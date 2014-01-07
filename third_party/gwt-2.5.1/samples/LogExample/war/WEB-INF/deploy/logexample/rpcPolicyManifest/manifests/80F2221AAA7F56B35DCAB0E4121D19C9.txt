@@ -1,0 +1,2 @@
+serviceClass: com.google.gwt.sample.logexample.shared.MyService
+path: F0AFD6DD71C07C18E7FC6522AEDF42F6.gwt.rpc

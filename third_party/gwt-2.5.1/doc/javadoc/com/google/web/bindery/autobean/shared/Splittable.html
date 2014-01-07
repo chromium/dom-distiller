@@ -1,0 +1,618 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>Splittable (Google Web Toolkit Javadoc)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Splittable (Google Web Toolkit Javadoc)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/Splittable.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../../com/google/web/bindery/autobean/shared/AutoBeanVisitor.PropertyContext.html" title="interface in com.google.web.bindery.autobean.shared"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../com/google/web/bindery/autobean/shared/ValueCodex.html" title="class in com.google.web.bindery.autobean.shared"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../index.html?com/google/web/bindery/autobean/shared/Splittable.html" target="_top">Frames</a></li>
+<li><a href="Splittable.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.google.web.bindery.autobean.shared</div>
+<h2 title="Interface Splittable" class="title">Interface Splittable</h2>
+</div>
+<div class="contentContainer">
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre>public interface <span class="strong">Splittable</span></pre>
+<div class="block">This interface provides an abstraction around the underlying data model
+ (JavaScriptObject, <code>org.json</code>, or XML) used to encode an AutoBeanCodex
+ payload.</div>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html" title="interface in com.google.web.bindery.autobean.shared">Splittable</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#NULL">NULL</a></strong></code>
+<div class="block">A value that represents <code>null</code>.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#asBoolean()">asBoolean</a></strong>()</code>
+<div class="block">Returns a boolean representation of the data.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#asNumber()">asNumber</a></strong>()</code>
+<div class="block">Returns a numeric representation of the data.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#assign(com.google.web.bindery.autobean.shared.Splittable, int)">assign</a></strong>(<a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html" title="interface in com.google.web.bindery.autobean.shared">Splittable</a>&nbsp;parent,
+      int&nbsp;index)</code>
+<div class="block">Assign the splittable to the specified index of the <code>parent</code> object.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#assign(com.google.web.bindery.autobean.shared.Splittable, java.lang.String)">assign</a></strong>(<a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html" title="interface in com.google.web.bindery.autobean.shared">Splittable</a>&nbsp;parent,
+      java.lang.String&nbsp;propertyName)</code>
+<div class="block">Assign the splittable to the named property of the <code>parent</code> object.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#asString()">asString</a></strong>()</code>
+<div class="block">Returns a string representation of the data.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html" title="interface in com.google.web.bindery.autobean.shared">Splittable</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#deepCopy()">deepCopy</a></strong>()</code>
+<div class="block">Clones the Splittable, ignoring cycles and tags.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html" title="interface in com.google.web.bindery.autobean.shared">Splittable</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#get(int)">get</a></strong>(int&nbsp;index)</code>
+<div class="block">Returns the nth element of a list.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html" title="interface in com.google.web.bindery.autobean.shared">Splittable</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#get(java.lang.String)">get</a></strong>(java.lang.String&nbsp;key)</code>
+<div class="block">Returns the named property.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#getPayload()">getPayload</a></strong>()</code>
+<div class="block">Returns a wire-format representation of the data.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.util.List&lt;java.lang.String&gt;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#getPropertyKeys()">getPropertyKeys</a></strong>()</code>
+<div class="block">Returns all keys available in the Splittable.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.Object</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#getReified(java.lang.String)">getReified</a></strong>(java.lang.String&nbsp;key)</code>
+<div class="block">Returns a value previously set with <a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#setReified(java.lang.String, java.lang.Object)"><code>setReified(String, Object)</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#isBoolean()">isBoolean</a></strong>()</code>
+<div class="block">Returns <code>true</code> if the value of the Splittable is a boolean.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#isIndexed()">isIndexed</a></strong>()</code>
+<div class="block">Returns <code></code> true if <a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#size()"><code>size()</code></a> and <a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#get(int)"><code>get(int)</code></a> can be
+ expected to return meaningful values.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#isKeyed()">isKeyed</a></strong>()</code>
+<div class="block">Returns <code></code> true if <a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#getPropertyKeys()"><code>getPropertyKeys()</code></a> and <a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#get(java.lang.String)"><code>get(String)</code></a>
+ can be expected to return meaningful values.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#isNull(int)">isNull</a></strong>(int&nbsp;index)</code>
+<div class="block">Indicates if the nth element of a list is null or undefined.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#isNull(java.lang.String)">isNull</a></strong>(java.lang.String&nbsp;key)</code>
+<div class="block">Indicates if the named property is null or undefined.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#isNumber()">isNumber</a></strong>()</code>
+<div class="block">Returns <code>true</code> if the value of the Splittable is numeric.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#isReified(java.lang.String)">isReified</a></strong>(java.lang.String&nbsp;key)</code>
+<div class="block">Returns <code>true</code> if <a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#setReified(java.lang.String, java.lang.Object)"><code>setReified(String, Object)</code></a> has been called
+ with the given key.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#isString()">isString</a></strong>()</code>
+<div class="block">Returns <code></code> true if <a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#asString()"><code>asString()</code></a> can be expected to return a
+ meaningful value.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#isUndefined(java.lang.String)">isUndefined</a></strong>(java.lang.String&nbsp;key)</code>
+<div class="block">Returns <code>true</code> if the value of the key is undefined.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#setReified(java.lang.String, java.lang.Object)">setReified</a></strong>(java.lang.String&nbsp;key,
+          java.lang.Object&nbsp;object)</code>
+<div class="block">Associates a tag value with the Splittable.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#setSize(int)">setSize</a></strong>(int&nbsp;i)</code>
+<div class="block">Resets the length of an indexed Splittable.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#size()">size</a></strong>()</code>
+<div class="block">Returns the size of an indexed Splittable.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="NULL">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>NULL</h4>
+<pre>static final&nbsp;<a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html" title="interface in com.google.web.bindery.autobean.shared">Splittable</a> NULL</pre>
+<div class="block">A value that represents <code>null</code>.</div>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="asBoolean()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>asBoolean</h4>
+<pre>boolean&nbsp;asBoolean()</pre>
+<div class="block">Returns a boolean representation of the data.</div>
+</li>
+</ul>
+<a name="asNumber()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>asNumber</h4>
+<pre>double&nbsp;asNumber()</pre>
+<div class="block">Returns a numeric representation of the data.</div>
+</li>
+</ul>
+<a name="assign(com.google.web.bindery.autobean.shared.Splittable, int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>assign</h4>
+<pre>void&nbsp;assign(<a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html" title="interface in com.google.web.bindery.autobean.shared">Splittable</a>&nbsp;parent,
+          int&nbsp;index)</pre>
+<div class="block">Assign the splittable to the specified index of the <code>parent</code> object.</div>
+</li>
+</ul>
+<a name="assign(com.google.web.bindery.autobean.shared.Splittable, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>assign</h4>
+<pre>void&nbsp;assign(<a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html" title="interface in com.google.web.bindery.autobean.shared">Splittable</a>&nbsp;parent,
+          java.lang.String&nbsp;propertyName)</pre>
+<div class="block">Assign the splittable to the named property of the <code>parent</code> object.</div>
+</li>
+</ul>
+<a name="asString()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>asString</h4>
+<pre>java.lang.String&nbsp;asString()</pre>
+<div class="block">Returns a string representation of the data.</div>
+</li>
+</ul>
+<a name="deepCopy()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>deepCopy</h4>
+<pre><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html" title="interface in com.google.web.bindery.autobean.shared">Splittable</a>&nbsp;deepCopy()</pre>
+<div class="block">Clones the Splittable, ignoring cycles and tags.</div>
+</li>
+</ul>
+<a name="get(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get</h4>
+<pre><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html" title="interface in com.google.web.bindery.autobean.shared">Splittable</a>&nbsp;get(int&nbsp;index)</pre>
+<div class="block">Returns the nth element of a list.</div>
+</li>
+</ul>
+<a name="get(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get</h4>
+<pre><a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html" title="interface in com.google.web.bindery.autobean.shared">Splittable</a>&nbsp;get(java.lang.String&nbsp;key)</pre>
+<div class="block">Returns the named property.</div>
+</li>
+</ul>
+<a name="getPayload()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPayload</h4>
+<pre>java.lang.String&nbsp;getPayload()</pre>
+<div class="block">Returns a wire-format representation of the data.</div>
+</li>
+</ul>
+<a name="getPropertyKeys()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPropertyKeys</h4>
+<pre>java.util.List&lt;java.lang.String&gt;&nbsp;getPropertyKeys()</pre>
+<div class="block">Returns all keys available in the Splittable. This method may be expensive
+ to compute.</div>
+</li>
+</ul>
+<a name="getReified(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getReified</h4>
+<pre>java.lang.Object&nbsp;getReified(java.lang.String&nbsp;key)</pre>
+<div class="block">Returns a value previously set with <a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#setReified(java.lang.String, java.lang.Object)"><code>setReified(String, Object)</code></a>.</div>
+</li>
+</ul>
+<a name="isBoolean()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isBoolean</h4>
+<pre>boolean&nbsp;isBoolean()</pre>
+<div class="block">Returns <code>true</code> if the value of the Splittable is a boolean.</div>
+</li>
+</ul>
+<a name="isIndexed()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isIndexed</h4>
+<pre>boolean&nbsp;isIndexed()</pre>
+<div class="block">Returns <code></code> true if <a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#size()"><code>size()</code></a> and <a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#get(int)"><code>get(int)</code></a> can be
+ expected to return meaningful values.</div>
+</li>
+</ul>
+<a name="isKeyed()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isKeyed</h4>
+<pre>boolean&nbsp;isKeyed()</pre>
+<div class="block">Returns <code></code> true if <a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#getPropertyKeys()"><code>getPropertyKeys()</code></a> and <a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#get(java.lang.String)"><code>get(String)</code></a>
+ can be expected to return meaningful values.</div>
+</li>
+</ul>
+<a name="isNull(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isNull</h4>
+<pre>boolean&nbsp;isNull(int&nbsp;index)</pre>
+<div class="block">Indicates if the nth element of a list is null or undefined.</div>
+</li>
+</ul>
+<a name="isNull(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isNull</h4>
+<pre>boolean&nbsp;isNull(java.lang.String&nbsp;key)</pre>
+<div class="block">Indicates if the named property is null or undefined.</div>
+</li>
+</ul>
+<a name="isNumber()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isNumber</h4>
+<pre>boolean&nbsp;isNumber()</pre>
+<div class="block">Returns <code>true</code> if the value of the Splittable is numeric.</div>
+</li>
+</ul>
+<a name="isReified(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isReified</h4>
+<pre>boolean&nbsp;isReified(java.lang.String&nbsp;key)</pre>
+<div class="block">Returns <code>true</code> if <a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#setReified(java.lang.String, java.lang.Object)"><code>setReified(String, Object)</code></a> has been called
+ with the given key.</div>
+</li>
+</ul>
+<a name="isString()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isString</h4>
+<pre>boolean&nbsp;isString()</pre>
+<div class="block">Returns <code></code> true if <a href="../../../../../../com/google/web/bindery/autobean/shared/Splittable.html#asString()"><code>asString()</code></a> can be expected to return a
+ meaningful value.</div>
+</li>
+</ul>
+<a name="isUndefined(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isUndefined</h4>
+<pre>boolean&nbsp;isUndefined(java.lang.String&nbsp;key)</pre>
+<div class="block">Returns <code>true</code> if the value of the key is undefined.</div>
+</li>
+</ul>
+<a name="setReified(java.lang.String, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setReified</h4>
+<pre>void&nbsp;setReified(java.lang.String&nbsp;key,
+              java.lang.Object&nbsp;object)</pre>
+<div class="block">Associates a tag value with the Splittable.</div>
+</li>
+</ul>
+<a name="setSize(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSize</h4>
+<pre>void&nbsp;setSize(int&nbsp;i)</pre>
+<div class="block">Resets the length of an indexed Splittable.</div>
+</li>
+</ul>
+<a name="size()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>size</h4>
+<pre>int&nbsp;size()</pre>
+<div class="block">Returns the size of an indexed Splittable.</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/Splittable.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../../com/google/web/bindery/autobean/shared/AutoBeanVisitor.PropertyContext.html" title="interface in com.google.web.bindery.autobean.shared"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../com/google/web/bindery/autobean/shared/ValueCodex.html" title="class in com.google.web.bindery.autobean.shared"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../index.html?com/google/web/bindery/autobean/shared/Splittable.html" target="_top">Frames</a></li>
+<li><a href="Splittable.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

@@ -1,0 +1,1101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>Roles (Google Web Toolkit Javadoc)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Roles (Google Web Toolkit Javadoc)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/Roles.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/google/gwt/aria/client/RoleImpl.html" title="class in com.google.gwt.aria.client"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/google/gwt/aria/client/RowgroupRole.html" title="interface in com.google.gwt.aria.client"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/google/gwt/aria/client/Roles.html" target="_top">Frames</a></li>
+<li><a href="Roles.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.google.gwt.aria.client</div>
+<h2 title="Class Roles" class="title">Class Roles</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>com.google.gwt.aria.client.Roles</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre>public final class <span class="strong">Roles</span>
+extends java.lang.Object</pre>
+<div class="block"><p>A factory providing each concrete role in the ARIA specification. Each role implements
+ methods that a GWT application can use to modify the appropriate DOM attributes for that
+ role.</p>
+
+ <p>For example, suppose our GWT app has a image button and we want to make it visible in screen
+ readers as a button with some help text. To do this, we add a <i>button</i> role to the image and
+ set the ARIA <i>label</i> property to the help text that the screen reader can use:</p>
+
+ <pre>
+    Roles.getButtonRole().set(img.getElement());
+    Roles.getButtonRole().setAriaLabelProperty(img.getElement(), "some help text");
+ </pre>
+
+ <p>Most ARIA properties have a prefix of "aria-" and only affect screen readers, but there is
+ one exception: the "tabindex" property is the same one used for tab order in regular widgets.
+ For example, to set tabindex to 0 for the button:
+ </p>
+
+ <pre>
+   Roles.getButtonRole().setTabindexExtraAttribute(img.getElement(), 0);
+ </pre>
+
+ <p>When the button changes state (it's enabled or disabled), we can change the ARIA enabled
+ state to match, like this:</p>
+
+ <pre>
+   Roles.getButtonRole().setAriaEnabledState(img.getElement(), isEnabled);
+ </pre>
+
+ <p>ARIA distinguishes between properties (which change rarely and could be set in static HTML)
+ and states (which need to be updated in response to user input). This distinction can get a bit
+ blurry when a GWT app updates the DOM dynamically. Generally you should update ARIA
+ attributes at the same time that you change the CSS styles on a DOM node, so that a screen
+ reader will see the same state as someone viewing the page visually.</p>
+
+ <p>The role interfaces form a hierarchy whose root is the <a href="../../../../../com/google/gwt/aria/client/Role.html" title="interface in com.google.gwt.aria.client"><code>Role</code></a> interface, which contains
+ generic methods that aren't specific to a role. Some abstract roles include:</p>
+ <ol>
+ <li><a href="../../../../../com/google/gwt/aria/client/WidgetRole.html" title="interface in com.google.gwt.aria.client"><code>WidgetRole</code></a>, for DOM elements that represent either standalone or composite widgets.
+ <li><a href="../../../../../com/google/gwt/aria/client/CompositeRole.html" title="interface in com.google.gwt.aria.client"><code>CompositeRole</code></a>, for widgets that contain other widgets.</li>
+ <li><a href="../../../../../com/google/gwt/aria/client/StructureRole.html" title="interface in com.google.gwt.aria.client"><code>StructureRole</code></a>, for DOM elements that are part of the page layout.</li>
+ <li><a href="../../../../../com/google/gwt/aria/client/LandmarkRole.html" title="interface in com.google.gwt.aria.client"><code>LandmarkRole</code></a>, for DOM elements defining common regions of a page.</li>
+ <li><a href="../../../../../com/google/gwt/aria/client/WindowRole.html" title="interface in com.google.gwt.aria.client"><code>WindowRole</code></a>, for DOM elements that define windows and dialogs.</li>
+ </ol>
+ </p></div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="http://www.w3.org/TR/wai-aria/roles">the W3C specification</a></dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#Roles()">Roles</a></strong>()</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/AlertdialogRole.html" title="interface in com.google.gwt.aria.client">AlertdialogRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getAlertdialogRole()">getAlertdialogRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/AlertRole.html" title="interface in com.google.gwt.aria.client">AlertRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getAlertRole()">getAlertRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/ApplicationRole.html" title="interface in com.google.gwt.aria.client">ApplicationRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getApplicationRole()">getApplicationRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/ArticleRole.html" title="interface in com.google.gwt.aria.client">ArticleRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getArticleRole()">getArticleRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/BannerRole.html" title="interface in com.google.gwt.aria.client">BannerRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getBannerRole()">getBannerRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/ButtonRole.html" title="interface in com.google.gwt.aria.client">ButtonRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getButtonRole()">getButtonRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/CheckboxRole.html" title="interface in com.google.gwt.aria.client">CheckboxRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getCheckboxRole()">getCheckboxRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/ColumnheaderRole.html" title="interface in com.google.gwt.aria.client">ColumnheaderRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getColumnheaderRole()">getColumnheaderRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/ComboboxRole.html" title="interface in com.google.gwt.aria.client">ComboboxRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getComboboxRole()">getComboboxRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/ComplementaryRole.html" title="interface in com.google.gwt.aria.client">ComplementaryRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getComplementaryRole()">getComplementaryRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/ContentinfoRole.html" title="interface in com.google.gwt.aria.client">ContentinfoRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getContentinfoRole()">getContentinfoRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/DefinitionRole.html" title="interface in com.google.gwt.aria.client">DefinitionRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getDefinitionRole()">getDefinitionRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/DialogRole.html" title="interface in com.google.gwt.aria.client">DialogRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getDialogRole()">getDialogRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/DirectoryRole.html" title="interface in com.google.gwt.aria.client">DirectoryRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getDirectoryRole()">getDirectoryRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/DocumentRole.html" title="interface in com.google.gwt.aria.client">DocumentRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getDocumentRole()">getDocumentRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/FormRole.html" title="interface in com.google.gwt.aria.client">FormRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getFormRole()">getFormRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/GridcellRole.html" title="interface in com.google.gwt.aria.client">GridcellRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getGridcellRole()">getGridcellRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/GridRole.html" title="interface in com.google.gwt.aria.client">GridRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getGridRole()">getGridRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/GroupRole.html" title="interface in com.google.gwt.aria.client">GroupRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getGroupRole()">getGroupRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/HeadingRole.html" title="interface in com.google.gwt.aria.client">HeadingRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getHeadingRole()">getHeadingRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/ImgRole.html" title="interface in com.google.gwt.aria.client">ImgRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getImgRole()">getImgRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/LinkRole.html" title="interface in com.google.gwt.aria.client">LinkRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getLinkRole()">getLinkRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/ListboxRole.html" title="interface in com.google.gwt.aria.client">ListboxRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getListboxRole()">getListboxRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/ListitemRole.html" title="interface in com.google.gwt.aria.client">ListitemRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getListitemRole()">getListitemRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/ListRole.html" title="interface in com.google.gwt.aria.client">ListRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getListRole()">getListRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/LogRole.html" title="interface in com.google.gwt.aria.client">LogRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getLogRole()">getLogRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/MainRole.html" title="interface in com.google.gwt.aria.client">MainRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getMainRole()">getMainRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/MarqueeRole.html" title="interface in com.google.gwt.aria.client">MarqueeRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getMarqueeRole()">getMarqueeRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/MathRole.html" title="interface in com.google.gwt.aria.client">MathRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getMathRole()">getMathRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/MenubarRole.html" title="interface in com.google.gwt.aria.client">MenubarRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getMenubarRole()">getMenubarRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/MenuitemcheckboxRole.html" title="interface in com.google.gwt.aria.client">MenuitemcheckboxRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getMenuitemcheckboxRole()">getMenuitemcheckboxRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/MenuitemradioRole.html" title="interface in com.google.gwt.aria.client">MenuitemradioRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getMenuitemradioRole()">getMenuitemradioRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/MenuitemRole.html" title="interface in com.google.gwt.aria.client">MenuitemRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getMenuitemRole()">getMenuitemRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/MenuRole.html" title="interface in com.google.gwt.aria.client">MenuRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getMenuRole()">getMenuRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/NavigationRole.html" title="interface in com.google.gwt.aria.client">NavigationRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getNavigationRole()">getNavigationRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/NoteRole.html" title="interface in com.google.gwt.aria.client">NoteRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getNoteRole()">getNoteRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/OptionRole.html" title="interface in com.google.gwt.aria.client">OptionRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getOptionRole()">getOptionRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/PresentationRole.html" title="interface in com.google.gwt.aria.client">PresentationRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getPresentationRole()">getPresentationRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/ProgressbarRole.html" title="interface in com.google.gwt.aria.client">ProgressbarRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getProgressbarRole()">getProgressbarRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/RadiogroupRole.html" title="interface in com.google.gwt.aria.client">RadiogroupRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getRadiogroupRole()">getRadiogroupRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/RadioRole.html" title="interface in com.google.gwt.aria.client">RadioRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getRadioRole()">getRadioRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/RegionRole.html" title="interface in com.google.gwt.aria.client">RegionRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getRegionRole()">getRegionRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/RowgroupRole.html" title="interface in com.google.gwt.aria.client">RowgroupRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getRowgroupRole()">getRowgroupRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/RowheaderRole.html" title="interface in com.google.gwt.aria.client">RowheaderRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getRowheaderRole()">getRowheaderRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/RowRole.html" title="interface in com.google.gwt.aria.client">RowRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getRowRole()">getRowRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/ScrollbarRole.html" title="interface in com.google.gwt.aria.client">ScrollbarRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getScrollbarRole()">getScrollbarRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/SearchRole.html" title="interface in com.google.gwt.aria.client">SearchRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getSearchRole()">getSearchRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/SeparatorRole.html" title="interface in com.google.gwt.aria.client">SeparatorRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getSeparatorRole()">getSeparatorRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/SliderRole.html" title="interface in com.google.gwt.aria.client">SliderRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getSliderRole()">getSliderRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/SpinbuttonRole.html" title="interface in com.google.gwt.aria.client">SpinbuttonRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getSpinbuttonRole()">getSpinbuttonRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/StatusRole.html" title="interface in com.google.gwt.aria.client">StatusRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getStatusRole()">getStatusRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/TablistRole.html" title="interface in com.google.gwt.aria.client">TablistRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getTablistRole()">getTablistRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/TabpanelRole.html" title="interface in com.google.gwt.aria.client">TabpanelRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getTabpanelRole()">getTabpanelRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/TabRole.html" title="interface in com.google.gwt.aria.client">TabRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getTabRole()">getTabRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/TextboxRole.html" title="interface in com.google.gwt.aria.client">TextboxRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getTextboxRole()">getTextboxRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/TimerRole.html" title="interface in com.google.gwt.aria.client">TimerRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getTimerRole()">getTimerRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/ToolbarRole.html" title="interface in com.google.gwt.aria.client">ToolbarRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getToolbarRole()">getToolbarRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/TooltipRole.html" title="interface in com.google.gwt.aria.client">TooltipRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getTooltipRole()">getTooltipRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/TreegridRole.html" title="interface in com.google.gwt.aria.client">TreegridRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getTreegridRole()">getTreegridRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/TreeitemRole.html" title="interface in com.google.gwt.aria.client">TreeitemRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getTreeitemRole()">getTreeitemRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/TreeRole.html" title="interface in com.google.gwt.aria.client">TreeRole</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#getTreeRole()">getTreeRole</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/aria/client/Role.html" title="interface in com.google.gwt.aria.client">Role</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/aria/client/Roles.html#roleOf(com.google.gwt.dom.client.Element)">roleOf</a></strong>(<a href="../../../../../com/google/gwt/dom/client/Element.html" title="class in com.google.gwt.dom.client">Element</a>&nbsp;element)</code>
+<div class="block">Returns the WAI-ARIA role for the <code>element</code>.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="Roles()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>Roles</h4>
+<pre>public&nbsp;Roles()</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getAlertdialogRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAlertdialogRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/AlertdialogRole.html" title="interface in com.google.gwt.aria.client">AlertdialogRole</a>&nbsp;getAlertdialogRole()</pre>
+</li>
+</ul>
+<a name="getAlertRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAlertRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/AlertRole.html" title="interface in com.google.gwt.aria.client">AlertRole</a>&nbsp;getAlertRole()</pre>
+</li>
+</ul>
+<a name="getApplicationRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getApplicationRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/ApplicationRole.html" title="interface in com.google.gwt.aria.client">ApplicationRole</a>&nbsp;getApplicationRole()</pre>
+</li>
+</ul>
+<a name="getArticleRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getArticleRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/ArticleRole.html" title="interface in com.google.gwt.aria.client">ArticleRole</a>&nbsp;getArticleRole()</pre>
+</li>
+</ul>
+<a name="getBannerRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBannerRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/BannerRole.html" title="interface in com.google.gwt.aria.client">BannerRole</a>&nbsp;getBannerRole()</pre>
+</li>
+</ul>
+<a name="getButtonRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getButtonRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/ButtonRole.html" title="interface in com.google.gwt.aria.client">ButtonRole</a>&nbsp;getButtonRole()</pre>
+</li>
+</ul>
+<a name="getCheckboxRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCheckboxRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/CheckboxRole.html" title="interface in com.google.gwt.aria.client">CheckboxRole</a>&nbsp;getCheckboxRole()</pre>
+</li>
+</ul>
+<a name="getColumnheaderRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getColumnheaderRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/ColumnheaderRole.html" title="interface in com.google.gwt.aria.client">ColumnheaderRole</a>&nbsp;getColumnheaderRole()</pre>
+</li>
+</ul>
+<a name="getComboboxRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getComboboxRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/ComboboxRole.html" title="interface in com.google.gwt.aria.client">ComboboxRole</a>&nbsp;getComboboxRole()</pre>
+</li>
+</ul>
+<a name="getComplementaryRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getComplementaryRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/ComplementaryRole.html" title="interface in com.google.gwt.aria.client">ComplementaryRole</a>&nbsp;getComplementaryRole()</pre>
+</li>
+</ul>
+<a name="getContentinfoRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getContentinfoRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/ContentinfoRole.html" title="interface in com.google.gwt.aria.client">ContentinfoRole</a>&nbsp;getContentinfoRole()</pre>
+</li>
+</ul>
+<a name="getDefinitionRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDefinitionRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/DefinitionRole.html" title="interface in com.google.gwt.aria.client">DefinitionRole</a>&nbsp;getDefinitionRole()</pre>
+</li>
+</ul>
+<a name="getDialogRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDialogRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/DialogRole.html" title="interface in com.google.gwt.aria.client">DialogRole</a>&nbsp;getDialogRole()</pre>
+</li>
+</ul>
+<a name="getDirectoryRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDirectoryRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/DirectoryRole.html" title="interface in com.google.gwt.aria.client">DirectoryRole</a>&nbsp;getDirectoryRole()</pre>
+</li>
+</ul>
+<a name="getDocumentRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDocumentRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/DocumentRole.html" title="interface in com.google.gwt.aria.client">DocumentRole</a>&nbsp;getDocumentRole()</pre>
+</li>
+</ul>
+<a name="getFormRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFormRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/FormRole.html" title="interface in com.google.gwt.aria.client">FormRole</a>&nbsp;getFormRole()</pre>
+</li>
+</ul>
+<a name="getGridcellRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getGridcellRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/GridcellRole.html" title="interface in com.google.gwt.aria.client">GridcellRole</a>&nbsp;getGridcellRole()</pre>
+</li>
+</ul>
+<a name="getGridRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getGridRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/GridRole.html" title="interface in com.google.gwt.aria.client">GridRole</a>&nbsp;getGridRole()</pre>
+</li>
+</ul>
+<a name="getGroupRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getGroupRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/GroupRole.html" title="interface in com.google.gwt.aria.client">GroupRole</a>&nbsp;getGroupRole()</pre>
+</li>
+</ul>
+<a name="getHeadingRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHeadingRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/HeadingRole.html" title="interface in com.google.gwt.aria.client">HeadingRole</a>&nbsp;getHeadingRole()</pre>
+</li>
+</ul>
+<a name="getImgRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getImgRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/ImgRole.html" title="interface in com.google.gwt.aria.client">ImgRole</a>&nbsp;getImgRole()</pre>
+</li>
+</ul>
+<a name="getLinkRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLinkRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/LinkRole.html" title="interface in com.google.gwt.aria.client">LinkRole</a>&nbsp;getLinkRole()</pre>
+</li>
+</ul>
+<a name="getListboxRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getListboxRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/ListboxRole.html" title="interface in com.google.gwt.aria.client">ListboxRole</a>&nbsp;getListboxRole()</pre>
+</li>
+</ul>
+<a name="getListitemRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getListitemRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/ListitemRole.html" title="interface in com.google.gwt.aria.client">ListitemRole</a>&nbsp;getListitemRole()</pre>
+</li>
+</ul>
+<a name="getListRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getListRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/ListRole.html" title="interface in com.google.gwt.aria.client">ListRole</a>&nbsp;getListRole()</pre>
+</li>
+</ul>
+<a name="getLogRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLogRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/LogRole.html" title="interface in com.google.gwt.aria.client">LogRole</a>&nbsp;getLogRole()</pre>
+</li>
+</ul>
+<a name="getMainRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMainRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/MainRole.html" title="interface in com.google.gwt.aria.client">MainRole</a>&nbsp;getMainRole()</pre>
+</li>
+</ul>
+<a name="getMarqueeRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMarqueeRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/MarqueeRole.html" title="interface in com.google.gwt.aria.client">MarqueeRole</a>&nbsp;getMarqueeRole()</pre>
+</li>
+</ul>
+<a name="getMathRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMathRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/MathRole.html" title="interface in com.google.gwt.aria.client">MathRole</a>&nbsp;getMathRole()</pre>
+</li>
+</ul>
+<a name="getMenubarRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMenubarRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/MenubarRole.html" title="interface in com.google.gwt.aria.client">MenubarRole</a>&nbsp;getMenubarRole()</pre>
+</li>
+</ul>
+<a name="getMenuitemcheckboxRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMenuitemcheckboxRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/MenuitemcheckboxRole.html" title="interface in com.google.gwt.aria.client">MenuitemcheckboxRole</a>&nbsp;getMenuitemcheckboxRole()</pre>
+</li>
+</ul>
+<a name="getMenuitemradioRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMenuitemradioRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/MenuitemradioRole.html" title="interface in com.google.gwt.aria.client">MenuitemradioRole</a>&nbsp;getMenuitemradioRole()</pre>
+</li>
+</ul>
+<a name="getMenuitemRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMenuitemRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/MenuitemRole.html" title="interface in com.google.gwt.aria.client">MenuitemRole</a>&nbsp;getMenuitemRole()</pre>
+</li>
+</ul>
+<a name="getMenuRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMenuRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/MenuRole.html" title="interface in com.google.gwt.aria.client">MenuRole</a>&nbsp;getMenuRole()</pre>
+</li>
+</ul>
+<a name="getNavigationRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNavigationRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/NavigationRole.html" title="interface in com.google.gwt.aria.client">NavigationRole</a>&nbsp;getNavigationRole()</pre>
+</li>
+</ul>
+<a name="getNoteRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNoteRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/NoteRole.html" title="interface in com.google.gwt.aria.client">NoteRole</a>&nbsp;getNoteRole()</pre>
+</li>
+</ul>
+<a name="getOptionRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getOptionRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/OptionRole.html" title="interface in com.google.gwt.aria.client">OptionRole</a>&nbsp;getOptionRole()</pre>
+</li>
+</ul>
+<a name="getPresentationRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPresentationRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/PresentationRole.html" title="interface in com.google.gwt.aria.client">PresentationRole</a>&nbsp;getPresentationRole()</pre>
+</li>
+</ul>
+<a name="getProgressbarRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getProgressbarRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/ProgressbarRole.html" title="interface in com.google.gwt.aria.client">ProgressbarRole</a>&nbsp;getProgressbarRole()</pre>
+</li>
+</ul>
+<a name="getRadiogroupRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRadiogroupRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/RadiogroupRole.html" title="interface in com.google.gwt.aria.client">RadiogroupRole</a>&nbsp;getRadiogroupRole()</pre>
+</li>
+</ul>
+<a name="getRadioRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRadioRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/RadioRole.html" title="interface in com.google.gwt.aria.client">RadioRole</a>&nbsp;getRadioRole()</pre>
+</li>
+</ul>
+<a name="getRegionRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRegionRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/RegionRole.html" title="interface in com.google.gwt.aria.client">RegionRole</a>&nbsp;getRegionRole()</pre>
+</li>
+</ul>
+<a name="getRowgroupRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRowgroupRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/RowgroupRole.html" title="interface in com.google.gwt.aria.client">RowgroupRole</a>&nbsp;getRowgroupRole()</pre>
+</li>
+</ul>
+<a name="getRowheaderRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRowheaderRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/RowheaderRole.html" title="interface in com.google.gwt.aria.client">RowheaderRole</a>&nbsp;getRowheaderRole()</pre>
+</li>
+</ul>
+<a name="getRowRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRowRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/RowRole.html" title="interface in com.google.gwt.aria.client">RowRole</a>&nbsp;getRowRole()</pre>
+</li>
+</ul>
+<a name="getScrollbarRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getScrollbarRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/ScrollbarRole.html" title="interface in com.google.gwt.aria.client">ScrollbarRole</a>&nbsp;getScrollbarRole()</pre>
+</li>
+</ul>
+<a name="getSearchRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSearchRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/SearchRole.html" title="interface in com.google.gwt.aria.client">SearchRole</a>&nbsp;getSearchRole()</pre>
+</li>
+</ul>
+<a name="getSeparatorRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSeparatorRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/SeparatorRole.html" title="interface in com.google.gwt.aria.client">SeparatorRole</a>&nbsp;getSeparatorRole()</pre>
+</li>
+</ul>
+<a name="getSliderRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSliderRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/SliderRole.html" title="interface in com.google.gwt.aria.client">SliderRole</a>&nbsp;getSliderRole()</pre>
+</li>
+</ul>
+<a name="getSpinbuttonRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSpinbuttonRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/SpinbuttonRole.html" title="interface in com.google.gwt.aria.client">SpinbuttonRole</a>&nbsp;getSpinbuttonRole()</pre>
+</li>
+</ul>
+<a name="getStatusRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getStatusRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/StatusRole.html" title="interface in com.google.gwt.aria.client">StatusRole</a>&nbsp;getStatusRole()</pre>
+</li>
+</ul>
+<a name="getTablistRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTablistRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/TablistRole.html" title="interface in com.google.gwt.aria.client">TablistRole</a>&nbsp;getTablistRole()</pre>
+</li>
+</ul>
+<a name="getTabpanelRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTabpanelRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/TabpanelRole.html" title="interface in com.google.gwt.aria.client">TabpanelRole</a>&nbsp;getTabpanelRole()</pre>
+</li>
+</ul>
+<a name="getTabRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTabRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/TabRole.html" title="interface in com.google.gwt.aria.client">TabRole</a>&nbsp;getTabRole()</pre>
+</li>
+</ul>
+<a name="getTextboxRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTextboxRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/TextboxRole.html" title="interface in com.google.gwt.aria.client">TextboxRole</a>&nbsp;getTextboxRole()</pre>
+</li>
+</ul>
+<a name="getTimerRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTimerRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/TimerRole.html" title="interface in com.google.gwt.aria.client">TimerRole</a>&nbsp;getTimerRole()</pre>
+</li>
+</ul>
+<a name="getToolbarRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getToolbarRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/ToolbarRole.html" title="interface in com.google.gwt.aria.client">ToolbarRole</a>&nbsp;getToolbarRole()</pre>
+</li>
+</ul>
+<a name="getTooltipRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTooltipRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/TooltipRole.html" title="interface in com.google.gwt.aria.client">TooltipRole</a>&nbsp;getTooltipRole()</pre>
+</li>
+</ul>
+<a name="getTreegridRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTreegridRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/TreegridRole.html" title="interface in com.google.gwt.aria.client">TreegridRole</a>&nbsp;getTreegridRole()</pre>
+</li>
+</ul>
+<a name="getTreeitemRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTreeitemRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/TreeitemRole.html" title="interface in com.google.gwt.aria.client">TreeitemRole</a>&nbsp;getTreeitemRole()</pre>
+</li>
+</ul>
+<a name="getTreeRole()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTreeRole</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/TreeRole.html" title="interface in com.google.gwt.aria.client">TreeRole</a>&nbsp;getTreeRole()</pre>
+</li>
+</ul>
+<a name="roleOf(com.google.gwt.dom.client.Element)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>roleOf</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/aria/client/Role.html" title="interface in com.google.gwt.aria.client">Role</a>&nbsp;roleOf(<a href="../../../../../com/google/gwt/dom/client/Element.html" title="class in com.google.gwt.dom.client">Element</a>&nbsp;element)</pre>
+<div class="block">Returns the WAI-ARIA role for the <code>element</code>. If no 'role' attribute is set to the
+ <code>element</code> or if the set role tokens do not include a WAI-ARIA role,
+ null is returned. Otherwise, if a WAI_ARIA role is among the role tokens in the the 'role'
+ attribute token list, a <a href="../../../../../com/google/gwt/aria/client/Role.html" title="interface in com.google.gwt.aria.client"><code>Role</code></a> corresponding the WAI-ARIA role is returned.</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/Roles.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/google/gwt/aria/client/RoleImpl.html" title="class in com.google.gwt.aria.client"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/google/gwt/aria/client/RowgroupRole.html" title="interface in com.google.gwt.aria.client"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/google/gwt/aria/client/Roles.html" target="_top">Frames</a></li>
+<li><a href="Roles.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

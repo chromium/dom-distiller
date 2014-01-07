@@ -1,0 +1,2 @@
+function Xqb(){var a,b,c,d,e;b=new OUb(4,4);d=b.g;c=b.f;for(e=0;e<d;++e){for(a=0;a<c;++a){gUb(b,e,a,new mJb((q6(),f6)))}}$Tb(b,'cwGrid');return b}
+C1(746,1,doc);_.lc=function brb(){k4(this.a,Xqb())};Soc(vn)(16);

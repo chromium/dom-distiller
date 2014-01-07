@@ -1,0 +1,2 @@
+function Sob(){var a,b,c;b=new XTb;Y3b(b.db,Ooc,'cwFlowPanel');for(c=0;c<30;++c){a=new PMb(jvc+c);dj(a.db,'cw-FlowPanel-checkBox',true);qLb(b,a,b.db)}return b}
+i1(720,1,gnc);_.mc=function Yob(){N3(this.b,Sob())};Vnc(wn)(8);

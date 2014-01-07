@@ -1,0 +1,6 @@
+function A5b(a){this.b=a}
+function D5b(a){this.b=a}
+function czc(a,b){(a.b.Yg(0,1),a.b.j.rows[0].cells[1])[ybd]=b}
+function w5b(a){var b;b=a.j.rows.length;if(b>1){Cyc(a,b-1);czc(dlb(a.k,99),b-1)}}
+function v5b(a){var b;b=a.j.rows.length;Iyc(a,b,0,new Inc((dNb(),UMb)));Iyc(a,b,1,new Inc(UMb));czc(dlb(a.k,99),b+1)}
+uIb(826,1,p2c,A5b);_.Dc=function B5b(a){v5b(this.b)};_.b=null;uIb(827,1,p2c,D5b);_.Dc=function E5b(a){w5b(this.b)};_.b=null;uIb(828,1,s2c);_.mc=function I5b(){var a,b,c,d,e;ZKb(this.b,(a=new Oyc,b=dlb(a.k,99),dj(a.db,'cw-FlexTable',true),a.db.style[A4c]='32em',a.p[O8c]=5,a.p[P8c]=3,$yc(b,1,(Tzc(),Pzc)),Fyc(a,0,0,'This is a FlexTable that supports <B>colspans<\/B> and <B>rowspans<\/B>.  You can use it to format your page or as a special purpose table.'),Xyc(b,0)[Fad]=2,c=new Rrc('Add a row',new A5b(a)),dj(c.db,Bbd,true),d=new Rrc('Remove a row',new D5b(a)),dj(d.db,Bbd,true),e=new GLc,e.db[z4c]='cw-FlexTable-buttonPanel',DLc(e,c),DLc(e,d),Iyc(a,0,1,e),azc(b,0,1,($zc(),Zzc)),v5b(a),v5b(a),Ayc(a,'cwFlexTable'),a))};var Ixb=JSc(G9c,'CwFlexTable$1',826),Jxb=JSc(G9c,'CwFlexTable$2',827);f3c(wn)(17);

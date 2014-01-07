@@ -1,0 +1,574 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>LocalePropertyProviderGenerator (Google Web Toolkit Javadoc)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="LocalePropertyProviderGenerator (Google Web Toolkit Javadoc)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/LocalePropertyProviderGenerator.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>Prev Class</li>
+<li>Next Class</li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html" target="_top">Frames</a></li>
+<li><a href="LocalePropertyProviderGenerator.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.google.gwt.i18n.linker</div>
+<h2 title="Class LocalePropertyProviderGenerator" class="title">Class LocalePropertyProviderGenerator</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>com.google.gwt.i18n.linker.LocalePropertyProviderGenerator</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="../../../../../com/google/gwt/core/ext/linker/PropertyProviderGenerator.html" title="interface in com.google.gwt.core.ext.linker">PropertyProviderGenerator</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public class <span class="strong">LocalePropertyProviderGenerator</span>
+extends java.lang.Object
+implements <a href="../../../../../com/google/gwt/core/ext/linker/PropertyProviderGenerator.html" title="interface in com.google.gwt.core.ext.linker">PropertyProviderGenerator</a></pre>
+<div class="block">Generates a property provider implementation for the "locale" property.</div>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static java.util.regex.Pattern</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html#COOKIE_PATTERN">COOKIE_PATTERN</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html#LOCALE_COOKIE">LOCALE_COOKIE</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html#LOCALE_QUERYPARAM">LOCALE_QUERYPARAM</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html#LOCALE_SEARCHORDER">LOCALE_SEARCHORDER</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html#LOCALE_USEMETA">LOCALE_USEMETA</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html#LOCALE_USERAGENT">LOCALE_USERAGENT</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static java.util.regex.Pattern</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html#QUERYPARAM_PATTERN">QUERYPARAM_PATTERN</a></strong></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html#LocalePropertyProviderGenerator()">LocalePropertyProviderGenerator</a></strong>()</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html#generate(com.google.gwt.core.ext.TreeLogger, java.util.SortedSet, java.lang.String, java.util.SortedSet)">generate</a></strong>(<a href="../../../../../com/google/gwt/core/ext/TreeLogger.html" title="class in com.google.gwt.core.ext">TreeLogger</a>&nbsp;logger,
+        java.util.SortedSet&lt;java.lang.String&gt;&nbsp;possibleValues,
+        java.lang.String&nbsp;fallback,
+        java.util.SortedSet&lt;<a href="../../../../../com/google/gwt/core/ext/linker/ConfigurationProperty.html" title="interface in com.google.gwt.core.ext.linker">ConfigurationProperty</a>&gt;&nbsp;configProperties)</code>
+<div class="block">Generate a property provider.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html#generateCookieLookup(com.google.gwt.core.ext.TreeLogger, com.google.gwt.user.rebind.SourceWriter, java.lang.String)">generateCookieLookup</a></strong>(<a href="../../../../../com/google/gwt/core/ext/TreeLogger.html" title="class in com.google.gwt.core.ext">TreeLogger</a>&nbsp;logger,
+                    com.google.gwt.user.rebind.SourceWriter&nbsp;body,
+                    java.lang.String&nbsp;cookieName)</code>
+<div class="block">Generate JS code that looks up the locale value from a cookie.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html#generateInheritanceLookup(com.google.gwt.core.ext.TreeLogger, com.google.gwt.user.rebind.SourceWriter)">generateInheritanceLookup</a></strong>(<a href="../../../../../com/google/gwt/core/ext/TreeLogger.html" title="class in com.google.gwt.core.ext">TreeLogger</a>&nbsp;logger,
+                         com.google.gwt.user.rebind.SourceWriter&nbsp;body)</code>
+<div class="block">Generate JS code that takes the value of the "locale" variable and finds
+ parent locales until the value is a supported locale or the default locale.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html#generateMetaLookup(com.google.gwt.core.ext.TreeLogger, com.google.gwt.user.rebind.SourceWriter)">generateMetaLookup</a></strong>(<a href="../../../../../com/google/gwt/core/ext/TreeLogger.html" title="class in com.google.gwt.core.ext">TreeLogger</a>&nbsp;logger,
+                  com.google.gwt.user.rebind.SourceWriter&nbsp;body)</code>
+<div class="block">Generate JS code to fetch the locale from a meta property.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html#generateQueryParamLookup(com.google.gwt.core.ext.TreeLogger, com.google.gwt.user.rebind.SourceWriter, java.lang.String)">generateQueryParamLookup</a></strong>(<a href="../../../../../com/google/gwt/core/ext/TreeLogger.html" title="class in com.google.gwt.core.ext">TreeLogger</a>&nbsp;logger,
+                        com.google.gwt.user.rebind.SourceWriter&nbsp;body,
+                        java.lang.String&nbsp;queryParam)</code>
+<div class="block">Generate JS code to get the locale from a query parameter.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html#generateUserAgentLookup(com.google.gwt.core.ext.TreeLogger, com.google.gwt.user.rebind.SourceWriter)">generateUserAgentLookup</a></strong>(<a href="../../../../../com/google/gwt/core/ext/TreeLogger.html" title="class in com.google.gwt.core.ext">TreeLogger</a>&nbsp;logger,
+                       com.google.gwt.user.rebind.SourceWriter&nbsp;body)</code>
+<div class="block">Generate JS code to fetch the locale from the user agent's compile-time
+ locale.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html#isTrue(java.lang.String)">isTrue</a></strong>(java.lang.String&nbsp;value)</code>
+<div class="block">Return true when the supplied value represents a true/yes/on value.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html#validateCookieName(java.lang.String)">validateCookieName</a></strong>(java.lang.String&nbsp;cookieName)</code>
+<div class="block">Validate that a name is a valid cookie name.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html#validateQueryParam(java.lang.String)">validateQueryParam</a></strong>(java.lang.String&nbsp;queryParam)</code>
+<div class="block">Validate that a value is a valid query parameter name.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="LOCALE_QUERYPARAM">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>LOCALE_QUERYPARAM</h4>
+<pre>public static final&nbsp;java.lang.String LOCALE_QUERYPARAM</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#com.google.gwt.i18n.linker.LocalePropertyProviderGenerator.LOCALE_QUERYPARAM">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="LOCALE_COOKIE">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>LOCALE_COOKIE</h4>
+<pre>public static final&nbsp;java.lang.String LOCALE_COOKIE</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#com.google.gwt.i18n.linker.LocalePropertyProviderGenerator.LOCALE_COOKIE">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="LOCALE_SEARCHORDER">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>LOCALE_SEARCHORDER</h4>
+<pre>public static final&nbsp;java.lang.String LOCALE_SEARCHORDER</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#com.google.gwt.i18n.linker.LocalePropertyProviderGenerator.LOCALE_SEARCHORDER">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="LOCALE_USEMETA">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>LOCALE_USEMETA</h4>
+<pre>public static final&nbsp;java.lang.String LOCALE_USEMETA</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#com.google.gwt.i18n.linker.LocalePropertyProviderGenerator.LOCALE_USEMETA">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="LOCALE_USERAGENT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>LOCALE_USERAGENT</h4>
+<pre>public static final&nbsp;java.lang.String LOCALE_USERAGENT</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#com.google.gwt.i18n.linker.LocalePropertyProviderGenerator.LOCALE_USERAGENT">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+<a name="COOKIE_PATTERN">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COOKIE_PATTERN</h4>
+<pre>protected static final&nbsp;java.util.regex.Pattern COOKIE_PATTERN</pre>
+</li>
+</ul>
+<a name="QUERYPARAM_PATTERN">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>QUERYPARAM_PATTERN</h4>
+<pre>protected static final&nbsp;java.util.regex.Pattern QUERYPARAM_PATTERN</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="LocalePropertyProviderGenerator()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>LocalePropertyProviderGenerator</h4>
+<pre>public&nbsp;LocalePropertyProviderGenerator()</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="isTrue(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isTrue</h4>
+<pre>protected static&nbsp;boolean&nbsp;isTrue(java.lang.String&nbsp;value)</pre>
+<div class="block">Return true when the supplied value represents a true/yes/on value.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>value</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd>true if the string represents true/yes/on</dd></dl>
+</li>
+</ul>
+<a name="generate(com.google.gwt.core.ext.TreeLogger, java.util.SortedSet, java.lang.String, java.util.SortedSet)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generate</h4>
+<pre>public&nbsp;java.lang.String&nbsp;generate(<a href="../../../../../com/google/gwt/core/ext/TreeLogger.html" title="class in com.google.gwt.core.ext">TreeLogger</a>&nbsp;logger,
+                        java.util.SortedSet&lt;java.lang.String&gt;&nbsp;possibleValues,
+                        java.lang.String&nbsp;fallback,
+                        java.util.SortedSet&lt;<a href="../../../../../com/google/gwt/core/ext/linker/ConfigurationProperty.html" title="interface in com.google.gwt.core.ext.linker">ConfigurationProperty</a>&gt;&nbsp;configProperties)
+                          throws <a href="../../../../../com/google/gwt/core/ext/UnableToCompleteException.html" title="class in com.google.gwt.core.ext">UnableToCompleteException</a></pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../com/google/gwt/core/ext/linker/PropertyProviderGenerator.html#generate(com.google.gwt.core.ext.TreeLogger, java.util.SortedSet, java.lang.String, java.util.SortedSet)">PropertyProviderGenerator</a></code></strong></div>
+<div class="block">Generate a property provider.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../com/google/gwt/core/ext/linker/PropertyProviderGenerator.html#generate(com.google.gwt.core.ext.TreeLogger, java.util.SortedSet, java.lang.String, java.util.SortedSet)">generate</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../com/google/gwt/core/ext/linker/PropertyProviderGenerator.html" title="interface in com.google.gwt.core.ext.linker">PropertyProviderGenerator</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>logger</code> - TreeLogger</dd><dd><code>possibleValues</code> - the possible values of this property</dd><dd><code>fallback</code> - the fallback value for this property, or null</dd><dd><code>configProperties</code> - the configuration properties for this module</dd>
+<dt><span class="strong">Returns:</span></dt><dd>the JS source of the property provider (the complete body of a JS
+     function taking no arguments, including open/close braces), or null to
+     use the default implementation in the property-provider tag</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/google/gwt/core/ext/UnableToCompleteException.html" title="class in com.google.gwt.core.ext">UnableToCompleteException</a></code> - after logging the message if processing
+     is unable to continue</dd></dl>
+</li>
+</ul>
+<a name="generateCookieLookup(com.google.gwt.core.ext.TreeLogger, com.google.gwt.user.rebind.SourceWriter, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generateCookieLookup</h4>
+<pre>protected&nbsp;void&nbsp;generateCookieLookup(<a href="../../../../../com/google/gwt/core/ext/TreeLogger.html" title="class in com.google.gwt.core.ext">TreeLogger</a>&nbsp;logger,
+                        com.google.gwt.user.rebind.SourceWriter&nbsp;body,
+                        java.lang.String&nbsp;cookieName)
+                             throws <a href="../../../../../com/google/gwt/core/ext/UnableToCompleteException.html" title="class in com.google.gwt.core.ext">UnableToCompleteException</a></pre>
+<div class="block">Generate JS code that looks up the locale value from a cookie.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>logger</code> - logger to use</dd><dd><code>body</code> - </dd><dd><code>cookieName</code> - </dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/google/gwt/core/ext/UnableToCompleteException.html" title="class in com.google.gwt.core.ext">UnableToCompleteException</a></code></dd></dl>
+</li>
+</ul>
+<a name="generateInheritanceLookup(com.google.gwt.core.ext.TreeLogger, com.google.gwt.user.rebind.SourceWriter)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generateInheritanceLookup</h4>
+<pre>protected&nbsp;void&nbsp;generateInheritanceLookup(<a href="../../../../../com/google/gwt/core/ext/TreeLogger.html" title="class in com.google.gwt.core.ext">TreeLogger</a>&nbsp;logger,
+                             com.google.gwt.user.rebind.SourceWriter&nbsp;body)
+                                  throws <a href="../../../../../com/google/gwt/core/ext/UnableToCompleteException.html" title="class in com.google.gwt.core.ext">UnableToCompleteException</a></pre>
+<div class="block">Generate JS code that takes the value of the "locale" variable and finds
+ parent locales until the value is a supported locale or the default locale.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>logger</code> - logger to use</dd><dd><code>body</code> - </dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/google/gwt/core/ext/UnableToCompleteException.html" title="class in com.google.gwt.core.ext">UnableToCompleteException</a></code></dd></dl>
+</li>
+</ul>
+<a name="generateMetaLookup(com.google.gwt.core.ext.TreeLogger, com.google.gwt.user.rebind.SourceWriter)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generateMetaLookup</h4>
+<pre>protected&nbsp;void&nbsp;generateMetaLookup(<a href="../../../../../com/google/gwt/core/ext/TreeLogger.html" title="class in com.google.gwt.core.ext">TreeLogger</a>&nbsp;logger,
+                      com.google.gwt.user.rebind.SourceWriter&nbsp;body)
+                           throws <a href="../../../../../com/google/gwt/core/ext/UnableToCompleteException.html" title="class in com.google.gwt.core.ext">UnableToCompleteException</a></pre>
+<div class="block">Generate JS code to fetch the locale from a meta property.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>logger</code> - logger to use</dd><dd><code>body</code> - </dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/google/gwt/core/ext/UnableToCompleteException.html" title="class in com.google.gwt.core.ext">UnableToCompleteException</a></code></dd></dl>
+</li>
+</ul>
+<a name="generateQueryParamLookup(com.google.gwt.core.ext.TreeLogger, com.google.gwt.user.rebind.SourceWriter, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generateQueryParamLookup</h4>
+<pre>protected&nbsp;void&nbsp;generateQueryParamLookup(<a href="../../../../../com/google/gwt/core/ext/TreeLogger.html" title="class in com.google.gwt.core.ext">TreeLogger</a>&nbsp;logger,
+                            com.google.gwt.user.rebind.SourceWriter&nbsp;body,
+                            java.lang.String&nbsp;queryParam)
+                                 throws <a href="../../../../../com/google/gwt/core/ext/UnableToCompleteException.html" title="class in com.google.gwt.core.ext">UnableToCompleteException</a></pre>
+<div class="block">Generate JS code to get the locale from a query parameter.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>logger</code> - logger to use</dd><dd><code>body</code> - where to append JS output</dd><dd><code>queryParam</code> - the query parameter to use</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/google/gwt/core/ext/UnableToCompleteException.html" title="class in com.google.gwt.core.ext">UnableToCompleteException</a></code></dd></dl>
+</li>
+</ul>
+<a name="generateUserAgentLookup(com.google.gwt.core.ext.TreeLogger, com.google.gwt.user.rebind.SourceWriter)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generateUserAgentLookup</h4>
+<pre>protected&nbsp;void&nbsp;generateUserAgentLookup(<a href="../../../../../com/google/gwt/core/ext/TreeLogger.html" title="class in com.google.gwt.core.ext">TreeLogger</a>&nbsp;logger,
+                           com.google.gwt.user.rebind.SourceWriter&nbsp;body)
+                                throws <a href="../../../../../com/google/gwt/core/ext/UnableToCompleteException.html" title="class in com.google.gwt.core.ext">UnableToCompleteException</a></pre>
+<div class="block">Generate JS code to fetch the locale from the user agent's compile-time
+ locale.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>logger</code> - logger to use</dd><dd><code>body</code> - </dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/google/gwt/core/ext/UnableToCompleteException.html" title="class in com.google.gwt.core.ext">UnableToCompleteException</a></code></dd></dl>
+</li>
+</ul>
+<a name="validateCookieName(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>validateCookieName</h4>
+<pre>protected&nbsp;boolean&nbsp;validateCookieName(java.lang.String&nbsp;cookieName)</pre>
+<div class="block">Validate that a name is a valid cookie name.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>cookieName</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd>true if cookieName is an acceptable cookie name</dd></dl>
+</li>
+</ul>
+<a name="validateQueryParam(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>validateQueryParam</h4>
+<pre>protected&nbsp;boolean&nbsp;validateQueryParam(java.lang.String&nbsp;queryParam)</pre>
+<div class="block">Validate that a value is a valid query parameter name.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>queryParam</code> - </dd>
+<dt><span class="strong">Returns:</span></dt><dd>true if queryParam is a valid query parameter name.</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/LocalePropertyProviderGenerator.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>Prev Class</li>
+<li>Next Class</li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/google/gwt/i18n/linker/LocalePropertyProviderGenerator.html" target="_top">Frames</a></li>
+<li><a href="LocalePropertyProviderGenerator.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

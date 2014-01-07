@@ -1,0 +1,6 @@
+function trb(a){this.b=a}
+function wrb(a){this.b=a}
+function XUb(a,b){(a.b.cg(0,1),a.b.j.rows[0].cells[1])[sxc]=b}
+function prb(a){var b;b=a.j.rows.length;if(b>1){vUb(a,b-1);XUb(qI(a.k,99),b-1)}}
+function orb(a){var b;b=a.j.rows.length;BUb(a,b,0,new BJb((Z6(),O6)));BUb(a,b,1,new BJb(O6));XUb(qI(a.k,99),b+1)}
+o2(747,1,Coc,trb);_.Lc=function urb(a){orb(this.b)};_.b=null;o2(748,1,Coc,wrb);_.Lc=function xrb(a){prb(this.b)};_.b=null;o2(749,1,Foc);_.qc=function Brb(){var a,b,c,d,e;T4(this.b,(a=new HUb,b=qI(a.k,99),pj(a.db,'cw-FlexTable',true),a.db.style[Oqc]='32em',a.p[Fuc]=5,a.p[Guc]=3,TUb(b,1,(OVb(),KVb)),yUb(a,0,0,'\u8FD9\u662F\u4E00\u4E2A\u53EF\u652F\u6301 <B>colspans<\/B> \u548C <B>rowspans<\/B> \u7684 FlexTable\u3002  \u60A8\u53EF\u4EE5\u7528\u5B83\u6765\u5E03\u5C40\u9875\u9762\u6216\u4F5C\u4E3A\u5176\u5B83\u7279\u6B8A\u7528\u9014\u7684\u8868\u3002'),QUb(b,0)[vwc]=2,c=new ONb('\u6DFB\u52A0\u884C',new trb(a)),pj(c.db,uxc,true),d=new ONb('\u5220\u9664\u884C',new wrb(a)),pj(d.db,uxc,true),e=new C5b,e.db[Nqc]='cw-FlexTable-buttonPanel',z5b(e,c),z5b(e,d),BUb(a,0,1,e),VUb(b,0,1,(VVb(),UVb)),orb(a),orb(a),tUb(a,'cwFlexTable'),a))};var zT=Ucc(yvc,'CwFlexTable$1',747),AT=Ucc(yvc,'CwFlexTable$2',748);spc(Jn)(17);

@@ -1,0 +1,2 @@
+function NUb(){var a,b,c,d,e;b=new Emc(4,4);d=b.g;c=b.f;for(e=0;e<d;++e){for(a=0;a<c;++a){Ylc(b,e,a,new cbc((gAb(),Xzb)))}}Qlc(b,'cwGrid');return b}
+svb(816,1,VRc);_.lc=function TUb(){ayb(this.a,NUb())};ISc(vn)(16);

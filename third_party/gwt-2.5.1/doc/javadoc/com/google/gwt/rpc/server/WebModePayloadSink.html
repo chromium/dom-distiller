@@ -1,0 +1,683 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>WebModePayloadSink (Google Web Toolkit Javadoc)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="WebModePayloadSink (Google Web Toolkit Javadoc)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/WebModePayloadSink.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/google/gwt/rpc/server/WebModeClientOracle.Triple.html" title="class in com.google.gwt.rpc.server"><span class="strong">Prev Class</span></a></li>
+<li>Next Class</li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/google/gwt/rpc/server/WebModePayloadSink.html" target="_top">Frames</a></li>
+<li><a href="WebModePayloadSink.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.google.gwt.rpc.server</div>
+<h2 title="Class WebModePayloadSink" class="title">Class WebModePayloadSink</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>com.google.gwt.rpc.client.ast.CommandSink</li>
+<li>
+<ul class="inheritance">
+<li>com.google.gwt.rpc.server.WebModePayloadSink</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre>public class <span class="strong">WebModePayloadSink</span>
+extends com.google.gwt.rpc.client.ast.CommandSink</pre>
+<div class="block">A CommandSink that will generate a web-mode payload.
+ 
+ ONE-SHOT EVAL (no incremental evaluation, must call finish())</div>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#COMMA_BYTES">COMMA_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#DOT_BYTES">DOT_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#EQ_BYTES">EQ_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#FUNCTION_BYTES">FUNCTION_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#LBRACE_BYTES">LBRACE_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#LBRACKET_BYTES">LBRACKET_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#LPAREN_BYTES">LPAREN_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#NEW_BYTES">NEW_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#NEWLINE_BYTES">NEWLINE_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#NULL_BYTES">NULL_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#ONE_BYTES">ONE_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>(package private) static boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#PRETTY">PRETTY</a></strong></code>
+<div class="block">A runtime flag to indicate that the generated output should be made to be
+ human-readable.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#QUOTE_BYTES">QUOTE_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#RBRACE_BYTES">RBRACE_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#RBRACKET_BYTES">RBRACKET_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#RETURN_BYTES">RETURN_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#RPAREN_BYTES">RPAREN_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#SEMI_BYTES">SEMI_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#SPACE_BYTES">SPACE_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#THROW_BYTES">THROW_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#ZERO_BYTES">ZERO_BYTES</a></strong></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#WebModePayloadSink(com.google.gwt.rpc.server.ClientOracle, java.io.OutputStream)">WebModePayloadSink</a></strong>(<a href="../../../../../com/google/gwt/rpc/server/ClientOracle.html" title="class in com.google.gwt.rpc.server">ClientOracle</a>&nbsp;clientOracle,
+                  java.io.OutputStream&nbsp;out)</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#accept(com.google.gwt.rpc.client.ast.RpcCommand)">accept</a></strong>(com.google.gwt.rpc.client.ast.RpcCommand&nbsp;command)</code>
+<div class="block">Accept an RpcCommand for processing.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#finish()">finish</a></strong>()</code>
+<div class="block">The caller must close the stream.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>(package private) void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#forget(com.google.gwt.rpc.client.ast.ValueCommand)">forget</a></strong>(com.google.gwt.rpc.client.ast.ValueCommand&nbsp;x)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>(package private) static byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#getBytes(java.lang.String)">getBytes</a></strong>(java.lang.String&nbsp;x)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>(package private) boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#hasBackRef(com.google.gwt.rpc.client.ast.ValueCommand)">hasBackRef</a></strong>(com.google.gwt.rpc.client.ast.ValueCommand&nbsp;x)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>(package private) byte[]</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#makeBackRef(com.google.gwt.rpc.client.ast.ValueCommand)">makeBackRef</a></strong>(com.google.gwt.rpc.client.ast.ValueCommand&nbsp;x)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>(package private) void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#send(java.nio.ByteBuffer)">send</a></strong>(java.nio.ByteBuffer&nbsp;x)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>(package private) void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/WebModePayloadSink.html#send(java.lang.String)">send</a></strong>(java.lang.String&nbsp;x)</code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="COMMA_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>COMMA_BYTES</h4>
+<pre>static final&nbsp;byte[] COMMA_BYTES</pre>
+</li>
+</ul>
+<a name="DOT_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DOT_BYTES</h4>
+<pre>static final&nbsp;byte[] DOT_BYTES</pre>
+</li>
+</ul>
+<a name="EQ_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>EQ_BYTES</h4>
+<pre>static final&nbsp;byte[] EQ_BYTES</pre>
+</li>
+</ul>
+<a name="FUNCTION_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>FUNCTION_BYTES</h4>
+<pre>static final&nbsp;byte[] FUNCTION_BYTES</pre>
+</li>
+</ul>
+<a name="LBRACE_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>LBRACE_BYTES</h4>
+<pre>static final&nbsp;byte[] LBRACE_BYTES</pre>
+</li>
+</ul>
+<a name="LBRACKET_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>LBRACKET_BYTES</h4>
+<pre>static final&nbsp;byte[] LBRACKET_BYTES</pre>
+</li>
+</ul>
+<a name="LPAREN_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>LPAREN_BYTES</h4>
+<pre>static final&nbsp;byte[] LPAREN_BYTES</pre>
+</li>
+</ul>
+<a name="NEW_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>NEW_BYTES</h4>
+<pre>static final&nbsp;byte[] NEW_BYTES</pre>
+</li>
+</ul>
+<a name="NEWLINE_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>NEWLINE_BYTES</h4>
+<pre>static final&nbsp;byte[] NEWLINE_BYTES</pre>
+</li>
+</ul>
+<a name="NULL_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>NULL_BYTES</h4>
+<pre>static final&nbsp;byte[] NULL_BYTES</pre>
+</li>
+</ul>
+<a name="ONE_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ONE_BYTES</h4>
+<pre>static final&nbsp;byte[] ONE_BYTES</pre>
+</li>
+</ul>
+<a name="QUOTE_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>QUOTE_BYTES</h4>
+<pre>static final&nbsp;byte[] QUOTE_BYTES</pre>
+</li>
+</ul>
+<a name="RBRACE_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>RBRACE_BYTES</h4>
+<pre>static final&nbsp;byte[] RBRACE_BYTES</pre>
+</li>
+</ul>
+<a name="RBRACKET_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>RBRACKET_BYTES</h4>
+<pre>static final&nbsp;byte[] RBRACKET_BYTES</pre>
+</li>
+</ul>
+<a name="RETURN_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>RETURN_BYTES</h4>
+<pre>static final&nbsp;byte[] RETURN_BYTES</pre>
+</li>
+</ul>
+<a name="RPAREN_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>RPAREN_BYTES</h4>
+<pre>static final&nbsp;byte[] RPAREN_BYTES</pre>
+</li>
+</ul>
+<a name="SPACE_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SPACE_BYTES</h4>
+<pre>static final&nbsp;byte[] SPACE_BYTES</pre>
+</li>
+</ul>
+<a name="SEMI_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SEMI_BYTES</h4>
+<pre>static final&nbsp;byte[] SEMI_BYTES</pre>
+</li>
+</ul>
+<a name="THROW_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>THROW_BYTES</h4>
+<pre>static final&nbsp;byte[] THROW_BYTES</pre>
+</li>
+</ul>
+<a name="ZERO_BYTES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ZERO_BYTES</h4>
+<pre>static final&nbsp;byte[] ZERO_BYTES</pre>
+</li>
+</ul>
+<a name="PRETTY">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>PRETTY</h4>
+<pre>static final&nbsp;boolean PRETTY</pre>
+<div class="block">A runtime flag to indicate that the generated output should be made to be
+ human-readable.</div>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="WebModePayloadSink(com.google.gwt.rpc.server.ClientOracle, java.io.OutputStream)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>WebModePayloadSink</h4>
+<pre>public&nbsp;WebModePayloadSink(<a href="../../../../../com/google/gwt/rpc/server/ClientOracle.html" title="class in com.google.gwt.rpc.server">ClientOracle</a>&nbsp;clientOracle,
+                  java.io.OutputStream&nbsp;out)</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getBytes(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBytes</h4>
+<pre>static&nbsp;byte[]&nbsp;getBytes(java.lang.String&nbsp;x)</pre>
+</li>
+</ul>
+<a name="accept(com.google.gwt.rpc.client.ast.RpcCommand)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>accept</h4>
+<pre>public&nbsp;void&nbsp;accept(com.google.gwt.rpc.client.ast.RpcCommand&nbsp;command)
+            throws <a href="../../../../../com/google/gwt/user/client/rpc/SerializationException.html" title="class in com.google.gwt.user.client.rpc">SerializationException</a></pre>
+<div class="block"><strong>Description copied from class:&nbsp;<code>com.google.gwt.rpc.client.ast.CommandSink</code></strong></div>
+<div class="block">Accept an RpcCommand for processing.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>accept</code>&nbsp;in class&nbsp;<code>com.google.gwt.rpc.client.ast.CommandSink</code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/google/gwt/user/client/rpc/SerializationException.html" title="class in com.google.gwt.user.client.rpc">SerializationException</a></code></dd></dl>
+</li>
+</ul>
+<a name="finish()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>finish</h4>
+<pre>public&nbsp;void&nbsp;finish()
+            throws <a href="../../../../../com/google/gwt/user/client/rpc/SerializationException.html" title="class in com.google.gwt.user.client.rpc">SerializationException</a></pre>
+<div class="block">The caller must close the stream.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code>finish</code>&nbsp;in class&nbsp;<code>com.google.gwt.rpc.client.ast.CommandSink</code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/google/gwt/user/client/rpc/SerializationException.html" title="class in com.google.gwt.user.client.rpc">SerializationException</a></code></dd></dl>
+</li>
+</ul>
+<a name="forget(com.google.gwt.rpc.client.ast.ValueCommand)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>forget</h4>
+<pre>void&nbsp;forget(com.google.gwt.rpc.client.ast.ValueCommand&nbsp;x)</pre>
+</li>
+</ul>
+<a name="hasBackRef(com.google.gwt.rpc.client.ast.ValueCommand)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasBackRef</h4>
+<pre>boolean&nbsp;hasBackRef(com.google.gwt.rpc.client.ast.ValueCommand&nbsp;x)</pre>
+</li>
+</ul>
+<a name="makeBackRef(com.google.gwt.rpc.client.ast.ValueCommand)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>makeBackRef</h4>
+<pre>byte[]&nbsp;makeBackRef(com.google.gwt.rpc.client.ast.ValueCommand&nbsp;x)</pre>
+</li>
+</ul>
+<a name="send(java.nio.ByteBuffer)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>send</h4>
+<pre>void&nbsp;send(java.nio.ByteBuffer&nbsp;x)
+    throws <a href="../../../../../com/google/gwt/user/client/rpc/SerializationException.html" title="class in com.google.gwt.user.client.rpc">SerializationException</a></pre>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/google/gwt/user/client/rpc/SerializationException.html" title="class in com.google.gwt.user.client.rpc">SerializationException</a></code></dd></dl>
+</li>
+</ul>
+<a name="send(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>send</h4>
+<pre>void&nbsp;send(java.lang.String&nbsp;x)
+    throws <a href="../../../../../com/google/gwt/user/client/rpc/SerializationException.html" title="class in com.google.gwt.user.client.rpc">SerializationException</a></pre>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/google/gwt/user/client/rpc/SerializationException.html" title="class in com.google.gwt.user.client.rpc">SerializationException</a></code></dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/WebModePayloadSink.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/google/gwt/rpc/server/WebModeClientOracle.Triple.html" title="class in com.google.gwt.rpc.server"><span class="strong">Prev Class</span></a></li>
+<li>Next Class</li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/google/gwt/rpc/server/WebModePayloadSink.html" target="_top">Frames</a></li>
+<li><a href="WebModePayloadSink.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

@@ -1,0 +1,2 @@
+function oUb(){var a,b,c,d,e;b=new Ulc(4,4);d=b.i;c=b.g;for(e=0;e<d;++e){for(a=0;a<c;++a){mlc(b,e,a,new mac((Jzb(),yzb)))}}elc(b,'cwGrid');return b}
+$ub(813,1,YQc);_.mc=function uUb(){Dxb(this.b,oUb())};LRc(wn)(16);

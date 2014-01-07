@@ -1,0 +1,2 @@
+function h6b(){var a,b,c,d,e;b=new $zc(4,4);d=b.g;c=b.f;for(e=0;e<d;++e){for(a=0;a<c;++a){szc(b,e,a,new yoc((CNb(),rNb)))}}kzc(b,'cwGrid');return b}
+OIb(833,1,p3c);_.lc=function n6b(){wLb(this.a,h6b())};c4c(vn)(16);

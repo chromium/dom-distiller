@@ -1,0 +1,2 @@
+function arb(){var a,b,c,d,e;b=new JUb(4,4);d=b.i;c=b.g;for(e=0;e<d;++e){for(a=0;a<c;++a){bUb(b,e,a,new bJb((v6(),k6)))}}VTb(b,'cwGrid');return b}
+M1(744,1,Znc);_.qc=function grb(){p4(this.b,arb())};Moc(In)(16);

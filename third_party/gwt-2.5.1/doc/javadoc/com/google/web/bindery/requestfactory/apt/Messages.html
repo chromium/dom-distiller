@@ -1,0 +1,580 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>Messages (Google Web Toolkit Javadoc)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Messages (Google Web Toolkit Javadoc)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/Messages.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../../com/google/web/bindery/requestfactory/apt/HaltException.html" title="class in com.google.web.bindery.requestfactory.apt"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../com/google/web/bindery/requestfactory/apt/ProxyScanner.html" title="class in com.google.web.bindery.requestfactory.apt"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../index.html?com/google/web/bindery/requestfactory/apt/Messages.html" target="_top">Frames</a></li>
+<li><a href="Messages.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.google.web.bindery.requestfactory.apt</div>
+<h2 title="Class Messages" class="title">Class Messages</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>com.google.web.bindery.requestfactory.apt.Messages</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre> class <span class="strong">Messages</span>
+extends java.lang.Object</pre>
+<div class="block">Contains string-formatting methods to produce error messages. This class
+ exists to avoid the need to duplicate error messages in test code. All method
+ parameters in this class accept <code>Object</code> so that the production code
+ can pass <code>javax.lang.model</code> types and the test code can pass Strings.</div>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#contextMissingDomainType(java.lang.Object)">contextMissingDomainType</a></strong>(java.lang.Object&nbsp;domainTypeName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#contextMustBeAnnotated(java.lang.Object)">contextMustBeAnnotated</a></strong>(java.lang.Object&nbsp;requestContextName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#contextRequiredReturnTypes(java.lang.Object, java.lang.Object)">contextRequiredReturnTypes</a></strong>(java.lang.Object&nbsp;requestName,
+                          java.lang.Object&nbsp;instanceRequestName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#deobfuscatorMissingContext(java.lang.Object)">deobfuscatorMissingContext</a></strong>(java.lang.Object&nbsp;contextName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#deobfuscatorMissingProxy(java.lang.Object)">deobfuscatorMissingProxy</a></strong>(java.lang.Object&nbsp;proxyName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#domainFindNotStatic(java.lang.Object)">domainFindNotStatic</a></strong>(java.lang.Object&nbsp;domainTypeName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#domainGetIdStatic()">domainGetIdStatic</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#domainGetVersionStatic()">domainGetVersionStatic</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#domainMethodNotPublic(java.lang.Object)">domainMethodNotPublic</a></strong>(java.lang.Object&nbsp;domainMethodName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#domainMethodWrongModifier(boolean, java.lang.Object)">domainMethodWrongModifier</a></strong>(boolean&nbsp;expectStatic,
+                         java.lang.Object&nbsp;domainMethodName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#domainMissingFind(java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object)">domainMissingFind</a></strong>(java.lang.Object&nbsp;domainType,
+                 java.lang.Object&nbsp;simpleName,
+                 java.lang.Object&nbsp;getIdReturnType,
+                 java.lang.Object&nbsp;checkedTypeName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#domainMissingMethod(java.lang.Object)">domainMissingMethod</a></strong>(java.lang.Object&nbsp;description)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#domainNoGetId(java.lang.Object)">domainNoGetId</a></strong>(java.lang.Object&nbsp;domainType)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#domainNoGetVersion(java.lang.Object)">domainNoGetVersion</a></strong>(java.lang.Object&nbsp;domainType)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#domainNotDefaultInstantiable(java.lang.Object, java.lang.Object, java.lang.Object)">domainNotDefaultInstantiable</a></strong>(java.lang.Object&nbsp;domainName,
+                            java.lang.Object&nbsp;proxyName,
+                            java.lang.Object&nbsp;requestContextName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#factoryMustBeAssignable(java.lang.Object)">factoryMustBeAssignable</a></strong>(java.lang.Object&nbsp;assignableTo)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#factoryMustReturnInterface(java.lang.Object)">factoryMustReturnInterface</a></strong>(java.lang.Object&nbsp;returnType)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#factoryNoMethodParameters()">factoryNoMethodParameters</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#methodNoDomainPeer(java.lang.Object, boolean)">methodNoDomainPeer</a></strong>(java.lang.Object&nbsp;proxyTypeName,
+                  boolean&nbsp;isParameter)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#noSuchType(java.lang.String)">noSuchType</a></strong>(java.lang.String&nbsp;binaryTypeName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#proxyMissingDomainType(java.lang.Object)">proxyMissingDomainType</a></strong>(java.lang.Object&nbsp;missingDomainName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#proxyMustBeAnnotated(java.lang.Object)">proxyMustBeAnnotated</a></strong>(java.lang.Object&nbsp;typeName)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#proxyOnlyGettersSetters()">proxyOnlyGettersSetters</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#rawType()">rawType</a></strong>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#redundantAnnotation(java.lang.Object)">redundantAnnotation</a></strong>(java.lang.Object&nbsp;annotationName)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#untransportableType(java.lang.Object)">untransportableType</a></strong>(java.lang.Object&nbsp;returnType)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/apt/Messages.html#warnSuffix()">warnSuffix</a></strong>()</code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="contextMissingDomainType(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>contextMissingDomainType</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;contextMissingDomainType(java.lang.Object&nbsp;domainTypeName)</pre>
+</li>
+</ul>
+<a name="contextMustBeAnnotated(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>contextMustBeAnnotated</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;contextMustBeAnnotated(java.lang.Object&nbsp;requestContextName)</pre>
+</li>
+</ul>
+<a name="contextRequiredReturnTypes(java.lang.Object, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>contextRequiredReturnTypes</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;contextRequiredReturnTypes(java.lang.Object&nbsp;requestName,
+                                          java.lang.Object&nbsp;instanceRequestName)</pre>
+</li>
+</ul>
+<a name="deobfuscatorMissingContext(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>deobfuscatorMissingContext</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;deobfuscatorMissingContext(java.lang.Object&nbsp;contextName)</pre>
+</li>
+</ul>
+<a name="deobfuscatorMissingProxy(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>deobfuscatorMissingProxy</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;deobfuscatorMissingProxy(java.lang.Object&nbsp;proxyName)</pre>
+</li>
+</ul>
+<a name="domainFindNotStatic(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>domainFindNotStatic</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;domainFindNotStatic(java.lang.Object&nbsp;domainTypeName)</pre>
+</li>
+</ul>
+<a name="domainGetIdStatic()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>domainGetIdStatic</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;domainGetIdStatic()</pre>
+</li>
+</ul>
+<a name="domainGetVersionStatic()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>domainGetVersionStatic</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;domainGetVersionStatic()</pre>
+</li>
+</ul>
+<a name="domainMethodNotPublic(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>domainMethodNotPublic</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;domainMethodNotPublic(java.lang.Object&nbsp;domainMethodName)</pre>
+</li>
+</ul>
+<a name="domainMethodWrongModifier(boolean, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>domainMethodWrongModifier</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;domainMethodWrongModifier(boolean&nbsp;expectStatic,
+                                         java.lang.Object&nbsp;domainMethodName)</pre>
+</li>
+</ul>
+<a name="domainMissingFind(java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>domainMissingFind</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;domainMissingFind(java.lang.Object&nbsp;domainType,
+                                 java.lang.Object&nbsp;simpleName,
+                                 java.lang.Object&nbsp;getIdReturnType,
+                                 java.lang.Object&nbsp;checkedTypeName)</pre>
+</li>
+</ul>
+<a name="domainMissingMethod(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>domainMissingMethod</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;domainMissingMethod(java.lang.Object&nbsp;description)</pre>
+</li>
+</ul>
+<a name="domainNoGetId(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>domainNoGetId</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;domainNoGetId(java.lang.Object&nbsp;domainType)</pre>
+</li>
+</ul>
+<a name="domainNoGetVersion(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>domainNoGetVersion</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;domainNoGetVersion(java.lang.Object&nbsp;domainType)</pre>
+</li>
+</ul>
+<a name="domainNotDefaultInstantiable(java.lang.Object, java.lang.Object, java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>domainNotDefaultInstantiable</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;domainNotDefaultInstantiable(java.lang.Object&nbsp;domainName,
+                                            java.lang.Object&nbsp;proxyName,
+                                            java.lang.Object&nbsp;requestContextName)</pre>
+</li>
+</ul>
+<a name="factoryMustBeAssignable(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>factoryMustBeAssignable</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;factoryMustBeAssignable(java.lang.Object&nbsp;assignableTo)</pre>
+</li>
+</ul>
+<a name="factoryMustReturnInterface(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>factoryMustReturnInterface</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;factoryMustReturnInterface(java.lang.Object&nbsp;returnType)</pre>
+</li>
+</ul>
+<a name="factoryNoMethodParameters()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>factoryNoMethodParameters</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;factoryNoMethodParameters()</pre>
+</li>
+</ul>
+<a name="methodNoDomainPeer(java.lang.Object, boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>methodNoDomainPeer</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;methodNoDomainPeer(java.lang.Object&nbsp;proxyTypeName,
+                                  boolean&nbsp;isParameter)</pre>
+</li>
+</ul>
+<a name="noSuchType(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>noSuchType</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;noSuchType(java.lang.String&nbsp;binaryTypeName)</pre>
+</li>
+</ul>
+<a name="proxyMissingDomainType(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>proxyMissingDomainType</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;proxyMissingDomainType(java.lang.Object&nbsp;missingDomainName)</pre>
+</li>
+</ul>
+<a name="proxyMustBeAnnotated(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>proxyMustBeAnnotated</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;proxyMustBeAnnotated(java.lang.Object&nbsp;typeName)</pre>
+</li>
+</ul>
+<a name="proxyOnlyGettersSetters()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>proxyOnlyGettersSetters</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;proxyOnlyGettersSetters()</pre>
+</li>
+</ul>
+<a name="rawType()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>rawType</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;rawType()</pre>
+</li>
+</ul>
+<a name="redundantAnnotation(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>redundantAnnotation</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;redundantAnnotation(java.lang.Object&nbsp;annotationName)</pre>
+</li>
+</ul>
+<a name="untransportableType(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>untransportableType</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;untransportableType(java.lang.Object&nbsp;returnType)</pre>
+</li>
+</ul>
+<a name="warnSuffix()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>warnSuffix</h4>
+<pre>public static&nbsp;java.lang.String&nbsp;warnSuffix()</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/Messages.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../../com/google/web/bindery/requestfactory/apt/HaltException.html" title="class in com.google.web.bindery.requestfactory.apt"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../com/google/web/bindery/requestfactory/apt/ProxyScanner.html" title="class in com.google.web.bindery.requestfactory.apt"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../index.html?com/google/web/bindery/requestfactory/apt/Messages.html" target="_top">Frames</a></li>
+<li><a href="Messages.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

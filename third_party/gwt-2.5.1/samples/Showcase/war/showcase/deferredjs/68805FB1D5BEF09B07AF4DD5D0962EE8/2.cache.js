@@ -1,0 +1,2 @@
+function QVb(){}
+$ub(842,1,VQc,QVb);_.Dc=function RVb(a){Vbc('\u062A\u0648\u0642\u0641 \u0639\u0646 \u0648\u0643\u0632\u064A!')};$ub(843,1,YQc);_.mc=function VVb(){var a,b,c;Dxb(this.b,(a=new inc,a.f[gXc]=10,b=new vec('\u0632\u0631 \u0639\u0627\u062F\u064A',new QVb),Oxc(b.db,ESc,'cwBasicButton-normal'),fnc(a,b),c=new uec('\u0632\u0631 \u0627\u0644\u0645\u0639\u0648\u0642\u064A\u0646'),Oxc(c.db,ESc,'cwBasicButton-disabled'),c.db[MYc]=true,fnc(a,c),a))};var Akb=nFc(WXc,'CwBasicButton$1',842);LRc(wn)(2);

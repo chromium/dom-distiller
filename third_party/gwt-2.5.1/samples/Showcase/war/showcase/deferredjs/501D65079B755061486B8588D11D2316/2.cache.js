@@ -1,0 +1,2 @@
+function VFb(){}
+dfb(802,1,sBc,VFb);_.Lc=function WFb(a){$Xb('Arr\xEAtez de me tapoter!')};dfb(803,1,vBc);_.qc=function $Fb(){var a,b,c;Ihb(this.b,(a=new p7b,a.f[AHc]=10,b=new E$b('Bouton normal',new VFb),Whc(b.db,cDc,'cwBasicButton-normal'),m7b(a,b),c=new D$b('Bouton d\xE9sactiv\xE9'),Whc(c.db,cDc,'cwBasicButton-disabled'),c.db[gJc]=true,m7b(a,c),a))};var C4=Kpc(pIc,'CwBasicButton$1',802);iCc(Jn)(2);

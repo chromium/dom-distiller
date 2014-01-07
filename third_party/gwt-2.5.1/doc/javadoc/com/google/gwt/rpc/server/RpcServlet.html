@@ -1,0 +1,558 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>RpcServlet (Google Web Toolkit Javadoc)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="RpcServlet (Google Web Toolkit Javadoc)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/RpcServlet.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/google/gwt/rpc/server/RPC.html" title="class in com.google.gwt.rpc.server"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/google/gwt/rpc/server/SimplePayloadDecoder.html" title="class in com.google.gwt.rpc.server"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/google/gwt/rpc/server/RpcServlet.html" target="_top">Frames</a></li>
+<li><a href="RpcServlet.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.google.gwt.rpc.server</div>
+<h2 title="Class RpcServlet" class="title">Class RpcServlet</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>javax.servlet.GenericServlet</li>
+<li>
+<ul class="inheritance">
+<li>javax.servlet.http.HttpServlet</li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html" title="class in com.google.gwt.user.server.rpc">com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet</a></li>
+<li>
+<ul class="inheritance">
+<li>com.google.gwt.rpc.server.RpcServlet</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd>java.io.Serializable, javax.servlet.Servlet, javax.servlet.ServletConfig</dd>
+</dl>
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../../com/google/gwt/user/server/rpc/HybridServiceServlet.html" title="class in com.google.gwt.user.server.rpc">HybridServiceServlet</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public class <span class="strong">RpcServlet</span>
+extends <a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html" title="class in com.google.gwt.user.server.rpc">AbstractRemoteServiceServlet</a></pre>
+<div class="block">EXPERIMENTAL and subject to change. Do not use this in production code.
+ <p>
+ The servlet base class for your RPC service implementations that
+ automatically deserializes incoming requests from the client and serializes
+ outgoing responses for client/server RPCs.</div>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../serialized-form.html#com.google.gwt.rpc.server.RpcServlet">Serialized Form</a></dd></dl>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected static java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/RpcServlet.html#CLIENT_ORACLE_EXTENSION">CLIENT_ORACLE_EXTENSION</a></strong></code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;com.google.gwt.user.server.rpc.<a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html" title="class in com.google.gwt.user.server.rpc">AbstractRemoteServiceServlet</a></h3>
+<code><a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html#perThreadRequest">perThreadRequest</a>, <a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html#perThreadResponse">perThreadResponse</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../com/google/gwt/rpc/server/RpcServlet.html#RpcServlet()">RpcServlet</a></strong>()</code>
+<div class="block">The default constructor used by service implementations that
+ extend this class.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../com/google/gwt/rpc/server/RpcServlet.html#RpcServlet(java.lang.Object)">RpcServlet</a></strong>(java.lang.Object&nbsp;delegate)</code>
+<div class="block">The wrapping constructor used by service implementations that are
+ separate from this class.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/RpcServlet.html#allowHostedModeConnections()">allowHostedModeConnections</a></strong>()</code>
+<div class="block">Indicates whether or not an RPC request from a Development Mode client
+ should be serviced.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected java.io.InputStream</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/RpcServlet.html#findClientOracleData(java.lang.String, java.lang.String)">findClientOracleData</a></strong>(java.lang.String&nbsp;requestModuleBasePath,
+                    java.lang.String&nbsp;permutationStrongName)</code>
+<div class="block">Override this method to control access to permutation-specific data.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/google/gwt/rpc/server/ClientOracle.html" title="class in com.google.gwt.rpc.server">ClientOracle</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/RpcServlet.html#getClientOracle()">getClientOracle</a></strong>()</code>
+<div class="block">This method creates the ClientOracle that will provide data about the
+ remote client.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/RpcServlet.html#getRequestModuleBasePath()">getRequestModuleBasePath</a></strong>()</code>
+<div class="block">Extract the module's base path from the current request.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/RpcServlet.html#processCall(com.google.gwt.rpc.server.ClientOracle, java.lang.String, java.io.OutputStream)">processCall</a></strong>(<a href="../../../../../com/google/gwt/rpc/server/ClientOracle.html" title="class in com.google.gwt.rpc.server">ClientOracle</a>&nbsp;clientOracle,
+           java.lang.String&nbsp;payload,
+           java.io.OutputStream&nbsp;stream)</code>
+<div class="block">Process a call originating from the given request.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/RpcServlet.html#processPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)">processPost</a></strong>(javax.servlet.http.HttpServletRequest&nbsp;request,
+           javax.servlet.http.HttpServletResponse&nbsp;response)</code>
+<div class="block">Standard HttpServlet method: handle the POST.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/rpc/server/RpcServlet.html#shouldCompressResponse(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)">shouldCompressResponse</a></strong>(javax.servlet.http.HttpServletRequest&nbsp;request,
+                      javax.servlet.http.HttpServletResponse&nbsp;response)</code>
+<div class="block">Determines whether the response to a given servlet request should or should
+ not be GZIP compressed.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.google.gwt.user.server.rpc.AbstractRemoteServiceServlet">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.google.gwt.user.server.rpc.<a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html" title="class in com.google.gwt.user.server.rpc">AbstractRemoteServiceServlet</a></h3>
+<code><a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)">doPost</a>, <a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html#doUnexpectedFailure(java.lang.Throwable)">doUnexpectedFailure</a>, <a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html#getPermutationStrongName()">getPermutationStrongName</a>, <a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html#getThreadLocalRequest()">getThreadLocalRequest</a>, <a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html#getThreadLocalResponse()">getThreadLocalResponse</a>, <a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html#onAfterRequestDeserialized(com.google.gwt.user.server.rpc.RPCRequest)">onAfterRequestDeserialized</a>, <a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html#readContent(javax.servlet.http.HttpServletRequest)">readContent</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_javax.servlet.http.HttpServlet">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;javax.servlet.http.HttpServlet</h3>
+<code>doDelete, doGet, doHead, doOptions, doPut, doTrace, getLastModified, service, service</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_javax.servlet.GenericServlet">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;javax.servlet.GenericServlet</h3>
+<code>destroy, getInitParameter, getInitParameterNames, getServletConfig, getServletContext, getServletInfo, getServletName, init, init, log, log</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="CLIENT_ORACLE_EXTENSION">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>CLIENT_ORACLE_EXTENSION</h4>
+<pre>protected static final&nbsp;java.lang.String CLIENT_ORACLE_EXTENSION</pre>
+<dl><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../constant-values.html#com.google.gwt.rpc.server.RpcServlet.CLIENT_ORACLE_EXTENSION">Constant Field Values</a></dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="RpcServlet()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>RpcServlet</h4>
+<pre>public&nbsp;RpcServlet()</pre>
+<div class="block">The default constructor used by service implementations that
+ extend this class.  The servlet will delegate AJAX requests to
+ the appropriate method in the subclass.</div>
+</li>
+</ul>
+<a name="RpcServlet(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>RpcServlet</h4>
+<pre>public&nbsp;RpcServlet(java.lang.Object&nbsp;delegate)</pre>
+<div class="block">The wrapping constructor used by service implementations that are
+ separate from this class.  The servlet will delegate AJAX
+ requests to the appropriate method in the given object.</div>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getClientOracle()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getClientOracle</h4>
+<pre>public&nbsp;<a href="../../../../../com/google/gwt/rpc/server/ClientOracle.html" title="class in com.google.gwt.rpc.server">ClientOracle</a>&nbsp;getClientOracle()
+                             throws <a href="../../../../../com/google/gwt/user/client/rpc/SerializationException.html" title="class in com.google.gwt.user.client.rpc">SerializationException</a></pre>
+<div class="block">This method creates the ClientOracle that will provide data about the
+ remote client. It delegates to
+ <a href="../../../../../com/google/gwt/rpc/server/RpcServlet.html#findClientOracleData(java.lang.String, java.lang.String)"><code>findClientOracleData(String, String)</code></a> to obtain access to
+ ClientOracle data emitted by the GWT compiler.</div>
+<dl><dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/google/gwt/user/client/rpc/SerializationException.html" title="class in com.google.gwt.user.client.rpc">SerializationException</a></code></dd></dl>
+</li>
+</ul>
+<a name="processCall(com.google.gwt.rpc.server.ClientOracle, java.lang.String, java.io.OutputStream)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>processCall</h4>
+<pre>public&nbsp;void&nbsp;processCall(<a href="../../../../../com/google/gwt/rpc/server/ClientOracle.html" title="class in com.google.gwt.rpc.server">ClientOracle</a>&nbsp;clientOracle,
+               java.lang.String&nbsp;payload,
+               java.io.OutputStream&nbsp;stream)
+                 throws <a href="../../../../../com/google/gwt/user/client/rpc/SerializationException.html" title="class in com.google.gwt.user.client.rpc">SerializationException</a></pre>
+<div class="block">Process a call originating from the given request. Uses the
+ <a href="../../../../../com/google/gwt/rpc/server/RPC.html#invokeAndStreamResponse(java.lang.Object, java.lang.reflect.Method, java.lang.Object[], com.google.gwt.rpc.server.ClientOracle, java.io.OutputStream)"><code>RPC.invokeAndStreamResponse(Object, java.lang.reflect.Method, Object[], ClientOracle, OutputStream)</code></a>
+ method to do the actual work.
+ <p>
+ Subclasses may optionally override this method to handle the payload in any
+ way they desire (by routing the request to a framework component, for
+ instance). The <code>HttpServletRequest</code> and <code>HttpServletResponse</code>
+ can be accessed via the <a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html#getThreadLocalRequest()"><code>AbstractRemoteServiceServlet.getThreadLocalRequest()</code></a> and
+ <a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html#getThreadLocalResponse()"><code>AbstractRemoteServiceServlet.getThreadLocalResponse()</code></a> methods.
+ </p>
+ This is public so that it can be unit tested easily without HTTP.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>clientOracle</code> - the ClientOracle that will be used to interpret the
+          request</dd><dd><code>payload</code> - the UTF-8 request payload</dd><dd><code>stream</code> - the OutputStream that will receive the encoded response</dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/google/gwt/user/client/rpc/SerializationException.html" title="class in com.google.gwt.user.client.rpc">SerializationException</a></code> - if we cannot serialize the response</dd></dl>
+</li>
+</ul>
+<a name="processPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>processPost</h4>
+<pre>public final&nbsp;void&nbsp;processPost(javax.servlet.http.HttpServletRequest&nbsp;request,
+               javax.servlet.http.HttpServletResponse&nbsp;response)
+                       throws javax.servlet.ServletException,
+                              java.io.IOException,
+                              <a href="../../../../../com/google/gwt/user/client/rpc/SerializationException.html" title="class in com.google.gwt.user.client.rpc">SerializationException</a></pre>
+<div class="block">Standard HttpServlet method: handle the POST.
+ 
+ This doPost method swallows ALL exceptions, logs them in the
+ ServletContext, and returns a GENERIC_FAILURE_MSG response with status code
+ 500.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html#processPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)">processPost</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html" title="class in com.google.gwt.user.server.rpc">AbstractRemoteServiceServlet</a></code></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code>java.io.IOException</code></dd>
+<dd><code>javax.servlet.ServletException</code></dd>
+<dd><code><a href="../../../../../com/google/gwt/user/client/rpc/SerializationException.html" title="class in com.google.gwt.user.client.rpc">SerializationException</a></code></dd></dl>
+</li>
+</ul>
+<a name="allowHostedModeConnections()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>allowHostedModeConnections</h4>
+<pre>protected&nbsp;boolean&nbsp;allowHostedModeConnections()</pre>
+<div class="block">Indicates whether or not an RPC request from a Development Mode client
+ should be serviced. Requests from Development Mode clients will expose
+ unobfuscated identifiers in the payload. It is intended that developers
+ override this method to restrict access based on installation-specific
+ logic (such as a range of IP addresses, checking for certain cookies, etc.)
+ <p>
+ The default implementation allows hosted-mode connections from the local
+ host, loopback addresses (127.*), site local (RFC 1918), link local
+ (169.254/16) addresses, and their IPv6 equivalents.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd><code>true</code> if a Development Mode connection should be
+         allowed</dd><dt><span class="strong">See Also:</span></dt><dd><a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html#getThreadLocalRequest()"><code>AbstractRemoteServiceServlet.getThreadLocalRequest()</code></a>, 
+<code>InetAddress</code></dd></dl>
+</li>
+</ul>
+<a name="findClientOracleData(java.lang.String, java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findClientOracleData</h4>
+<pre>protected&nbsp;java.io.InputStream&nbsp;findClientOracleData(java.lang.String&nbsp;requestModuleBasePath,
+                                       java.lang.String&nbsp;permutationStrongName)
+                                            throws <a href="../../../../../com/google/gwt/user/client/rpc/SerializationException.html" title="class in com.google.gwt.user.client.rpc">SerializationException</a></pre>
+<div class="block">Override this method to control access to permutation-specific data. For
+ instance, the permutation-specific data may be stored in a database in
+ order to support older clients.
+ <p>
+ The default implementation attempts to load the file from the
+ ServletContext as
+ 
+ <code>requestModuleBasePath + permutationStrongName + CLIENT_ORACLE_EXTENSION</code></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>requestModuleBasePath</code> - the module's base path, modulo protocol and
+          host, as reported by <a href="../../../../../com/google/gwt/rpc/server/RpcServlet.html#getRequestModuleBasePath()"><code>getRequestModuleBasePath()</code></a></dd><dd><code>permutationStrongName</code> - the module's strong name as reported by
+          <a href="../../../../../com/google/gwt/user/server/rpc/AbstractRemoteServiceServlet.html#getPermutationStrongName()"><code>AbstractRemoteServiceServlet.getPermutationStrongName()</code></a></dd>
+<dt><span class="strong">Throws:</span></dt>
+<dd><code><a href="../../../../../com/google/gwt/user/client/rpc/SerializationException.html" title="class in com.google.gwt.user.client.rpc">SerializationException</a></code></dd></dl>
+</li>
+</ul>
+<a name="getRequestModuleBasePath()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRequestModuleBasePath</h4>
+<pre>protected final&nbsp;java.lang.String&nbsp;getRequestModuleBasePath()</pre>
+<div class="block">Extract the module's base path from the current request.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the module's base path, modulo protocol and host, as reported by
+         <a href="../../../../../com/google/gwt/core/client/GWT.html#getModuleBaseURL()"><code>GWT.getModuleBaseURL()</code></a> or
+         <code>null</code> if the request did not contain the
+         <a href="../../../../../com/google/gwt/user/client/rpc/RpcRequestBuilder.html#MODULE_BASE_HEADER">"X-GWT-Module-Base"</a> header</dd></dl>
+</li>
+</ul>
+<a name="shouldCompressResponse(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>shouldCompressResponse</h4>
+<pre>protected&nbsp;boolean&nbsp;shouldCompressResponse(javax.servlet.http.HttpServletRequest&nbsp;request,
+                             javax.servlet.http.HttpServletResponse&nbsp;response)</pre>
+<div class="block">Determines whether the response to a given servlet request should or should
+ not be GZIP compressed. This method is only called in cases where the
+ requester accepts GZIP encoding.
+ <p>
+ This implementation currently returns <code>true</code> if the request
+ originates from a non-local address. Subclasses can override this logic.
+ </p></div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>request</code> - the request being served</dd><dd><code>response</code> - the response that will be written into</dd>
+<dt><span class="strong">Returns:</span></dt><dd><code>true</code> if responsePayload should be GZIP compressed,
+         otherwise <code>false</code>.</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/RpcServlet.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/google/gwt/rpc/server/RPC.html" title="class in com.google.gwt.rpc.server"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/google/gwt/rpc/server/SimplePayloadDecoder.html" title="class in com.google.gwt.rpc.server"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/google/gwt/rpc/server/RpcServlet.html" target="_top">Frames</a></li>
+<li><a href="RpcServlet.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#field_summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li><a href="#field_detail">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

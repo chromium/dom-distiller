@@ -1,0 +1,3 @@
+function gc(a){Zb((bg(),_f),a)}
+function fNb(a,b){var c;if(!a.db[Nuc]!=b){c=(!a.c&&aNb(a,a.k),a.c.b)^4;c&=-3;_Mb(a,c);a.db[Nuc]=!b;if(b){$Mb(a,(!a.c&&aNb(a,a.k),a.c))}else{XMb(a);yf();gc(a.db)}}}
+i1(776,1,gnc);_.mc=function osb(){var a,b,c,d,e,f,g;N3(this.b,(a=new u4b,b=new sVb,b.f[ctc]=10,c=new sVb,c.f[ctc]=10,r4b(a,new XQb('<b>Push Buttons:<\/b>')),r4b(a,b),r4b(a,new XQb('<br><br><b>Toggle Buttons:<\/b>')),r4b(a,c),d=new j$b(new wIb((T5(),I5))),Y3b(d.db,Ooc,'cwCustomButton-push-normal'),pVb(b,d),e=new j$b(new wIb(I5)),Y3b(e.db,Ooc,'cwCustomButton-push-disabled'),fNb(e,false),pVb(b,e),f=new n2b(new wIb(I5)),Y3b(f.db,Ooc,'cwCustomButton-toggle-normal'),pVb(c,f),g=new n2b(new wIb(I5)),Y3b(g.db,Ooc,'cwCustomButton-toggle-disabled'),fNb(g,false),pVb(c,g),a))};Vnc(wn)(3);

@@ -1,0 +1,415 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>Uses of Class com.google.gwt.core.ext.Linker (Google Web Toolkit Javadoc)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="Uses of Class com.google.gwt.core.ext.Linker (Google Web Toolkit Javadoc)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="../package-summary.html">Package</a></li>
+<li><a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Class</a></li>
+<li class="navBarCell1Rev">Use</li>
+<li><a href="../package-tree.html">Tree</a></li>
+<li><a href="../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>Prev</li>
+<li>Next</li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../index.html?com/google/gwt/core/ext//class-useLinker.html" target="_top">Frames</a></li>
+<li><a href="Linker.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<div class="header">
+<h2 title="Uses of Class com.google.gwt.core.ext.Linker" class="title">Uses of Class<br>com.google.gwt.core.ext.Linker</h2>
+</div>
+<div class="classUseContainer">
+<ul class="blockList">
+<li class="blockList">
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing packages, and an explanation">
+<caption><span>Packages that use <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Package</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><a href="#com.google.gwt.core.ext.linker">com.google.gwt.core.ext.linker</a></td>
+<td class="colLast">
+<div class="block">Classes for writing Linkers.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#com.google.gwt.core.ext.linker.impl">com.google.gwt.core.ext.linker.impl</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#com.google.gwt.core.linker">com.google.gwt.core.linker</a></td>
+<td class="colLast">
+<div class="block">A package containing implementations of the GWT bootstrap linkers.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#com.google.gwt.precompress.linker">com.google.gwt.precompress.linker</a></td>
+<td class="colLast">
+<div class="block">A linker that precompresses the public artifacts that it sees.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#com.google.gwt.rpc.linker">com.google.gwt.rpc.linker</a></td>
+<td class="colLast">
+<div class="block">Classes used to implement RPC.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#com.google.gwt.user.linker.rpc">com.google.gwt.user.linker.rpc</a></td>
+<td class="colLast">
+<div class="block">Classes used to provide information about RPC for a GWT application.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<ul class="blockList">
+<li class="blockList"><a name="com.google.gwt.core.ext.linker">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a> in <a href="../../../../../../com/google/gwt/core/ext/linker/package-summary.html">com.google.gwt.core.ext.linker</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a> in <a href="../../../../../../com/google/gwt/core/ext/linker/package-summary.html">com.google.gwt.core.ext.linker</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/ext/linker/AbstractLinker.html" title="class in com.google.gwt.core.ext.linker">AbstractLinker</a></strong></code>
+<div class="block">Provides basic functions common to all Linker implementations.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../com/google/gwt/core/ext/linker/package-summary.html">com.google.gwt.core.ext.linker</a> that return types with arguments of type <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.Class&lt;? extends <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a>&gt;</code></td>
+<td class="colLast"><span class="strong">Artifact.</span><code><strong><a href="../../../../../../com/google/gwt/core/ext/linker/Artifact.html#getLinker()">getLinker</a></strong>()</code>
+<div class="block">Returns the Linker that created the Artifact.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructor parameters in <a href="../../../../../../com/google/gwt/core/ext/linker/package-summary.html">com.google.gwt.core.ext.linker</a> with type arguments of type <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/ext/linker/Artifact.html#Artifact(java.lang.Class)">Artifact</a></strong>(java.lang.Class&lt;? extends <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a>&gt;&nbsp;linker)</code>
+<div class="block">Constructor.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/ext/linker/CompilationMetricsArtifact.html#CompilationMetricsArtifact(java.lang.Class, int)">CompilationMetricsArtifact</a></strong>(java.lang.Class&lt;? extends <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a>&gt;&nbsp;linker,
+                          int&nbsp;permutationId)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/ext/linker/CompilationResult.html#CompilationResult(java.lang.Class)">CompilationResult</a></strong>(java.lang.Class&lt;? extends <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a>&gt;&nbsp;linkerType)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/ext/linker/DelegatingCompilationResult.html#DelegatingCompilationResult(java.lang.Class, com.google.gwt.core.ext.linker.CompilationResult)">DelegatingCompilationResult</a></strong>(java.lang.Class&lt;? extends <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a>&gt;&nbsp;linkerType,
+                           <a href="../../../../../../com/google/gwt/core/ext/linker/CompilationResult.html" title="class in com.google.gwt.core.ext.linker">CompilationResult</a>&nbsp;compilationResult)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/ext/linker/EmittedArtifact.html#EmittedArtifact(java.lang.Class, java.lang.String)">EmittedArtifact</a></strong>(java.lang.Class&lt;? extends <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a>&gt;&nbsp;linker,
+               java.lang.String&nbsp;partialPath)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/ext/linker/GeneratedResource.html#GeneratedResource(java.lang.Class, java.lang.Class, java.lang.String)">GeneratedResource</a></strong>(java.lang.Class&lt;? extends <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a>&gt;&nbsp;linkerType,
+                 java.lang.Class&lt;? extends <a href="../../../../../../com/google/gwt/core/ext/Generator.html" title="class in com.google.gwt.core.ext">Generator</a>&gt;&nbsp;generatorType,
+                 java.lang.String&nbsp;partialPath)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/ext/linker/ModuleMetricsArtifact.html#ModuleMetricsArtifact(java.lang.Class, int)">ModuleMetricsArtifact</a></strong>(java.lang.Class&lt;? extends <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a>&gt;&nbsp;linker,
+                     int&nbsp;instanceId)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/ext/linker/PrecompilationMetricsArtifact.html#PrecompilationMetricsArtifact(java.lang.Class, int)">PrecompilationMetricsArtifact</a></strong>(java.lang.Class&lt;? extends <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a>&gt;&nbsp;linker,
+                             int&nbsp;permutationBase)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/ext/linker/PublicResource.html#PublicResource(java.lang.Class, java.lang.String)">PublicResource</a></strong>(java.lang.Class&lt;? extends <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a>&gt;&nbsp;linkerType,
+              java.lang.String&nbsp;partialPath)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/ext/linker/ScriptReference.html#ScriptReference(java.lang.Class, java.lang.String, int)">ScriptReference</a></strong>(java.lang.Class&lt;? extends <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a>&gt;&nbsp;linkerType,
+               java.lang.String&nbsp;src,
+               int&nbsp;index)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/ext/linker/StylesheetReference.html#StylesheetReference(java.lang.Class, java.lang.String, int)">StylesheetReference</a></strong>(java.lang.Class&lt;? extends <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a>&gt;&nbsp;linkerType,
+                   java.lang.String&nbsp;src,
+                   int&nbsp;index)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/ext/linker/SyntheticArtifact.html#SyntheticArtifact(java.lang.Class, java.lang.String, byte[])">SyntheticArtifact</a></strong>(java.lang.Class&lt;? extends <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a>&gt;&nbsp;linkerType,
+                 java.lang.String&nbsp;partialPath,
+                 byte[]&nbsp;data)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/ext/linker/SyntheticArtifact.html#SyntheticArtifact(java.lang.Class, java.lang.String, byte[], long)">SyntheticArtifact</a></strong>(java.lang.Class&lt;? extends <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a>&gt;&nbsp;linkerType,
+                 java.lang.String&nbsp;partialPath,
+                 byte[]&nbsp;data,
+                 long&nbsp;lastModified)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.google.gwt.core.ext.linker.impl">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a> in com.google.gwt.core.ext.linker.impl</h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a> in com.google.gwt.core.ext.linker.impl</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong>com.google.gwt.core.ext.linker.impl.SelectionScriptLinker</strong></code>
+<div class="block">A base class for Linkers that use an external script to boostrap the GWT module.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.google.gwt.core.linker">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a> in <a href="../../../../../../com/google/gwt/core/linker/package-summary.html">com.google.gwt.core.linker</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a> in <a href="../../../../../../com/google/gwt/core/linker/package-summary.html">com.google.gwt.core.linker</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html" title="class in com.google.gwt.core.linker">CrossSiteIframeLinker</a></strong></code>
+<div class="block">This linker uses an iframe to hold the code and a script tag to download the
+ code.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/linker/DirectInstallLinker.html" title="class in com.google.gwt.core.linker">DirectInstallLinker</a></strong></code>
+<div class="block">A linker that adds a script tag to the iframe rather than downloading the
+ code as a string and then installing it into the iframe.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/linker/IFrameLinker.html" title="class in com.google.gwt.core.linker">IFrameLinker</a></strong></code>
+<div class="block">Implements the canonical GWT bootstrap sequence that loads the GWT module in
+ a separate iframe.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/linker/SingleScriptLinker.html" title="class in com.google.gwt.core.linker">SingleScriptLinker</a></strong></code>
+<div class="block">A Linker for producing a single JavaScript file from a GWT module.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/linker/SoycReportLinker.html" title="class in com.google.gwt.core.linker">SoycReportLinker</a></strong></code>
+<div class="block">Converts SOYC report files into emitted private artifacts.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/linker/SymbolMapsLinker.html" title="class in com.google.gwt.core.linker">SymbolMapsLinker</a></strong></code>
+<div class="block">This Linker exports the symbol maps associated with each compilation result as a private file.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/core/linker/XSLinker.html" title="class in com.google.gwt.core.linker">XSLinker</a></strong></code>
+<div class="block">Generates a cross-site compatible bootstrap sequence.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.google.gwt.precompress.linker">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a> in <a href="../../../../../../com/google/gwt/precompress/linker/package-summary.html">com.google.gwt.precompress.linker</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a> in <a href="../../../../../../com/google/gwt/precompress/linker/package-summary.html">com.google.gwt.precompress.linker</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/precompress/linker/PrecompressLinker.html" title="class in com.google.gwt.precompress.linker">PrecompressLinker</a></strong></code>
+<div class="block">
+ A linker that precompresses the public artifacts that it sees.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.google.gwt.rpc.linker">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a> in <a href="../../../../../../com/google/gwt/rpc/linker/package-summary.html">com.google.gwt.rpc.linker</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a> in <a href="../../../../../../com/google/gwt/rpc/linker/package-summary.html">com.google.gwt.rpc.linker</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/rpc/linker/ClientOracleLinker.html" title="class in com.google.gwt.rpc.linker">ClientOracleLinker</a></strong></code>
+<div class="block">Exports data required by server components for directly-evalable RPC.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="com.google.gwt.user.linker.rpc">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a> in <a href="../../../../../../com/google/gwt/user/linker/rpc/package-summary.html">com.google.gwt.user.linker.rpc</a></h3>
+<table border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a> in <a href="../../../../../../com/google/gwt/user/linker/rpc/package-summary.html">com.google.gwt.user.linker.rpc</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/user/linker/rpc/RpcLogLinker.html" title="class in com.google.gwt.user.linker.rpc">RpcLogLinker</a></strong></code>
+<div class="block">This linker emits <a href="../../../../../../com/google/gwt/user/linker/rpc/RpcLogArtifact.html" title="class in com.google.gwt.user.linker.rpc"><code>RpcLogArtifact</code></a>s as output files.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/gwt/user/linker/rpc/RpcPolicyManifestLinker.html" title="class in com.google.gwt.user.linker.rpc">RpcPolicyManifestLinker</a></strong></code>
+<div class="block">Emit a file containing a map of RPC proxy classes to the partial path of the
+ RPC policy file.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="../package-summary.html">Package</a></li>
+<li><a href="../../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Class</a></li>
+<li class="navBarCell1Rev">Use</li>
+<li><a href="../package-tree.html">Tree</a></li>
+<li><a href="../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li>Prev</li>
+<li>Next</li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../index.html?com/google/gwt/core/ext//class-useLinker.html" target="_top">Frames</a></li>
+<li><a href="Linker.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

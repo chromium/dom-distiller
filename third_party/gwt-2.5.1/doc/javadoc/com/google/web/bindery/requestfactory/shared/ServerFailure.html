@@ -1,0 +1,389 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>ServerFailure (Google Web Toolkit Javadoc)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="ServerFailure (Google Web Toolkit Javadoc)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/ServerFailure.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../../com/google/web/bindery/requestfactory/shared/RequestTransport.TransportReceiver.html" title="interface in com.google.web.bindery.requestfactory.shared"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../com/google/web/bindery/requestfactory/shared/Service.html" title="annotation in com.google.web.bindery.requestfactory.shared"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../index.html?com/google/web/bindery/requestfactory/shared/ServerFailure.html" target="_top">Frames</a></li>
+<li><a href="ServerFailure.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.google.web.bindery.requestfactory.shared</div>
+<h2 title="Class ServerFailure" class="title">Class ServerFailure</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>com.google.web.bindery.requestfactory.shared.ServerFailure</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre>public class <span class="strong">ServerFailure</span>
+extends java.lang.Object</pre>
+<div class="block">Describes a request failure on the server.
+ <p>
+ This error reporting mechanism is adequate at best. When RequestFactory is
+ extended to handle polymorphic types, this class will likely be replaced with
+ something more expressive.</div>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/shared/ServerFailure.html#ServerFailure()">ServerFailure</a></strong>()</code>
+<div class="block">Constructs a ServerFailure with null properties.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/shared/ServerFailure.html#ServerFailure(java.lang.String)">ServerFailure</a></strong>(java.lang.String&nbsp;message)</code>
+<div class="block">Constructs a fatal ServerFailure with null type and null stack trace.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/shared/ServerFailure.html#ServerFailure(java.lang.String, java.lang.String, java.lang.String, boolean)">ServerFailure</a></strong>(java.lang.String&nbsp;message,
+             java.lang.String&nbsp;exceptionType,
+             java.lang.String&nbsp;stackTraceString,
+             boolean&nbsp;fatal)</code>
+<div class="block">Constructs a ServerFailure object.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/shared/ServerFailure.html#getExceptionType()">getExceptionType</a></strong>()</code>
+<div class="block">Return the exception type.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/shared/ServerFailure.html#getMessage()">getMessage</a></strong>()</code>
+<div class="block">Return the failure message.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../com/google/web/bindery/requestfactory/shared/RequestContext.html" title="interface in com.google.web.bindery.requestfactory.shared">RequestContext</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/shared/ServerFailure.html#getRequestContext()">getRequestContext</a></strong>()</code>
+<div class="block">Returns the RequestContext that triggered the ServerFailure.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/shared/ServerFailure.html#getStackTraceString()">getStackTraceString</a></strong>()</code>
+<div class="block">Return the failure stack trace.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/shared/ServerFailure.html#isFatal()">isFatal</a></strong>()</code>
+<div class="block">Return true if this is a fatal error.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><strong><a href="../../../../../../com/google/web/bindery/requestfactory/shared/ServerFailure.html#setRequestContext(com.google.web.bindery.requestfactory.shared.RequestContext)">setRequestContext</a></strong>(<a href="../../../../../../com/google/web/bindery/requestfactory/shared/RequestContext.html" title="interface in com.google.web.bindery.requestfactory.shared">RequestContext</a>&nbsp;requestContext)</code>
+<div class="block">Sets the RequestContext to return via <a href="../../../../../../com/google/web/bindery/requestfactory/shared/ServerFailure.html#getRequestContext()"><code>getRequestContext()</code></a>.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="ServerFailure()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ServerFailure</h4>
+<pre>public&nbsp;ServerFailure()</pre>
+<div class="block">Constructs a ServerFailure with null properties.</div>
+</li>
+</ul>
+<a name="ServerFailure(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ServerFailure</h4>
+<pre>public&nbsp;ServerFailure(java.lang.String&nbsp;message)</pre>
+<div class="block">Constructs a fatal ServerFailure with null type and null stack trace.</div>
+</li>
+</ul>
+<a name="ServerFailure(java.lang.String, java.lang.String, java.lang.String, boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>ServerFailure</h4>
+<pre>public&nbsp;ServerFailure(java.lang.String&nbsp;message,
+             java.lang.String&nbsp;exceptionType,
+             java.lang.String&nbsp;stackTraceString,
+             boolean&nbsp;fatal)</pre>
+<div class="block">Constructs a ServerFailure object.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>message</code> - a String containing the failure message</dd><dd><code>exceptionType</code> - a String containing the exception type</dd><dd><code>stackTraceString</code> - a String containing the stack trace</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getExceptionType()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getExceptionType</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getExceptionType()</pre>
+<div class="block">Return the exception type.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the exception type as a String</dd></dl>
+</li>
+</ul>
+<a name="getMessage()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMessage</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getMessage()</pre>
+<div class="block">Return the failure message.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the message as a String</dd></dl>
+</li>
+</ul>
+<a name="getRequestContext()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRequestContext</h4>
+<pre>public&nbsp;<a href="../../../../../../com/google/web/bindery/requestfactory/shared/RequestContext.html" title="interface in com.google.web.bindery.requestfactory.shared">RequestContext</a>&nbsp;getRequestContext()</pre>
+<div class="block">Returns the RequestContext that triggered the ServerFailure.</div>
+</li>
+</ul>
+<a name="getStackTraceString()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getStackTraceString</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getStackTraceString()</pre>
+<div class="block">Return the failure stack trace.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>the stack trace as a String</dd></dl>
+</li>
+</ul>
+<a name="isFatal()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isFatal</h4>
+<pre>public&nbsp;boolean&nbsp;isFatal()</pre>
+<div class="block">Return true if this is a fatal error. The default implementation of
+ <a href="../../../../../../com/google/web/bindery/requestfactory/shared/Receiver.html#onFailure(com.google.web.bindery.requestfactory.shared.ServerFailure)"><code>Receiver.onFailure(com.google.web.bindery.requestfactory.shared.ServerFailure)</code></a> throws a runtime exception for fatal failures.</div>
+<dl><dt><span class="strong">Returns:</span></dt><dd>whether this is a fatal failure</dd></dl>
+</li>
+</ul>
+<a name="setRequestContext(com.google.web.bindery.requestfactory.shared.RequestContext)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setRequestContext</h4>
+<pre>public&nbsp;void&nbsp;setRequestContext(<a href="../../../../../../com/google/web/bindery/requestfactory/shared/RequestContext.html" title="interface in com.google.web.bindery.requestfactory.shared">RequestContext</a>&nbsp;requestContext)</pre>
+<div class="block">Sets the RequestContext to return via <a href="../../../../../../com/google/web/bindery/requestfactory/shared/ServerFailure.html#getRequestContext()"><code>getRequestContext()</code></a>.</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/ServerFailure.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../../com/google/web/bindery/requestfactory/shared/RequestTransport.TransportReceiver.html" title="interface in com.google.web.bindery.requestfactory.shared"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../../com/google/web/bindery/requestfactory/shared/Service.html" title="annotation in com.google.web.bindery.requestfactory.shared"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../../index.html?com/google/web/bindery/requestfactory/shared/ServerFailure.html" target="_top">Frames</a></li>
+<li><a href="ServerFailure.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

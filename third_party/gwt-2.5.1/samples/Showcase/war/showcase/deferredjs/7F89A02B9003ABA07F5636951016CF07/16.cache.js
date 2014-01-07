@@ -1,0 +1,2 @@
+function Wqb(){var a,b,c,d,e;b=new GUb(4,4);d=b.g;c=b.f;for(e=0;e<d;++e){for(a=0;a<c;++a){$Tb(b,e,a,new ZIb((q6(),f6)))}}STb(b,'cwGrid');return b}
+C1(750,1,Vnc);_.lc=function arb(){k4(this.a,Wqb())};Ioc(wn)(16);

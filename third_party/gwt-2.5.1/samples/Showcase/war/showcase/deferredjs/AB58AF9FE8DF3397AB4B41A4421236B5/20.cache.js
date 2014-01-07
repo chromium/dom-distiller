@@ -1,0 +1,3 @@
+function ptb(a){this.b=a}
+function PTb(){Yi(this,Er($doc,'file'));this.db[oqc]='gwt-FileUpload'}
+X1(785,1,eoc,ptb);_.Hc=function qtb(a){var b;b=this.b.db.value;b.length==0?TKb('\u4F60\u5FC5\u987B\u9009\u62E9\u8981\u4E0A\u4F20\u7684\u6587\u4EF6'):TKb('\u6587\u4EF6\u4E0A\u4F20\u5B8C\u6BD5\uFF01')};_.b=null;X1(786,1,hoc);_.qc=function utb(){var a,b,c;A4(this.b,(a=new j5b,g5b(a,new QRb('<b>\u9009\u62E9\u4E00\u4E2A\u6587\u4EF6\uFF1A<\/b>')),b=new PTb,N4b(b.db,Ppc,'cwFileUpload'),g5b(a,b),c=new xNb('\u4E0A\u4F20\u6587\u4EF6'),vj(c,new ptb(b),(ux(),ux(),tx)),g5b(a,new QRb('<br>')),g5b(a,c),a))};X1(1029,104,wnc,PTb);_.Vb=function QTb(a){Aj(this,a)};var FT=xcc(Yuc,'CwFileUpload$1',785),eX=xcc(Xuc,'FileUpload',1029);Woc(In)(20);

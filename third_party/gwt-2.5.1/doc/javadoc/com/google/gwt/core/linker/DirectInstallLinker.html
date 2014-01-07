@@ -1,0 +1,351 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>DirectInstallLinker (Google Web Toolkit Javadoc)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="DirectInstallLinker (Google Web Toolkit Javadoc)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/DirectInstallLinker.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html" title="class in com.google.gwt.core.linker"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/google/gwt/core/linker/IFrameLinker.html" title="class in com.google.gwt.core.linker"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/google/gwt/core/linker/DirectInstallLinker.html" target="_top">Frames</a></li>
+<li><a href="DirectInstallLinker.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_com.google.gwt.core.ext.linker.impl.SelectionScriptLinker">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.google.gwt.core.linker</div>
+<h2 title="Class DirectInstallLinker" class="title">Class DirectInstallLinker</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">com.google.gwt.core.ext.Linker</a></li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/google/gwt/core/ext/linker/AbstractLinker.html" title="class in com.google.gwt.core.ext.linker">com.google.gwt.core.ext.linker.AbstractLinker</a></li>
+<li>
+<ul class="inheritance">
+<li>com.google.gwt.core.ext.linker.impl.SelectionScriptLinker</li>
+<li>
+<ul class="inheritance">
+<li><a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html" title="class in com.google.gwt.core.linker">com.google.gwt.core.linker.CrossSiteIframeLinker</a></li>
+<li>
+<ul class="inheritance">
+<li>com.google.gwt.core.linker.DirectInstallLinker</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<hr>
+<br>
+<pre>public class <span class="strong">DirectInstallLinker</span>
+extends <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html" title="class in com.google.gwt.core.linker">CrossSiteIframeLinker</a></pre>
+<div class="block">A linker that adds a script tag to the iframe rather than downloading the
+ code as a string and then installing it into the iframe.</div>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field_summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields_inherited_from_class_com.google.gwt.core.ext.linker.impl.SelectionScriptLinker">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;com.google.gwt.core.ext.linker.impl.SelectionScriptLinker</h3>
+<code>COMPUTE_SCRIPT_BASE_JS, FRAGMENT_EXTENSION, FRAGMENT_SUBDIR, permutationsUtil, PROCESS_METAS_JS, USE_SOURCE_MAPS_PROPERTY</code></li>
+</ul>
+</li>
+</ul>
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_summary">
+<!--   -->
+</a>
+<h3>Constructor Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
+<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><strong><a href="../../../../../com/google/gwt/core/linker/DirectInstallLinker.html#DirectInstallLinker()">DirectInstallLinker</a></strong>()</code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/core/linker/DirectInstallLinker.html#getJsInstallScript(com.google.gwt.core.ext.LinkerContext)">getJsInstallScript</a></strong>(<a href="../../../../../com/google/gwt/core/ext/LinkerContext.html" title="interface in com.google.gwt.core.ext">LinkerContext</a>&nbsp;context)</code>
+<div class="block">Returns the name of the <code>JsInstallScript</code> script.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/core/linker/DirectInstallLinker.html#shouldInstallCode(com.google.gwt.core.ext.LinkerContext)">shouldInstallCode</a></strong>(<a href="../../../../../com/google/gwt/core/ext/LinkerContext.html" title="interface in com.google.gwt.core.ext">LinkerContext</a>&nbsp;context)</code>&nbsp;</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.google.gwt.core.linker.CrossSiteIframeLinker">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.google.gwt.core.linker.<a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html" title="class in com.google.gwt.core.linker">CrossSiteIframeLinker</a></h3>
+<code><a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#fillSelectionScriptTemplate(java.lang.StringBuffer, com.google.gwt.core.ext.TreeLogger, com.google.gwt.core.ext.LinkerContext, com.google.gwt.core.ext.linker.ArtifactSet, com.google.gwt.core.ext.linker.CompilationResult)">fillSelectionScriptTemplate</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getBooleanConfigurationProperty(com.google.gwt.core.ext.LinkerContext, java.lang.String, boolean)">getBooleanConfigurationProperty</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getCompilationExtension(com.google.gwt.core.ext.TreeLogger, com.google.gwt.core.ext.LinkerContext)">getCompilationExtension</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getDeferredFragmentSuffix(com.google.gwt.core.ext.TreeLogger, com.google.gwt.core.ext.LinkerContext, int)">getDeferredFragmentSuffix</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getDescription()">getDescription</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getHostedFilename()">getHostedFilename</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getHostedFilenameFull(com.google.gwt.core.ext.LinkerContext)">getHostedFilenameFull</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getJsComputeScriptBase(com.google.gwt.core.ext.LinkerContext)">getJsComputeScriptBase</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getJsComputeUrlForResource(com.google.gwt.core.ext.LinkerContext)">getJsComputeUrlForResource</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getJsDevModeRedirectHook(com.google.gwt.core.ext.LinkerContext)">getJsDevModeRedirectHook</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getJsInstallLocation(com.google.gwt.core.ext.LinkerContext)">getJsInstallLocation</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getJsIsBodyLoaded(com.google.gwt.core.ext.LinkerContext)">getJsIsBodyLoaded</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getJsLoadExternalStylesheets(com.google.gwt.core.ext.LinkerContext)">getJsLoadExternalStylesheets</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getJsModuleFunctionErrorCatch(com.google.gwt.core.ext.LinkerContext)">getJsModuleFunctionErrorCatch</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getJsPermutations(com.google.gwt.core.ext.LinkerContext)">getJsPermutations</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getJsProcessMetas(com.google.gwt.core.ext.LinkerContext)">getJsProcessMetas</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getJsProperties(com.google.gwt.core.ext.LinkerContext)">getJsProperties</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getJsRunAsync(com.google.gwt.core.ext.LinkerContext)">getJsRunAsync</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getJsWaitForBodyLoaded(com.google.gwt.core.ext.LinkerContext)">getJsWaitForBodyLoaded</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getModulePrefix(com.google.gwt.core.ext.TreeLogger, com.google.gwt.core.ext.LinkerContext, java.lang.String)">getModulePrefix</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getModuleSuffix(com.google.gwt.core.ext.TreeLogger, com.google.gwt.core.ext.LinkerContext)">getModuleSuffix</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getScriptChunkSeparator(com.google.gwt.core.ext.TreeLogger, com.google.gwt.core.ext.LinkerContext)">getScriptChunkSeparator</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getSelectionScriptTemplate(com.google.gwt.core.ext.TreeLogger, com.google.gwt.core.ext.LinkerContext)">getSelectionScriptTemplate</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getStringConfigurationProperty(com.google.gwt.core.ext.LinkerContext, java.lang.String, java.lang.String)">getStringConfigurationProperty</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#includeJs(java.lang.StringBuffer, com.google.gwt.core.ext.TreeLogger, java.lang.String, java.lang.String)">includeJs</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#maybeAddHostedModeFile(com.google.gwt.core.ext.TreeLogger, com.google.gwt.core.ext.LinkerContext, com.google.gwt.core.ext.linker.ArtifactSet, com.google.gwt.core.ext.linker.CompilationResult)">maybeAddHostedModeFile</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#maybeOutputPropertyMap(com.google.gwt.core.ext.TreeLogger, com.google.gwt.core.ext.LinkerContext, com.google.gwt.core.ext.linker.ArtifactSet)">maybeOutputPropertyMap</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#shouldIncludeBootstrapInPrimaryFragment(com.google.gwt.core.ext.LinkerContext)">shouldIncludeBootstrapInPrimaryFragment</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#shouldUseSelfForWindowAndDocument(com.google.gwt.core.ext.LinkerContext)">shouldUseSelfForWindowAndDocument</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#wrapDeferredFragment(com.google.gwt.core.ext.TreeLogger, com.google.gwt.core.ext.LinkerContext, int, java.lang.String, com.google.gwt.core.ext.linker.ArtifactSet)">wrapDeferredFragment</a>, <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#wrapPrimaryFragment(com.google.gwt.core.ext.TreeLogger, com.google.gwt.core.ext.LinkerContext, java.lang.String, com.google.gwt.core.ext.linker.ArtifactSet, com.google.gwt.core.ext.linker.CompilationResult)">wrapPrimaryFragment</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.google.gwt.core.ext.linker.impl.SelectionScriptLinker">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.google.gwt.core.ext.linker.impl.SelectionScriptLinker</h3>
+<code>charsPerChunk, doEmitCompilation, emitSelectionInformation, emitSelectionScript, generateDeferredFragment, generatePrimaryFragment, generatePrimaryFragmentString, generateSelectionScript, generateSelectionScript, getDeferredFragmentPrefix, getFragmentSubdir, getModulePrefix, link, link, readFileToStringBuffer, replaceAll, splitPrimaryJavaScript, supportsDevModeInJunit</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.google.gwt.core.ext.linker.AbstractLinker">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.google.gwt.core.ext.linker.<a href="../../../../../com/google/gwt/core/ext/linker/AbstractLinker.html" title="class in com.google.gwt.core.ext.linker">AbstractLinker</a></h3>
+<code><a href="../../../../../com/google/gwt/core/ext/linker/AbstractLinker.html#emitBytes(com.google.gwt.core.ext.TreeLogger, byte[], java.lang.String)">emitBytes</a>, <a href="../../../../../com/google/gwt/core/ext/linker/AbstractLinker.html#emitBytes(com.google.gwt.core.ext.TreeLogger, byte[], java.lang.String, long)">emitBytes</a>, <a href="../../../../../com/google/gwt/core/ext/linker/AbstractLinker.html#emitInputStream(com.google.gwt.core.ext.TreeLogger, java.io.InputStream, java.lang.String)">emitInputStream</a>, <a href="../../../../../com/google/gwt/core/ext/linker/AbstractLinker.html#emitInputStream(com.google.gwt.core.ext.TreeLogger, java.io.InputStream, java.lang.String, long)">emitInputStream</a>, <a href="../../../../../com/google/gwt/core/ext/linker/AbstractLinker.html#emitString(com.google.gwt.core.ext.TreeLogger, java.lang.String, java.lang.String)">emitString</a>, <a href="../../../../../com/google/gwt/core/ext/linker/AbstractLinker.html#emitString(com.google.gwt.core.ext.TreeLogger, java.lang.String, java.lang.String, long)">emitString</a>, <a href="../../../../../com/google/gwt/core/ext/linker/AbstractLinker.html#emitWithStrongName(com.google.gwt.core.ext.TreeLogger, byte[], java.lang.String, java.lang.String)">emitWithStrongName</a>, <a href="../../../../../com/google/gwt/core/ext/linker/AbstractLinker.html#emitWithStrongName(com.google.gwt.core.ext.TreeLogger, byte[], java.lang.String, java.lang.String, long)">emitWithStrongName</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_com.google.gwt.core.ext.Linker">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;com.google.gwt.core.ext.<a href="../../../../../com/google/gwt/core/ext/Linker.html" title="class in com.google.gwt.core.ext">Linker</a></h3>
+<code><a href="../../../../../com/google/gwt/core/ext/Linker.html#isShardable()">isShardable</a>, <a href="../../../../../com/google/gwt/core/ext/Linker.html#relink(com.google.gwt.core.ext.TreeLogger, com.google.gwt.core.ext.LinkerContext, com.google.gwt.core.ext.linker.ArtifactSet)">relink</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="constructor_detail">
+<!--   -->
+</a>
+<h3>Constructor Detail</h3>
+<a name="DirectInstallLinker()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>DirectInstallLinker</h4>
+<pre>public&nbsp;DirectInstallLinker()</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getJsInstallScript(com.google.gwt.core.ext.LinkerContext)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getJsInstallScript</h4>
+<pre>protected&nbsp;java.lang.String&nbsp;getJsInstallScript(<a href="../../../../../com/google/gwt/core/ext/LinkerContext.html" title="interface in com.google.gwt.core.ext">LinkerContext</a>&nbsp;context)</pre>
+<div class="block"><strong>Description copied from class:&nbsp;<code><a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getJsInstallScript(com.google.gwt.core.ext.LinkerContext)">CrossSiteIframeLinker</a></code></strong></div>
+<div class="block">Returns the name of the <code>JsInstallScript</code> script.  By default,
+ returns <code>"com/google/gwt/core/ext/linker/impl/installScriptEarlyDownload.js"</code>.
+
+ <p> If you override this to return <code>installScriptDirect.js</code>, then you
+ should also override <a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#shouldInstallCode(com.google.gwt.core.ext.LinkerContext)"><code>CrossSiteIframeLinker.shouldInstallCode(LinkerContext)</code></a> to return
+ <code>false</code>.</div>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#getJsInstallScript(com.google.gwt.core.ext.LinkerContext)">getJsInstallScript</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html" title="class in com.google.gwt.core.linker">CrossSiteIframeLinker</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>context</code> - a LinkerContext</dd></dl>
+</li>
+</ul>
+<a name="shouldInstallCode(com.google.gwt.core.ext.LinkerContext)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>shouldInstallCode</h4>
+<pre>protected&nbsp;boolean&nbsp;shouldInstallCode(<a href="../../../../../com/google/gwt/core/ext/LinkerContext.html" title="interface in com.google.gwt.core.ext">LinkerContext</a>&nbsp;context)</pre>
+<dl>
+<dt><strong>Overrides:</strong></dt>
+<dd><code><a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html#shouldInstallCode(com.google.gwt.core.ext.LinkerContext)">shouldInstallCode</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html" title="class in com.google.gwt.core.linker">CrossSiteIframeLinker</a></code></dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/DirectInstallLinker.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/google/gwt/core/linker/CrossSiteIframeLinker.html" title="class in com.google.gwt.core.linker"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/google/gwt/core/linker/IFrameLinker.html" title="class in com.google.gwt.core.linker"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/google/gwt/core/linker/DirectInstallLinker.html" target="_top">Frames</a></li>
+<li><a href="DirectInstallLinker.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#fields_inherited_from_class_com.google.gwt.core.ext.linker.impl.SelectionScriptLinker">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#constructor_summary">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#constructor_detail">Constr</a>&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

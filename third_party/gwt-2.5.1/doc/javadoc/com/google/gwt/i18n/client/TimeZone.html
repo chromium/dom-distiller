@@ -1,0 +1,514 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>TimeZone (Google Web Toolkit Javadoc)</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<script type="text/javascript"><!--
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="TimeZone (Google Web Toolkit Javadoc)";
+    }
+//-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+<!-- ========= START OF TOP NAVBAR ======= -->
+<div class="topNav"><a name="navbar_top">
+<!--   -->
+</a><a href="#skip-navbar_top" title="Skip navigation links"></a><a name="navbar_top_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/TimeZone.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/google/gwt/i18n/client/PluralRule.PluralForm.html" title="class in com.google.gwt.i18n.client"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/google/gwt/i18n/client/TimeZoneInfo.html" title="class in com.google.gwt.i18n.client"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/google/gwt/i18n/client/TimeZone.html" target="_top">Frames</a></li>
+<li><a href="TimeZone.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_top">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_top">
+<!--   -->
+</a></div>
+<!-- ========= END OF TOP NAVBAR ========= -->
+<!-- ======== START OF CLASS DATA ======== -->
+<div class="header">
+<div class="subTitle">com.google.gwt.i18n.client</div>
+<h2 title="Class TimeZone" class="title">Class TimeZone</h2>
+</div>
+<div class="contentContainer">
+<ul class="inheritance">
+<li>java.lang.Object</li>
+<li>
+<ul class="inheritance">
+<li>com.google.gwt.i18n.client.TimeZone</li>
+</ul>
+</li>
+</ul>
+<div class="description">
+<ul class="blockList">
+<li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html" title="interface in com.google.gwt.i18n.shared">TimeZone</a></dd>
+</dl>
+<hr>
+<br>
+<pre>public class <span class="strong">TimeZone</span>
+extends java.lang.Object
+implements <a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html" title="interface in com.google.gwt.i18n.shared">TimeZone</a></pre>
+<div class="block">The TimeZone class implements a time zone information source for client
+ applications. The time zone object is instantiated from a TimeZoneData object,
+ which is made from a JSON string that contains all the data needed for
+ the specified time zone. Applications can instantiate a time zone statically,
+ in which case the data could be retrieved from
+ the <a href="../../../../../com/google/gwt/i18n/client/constants/TimeZoneConstants.html" title="interface in com.google.gwt.i18n.client.constants"><code>TimeZoneConstants</code></a>
+ class. Applications can also choose to instantiate from a string obtained
+ from a server. The time zone string contains locale specific data. If the
+ application only uses a short representation, the English data will usually
+ satisfy the user's need. In the case that only the time zone offset is known,
+ there is a decent fallback that only uses the time zone offset to create a
+ TimeZone object.</div>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========== METHOD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="overviewSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span>Methods</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/i18n/client/TimeZone.html" title="class in com.google.gwt.i18n.client">TimeZone</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/client/TimeZone.html#createTimeZone(int)">createTimeZone</a></strong>(int&nbsp;timeZoneOffsetInMinutes)</code>
+<div class="block">This factory method provides a decent fallback to create a time zone object
+ just based on a given time zone offset.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/i18n/client/TimeZone.html" title="class in com.google.gwt.i18n.client">TimeZone</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/client/TimeZone.html#createTimeZone(java.lang.String)">createTimeZone</a></strong>(java.lang.String&nbsp;tzJSON)</code>
+<div class="block">This factory method creates a time zone instance from a JSON string that
+ contains the time zone information for desired time zone.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../com/google/gwt/i18n/client/TimeZone.html" title="class in com.google.gwt.i18n.client">TimeZone</a></code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/client/TimeZone.html#createTimeZone(com.google.gwt.i18n.client.TimeZoneInfo)">createTimeZone</a></strong>(<a href="../../../../../com/google/gwt/i18n/client/TimeZoneInfo.html" title="class in com.google.gwt.i18n.client">TimeZoneInfo</a>&nbsp;timezoneData)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/client/TimeZone.html#getDaylightAdjustment(java.util.Date)">getDaylightAdjustment</a></strong>(java.util.Date&nbsp;date)</code>
+<div class="block">Returns the daylight savings time adjustment, in minutes, for the given
+ date.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/client/TimeZone.html#getGMTString(java.util.Date)">getGMTString</a></strong>(java.util.Date&nbsp;date)</code>
+<div class="block">Returns the GMT representation of this time zone object.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/client/TimeZone.html#getID()">getID</a></strong>()</code>
+<div class="block">Returns time zone id for this time zone.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/client/TimeZone.html#getISOTimeZoneString(java.util.Date)">getISOTimeZoneString</a></strong>(java.util.Date&nbsp;date)</code>
+<div class="block">To get ISO-style (+00:00) representation of the time zone for given date.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/client/TimeZone.html#getLongName(java.util.Date)">getLongName</a></strong>(java.util.Date&nbsp;date)</code>
+<div class="block">Returns the long version of the time zone name for the given date; the
+ result of this method will be different if daylight savings time is in
+ effect.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/client/TimeZone.html#getOffset(java.util.Date)">getOffset</a></strong>(java.util.Date&nbsp;date)</code>
+<div class="block">Returns the RFC representation of the time zone name for the given date.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/client/TimeZone.html#getRFCTimeZoneString(java.util.Date)">getRFCTimeZoneString</a></strong>(java.util.Date&nbsp;date)</code>
+<div class="block">To get RFC representation of certain time zone name for given date.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/client/TimeZone.html#getShortName(java.util.Date)">getShortName</a></strong>(java.util.Date&nbsp;date)</code>
+<div class="block">Returns the short time zone name for a given date.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/client/TimeZone.html#getStandardOffset()">getStandardOffset</a></strong>()</code>
+<div class="block">Returns the standard time zone offset, in minutes.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><strong><a href="../../../../../com/google/gwt/i18n/client/TimeZone.html#isDaylightTime(java.util.Date)">isDaylightTime</a></strong>(java.util.Date&nbsp;date)</code>
+<div class="block">Check whether the given date and time falls within a daylight savings time
+ period.</div>
+</td>
+</tr>
+</table>
+<ul class="blockList">
+<li class="blockList"><a name="methods_inherited_from_class_java.lang.Object">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method_detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="createTimeZone(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createTimeZone</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/i18n/client/TimeZone.html" title="class in com.google.gwt.i18n.client">TimeZone</a>&nbsp;createTimeZone(int&nbsp;timeZoneOffsetInMinutes)</pre>
+<div class="block">This factory method provides a decent fallback to create a time zone object
+ just based on a given time zone offset.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>timeZoneOffsetInMinutes</code> - time zone offset in minutes</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a new time zone object</dd></dl>
+</li>
+</ul>
+<a name="createTimeZone(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createTimeZone</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/i18n/client/TimeZone.html" title="class in com.google.gwt.i18n.client">TimeZone</a>&nbsp;createTimeZone(java.lang.String&nbsp;tzJSON)</pre>
+<div class="block">This factory method creates a time zone instance from a JSON string that
+ contains the time zone information for desired time zone. Applications can
+ get such a string from the TimeZoneConstants class, or it can request the
+ string from the server. Either way, the application obtains the original
+ string from the data provided in the TimeZoneConstant.properties file,
+ which was carefully prepared from CLDR and Olson time zone database.</div>
+<dl><dt><span class="strong">Parameters:</span></dt><dd><code>tzJSON</code> - JSON string that contains time zone data</dd>
+<dt><span class="strong">Returns:</span></dt><dd>a new time zone object</dd></dl>
+</li>
+</ul>
+<a name="createTimeZone(com.google.gwt.i18n.client.TimeZoneInfo)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createTimeZone</h4>
+<pre>public static&nbsp;<a href="../../../../../com/google/gwt/i18n/client/TimeZone.html" title="class in com.google.gwt.i18n.client">TimeZone</a>&nbsp;createTimeZone(<a href="../../../../../com/google/gwt/i18n/client/TimeZoneInfo.html" title="class in com.google.gwt.i18n.client">TimeZoneInfo</a>&nbsp;timezoneData)</pre>
+</li>
+</ul>
+<a name="getDaylightAdjustment(java.util.Date)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDaylightAdjustment</h4>
+<pre>public&nbsp;int&nbsp;getDaylightAdjustment(java.util.Date&nbsp;date)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getDaylightAdjustment(java.util.Date)">TimeZone</a></code></strong></div>
+<div class="block">Returns the daylight savings time adjustment, in minutes, for the given
+ date. If daylight savings time is in effect on the given date, the number
+ will be positive, otherwise 0.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getDaylightAdjustment(java.util.Date)">getDaylightAdjustment</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html" title="interface in com.google.gwt.i18n.shared">TimeZone</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>date</code> - the date to check</dd>
+<dt><span class="strong">Returns:</span></dt><dd>offset amount</dd></dl>
+</li>
+</ul>
+<a name="getGMTString(java.util.Date)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getGMTString</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getGMTString(java.util.Date&nbsp;date)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getGMTString(java.util.Date)">TimeZone</a></code></strong></div>
+<div class="block">Returns the GMT representation of this time zone object.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getGMTString(java.util.Date)">getGMTString</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html" title="interface in com.google.gwt.i18n.shared">TimeZone</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>date</code> - The date from which the time information should be extracted</dd>
+<dt><span class="strong">Returns:</span></dt><dd>A GMT representation of the time given by the date</dd></dl>
+</li>
+</ul>
+<a name="getID()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getID</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getID()</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getID()">TimeZone</a></code></strong></div>
+<div class="block">Returns time zone id for this time zone. For time zone objects that have
+ been instantiated from a time zone offset, the POSIX time zone id will be
+ returned.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getID()">getID</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html" title="interface in com.google.gwt.i18n.shared">TimeZone</a></code></dd>
+<dt><span class="strong">Returns:</span></dt><dd>time zone id</dd></dl>
+</li>
+</ul>
+<a name="getISOTimeZoneString(java.util.Date)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getISOTimeZoneString</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getISOTimeZoneString(java.util.Date&nbsp;date)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getISOTimeZoneString(java.util.Date)">TimeZone</a></code></strong></div>
+<div class="block">To get ISO-style (+00:00) representation of the time zone for given date.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getISOTimeZoneString(java.util.Date)">getISOTimeZoneString</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html" title="interface in com.google.gwt.i18n.shared">TimeZone</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>date</code> - The date for which time to retrieve RFC time zone string</dd>
+<dt><span class="strong">Returns:</span></dt><dd>ISO-style time zone string</dd></dl>
+</li>
+</ul>
+<a name="getLongName(java.util.Date)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLongName</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getLongName(java.util.Date&nbsp;date)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getLongName(java.util.Date)">TimeZone</a></code></strong></div>
+<div class="block">Returns the long version of the time zone name for the given date; the
+ result of this method will be different if daylight savings time is in
+ effect.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getLongName(java.util.Date)">getLongName</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html" title="interface in com.google.gwt.i18n.shared">TimeZone</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>date</code> - The date for which the long time zone name is returned</dd>
+<dt><span class="strong">Returns:</span></dt><dd>long time zone name</dd></dl>
+</li>
+</ul>
+<a name="getOffset(java.util.Date)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getOffset</h4>
+<pre>public&nbsp;int&nbsp;getOffset(java.util.Date&nbsp;date)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getOffset(java.util.Date)">TimeZone</a></code></strong></div>
+<div class="block">Returns the RFC representation of the time zone name for the given date.
+ To be consistent with JDK/Javascript API, west of Greenwich will be
+ positive.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getOffset(java.util.Date)">getOffset</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html" title="interface in com.google.gwt.i18n.shared">TimeZone</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>date</code> - The date for which time to retrieve time zone offset</dd>
+<dt><span class="strong">Returns:</span></dt><dd>time zone offset in minutes</dd></dl>
+</li>
+</ul>
+<a name="getRFCTimeZoneString(java.util.Date)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRFCTimeZoneString</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getRFCTimeZoneString(java.util.Date&nbsp;date)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getRFCTimeZoneString(java.util.Date)">TimeZone</a></code></strong></div>
+<div class="block">To get RFC representation of certain time zone name for given date.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getRFCTimeZoneString(java.util.Date)">getRFCTimeZoneString</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html" title="interface in com.google.gwt.i18n.shared">TimeZone</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>date</code> - The date for which time to retrieve RFC time zone string</dd>
+<dt><span class="strong">Returns:</span></dt><dd>RFC time zone string</dd></dl>
+</li>
+</ul>
+<a name="getShortName(java.util.Date)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getShortName</h4>
+<pre>public&nbsp;java.lang.String&nbsp;getShortName(java.util.Date&nbsp;date)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getShortName(java.util.Date)">TimeZone</a></code></strong></div>
+<div class="block">Returns the short time zone name for a given date.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getShortName(java.util.Date)">getShortName</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html" title="interface in com.google.gwt.i18n.shared">TimeZone</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>date</code> - The date for which time to retrieve short time zone</dd>
+<dt><span class="strong">Returns:</span></dt><dd>short time zone name</dd></dl>
+</li>
+</ul>
+<a name="getStandardOffset()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getStandardOffset</h4>
+<pre>public&nbsp;int&nbsp;getStandardOffset()</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getStandardOffset()">TimeZone</a></code></strong></div>
+<div class="block">Returns the standard time zone offset, in minutes.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#getStandardOffset()">getStandardOffset</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html" title="interface in com.google.gwt.i18n.shared">TimeZone</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="isDaylightTime(java.util.Date)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>isDaylightTime</h4>
+<pre>public&nbsp;boolean&nbsp;isDaylightTime(java.util.Date&nbsp;date)</pre>
+<div class="block"><strong>Description copied from interface:&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#isDaylightTime(java.util.Date)">TimeZone</a></code></strong></div>
+<div class="block">Check whether the given date and time falls within a daylight savings time
+ period.</div>
+<dl>
+<dt><strong>Specified by:</strong></dt>
+<dd><code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html#isDaylightTime(java.util.Date)">isDaylightTime</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../com/google/gwt/i18n/shared/TimeZone.html" title="interface in com.google.gwt.i18n.shared">TimeZone</a></code></dd>
+<dt><span class="strong">Parameters:</span></dt><dd><code>date</code> - and time to check</dd>
+<dt><span class="strong">Returns:</span></dt><dd>true if daylight savings time is in effect</dd></dl>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<!-- ========= END OF CLASS DATA ========= -->
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<div class="bottomNav"><a name="navbar_bottom">
+<!--   -->
+</a><a href="#skip-navbar_bottom" title="Skip navigation links"></a><a name="navbar_bottom_firstrow">
+<!--   -->
+</a>
+<ul class="navList" title="Navigation">
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li><a href="package-summary.html">Package</a></li>
+<li class="navBarCell1Rev">Class</li>
+<li><a href="class-use/TimeZone.html">Use</a></li>
+<li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+<li><a href="../../../../../help-doc.html">Help</a></li>
+</ul>
+<div class="aboutLanguage"><em>GWT 2.5.1</em></div>
+</div>
+<div class="subNav">
+<ul class="navList">
+<li><a href="../../../../../com/google/gwt/i18n/client/PluralRule.PluralForm.html" title="class in com.google.gwt.i18n.client"><span class="strong">Prev Class</span></a></li>
+<li><a href="../../../../../com/google/gwt/i18n/client/TimeZoneInfo.html" title="class in com.google.gwt.i18n.client"><span class="strong">Next Class</span></a></li>
+</ul>
+<ul class="navList">
+<li><a href="../../../../../index.html?com/google/gwt/i18n/client/TimeZone.html" target="_top">Frames</a></li>
+<li><a href="TimeZone.html" target="_top">No Frames</a></li>
+</ul>
+<ul class="navList" id="allclasses_navbar_bottom">
+<li><a href="../../../../../allclasses-noframe.html">All Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_bottom");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+</div>
+<div>
+<ul class="subNavList">
+<li>Summary:&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_summary">Method</a></li>
+</ul>
+<ul class="subNavList">
+<li>Detail:&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
+<li><a href="#method_detail">Method</a></li>
+</ul>
+</div>
+<a name="skip-navbar_bottom">
+<!--   -->
+</a></div>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+</body>
+</html>

@@ -1,0 +1,3 @@
+function ktb(a){this.a=a}
+function UTb(){Ni(this,qr($doc,'file'));this.cb[uqc]='gwt-FileUpload'}
+N1(787,1,koc,ktb);_.Dc=function ltb(a){var b;b=this.a.cb.value;b.length==0?cLb('\u4F60\u5FC5\u987B\u9009\u62E9\u8981\u4E0A\u4F20\u7684\u6587\u4EF6'):cLb('\u6587\u4EF6\u4E0A\u4F20\u5B8C\u6BD5\uFF01')};_.a=null;N1(788,1,noc);_.lc=function ptb(){var a,b,c;v4(this.a,(a=new s5b,p5b(a,new VRb('<b>\u9009\u62E9\u4E00\u4E2A\u6587\u4EF6\uFF1A<\/b>')),b=new UTb,W4b(b.cb,Vpc,'cwFileUpload'),p5b(a,b),c=new CNb('\u4E0A\u4F20\u6587\u4EF6'),jj(c,new ktb(b),(kx(),kx(),jx)),p5b(a,new VRb('<br>')),p5b(a,c),a))};N1(1031,102,Cnc,UTb);_.Qb=function VTb(a){oj(this,a)};var uT=Ecc(Vuc,'CwFileUpload$1',787),WW=Ecc(Uuc,'FileUpload',1031);apc(vn)(20);
