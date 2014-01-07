@@ -1,0 +1,99 @@
+<html>
+<head>
+  <title>ExporterDemo</title>
+
+
+  <style>
+    body, td, a, div, .p {
+      font-family: arial, sans-serif
+    }
+
+    div, td {
+      color: #000000
+    }
+
+    a:link, .w, .w a:link {
+      color: #0000cc
+    }
+
+    a:visited {
+      color: #551a8b
+    }
+
+    a:active {
+      color: #ff0000
+    }
+  </style>
+
+  <script language='javascript'
+          src='demo.nocache.js'></script>
+  <script language='javascript'>
+    function runTests() {
+
+      var employee = new test.Employee('CEO', 'Bill', 'Gates', test.Employee.MALE);
+      var employee2 = new test.Employee('Senator', 'Hillary', 'Clinton', test.Employee.FEMALE);
+      var person = new exporterdemo.Person('Ray', 'Cromwell');
+      print("employee.getFirstName() = " + employee.getFirstName());
+      print("employee2.getFirstName() = " + employee2.getFirstName());
+      print("Employee.sayHello(employee) = "
+          + test.Employee.sayHello(employee));
+      print("employee2.getGender() = " + employee.getGender(1));
+      print("employee2.getSelf().getGender() = "
+          + employee.getSelf().getGender());
+      print("Employee.sayHello(person) = " + test.Employee.sayHello(person));
+      print("person.getSelf().getGender = (should be undefined) "
+          + person.getSelf().getGender);
+      var it = new test.Employee.InnerTest();
+      print("Employee.InnerTest.getFoo() = " + it.getFoo());
+      employee.addListener(function(emp, str, i) {
+        print(str + " " + emp);
+      });
+      employee.fire();
+      print("overriden(\"Hello\") = "+employee.overriden("Hello"));
+      print("overriden(\"10\") = "+employee.overriden(10));
+      print("overriden(\"employee\") = "+employee.overriden(employee).getFirstName());
+      try {
+ 	     print("ERROR: Blah should not be exported: " + employee.getBlah());
+      } catch(e) {
+    	 print("OK, getBlah was not exported."); 
+      }
+      
+      var peoples = employee.getPeople();
+      for(i = 0; i < peoples.length; i++) {
+         print("people["+i+"]="+peoples[i].getFirstName());
+      }
+      
+      var values = employee.getValues();
+      for(i = 0; i < values.length; i++) {
+         print("values["+i+"]=" + values[i]);
+      }
+      
+      var arry = employee.getStrArry();
+      for(i = 0; i < arry.length; i++) {
+         print("string["+i+"]=" + arry[i]);
+      }
+    }
+
+    function print(str) {
+      var d = document.getElementById('results');
+      d.innerHTML += "<br>" + str;
+    }
+  </script>
+</head>
+
+
+<body>
+
+<!-- OPTIONAL: include this if you want history support -->
+<iframe src="javascript:''" id="__gwt_historyFrame"
+        style="width:0;height:0;border:0"></iframe>
+
+<h1>ExporterDemo</h1>
+
+<p>
+  <input type="button" onClick="runTests();" value="Run Tests">
+
+<div id="results"></div>
+</p>
+</body>
+</html>

@@ -1,0 +1,8 @@
+<module rename-to='ExportWidget'>
+    <inherits name='com.google.gwt.query.Query'/>
+    <inherits name='org.timepedia.exporter.Exporter'/>
+    <set-property name="export" value="yes"/>
+    <add-linker name="xsiframe"/>
+    <entry-point class='org.gquery.ewidget.client.ExportWidget'/>
+</module>
+    
