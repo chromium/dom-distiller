@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+ Copyright 2014 The Chromium Authors. All rights reserved.
+ Use of this source code is governed by a BSD-style license that can be
+ found in the LICENSE file.
+-->
+<project name="DomDistiller" default="build" basedir=".">
+  <!-- Arguments to gwtc and devmode targets -->
+  <property name="gwt.args" value="-war war" />
+
+  <!-- Configure path to GWT SDK -->
+  <property name="gwt.sdk" location="third_party/gwt-2.5.1" />
+
+  <path id="project.class.path">
+    <pathelement location="war/WEB-INF/classes"/>
+    <pathelement location="${gwt.sdk}/gwt-user.jar"/>
+    <fileset dir="${gwt.sdk}" includes="gwt-dev*.jar"/>
+  </path>
+
+  <target name="javac" description="Compile java source to bytecode">
+    <mkdir dir="war/WEB-INF/classes"/>
+    <javac srcdir="src" includes="**" encoding="utf-8"
+        destdir="war/WEB-INF/classes"
+        source="1.5" target="1.5" nowarn="true"
+        debug="true" debuglevel="lines,vars,source">
+      <classpath refid="project.class.path"/>
+    </javac>
+    <copy todir="war/WEB-INF/classes">
+      <fileset dir="src" excludes="**/*.java"/>
+    </copy>
+  </target>
+
+  <target name="gwtc" depends="javac" description="GWT compile to JavaScript (production mode)">
+    <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+      <classpath>
+        <pathelement location="src"/>
+        <path refid="project.class.path"/>
+        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA.jar" />
+        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA-sources.jar" />
+      </classpath>
+      <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
+      <jvmarg value="-Xmx256M"/>
+      <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+      <arg line="${gwt.args}"/>
+      <arg value="com.dom_distiller.DomDistiller"/>
+    </java>
+  </target>
+
+  <target name="devmode" depends="javac" description="Run development mode">
+    <java failonerror="true" fork="true" classname="com.google.gwt.dev.DevMode">
+      <classpath>
+        <pathelement location="src"/>
+        <path refid="project.class.path"/>
+      </classpath>
+      <jvmarg value="-Xmx256M"/>
+      <arg value="-startupUrl"/>
+      <arg value="DomDistiller.html"/>
+      <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+      <arg line="${gwt.args}"/>
+      <arg value="com.dom_distiller.DomDistiller"/>
+    </java>
+  </target>
+
+  <target name="javac.tests" depends="javac" description="Compiles test code">
+    <javac srcdir="test" includes="**" encoding="utf-8"
+      source="1.5" target="1.5" nowarn="true"
+      destdir="war/WEB-INF/classes"
+      debug="true" debuglevel="lines,vars,source">
+      <classpath location="third_party/junit/junit-4.11.jar"/>
+      <classpath refid="project.class.path"/>
+    </javac>
+  </target>
+
+  <target name="test.dev" depends="javac.tests" description="Run development mode tests">
+    <mkdir dir="out/reports/htmlunit.dev" />
+    <junit fork="yes" printsummary="yes" haltonfailure="yes">
+      <jvmarg line="-Xmx256m" />
+      <sysproperty key="gwt.args" value="-standardsMode -logLevel WARN" />
+      <sysproperty key="java.awt.headless" value="true" />
+      <classpath>
+        <pathelement location="src" />
+        <pathelement location="test" />
+        <path refid="project.class.path" />
+        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA.jar" />
+        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA-sources.jar" />
+        <pathelement location="third_party/junit/junit-4.11.jar" />
+      </classpath>
+      <batchtest todir="out/reports/htmlunit.dev" >
+        <fileset dir="test" >
+          <include name="**/*Test.java" />
+        </fileset>
+      </batchtest>
+      <formatter type="plain" />
+      <formatter type="xml" />
+    </junit>
+  </target>
+
+  <target name="test.prod" depends="javac.tests" description="Run production mode tests">
+    <mkdir dir="out/reports/htmlunit.prod" />
+    <junit fork="yes" printsummary="yes" haltonfailure="yes">
+      <jvmarg line="-Xmx256m" />
+      <sysproperty key="gwt.args" value="-prod -standardsMode -logLevel WARN -standardsMode -out out/www-test" />
+      <sysproperty key="java.awt.headless" value="true" />
+      <classpath>
+        <pathelement location="src" />
+        <pathelement location="test" />
+        <path refid="project.class.path" />
+        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA.jar" />
+        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA-sources.jar" />
+        <pathelement location="third_party/junit/junit-4.11.jar" />
+      </classpath>
+      <batchtest todir="out/reports/htmlunit.prod" >
+        <fileset dir="test" >
+          <include name="**/*Test.java" />
+        </fileset>
+      </batchtest>
+      <formatter type="plain" />
+      <formatter type="xml" />
+    </junit>
+  </target>
+
+  <target name="test" description="Run development and production mode tests">
+    <antcall target="test.dev" />
+    <antcall target="test.prod" />
+  </target>
+
+  <target name="build" depends="gwtc" description="Build this project" />
+
+  <target name="clean" description="Cleans this project">
+    <delete dir="war/WEB-INF" failonerror="false" />
+    <delete dir="war/domdistiller" failonerror="false" />
+    <delete file="war/DomDistiller.war" failonerror="false" />
+    <delete dir="gwt-unitCache" failonerror="false" />
+    <delete dir="out" failonerror="false" />
+    <delete failonerror="false" includeemptydirs="true">
+      <fileset dir="war" includes="*JUnit/**"/>
+    </delete>
+  </target>
+
+</project>

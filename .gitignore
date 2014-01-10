@@ -1,0 +1,6 @@
+DomDistiller.war
+gwt-unitCache/
+out/
+war/WEB-INF/
+war/domdistiller
+war/*.JUnit/
