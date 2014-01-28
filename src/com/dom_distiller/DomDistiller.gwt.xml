@@ -18,4 +18,8 @@
 
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
+  <!-- This provides simple implementations of java platform features used by boilerpipe but not
+  available in a gwt project -->
+  <super-source path='fake_java_platform'/>
+
 </module>
