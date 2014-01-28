@@ -1,11 +1,15 @@
+// Copyright 2014 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 package de.l3s.boilerpipe.sax;
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -111,7 +115,7 @@ public final class ImageExtractor {
 
 		private int inIgnorableElement = 0;
 		private int characterElementIdx = 0;
-		private final BitSet contentBitSet = new BitSet();
+		private final HashSet<Integer> contentBitSet = new HashSet<Integer>();
 		
 		private boolean inHighlight = false;
 
@@ -124,9 +128,9 @@ public final class ImageExtractor {
 				throws BoilerpipeProcessingException {
 			for (TextBlock block : doc.getTextBlocks()) {
 				if (block.isContent()) {
-					final BitSet bs = block.getContainedTextElements();
+					final HashSet<Integer> bs = block.getContainedTextElements();
 					if (bs != null) {
-						contentBitSet.or(bs);
+						contentBitSet.addAll(bs);
 					}
 				}
 			}
@@ -209,7 +213,7 @@ public final class ImageExtractor {
 			characterElementIdx++;
 			if (inIgnorableElement == 0) {
 
-				boolean highlight = contentBitSet.get(characterElementIdx);
+				boolean highlight = contentBitSet.contains(characterElementIdx);
 				if(!highlight) {
 					if(length == 0) {
 						return;

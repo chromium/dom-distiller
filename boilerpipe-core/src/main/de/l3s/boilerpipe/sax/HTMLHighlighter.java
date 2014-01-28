@@ -1,3 +1,7 @@
+// Copyright 2014 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 /**
  * boilerpipe
  *
@@ -20,8 +24,8 @@ package de.l3s.boilerpipe.sax;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
-import java.util.BitSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -312,7 +316,7 @@ public final class HTMLHighlighter {
 
 		private int inIgnorableElement = 0;
 		private int characterElementIdx = 0;
-		private final BitSet contentBitSet = new BitSet();
+		private final HashSet<Integer> contentBitSet = new HashSet<Integer>();
 		private final HTMLHighlighter hl = HTMLHighlighter.this;
 
 		Implementation() {
@@ -324,9 +328,9 @@ public final class HTMLHighlighter {
 				throws BoilerpipeProcessingException {
 			for (TextBlock block : doc.getTextBlocks()) {
 				if (block.isContent()) {
-					final BitSet bs = block.getContainedTextElements();
+					final HashSet<Integer> bs = block.getContainedTextElements();
 					if (bs != null) {
-						contentBitSet.or(bs);
+						contentBitSet.addAll(bs);
 					}
 				}
 			}
@@ -471,7 +475,7 @@ public final class HTMLHighlighter {
 			characterElementIdx++;
 			if (inIgnorableElement == 0) {
 
-				boolean highlight = contentBitSet.get(characterElementIdx);
+				boolean highlight = contentBitSet.contains(characterElementIdx);
 
 				if (!highlight && outputHighlightOnly) {
 					return;

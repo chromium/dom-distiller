@@ -1,3 +1,7 @@
+// Copyright 2014 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 /**
  * boilerpipe
  *
@@ -18,7 +22,7 @@
 package de.l3s.boilerpipe.sax;
 
 import java.util.ArrayList;
-import java.util.BitSet;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +74,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 	private Event lastEvent = null;
 
 	private int offsetBlocks = 0;
-	private BitSet currentContainedTextElements = new BitSet();
+	private HashSet<Integer> currentContainedTextElements = new HashSet<Integer>();
 
 	private boolean flush = false;
 	boolean inAnchorText = false;
@@ -290,7 +294,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 		sbLastWasWhitespace = endWhitespace;
 		lastEvent = Event.CHARACTERS;
 
-		currentContainedTextElements.set(textElementIdx);
+		currentContainedTextElements.add(textElementIdx);
 	}
 
 	List<TextBlock> getTextBlocks() {
@@ -365,7 +369,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 		TextBlock tb = new TextBlock(textBuffer.toString().trim(),
 				currentContainedTextElements, numWords, numLinkedWords,
 				numWordsInWrappedLines, numWrappedLines, offsetBlocks);
-		currentContainedTextElements = new BitSet();
+		currentContainedTextElements = new HashSet<Integer>();
 
 		offsetBlocks++;
 

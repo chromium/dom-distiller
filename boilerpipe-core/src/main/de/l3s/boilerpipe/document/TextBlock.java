@@ -1,3 +1,7 @@
+// Copyright 2014 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 /**
  * boilerpipe
  *
@@ -17,7 +21,6 @@
  */
 package de.l3s.boilerpipe.document;
 
-import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,12 +49,12 @@ public class TextBlock implements Cloneable {
     float textDensity;
     float linkDensity;
 
-    BitSet containedTextElements;
+    HashSet<Integer> containedTextElements;
 
     private int numFullTextWords = 0;
 	private int tagLevel;
 
-    private static final BitSet EMPTY_BITSET = new BitSet();
+    private static final HashSet<Integer> EMPTY_BITSET = new HashSet<Integer>();
     public static final TextBlock EMPTY_START = new TextBlock("", EMPTY_BITSET,
             0, 0, 0, 0, -1);
     public static final TextBlock EMPTY_END = new TextBlock("", EMPTY_BITSET,
@@ -61,7 +64,7 @@ public class TextBlock implements Cloneable {
         this(text, null, 0,0,0,0,0);
     }
     
-    public TextBlock(final String text, final BitSet containedTextElements,
+    public TextBlock(final String text, final HashSet<Integer> containedTextElements,
             final int numWords, final int numWordsInAnchorText,
             final int numWordsInWrappedLines, final int numWrappedLines,
             final int offsetBlocks) {
@@ -132,10 +135,9 @@ public class TextBlock implements Cloneable {
         this.isContent |= other.isContent;
 
         if(containedTextElements == null) {
-        	containedTextElements = (BitSet)other.containedTextElements.clone();
-        } else {
-        	containedTextElements.or(other.containedTextElements);
+            containedTextElements = new HashSet<Integer>();
         }
+        containedTextElements.addAll(other.containedTextElements);
 
         numFullTextWords += other.numFullTextWords;
 
@@ -251,26 +253,17 @@ public class TextBlock implements Cloneable {
      * Returns the containedTextElements BitSet, or <code>null</code>.
      * @return
      */
-    public BitSet getContainedTextElements() {
+    public HashSet<Integer> getContainedTextElements() {
         return containedTextElements;
     }
 
-	@Override
 	protected TextBlock clone() {
-		final TextBlock clone;
-		try {
-			clone = (TextBlock)super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
-		if(text != null && !(text instanceof String)) {
-			clone.text = new StringBuilder(text);
-		}
+		final TextBlock clone = new TextBlock(text.toString());
 		if(labels != null && !labels.isEmpty()) {
 			clone.labels = new HashSet<String>(labels);
 		}
 		if(containedTextElements != null) {
-			clone.containedTextElements = (BitSet)containedTextElements.clone();
+			clone.containedTextElements = (HashSet<Integer>)containedTextElements.clone();
 		}
 		
 		return clone;

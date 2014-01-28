@@ -6,6 +6,7 @@ package com.dom_distiller.client;
 
 import com.google.gwt.core.client.EntryPoint;
 
+import de.l3s.boilerpipe.document.TextBlock;
 import java.util.logging.Logger;
 
 /**
@@ -18,6 +19,7 @@ public class DomDistiller implements EntryPoint {
    * This is the entry point method.
    */
   public void onModuleLoad() {
-      logger.info("It works.");
+      TextBlock textBlock = new TextBlock("It works.");
+      logger.info(textBlock.getText());
   }
 }

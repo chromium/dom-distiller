@@ -9,6 +9,7 @@
 <module rename-to='domdistiller'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
+  <inherits name='Boilerpipe'/>
   <inherits name='com.google.gwt.logging.Logging'/>
 
   <entry-point class='com.dom_distiller.client.DomDistiller'/>
