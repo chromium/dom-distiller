@@ -12,6 +12,8 @@
   <inherits name='Boilerpipe'/>
   <inherits name='com.google.gwt.logging.Logging'/>
 
+  <set-property name='user.agent' value='safari'/>
+
   <entry-point class='com.dom_distiller.client.DomDistiller'/>
 
   <!-- Specify the paths for translatable code                    -->
