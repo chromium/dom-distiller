@@ -1,7 +1,5 @@
 package de.l3s.boilerpipe.extractors;
 
-import de.l3s.boilerpipe.BoilerpipeExtractor;
-
 /**
  * Provides quick access to common {@link BoilerpipeExtractor}s.
  * 

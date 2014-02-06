@@ -30,7 +30,7 @@ import de.l3s.boilerpipe.filters.heuristics.KeepLargestBlockFilter;
  * 
  * @author Christian Kohlschütter
  */
-public final class LargestContentExtractor extends ExtractorBase {
+public final class LargestContentExtractor {
     public static final LargestContentExtractor INSTANCE = new LargestContentExtractor();
 
     private LargestContentExtractor() {

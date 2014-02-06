@@ -28,7 +28,7 @@ import de.l3s.boilerpipe.filters.heuristics.SimpleBlockFusionProcessor;
  * 
  * @author Christian Kohlschütter
  */
-public class DefaultExtractor extends ExtractorBase {
+public class DefaultExtractor {
     public static final DefaultExtractor INSTANCE = new DefaultExtractor();
 
     /**

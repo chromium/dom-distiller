@@ -37,7 +37,7 @@ import de.l3s.boilerpipe.filters.simple.BoilerplateBlockFilter;
  * 
  * @author Christian Kohlschütter
  */
-public final class ArticleExtractor extends ExtractorBase {
+public final class ArticleExtractor {
     public static final ArticleExtractor INSTANCE = new ArticleExtractor();
 
     /**

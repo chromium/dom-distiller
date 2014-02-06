@@ -27,7 +27,7 @@ import de.l3s.boilerpipe.filters.english.NumWordsRulesClassifier;
  * 
  * @author Christian Kohlschütter
  */
-public class NumWordsRulesExtractor extends ExtractorBase {
+public class NumWordsRulesExtractor {
     public static final NumWordsRulesExtractor INSTANCE = new NumWordsRulesExtractor();
 
     /**

@@ -213,6 +213,16 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 		labelStacks.removeLast();
 	}
 
+        /**
+         * This is an approximation to Java's Character.isWhitespace(). That function is not
+         * available with GWT.
+         *
+         * TODO(cjhopman): Handle unicode whitespace.
+         */
+        private boolean isWhitespace(Character c) {
+            return " \t\n\r".indexOf(c) != -1;
+        }
+
 	// @Override
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
@@ -237,7 +247,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 
 		final int end = start + length;
 		for (int i = start; i < end; i++) {
-			if (Character.isWhitespace(ch[i])) {
+			if (isWhitespace(ch[i])) {
 				ch[i] = ' ';
 			}
 		}

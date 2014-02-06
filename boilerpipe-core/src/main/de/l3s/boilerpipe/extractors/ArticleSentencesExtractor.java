@@ -27,7 +27,7 @@ import de.l3s.boilerpipe.filters.simple.SplitParagraphBlocksFilter;
  * 
  * @author Christian Kohlschütter
  */
-public final class ArticleSentencesExtractor extends ExtractorBase {
+public final class ArticleSentencesExtractor {
     public static final ArticleSentencesExtractor INSTANCE = new ArticleSentencesExtractor();
 
     /**

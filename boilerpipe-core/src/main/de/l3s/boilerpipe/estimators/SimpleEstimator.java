@@ -17,7 +17,6 @@
  */
 package de.l3s.boilerpipe.estimators;
 
-import de.l3s.boilerpipe.BoilerpipeExtractor;
 import de.l3s.boilerpipe.document.TextDocumentStatistics;
 import de.l3s.boilerpipe.extractors.ArticleExtractor;
 import de.l3s.boilerpipe.extractors.DefaultExtractor;

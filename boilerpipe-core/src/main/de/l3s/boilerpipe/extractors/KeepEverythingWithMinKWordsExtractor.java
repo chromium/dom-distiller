@@ -30,7 +30,7 @@ import de.l3s.boilerpipe.filters.simple.MinWordsFilter;
  * 
  * @author Christian Kohlschütter
  */
-public final class KeepEverythingWithMinKWordsExtractor extends ExtractorBase {
+public final class KeepEverythingWithMinKWordsExtractor {
 
     private final MinWordsFilter filter;
 

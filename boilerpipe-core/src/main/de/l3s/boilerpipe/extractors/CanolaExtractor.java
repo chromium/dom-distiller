@@ -34,7 +34,7 @@ import de.l3s.boilerpipe.estimators.SimpleEstimator;
  * 
  * @author Christian Kohlschütter
  */
-public class CanolaExtractor extends ExtractorBase {
+public class CanolaExtractor {
 	public static final CanolaExtractor INSTANCE = new CanolaExtractor();
 
 	/**
