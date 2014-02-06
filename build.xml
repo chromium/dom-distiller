@@ -17,27 +17,38 @@
     <fileset dir="${gwt.sdk}" includes="gwt-dev*.jar"/>
   </path>
 
+  <path id="project.java.path">
+    <pathelement location="boilerpipe-core/src/main"/>
+    <pathelement location="src"/>
+  </path>
+
+  <path id="project.java.test.path">
+    <pathelement location="test" />
+  </path>
+
+  <union id="project.non.java.files">
+    <fileset dir="boilerpipe-core/src/main" excludes="**/*.java"/>
+    <fileset dir="src" excludes="**/*.java"/>
+  </union>
+
   <target name="javac" description="Compile java source to bytecode">
     <mkdir dir="war/WEB-INF/classes"/>
     <javac includes="**" encoding="utf-8"
         destdir="war/WEB-INF/classes"
         source="1.5" target="1.5" nowarn="true"
         debug="true" debuglevel="lines,vars,source">
-      <src path="src"/>
-      <src path="boilerpipe-core/src/main"/>
+      <src refid="project.java.path"/>
       <classpath refid="project.class.path"/>
     </javac>
     <copy todir="war/WEB-INF/classes">
-      <fileset dir="src" excludes="**/*.java"/>
-      <fileset dir="boilerpipe-core/src/main" excludes="**/*.java"/>
+      <resources refid="project.non.java.files" />
     </copy>
   </target>
 
   <target name="gwtc" depends="javac" description="GWT compile to JavaScript (production mode)">
     <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
       <classpath>
-        <pathelement location="src"/>
-        <pathelement location="boilerpipe-core/src/main"/>
+        <path refid="project.java.path"/>
         <path refid="project.class.path"/>
         <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA.jar" />
         <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA-sources.jar" />
@@ -53,8 +64,7 @@
   <target name="devmode" depends="javac" description="Run development mode">
     <java failonerror="true" fork="true" classname="com.google.gwt.dev.DevMode">
       <classpath>
-        <pathelement location="src"/>
-        <pathelement location="boilerpipe-core/src/main"/>
+        <path refid="project.java.path"/>
         <path refid="project.class.path"/>
       </classpath>
       <jvmarg value="-Xmx256M"/>
@@ -83,9 +93,9 @@
       <sysproperty key="gwt.args" value="-standardsMode -logLevel WARN" />
       <sysproperty key="java.awt.headless" value="true" />
       <classpath>
-        <pathelement location="src" />
-        <pathelement location="test" />
         <path refid="project.class.path" />
+        <path refid="project.java.path" />
+        <path refid="project.java.test.path" />
         <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA.jar" />
         <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA-sources.jar" />
         <pathelement location="third_party/junit/junit-4.11.jar" />
@@ -107,9 +117,9 @@
       <sysproperty key="gwt.args" value="-prod -standardsMode -logLevel WARN -standardsMode -out out/www-test" />
       <sysproperty key="java.awt.headless" value="true" />
       <classpath>
-        <pathelement location="src" />
-        <pathelement location="test" />
         <path refid="project.class.path" />
+        <path refid="project.java.path" />
+        <path refid="project.java.test.path" />
         <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA.jar" />
         <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA-sources.jar" />
         <pathelement location="third_party/junit/junit-4.11.jar" />
@@ -130,6 +140,14 @@
   </target>
 
   <target name="build" depends="gwtc" description="Build this project" />
+
+  <target name="javadoc">
+    <javadoc
+        destdir="out/javadoc"
+        sourcepathref="project.java.path"
+        classpathref="project.class.path">
+    </javadoc>
+  </target>
 
   <target name="clean" description="Cleans this project">
     <delete dir="war/WEB-INF" failonerror="false" />
