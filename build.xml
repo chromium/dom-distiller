@@ -33,6 +33,8 @@
     <pathelement location="test" />
   </path>
 
+  <property name="test.filter" value="*" />
+
   <union id="project.non.java.files">
     <fileset dir="boilerpipe-core/src/main" excludes="**/*.java"/>
     <fileset dir="src" excludes="**/*.java"/>
@@ -106,7 +108,7 @@
 
   <target name="test.dev" depends="javac.tests" description="Run development mode tests">
     <mkdir dir="out/reports/htmlunit.dev" />
-    <junit fork="yes" printsummary="yes" haltonfailure="yes">
+    <junit fork="yes" printsummary="yes" haltonfailure="no" failureproperty="test.dev.failed">
       <jvmarg line="-Xmx256m" />
       <sysproperty key="gwt.args" value="-standardsMode -logLevel WARN" />
       <sysproperty key="java.awt.headless" value="true" />
@@ -120,19 +122,20 @@
       </classpath>
       <batchtest todir="out/reports/htmlunit.dev" >
         <fileset dir="test" >
-          <include name="**/*Test.java" />
+          <include name="**/${test.filter}Test.java" />
         </fileset>
       </batchtest>
       <formatter type="plain" />
       <formatter type="xml" />
     </junit>
+    <fail message="Test failure detected." if="test.dev.failed" />
   </target>
 
   <target name="test.prod" depends="javac.tests" description="Run production mode tests">
     <mkdir dir="out/reports/htmlunit.prod" />
-    <junit fork="yes" printsummary="yes" haltonfailure="yes">
+    <junit fork="yes" printsummary="yes" haltonfailure="no" failureproperty="test.prod.failed">
       <jvmarg line="-Xmx256m" />
-      <sysproperty key="gwt.args" value="-prod -standardsMode -logLevel WARN -standardsMode -out out/www-test" />
+      <sysproperty key="gwt.args" value="-prod -standardsMode -logLevel WARN -out out/www-test" />
       <sysproperty key="java.awt.headless" value="true" />
       <classpath>
         <path refid="project.class.path" />
@@ -144,12 +147,13 @@
       </classpath>
       <batchtest todir="out/reports/htmlunit.prod" >
         <fileset dir="test" >
-          <include name="**/*Test.java" />
+          <include name="**/${test.filter}Test.java" />
         </fileset>
       </batchtest>
       <formatter type="plain" />
       <formatter type="xml" />
     </junit>
+    <fail message="Test failure detected." if="test.prod.failed" />
   </target>
 
   <target name="test" description="Run development and production mode tests">
