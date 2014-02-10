@@ -11,6 +11,8 @@
   <!-- Configure path to GWT SDK -->
   <property name="gwt.sdk" location="third_party/gwt-2.5.1" />
 
+  <property name="gwt_exporter.src" location="third_party/gwt_exporter/core/src/main/java/"/>
+
   <path id="project.class.path">
     <pathelement location="war/WEB-INF/classes"/>
     <pathelement location="${gwt.sdk}/gwt-user.jar"/>
@@ -20,6 +22,7 @@
   <path id="project.java.path">
     <pathelement location="boilerpipe-core/src/main"/>
     <pathelement location="src"/>
+    <pathelement location="${gwt_exporter.src}"/>
   </path>
 
   <path id="project.java.test.path">
@@ -29,6 +32,7 @@
   <union id="project.non.java.files">
     <fileset dir="boilerpipe-core/src/main" excludes="**/*.java"/>
     <fileset dir="src" excludes="**/*.java"/>
+    <fileset dir="${gwt_exporter.src}" excludes="**/*.java"/>
   </union>
 
   <target name="javac" description="Compile java source to bytecode">

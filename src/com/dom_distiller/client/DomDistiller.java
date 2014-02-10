@@ -8,6 +8,8 @@ import com.google.gwt.core.client.EntryPoint;
 
 import java.util.logging.Logger;
 
+import org.timepedia.exporter.client.ExporterUtil;
+
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
@@ -18,6 +20,7 @@ public class DomDistiller implements EntryPoint {
    * This is the entry point method.
    */
   public void onModuleLoad() {
+      ExporterUtil.exportAll();
       logger.info(ContentExtractor.extractContent());
   }
 }

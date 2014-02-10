@@ -14,9 +14,14 @@ import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.extractors.CommonExtractors;
 import de.l3s.boilerpipe.sax.BoilerpipeHTMLContentHandler;
 
-import org.xml.sax.SAXException;
+import org.timepedia.exporter.client.Export;
+import org.timepedia.exporter.client.Exportable;
 
-public class ContentExtractor {
+import org.xml.sax.SAXException;
+import org.xml.sax.AttributesImpl;
+
+@Export()
+public class ContentExtractor implements Exportable {
     static Logger logger = Logger.getLogger("DomDistiller");
 
     public static String extractContent() {
