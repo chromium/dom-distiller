@@ -19,6 +19,10 @@
     <fileset dir="${gwt.sdk}" includes="gwt-dev*.jar"/>
   </path>
 
+  <target name="setup">
+    <mkdir dir="out"/>
+  </target>
+
   <path id="project.java.path">
     <pathelement location="boilerpipe-core/src/main"/>
     <pathelement location="src"/>
@@ -35,7 +39,7 @@
     <fileset dir="${gwt_exporter.src}" excludes="**/*.java"/>
   </union>
 
-  <target name="javac" description="Compile java source to bytecode">
+  <target name="javac" depends="setup" description="Compile java source to bytecode">
     <mkdir dir="war/WEB-INF/classes"/>
     <javac includes="**" encoding="utf-8"
         destdir="war/WEB-INF/classes"
@@ -63,6 +67,16 @@
       <arg line="${gwt.args}"/>
       <arg value="com.dom_distiller.DomDistiller"/>
     </java>
+  </target>
+
+  <target name="extractjs" depends="gwtc" description="Extract standalone javascript from compiled javascript">
+    <property name="compiled.js.dir" value="war/domdistiller" />
+
+    <exec executable="python">
+      <arg value="create_standalone_js.py"/>
+      <arg line="-i ${compiled.js.dir}"/>
+      <arg line="-o out/domdistiller.js"/>
+    </exec>
   </target>
 
   <target name="devmode" depends="javac" description="Run development mode">
