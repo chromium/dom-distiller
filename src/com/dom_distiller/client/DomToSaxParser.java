@@ -23,31 +23,52 @@ import java.util.logging.Logger;
 class DomToSaxParser {
     static Logger logger = Logger.getLogger("DomToSaxParser");
 
+    private static class DomToSaxVisitor implements DomWalker.Visitor {
+        private static final String sHtmlNamespace = "http://www.w3.org/1999/xhtml";
+        private final ContentHandler handler;
+
+        DomToSaxVisitor(ContentHandler h) {
+            handler = h;
+        }
+
+        @Override
+        public boolean visit(Node n) {
+            try {
+                switch (n.getNodeType()) {
+                    case Node.TEXT_NODE:
+                        String text = Text.as(n).getData();
+                        handler.characters(text.toCharArray(), 0, text.length());
+                        return false;
+                    case Node.ELEMENT_NODE:
+                        Element e = Element.as(n);
+                        Attributes attrs = getSaxAttributes(e);
+                        handler.startElement(sHtmlNamespace, e.getTagName(), e.getTagName(), attrs);
+                        return true;
+                    case Node.DOCUMENT_NODE:  // Don't recurse into sub-documents.
+                    default:  // This case is for comment nodes.
+                        return false;
+                }
+            } catch (SAXException e) {
+                return false;
+            }
+        }
+
+        @Override
+        public void exit(Node n) {
+            Element e = Element.as(n);
+            try {
+                handler.endElement(sHtmlNamespace, e.getTagName(), e.getTagName());
+            } catch (SAXException ex) {
+                // Intentionally ignored.
+            }
+        }
+    }
+
     /**
      * This will generate sax events for the DOM tree rooted at e to the provided ContentHandler.
      */
-    static void parse(Element e, ContentHandler handler) throws SAXException {
-        Attributes attrs = getSaxAttributes(e);
-        handler.startElement("http://www.w3.org/1999/xhtml", e.getTagName(), e.getTagName(), attrs);
-
-        NodeList<Node> children = e.getChildNodes();
-        for (int i = 0; i < children.getLength(); ++i) {
-            Node n = children.getItem(i);
-            switch (n.getNodeType()) {
-                case Node.TEXT_NODE:
-                    String text = Text.as(n).getData();
-                    handler.characters(text.toCharArray(), 0, text.length());
-                    break;
-                case Node.ELEMENT_NODE:
-                    parse(Element.as(n), handler);
-                    break;
-                case Node.DOCUMENT_NODE:
-                    break;
-                default: // comments
-                    break;
-            }
-        }
-        handler.endElement("http://www.w3.org/1999/xhtml", e.getTagName(), e.getTagName());
+    static void parse(Element e, ContentHandler handler) {
+        new DomWalker(new DomToSaxVisitor(handler)).walk(e);
     }
 
     /**
