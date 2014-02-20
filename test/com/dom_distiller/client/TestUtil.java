@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.dom.client.Text;
 
 /**
  * A mixed bag of stuff used in tests.
@@ -56,6 +58,14 @@ class TestUtil {
         Element e = Document.get().createDivElement();
         e.setId(Integer.toString(id));
         return e;
+    }
+
+    public static Text createText(String value) {
+        return Document.get().createTextNode(value);
+    }
+
+    public static ImageElement createImage() {
+        return Document.get().createImageElement();
     }
 
     private static void createDivTreeImpl(Element e, int depth, List<Element> divs) {

@@ -128,7 +128,7 @@
       <formatter type="plain" />
       <formatter type="xml" />
     </junit>
-    <fail message="Test failure detected." if="test.dev.failed" />
+    <fail message="Test failure detected (test.dev)." if="test.dev.failed" />
   </target>
 
   <target name="test.prod" depends="javac.tests" description="Run production mode tests">
@@ -153,7 +153,7 @@
       <formatter type="plain" />
       <formatter type="xml" />
     </junit>
-    <fail message="Test failure detected." if="test.prod.failed" />
+    <fail message="Test failure detected (test.prod)." if="test.prod.failed" />
   </target>
 
   <target name="test" description="Run development and production mode tests">

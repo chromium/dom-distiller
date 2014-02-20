@@ -38,6 +38,8 @@ import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.labels.LabelAction;
 import de.l3s.boilerpipe.util.UnicodeTokenizer;
 
+import com.dom_distiller.client.StringUtil;
+
 /**
  * A simple SAX {@link ContentHandler}, used by {@link BoilerpipeSAXInput}. Can
  * be used by different parser implementations, e.g. NekoHTML and TagSoup.
@@ -213,16 +215,6 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 		labelStacks.removeLast();
 	}
 
-        /**
-         * This is an approximation to Java's Character.isWhitespace(). That function is not
-         * available with GWT.
-         *
-         * TODO(cjhopman): Handle unicode whitespace.
-         */
-        private boolean isWhitespace(Character c) {
-            return " \t\n\r".indexOf(c) != -1;
-        }
-
 	// @Override
 	public void characters(char[] ch, int start, int length)
 			throws SAXException {
@@ -247,7 +239,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 
 		final int end = start + length;
 		for (int i = start; i < end; i++) {
-			if (isWhitespace(ch[i])) {
+			if (StringUtil.isWhitespace(ch[i])) {
 				ch[i] = ' ';
 			}
 		}
