@@ -4,3 +4,4 @@ out/
 war/WEB-INF/
 war/domdistiller
 war/*.JUnit/
+.*.swp
