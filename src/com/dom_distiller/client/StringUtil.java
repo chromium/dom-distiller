@@ -4,6 +4,9 @@
 
 package com.dom_distiller.client;
 
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 public class StringUtil {
     /**
      * This is an approximation to Java's Character.isWhitespace(). That function is not available
@@ -20,5 +23,11 @@ public class StringUtil {
             if (!isWhitespace(s.charAt(i))) return false;
         }
         return true;
+    }
+
+    public static String trim(String input) {
+        Pattern pattern = Pattern.compile("^\\s+|\\s+$", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(input);
+        return matcher.replaceAll("");
     }
 }

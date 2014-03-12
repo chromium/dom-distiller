@@ -7,10 +7,12 @@ package com.dom_distiller.client;
 import java.util.List;
 import java.util.ArrayList;
 
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.Text;
+import com.google.gwt.dom.client.TitleElement;
 
 /**
  * A mixed bag of stuff used in tests.
@@ -66,6 +68,18 @@ class TestUtil {
 
     public static ImageElement createImage() {
         return Document.get().createImageElement();
+    }
+
+    public static TitleElement createTitle(String value) {
+        TitleElement t = Document.get().createTitleElement();
+        t.setInnerHTML(value);
+        return t;
+    }
+
+    public static HeadingElement createHeading(int n, String value) {
+        HeadingElement h = Document.get().createHElement(n);
+        h.setInnerHTML(value);
+        return h;
     }
 
     private static void createDivTreeImpl(Element e, int depth, List<Element> divs) {

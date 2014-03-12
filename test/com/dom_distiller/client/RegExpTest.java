@@ -23,11 +23,23 @@ public class RegExpTest extends GWTTestCase {
         return "com.dom_distiller.DomDistillerJUnit";
     }
 
-    public void testMatcherFind() {
+    public void testMatcherCaseSensitiveFind() {
         Pattern pattern = Pattern.compile("match");
         String goodString = "sdfmatchsdf";
-        String badString = "sdfxxxxxsdf";
+        String badString1 = "sdfxxxxxsdf";
+        String badString2 = "sdfMatchsdf";
         assertTrue(pattern.matcher(goodString).find());
+        assertFalse(pattern.matcher(badString1).find());
+        assertFalse(pattern.matcher(badString2).find());
+    }
+
+    public void testMatcherCaseInsensitiveFind() {
+        Pattern pattern = Pattern.compile("match", Pattern.CASE_INSENSITIVE);
+        String goodString1 = "sdfMaTchsdf";
+        String goodString2 = "sdfmatchsdf";
+        String badString = "sdfxxxxxsdf";
+        assertTrue(pattern.matcher(goodString1).find());
+        assertTrue(pattern.matcher(goodString2).find());
         assertFalse(pattern.matcher(badString).find());
     }
 

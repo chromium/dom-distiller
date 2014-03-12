@@ -8,6 +8,7 @@ import java.lang.IllegalStateException;
 
 import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;
+import com.google.gwt.regexp.shared.SplitResult;
 
 /**
  * This is a limited implementation of Java's java.util.regex.Matcher.
@@ -17,8 +18,8 @@ public class Matcher {
     private RegExp regex;
     private MatchResult currentMatch;
 
-    Matcher(String r, String in) {
-        regex = RegExp.compile(r, "g");
+    Matcher(String r, String f, String in) {
+        regex = RegExp.compile(r, f);
         input = in;
         currentMatch = null;
     }
