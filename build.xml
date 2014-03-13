@@ -7,6 +7,7 @@
 <project name="DomDistiller" default="build" basedir=".">
   <!-- Arguments to gwtc and devmode targets -->
   <property name="gwt.args" value="-war war" />
+  <property name="gwt.custom.args" value="" />
 
   <!-- Configure path to GWT SDK -->
   <property name="gwt.sdk" location="third_party/gwt-2.5.1" />
@@ -67,6 +68,7 @@
       <jvmarg value="-Xmx256M"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
       <arg line="${gwt.args}"/>
+      <arg line="${gwt.custom.args}"/>
       <arg value="com.dom_distiller.DomDistiller"/>
     </java>
   </target>

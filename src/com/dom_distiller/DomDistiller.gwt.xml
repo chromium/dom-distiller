@@ -10,7 +10,6 @@
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
   <inherits name='Boilerpipe'/>
-  <inherits name='com.google.gwt.logging.Logging'/>
 
   <inherits name='org.timepedia.exporter.Exporter'/>
   <set-property name='export' value='yes'/>
