@@ -7,12 +7,17 @@ package com.dom_distiller.client;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.Text;
 import com.google.gwt.dom.client.TitleElement;
+
+
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.Location;
 
 /**
  * A mixed bag of stuff used in tests.
@@ -82,6 +87,13 @@ class TestUtil {
         return h;
     }
 
+    public static AnchorElement createAnchor(String href, String text) {
+        AnchorElement l = Document.get().createAnchorElement();
+        l.setHref(href);
+        l.setInnerHTML(text);
+        return l;
+    }
+
     private static void createDivTreeImpl(Element e, int depth, List<Element> divs) {
         if (depth > 2) return;
         for (int i = 0; i < 2; i++) {
@@ -96,6 +108,15 @@ class TestUtil {
         Element div = Document.get().createDivElement();
         div.appendChild(e.cloneNode(true));
         return div.getInnerHTML();
+    }
+
+    public static String formHrefWithWindowLocationPath(String strToAppend) {
+        String noUrlParams = Window.Location.getPath();
+        // Append '/' if necessary.
+        if (!strToAppend.isEmpty() && !StringUtil.match(noUrlParams, "\\/$")) {
+            noUrlParams += "/";
+        }
+        return noUrlParams + strToAppend;
     }
 
 }

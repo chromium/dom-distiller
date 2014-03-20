@@ -2,13 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+/*
+ * Parts of this file are adapted from Readability.
+ *
+ * Readability is Copyright (c) 2010 Src90 Inc
+ * and licenced under the Apache License, Version 2.0.
+ */
+
 package com.dom_distiller.client;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
@@ -43,27 +49,25 @@ public class DocumentTitleGetter implements Exportable {
             currTitle = origTitle = objTitle.toString();
         } else if (root != null) {  // Otherwise, use text of first TITLE element.
             NodeList<Element> titles = root.getElementsByTagName("TITLE");
-            if (titles.getLength() > 0)
+            if (titles.getLength() > 0) {
               currTitle = origTitle = titles.getItem(0).getInnerText();
+            }
         }
-        if (currTitle == "")
-          return "";
+        if (currTitle == "") return "";
         
-        Pattern pattern = Pattern.compile(" [\\|\\-] ");
-        Matcher matcher = pattern.matcher(currTitle);
-        if (matcher.find()) {  // Title has '|' and/or '-'.
+        if (StringUtil.match(currTitle, " [\\|\\-] ")) {  // Title has '|' and/or '-'.
             // Get part before last '|' or '-'.
-            currTitle = findAndReplace(origTitle, "(.*)[\\|\\-] .*", "$1");
-            if (splitLength(currTitle, "\\s+") < 3) {  // Part has < 3 words.
+            currTitle = StringUtil.findAndReplace(origTitle, "(.*)[\\|\\-] .*", "$1");
+            if (StringUtil.splitLength(currTitle, "\\s+") < 3) {  // Part has < 3 words.
                 // Get part after first '|' or '-'.
-                currTitle = findAndReplace(origTitle, "[^\\|\\-]*[\\|\\-](.*)", "$1");
+                currTitle = StringUtil.findAndReplace(origTitle, "[^\\|\\-]*[\\|\\-](.*)", "$1");
             }
         } else if (currTitle.indexOf(": ") != -1) {  // Title has ':'.
             // Get part after last ':'.
-            currTitle = findAndReplace(origTitle, ".*:(.*)", "$1");
-            if (splitLength(currTitle, "\\s+") < 3) {  // Part has < 3 words.
+            currTitle = StringUtil.findAndReplace(origTitle, ".*:(.*)", "$1");
+            if (StringUtil.splitLength(currTitle, "\\s+") < 3) {  // Part has < 3 words.
               // Get part after first ':'.
-              currTitle = findAndReplace(origTitle, "[^:]*[:](.*)", "$1");
+              currTitle = StringUtil.findAndReplace(origTitle, "[^:]*[:](.*)", "$1");
             }
         } else if (root != null && (currTitle.length() > 150 || currTitle.length() < 15)) {
             // Get plain text from the only H1 element.
@@ -71,44 +75,16 @@ public class DocumentTitleGetter implements Exportable {
             // if rather than else-if, e.g. currently this else-if block is used when original title
             // is "foo" but not when it is "foo |" or "foo:".
             currTitle = findTheOnlyH1(root);
-            if (currTitle == null)
-                currTitle = origTitle;
+            if (currTitle == null) currTitle = origTitle;
         }
 
         currTitle = StringUtil.trim(currTitle);
 
-        if (splitLength(currTitle, "\\s+") <= 4)
-            currTitle = origTitle;
+        if (StringUtil.splitLength(currTitle, "\\s+") <= 4) currTitle = origTitle;
 
         return currTitle;
     }
 
-    private static String findAndReplace(String input, String regex, String replace) {
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(input);
-        return matcher.replaceAll(replace);
-    }
-
-    private static int splitLength(String input, String regex) {
-        // Either use String.split(), which is rumored to be very slow
-        // (see http://turbomanage.wordpress.com/2011/07/12/gwt-performance-tip-watch-out-for-string-split/),
-        return input.split(regex).length;
-
-/*
-        // OR RegEx.split() via Pattern.split(),
-        // TODO(kuan): add test for Pattern.split() if using this.
-        Pattern pattern = Pattern.compile(regex);
-        return pattern.split(input).length;
-*/
-    }
-
-    // OR JSNI to call native Javascript regexp (as suggested by the website above).
-    // Currently, "ant test.prod" which is closest to the "real world scenario" but still not very
-    // accurate, has RegEx.split as the slowest, while GWT String.split and JSNI String.split as
-    // almost the same.
-    //private static final native int splitLength(String input, String regex) /*-{
-        //return input.split(/regex/).length;
-    //}-*/;
 
     private static String findTheOnlyH1(Element root) {
         NodeList<Element> hOnes = root.getElementsByTagName("H1");
