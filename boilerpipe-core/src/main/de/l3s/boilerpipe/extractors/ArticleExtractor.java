@@ -1,3 +1,7 @@
+// Copyright 2014 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 /**
  * boilerpipe
  *
@@ -34,7 +38,7 @@ import de.l3s.boilerpipe.filters.simple.BoilerplateBlockFilter;
 /**
  * A full-text extractor which is tuned towards news articles. In this scenario
  * it achieves higher accuracy than {@link DefaultExtractor}.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public final class ArticleExtractor {
@@ -46,12 +50,11 @@ public final class ArticleExtractor {
     public static ArticleExtractor getInstance() {
         return INSTANCE;
     }
-    
+
     public boolean process(TextDocument doc)
             throws BoilerpipeProcessingException {
-        return
-
-        TerminatingBlocksFinder.INSTANCE.process(doc)
+        return true
+                | TerminatingBlocksFinder.INSTANCE.process(doc)
                 | new DocumentTitleMatchClassifier(doc.getTitle()).process(doc)
                 | NumWordsRulesClassifier.INSTANCE.process(doc)
                 | IgnoreBlocksAfterContentFilter.DEFAULT_INSTANCE.process(doc)

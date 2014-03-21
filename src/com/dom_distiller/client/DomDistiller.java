@@ -21,6 +21,5 @@ public class DomDistiller implements EntryPoint {
    */
   public void onModuleLoad() {
       ExporterUtil.exportAll();
-      logger.info(ContentExtractor.extractContent());
   }
 }
