@@ -9,9 +9,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.NodeList;
 
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
@@ -74,8 +76,20 @@ public class ContentExtractor implements Exportable {
         if (clonedSubtree.getNodeType() != Node.ELEMENT_NODE) {
             return "";
         }
+
+        makeAllLinksAbsolute(clonedSubtree);
+
         // TODO(cjhopman): this discards the top element and just returns its children. This might
         // break in some cases.
         return Element.as(clonedSubtree).getInnerHTML();
+    }
+
+    private static void makeAllLinksAbsolute(Node rootNode) {
+        Element root = Element.as(rootNode);
+        NodeList<Element> allLinks = root.getElementsByTagName("A");
+        for (int i = 0; i < allLinks.getLength(); i++) {
+            AnchorElement link = AnchorElement.as(allLinks.getItem(i));
+            link.setHref(link.getHref());
+        }
     }
 }
