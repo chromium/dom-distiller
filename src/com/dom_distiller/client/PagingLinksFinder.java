@@ -70,6 +70,9 @@ public class PagingLinksFinder implements Exportable {
 
     private static String findPagingLink(Element root, PageLink page_link) {
         String baseUrl = findBaseUrl();
+        // Remove trailing '/' from window location href, because it'll be used to compare with
+        // other href's whose trailing '/' are also removed.
+        String wndLocationHref = StringUtil.findAndReplace(Window.Location.getHref(), "\\/$", "");
         NodeList<Element> allLinks = root.getElementsByTagName("A");
         Map<String, PagingLinkObj> possiblePages = new HashMap<String, PagingLinkObj>();
 
@@ -82,6 +85,8 @@ public class PagingLinksFinder implements Exportable {
             AnchorElement link = AnchorElement.as(allLinks.getItem(i));
 
             // Remove url anchor and then trailing '/' from link's href.
+            // Note that AnchorElement.getHref() returns the absolute URI, so there's no need to
+            // worry about relative links.
             String linkHref = StringUtil.findAndReplace(
                 StringUtil.findAndReplace(link.getHref(), "#.*$", ""), "\\/$", "");
 
@@ -90,13 +95,12 @@ public class PagingLinksFinder implements Exportable {
             // - next page link: ignore it, since we would already have seen it.
             // - previous page link: don't ignore it, since some sites will simply have the same
             //                       base URL for the first page.
-            if (linkHref.isEmpty() || linkHref.equalsIgnoreCase(Window.Location.getHref()) ||
+            if (linkHref.isEmpty() || linkHref.equalsIgnoreCase(wndLocationHref) ||
                     (page_link == PageLink.NEXT && linkHref.equalsIgnoreCase(baseUrl))) {
                 continue;
             }
 
             // If it's on a different domain, skip it.
-            // TODO(kuan): check if this works for relative links.
             if (!Window.Location.getHost().equalsIgnoreCase(
                     StringUtil.split(linkHref, "\\/+")[1])) {
                 continue;
@@ -136,7 +140,6 @@ public class PagingLinksFinder implements Exportable {
             // Example: http://www.actionscript.org/resources/articles/745/1/JavaScript-and-VBScript-Injection-in-ActionScript-3/Page1.html.
             // TODO(kuan): again, baseUrl (returned by findBaseUrl()) is NOT the prefix of the
             // current window location, even though it appears to be so the way it's used here.
-            // TODO(kuan): check if this works for relative links.
             if (linkHref.indexOf(baseUrl) != 0) linkObj.mScore -= 25;
 
             // Concatenate the link text with class name and id, and determine the score based on
@@ -179,7 +182,7 @@ public class PagingLinksFinder implements Exportable {
                 }
                 // TODO(kuan): to get 1st page for prev page link, this can't be applied; however,
                 // the non-application might be the cause of recursive prev page being returned,
-                // i.e for page 1, it may incorrectly return page 3 for prev page link.
+                // i.e. for page 1, it may incorrectly return page 3 for prev page link.
                 if (!negativeMatch && StringUtil.match(parentClassAndId, NEGATIVE_REGEX)) {
                     // If this is just something like "footer", give it a negative.
                     // If it's something like "body-and-footer", leave it be.
