@@ -9,13 +9,24 @@ import java.util.regex.Matcher;
 
 public class StringUtil {
     /**
-     * This is an approximation to Java's Character.isWhitespace(). That function is not available
+     * This is equivalent  to Java's Character.isWhitespace(). That function is not available
      * with GWT.
-     *
-     * TODO(cjhopman): Handle unicode whitespace.
      */
     public static boolean isWhitespace(Character c) {
-        return " \t\n\r".indexOf(c) != -1;
+        int code = (int)c.charValue();
+        return between(code, 0x0009, 0x000d) ||
+                between(code, 0x001c, 0x0020) ||
+                code == 0x1680 ||
+                code == 0x180e ||
+                between(code, 0x2000, 0x2006) ||
+                between(code, 0x2028, 0x2029) ||
+                code == 0x205f ||
+                code == 0x3000;
+
+    }
+
+    private static boolean between(int t, int lo, int hi) {
+        return lo <= t && t <= hi;
     }
 
     public static boolean isStringAllWhitespace(String s) {
@@ -24,6 +35,15 @@ public class StringUtil {
         }
         return true;
     }
+
+    // The version of gwt that we use implements trim improperly (it uses a javascript regex with \s
+    // where java's trim explicitly matches \u0000-\u0020). This version is from GWT's trunk.
+    public static native String javaTrim(String s) /*-{
+        if (s.length == 0 || (s[0] > '\u0020' && s[s.length - 1] > '\u0020')) {
+            return s;
+        }
+        return s.replace(/^[\u0000-\u0020]*|[\u0000-\u0020]*$/g, '');
+    }-*/;
 
     public static boolean match(String input, String regex) {
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);

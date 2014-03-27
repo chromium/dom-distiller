@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 public class DomToSaxParser {
     static Logger logger = Logger.getLogger("DomToSaxParser");
 
-
     private static class DomToSaxVisitor implements DomWalker.Visitor {
         private static final String sHtmlNamespace = "http://www.w3.org/1999/xhtml";
         private final ContentHandler handler;

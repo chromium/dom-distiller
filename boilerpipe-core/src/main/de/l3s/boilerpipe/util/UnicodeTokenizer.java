@@ -1,3 +1,7 @@
+// Copyright 2014 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 /**
  * boilerpipe
  *
@@ -19,10 +23,12 @@ package de.l3s.boilerpipe.util;
 
 import java.util.regex.Pattern;
 
+import com.dom_distiller.client.StringUtil;
+
 /**
  * Tokenizes text according to Unicode word boundaries and strips off non-word
  * characters.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public class UnicodeTokenizer {
@@ -30,16 +36,28 @@ public class UnicodeTokenizer {
     private static final Pattern PAT_NOT_WORD_BOUNDARY = Pattern
             .compile("[\u2063]*([\\\"'\\.,\\!\\@\\-\\:\\;\\$\\?\\(\\)/])[\u2063]*");
 
+    private static String replaceWordBoundariesWithMarkers(final CharSequence text) {
+        return PAT_WORD_BOUNDARY.matcher(text).replaceAll("\u2063");
+    }
+
+    private static String replaceNonWordBoundaries(final String s) {
+        return PAT_NOT_WORD_BOUNDARY.matcher(s).replaceAll("$1");
+    }
+
+    private static String replaceMarkersWithSpace(final String s) {
+        return s.replaceAll("[ \u2063]+", " ");
+    }
+
     /**
      * Tokenizes the text and returns an array of tokens.
-     * 
+     *
      * @param text The text
      * @return The tokens
      */
     public static String[] tokenize(final CharSequence text) {
-        return PAT_NOT_WORD_BOUNDARY.matcher(
-                PAT_WORD_BOUNDARY.matcher(text).replaceAll("\u2063"))
-                .replaceAll("$1").replaceAll("[ \u2063]+", " ").trim().split(
-                        "[ ]+");
+        String res = replaceWordBoundariesWithMarkers(text);
+        res = replaceMarkersWithSpace(res);
+        res = StringUtil.javaTrim(res);
+        return res.split("[ ]+");
     }
 }
