@@ -26,9 +26,6 @@ public class PagingLinksFinderTest extends GWTTestCase {
 
     public void test1NextLink() {
         Element root = TestUtil.createDiv(0);
-        // In TestUtil.createAnchor, AnchorElement.setHref automatically prepends the input href
-        // with the host page base URL, which is the segment of the window location's path up to the
-        // last '/'.
         AnchorElement anchor = TestUtil.createAnchor("next", "next page");
         root.appendChild(anchor);
 
@@ -152,5 +149,17 @@ public class PagingLinksFinderTest extends GWTTestCase {
 
         assertEquals(anchor.getHref(), PagingLinksFinder.findPrevious(root));
     }
+
+    public void testNonHttpOrHttpsLink() {
+        Element root = TestUtil.createDiv(0);
+        AnchorElement anchor = TestUtil.createAnchor("javascript:void(0)",
+                                                     "NEXT");
+        root.appendChild(anchor);
+        assertEquals(null, PagingLinksFinder.findNext(root));
+
+        anchor.setHref("file://test.html");
+        assertEquals(null, PagingLinksFinder.findNext(root));
+    }
+
 
 }

@@ -90,19 +90,21 @@ public class PagingLinksFinder implements Exportable {
             String linkHref = StringUtil.findAndReplace(
                 StringUtil.findAndReplace(link.getHref(), "#.*$", ""), "\\/$", "");
 
-            // Ignore any page link that is empty or same as current window location.
+            // Ignore page link that is empty, not http/https, or same as current window location.
             // If the page link is same as the base URL:
             // - next page link: ignore it, since we would already have seen it.
             // - previous page link: don't ignore it, since some sites will simply have the same
             //                       base URL for the first page.
-            if (linkHref.isEmpty() || linkHref.equalsIgnoreCase(wndLocationHref) ||
+            if (linkHref.isEmpty() || !StringUtil.match(linkHref, "^https?://") ||
+                    linkHref.equalsIgnoreCase(wndLocationHref) ||
                     (page_link == PageLink.NEXT && linkHref.equalsIgnoreCase(baseUrl))) {
                 continue;
             }
 
             // If it's on a different domain, skip it.
-            if (!Window.Location.getHost().equalsIgnoreCase(
-                    StringUtil.split(linkHref, "\\/+")[1])) {
+            String[] urlSlashes = StringUtil.split(linkHref, "\\/+");
+            if (urlSlashes.length < 3 ||  // Expect at least the protocol, domain, and path.
+                    !Window.Location.getHost().equalsIgnoreCase(urlSlashes[1])) {
                 continue;
             }
 
