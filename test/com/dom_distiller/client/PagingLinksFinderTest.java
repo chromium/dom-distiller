@@ -161,5 +161,4 @@ public class PagingLinksFinderTest extends GWTTestCase {
         assertEquals(null, PagingLinksFinder.findNext(root));
     }
 
-
 }

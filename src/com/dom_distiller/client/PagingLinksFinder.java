@@ -43,6 +43,9 @@ import org.timepedia.exporter.client.Exportable;
  */
 @Export()
 public class PagingLinksFinder implements Exportable {
+    // To log debug information about the processed links, set this flag to true.
+    private static final boolean DEBUG = false;
+
     // Match for next page: next, continue, >, >>, » but not >|, »| as those usually mean last.
     private static final String NEXT_LINK_REGEX = "(next|weiter|continue|>([^\\|]|$)|»([^\\|]|$))";
     private static final String PREV_LINK_REGEX = "(prev|early|old|new|<|«)";
@@ -68,7 +71,10 @@ public class PagingLinksFinder implements Exportable {
         return findPagingLink(root, PageLink.PREV);
     }
 
-    private static String findPagingLink(Element root, PageLink page_link) {
+    private static String findPagingLink(Element root, PageLink pageLink) {
+        // findPagingLink() is static, so clear mLinkDebugInfo before processing the links.
+        if (DEBUG) mLinkDebugInfo.clear();
+
         String baseUrl = findBaseUrl();
         // Remove trailing '/' from window location href, because it'll be used to compare with
         // other href's whose trailing '/' are also removed.
@@ -97,7 +103,8 @@ public class PagingLinksFinder implements Exportable {
             //                       base URL for the first page.
             if (linkHref.isEmpty() || !StringUtil.match(linkHref, "^https?://") ||
                     linkHref.equalsIgnoreCase(wndLocationHref) ||
-                    (page_link == PageLink.NEXT && linkHref.equalsIgnoreCase(baseUrl))) {
+                    (pageLink == PageLink.NEXT && linkHref.equalsIgnoreCase(baseUrl))) {
+                appendDbgStrForLink(link, "ignored: empty or same as current or base url" + baseUrl);
                 continue;
             }
 
@@ -105,6 +112,7 @@ public class PagingLinksFinder implements Exportable {
             String[] urlSlashes = StringUtil.split(linkHref, "\\/+");
             if (urlSlashes.length < 3 ||  // Expect at least the protocol, domain, and path.
                     !Window.Location.getHost().equalsIgnoreCase(urlSlashes[1])) {
+                appendDbgStrForLink(link, "ignored: different domain");
                 continue;
             }
 
@@ -112,6 +120,7 @@ public class PagingLinksFinder implements Exportable {
 
             // If the linkText looks like it's not the next or previous page, skip it.
             if (StringUtil.match(linkText, EXTRANEOUS_REGEX) || linkText.length() > 25) {
+                appendDbgStrForLink(link, "ignored: one of extra");
                 continue;
             }
 
@@ -123,14 +132,17 @@ public class PagingLinksFinder implements Exportable {
             // window location, even though it appears to be so the way it's used here.
             // TODO(kuan): do we need to apply this heuristic to previous page links if current page
             // number is not 2?
-            if (page_link == PageLink.NEXT) {
+            if (pageLink == PageLink.NEXT) {
                 String linkHrefRemaining = StringUtil.findAndReplace(linkHref, baseUrl, "");
-                if (!StringUtil.match(linkHrefRemaining, "\\d")) continue;
+                if (!StringUtil.match(linkHrefRemaining, "\\d")) {
+                    appendDbgStrForLink(link, "ignored: no number beyond base url " + baseUrl);
+                    continue;
+                }
             }
 
             PagingLinkObj linkObj = null;
             if (!possiblePages.containsKey(linkHref)) {  // Have not encountered this href.
-                linkObj = new PagingLinkObj(0, linkText, linkHref);
+                linkObj = new PagingLinkObj(i, 0, linkText, linkHref);
                 possiblePages.put(linkHref, linkObj);
             } else {  // Have already encountered this href, append its text to existing entry's.
                 linkObj = possiblePages.get(linkHref);
@@ -142,35 +154,49 @@ public class PagingLinksFinder implements Exportable {
             // Example: http://www.actionscript.org/resources/articles/745/1/JavaScript-and-VBScript-Injection-in-ActionScript-3/Page1.html.
             // TODO(kuan): again, baseUrl (returned by findBaseUrl()) is NOT the prefix of the
             // current window location, even though it appears to be so the way it's used here.
-            if (linkHref.indexOf(baseUrl) != 0) linkObj.mScore -= 25;
+            if (linkHref.indexOf(baseUrl) != 0) {
+                linkObj.mScore -= 25;
+                appendDbgStrForLink(link, "score=" + linkObj.mScore + ": not part of base url " + baseUrl);
+            }
 
             // Concatenate the link text with class name and id, and determine the score based on
             // existence of various paging-related words.
             String linkData = linkText + " " + link.getClassName() + " " + link.getId();
+            appendDbgStrForLink(link, "txt+class+id=" + linkData);
             if (StringUtil.match(linkData,
-                    page_link == PageLink.NEXT ? NEXT_LINK_REGEX : PREV_LINK_REGEX)) {
+                    pageLink == PageLink.NEXT ? NEXT_LINK_REGEX : PREV_LINK_REGEX)) {
                 linkObj.mScore += 50;
+                appendDbgStrForLink(link, "score=" + linkObj.mScore + ": has " +
+                        (pageLink == PageLink.NEXT ? "next" : "prev" + " regex"));
             }
-            if (StringUtil.match(linkData, "pag(e|ing|inat)")) linkObj.mScore += 25;
+            if (StringUtil.match(linkData, "pag(e|ing|inat)")) {
+                linkObj.mScore += 25;
+                appendDbgStrForLink(link, "score=" + linkObj.mScore + ": has pag* word");
+            }
             if (StringUtil.match(linkData, "(first|last)")) {
                 // -65 is enough to negate any bonuses gotten from a > or » in the text.
                 // If we already matched on "next", last is probably fine.
                 // If we didn't, then it's bad.  Penalize.
                 // Same for "prev".
-                if ((page_link == PageLink.NEXT &&
+                if ((pageLink == PageLink.NEXT &&
                         !StringUtil.match(linkObj.mLinkText, NEXT_LINK_REGEX)) ||
-                    (page_link == PageLink.PREV &&
+                    (pageLink == PageLink.PREV &&
                         !StringUtil.match(linkObj.mLinkText, PREV_LINK_REGEX))) {
                     linkObj.mScore -= 65;
+                    appendDbgStrForLink(link, "score=" + linkObj.mScore + ": has first|last but no " +
+                            (pageLink == PageLink.NEXT ? "next" : "prev") + " regex");
                 }
             }
             if (StringUtil.match(linkData, NEGATIVE_REGEX) ||
                     StringUtil.match(linkData, EXTRANEOUS_REGEX)) {
                 linkObj.mScore -= 50;
+                appendDbgStrForLink(link, "score=" + linkObj.mScore + ": has neg or extra regex");
             }
             if (StringUtil.match(linkData,
-                    page_link == PageLink.NEXT ? PREV_LINK_REGEX : NEXT_LINK_REGEX)) {
+                    pageLink == PageLink.NEXT ? PREV_LINK_REGEX : NEXT_LINK_REGEX)) {
                 linkObj.mScore -= 200;
+                appendDbgStrForLink(link, "score=" + linkObj.mScore + ": has opp of " +
+                            (pageLink == PageLink.NEXT ? "next" : "prev") + " regex");
             }
 
             // Check if a parent element contains page or paging or paginate.
@@ -181,6 +207,7 @@ public class PagingLinksFinder implements Exportable {
                 if (!positiveMatch && StringUtil.match(parentClassAndId, "pag(e|ing|inat)")) {
                     linkObj.mScore += 25;
                     positiveMatch = true;
+                    appendDbgStrForLink(link, "score=" + linkObj.mScore + ": posParent - " + parentClassAndId);
                 }
                 // TODO(kuan): to get 1st page for prev page link, this can't be applied; however,
                 // the non-application might be the cause of recursive prev page being returned,
@@ -191,6 +218,8 @@ public class PagingLinksFinder implements Exportable {
                     if (!StringUtil.match(parentClassAndId, POSITIVE_REGEX)) {
                         linkObj.mScore -= 25;
                         negativeMatch = true;
+                        appendDbgStrForLink(link, "score=" + linkObj.mScore + ": negParent - " +
+                                parentClassAndId);
                     }
                 }
                 parent = parent.getParentElement();
@@ -201,10 +230,14 @@ public class PagingLinksFinder implements Exportable {
             if (StringUtil.match(linkHref, "p(a|g|ag)?(e|ing|ination)?(=|\\/)[0-9]{1,2}") ||
                     StringUtil.match(linkHref, "(page|paging)")) {
                 linkObj.mScore += 25;
+                appendDbgStrForLink(link, "score=" + linkObj.mScore + ": has paging info");
             }
 
             // If the URL contains negative values, give a slight decrease.
-            if (StringUtil.match(linkHref, EXTRANEOUS_REGEX)) linkObj.mScore -= 15;
+            if (StringUtil.match(linkHref, EXTRANEOUS_REGEX)) {
+                linkObj.mScore -= 15;
+                appendDbgStrForLink(link, "score=" + linkObj.mScore + ": has extra regex");
+            }
 
             // If the link text can be parsed as a number, give it a minor bonus, with a slight bias
             // towards lower numbered pages.  This is so that pages that might not have 'next' in
@@ -224,6 +257,7 @@ public class PagingLinksFinder implements Exportable {
                 } else {
                     linkObj.mScore += Math.max(0, 10 - linkTextAsNumber);
                 }
+                appendDbgStrForLink(link, "score=" + linkObj.mScore + ": linktxt is a num");
             }
         }  // for all links
 
@@ -242,11 +276,16 @@ public class PagingLinksFinder implements Exportable {
             }
         }
 
+        String pagingHref = null;
         if (topPage != null) {
-            String nextHref = StringUtil.findAndReplace(topPage.mLinkHref, "\\/$", "");
-            return nextHref;
+            pagingHref = StringUtil.findAndReplace(topPage.mLinkHref, "\\/$", "");
+            appendDbgStrForLink(allLinks.getItem(topPage.mLinkIndex), "found: score=" +
+                    topPage.mScore + ", txt=[" + topPage.mLinkText + "], " + pagingHref);
         }
-        return null;
+
+        if (DEBUG) logDbgInfoToConsole(pageLink, pagingHref, allLinks);
+
+        return pagingHref;
     }
 
     private static String findBaseUrl() {
@@ -324,12 +363,77 @@ public class PagingLinksFinder implements Exportable {
         return joined;
     }
 
+    private static void appendDbgStrForLink(Element link, String message) {
+        if (!DEBUG) return;
+
+        // |message| is concatenated with the existing debug string for |link| (delimited by ";") in
+        // mLinkDebugInfo.
+        String dbgStr = "";
+        if (mLinkDebugInfo.containsKey(link)) dbgStr = mLinkDebugInfo.get(link);
+        if (!dbgStr.isEmpty()) dbgStr += "; ";
+        dbgStr += message;
+        mLinkDebugInfo.put(link, dbgStr);
+    }
+
+    private static void logDbgInfoToConsole(PageLink pageLink, String pagingHref,
+            NodeList<Element> allLinks) {
+        // This logs the following to the console:
+        // - number of links processed
+        // - the next or previous page link found
+        // - for each link: its href, text, concatenated debug string.
+        // Location of logging output is different when running in different modes:
+        // - "ant test.dev": test output file.
+        // - chrome browser distiller viewer: chrome logfile.
+        // (TODO)kuan): investigate how to get logging when running "ant test.prod" - currently,
+        // nothing appears.  In the meantime, throwing an exception with a log message at suspicious
+        // codepoints can produce a call stack and help debugging, albeit tediously.
+        logToConsole("numLinks=" + allLinks.getLength() + ", found " +
+                (pageLink == PageLink.NEXT ? "next: " : "prev: ") +
+                (pagingHref != null ? pagingHref : "null"));
+      
+        for (int i = 0; i < allLinks.getLength(); i++) {
+            AnchorElement link = AnchorElement.as(allLinks.getItem(i));
+
+            String text = link.getInnerText();
+            // Trim unnecessary whitespaces from text.
+            String[] words = StringUtil.split(text, "\\s+");
+            text = "";
+            for (int w = 0; w < words.length; w++) {
+                text += words[w];
+                if (w < words.length - 1) text += " ";
+            }
+
+            logToConsole(i + ")" + link.getHref() + ", txt=[" + text + "], dbg=[" +
+                    mLinkDebugInfo.get(link) + "]");
+        }
+    }
+
+    private static void logToConsole(String str) {
+        // Try to log to javascript console, which is only available when running in production mode
+        // in browser; otherwise, log to regular system console.
+        if (!jsLogToConsole(str))
+            System.out.println(str);
+    }
+
+    private static native boolean jsLogToConsole(String str) /*-{
+        // Only log to javascript console if it's defined correctly.
+        // Otherwise, running "ant test.dev" or "ant test.prod" will crash or hang.
+        if ($wnd.console == null ||
+                (typeof($wnd.console.log) != 'function' && typeof($wnd.console.log) != 'object')) {
+            return false;
+        }
+        $wnd.console.log(str);
+        return true;
+    }-*/;
+
     private static class PagingLinkObj {
+        private int mLinkIndex = -1;
         private int mScore = 0;
         private String mLinkText;
         private String mLinkHref;
 
-        PagingLinkObj(int score, String linkText, String linkHref) {
+        PagingLinkObj(int linkIndex, int score, String linkText, String linkHref) {
+            mLinkIndex = linkIndex;
             mScore = score;
             mLinkText = linkText;
             mLinkHref = linkHref;
@@ -340,5 +444,7 @@ public class PagingLinksFinder implements Exportable {
         NEXT,
         PREV,
     }
+
+    private static final Map<Element, String> mLinkDebugInfo = new HashMap<Element, String>();
 
 }
