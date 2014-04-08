@@ -12,9 +12,9 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.dom.client.MetaElement;
 import com.google.gwt.dom.client.Text;
 import com.google.gwt.dom.client.TitleElement;
-
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
@@ -92,6 +92,14 @@ class TestUtil {
         l.setHref(href);
         l.setInnerHTML(text);
         return l;
+    }
+
+    public static MetaElement createMetaProperty(String property,
+            String content) {
+        MetaElement m = Document.get().createMetaElement();
+        m.setAttribute("property", property);
+        m.setContent(content);
+        return m;
     }
 
     private static void createDivTreeImpl(Element e, int depth, List<Element> divs) {

@@ -4,8 +4,8 @@
 
 package com.dom_distiller.client;
 
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringUtil {
     /**
