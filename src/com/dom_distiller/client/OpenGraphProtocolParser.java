@@ -19,9 +19,6 @@ import com.google.gwt.dom.client.MetaElement;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 
-import org.timepedia.exporter.client.Export;
-import org.timepedia.exporter.client.Exportable;
-
 /**
  * This class recognizes and parses the Open Graph Protocol markup tags and returns the properties
  * that matter to distilled content.
@@ -38,8 +35,7 @@ import org.timepedia.exporter.client.Exportable;
  * - article object properties: section, published_time, modified_time, expiration_time, author;
  *                              each author is a URL to the author's profile.
  */
-@Export()
-public class OpenGraphProtocolParser implements Exportable {
+public class OpenGraphProtocolParser implements MarkupParser.Parser {
     private static final String TITLE_PROP = "title";
     private static final String TYPE_PROP = "type";
     private static final String IMAGE_PROP = "image";
@@ -63,16 +59,18 @@ public class OpenGraphProtocolParser implements Exportable {
     private static final String PROFILE_OBJTYPE = "profile";
     private static final String ARTICLE_OBJTYPE = "article";
 
-    private final Map<String, String> mPropertyTable;
-    private final Map<Prefix, String> mPrefixes;
-    private final ImageParser mImageParser = new ImageParser();
-    private final ProfileParser mProfileParser = new ProfileParser();
-    private final ArticleParser mArticleParser = new ArticleParser();
-
     private enum Prefix {
         OG,
         PROFILE,
         ARTICLE,
+    }
+
+    /**
+     * Called when parsing a stateful property, returns true if the property and its content should
+     * be added to the property table.
+     */
+    private interface Parser {
+        public boolean parse(String property, String content, Map<String, String> propertyTable);
     }
 
     private class PropertyRecord {
@@ -87,6 +85,11 @@ public class OpenGraphProtocolParser implements Exportable {
         }
     }
 
+    private final Map<String, String> mPropertyTable;
+    private final Map<Prefix, String> mPrefixes;
+    private final ImageParser mImageParser = new ImageParser();
+    private final ProfileParser mProfileParser = new ProfileParser();
+    private final ArticleParser mArticleParser = new ArticleParser();
     private final PropertyRecord[] mProperties = {
         new PropertyRecord(TITLE_PROP, Prefix.OG, null),
         new PropertyRecord(TYPE_PROP, Prefix.OG, null),
@@ -103,27 +106,6 @@ public class OpenGraphProtocolParser implements Exportable {
         new PropertyRecord(ARTICLE_EXPIRATION_TIME_PROP, Prefix.ARTICLE, mArticleParser),
         new PropertyRecord(ARTICLE_AUTHOR_PROP, Prefix.ARTICLE, mArticleParser),
     };
-
-    // TODO(kuan): this class is not exported yet, and hence not accessible from native javascript.
-    // If export is needed, move it to a file of its own, because GWT doesn't seem to allow children
-    // of Exportable classes to implement Exportable.
-    public class Image {
-        public String image = null;
-        public String url = null;
-        public String secureUrl = null;
-        public String type = null;
-        public int width = 0;
-        public int height = 0;
-    }
-
-    // TODO(kuan): same as for class Image above.
-    public class Article {
-        public String publishedTime = null;
-        public String modifiedTime = null;
-        public String expirationTime = null;
-        public String section = null;
-        public String[] authors = null;
-    }
 
     /**
      * OpenGraph Protocol prefixes are determined and properties are parsed.  Returns the
@@ -142,6 +124,7 @@ public class OpenGraphProtocolParser implements Exportable {
     /**
      * Returns the required "title" of the document.
      */
+    @Override
     public String getTitle() {
         return getPropertyContent(TITLE_PROP);
     }
@@ -149,6 +132,7 @@ public class OpenGraphProtocolParser implements Exportable {
     /**
      * Returns the required "type" of the document.
      */
+    @Override
     public String getType() {
         return getPropertyContent(TYPE_PROP);
     }
@@ -156,6 +140,7 @@ public class OpenGraphProtocolParser implements Exportable {
     /**
      * Returns the required "url" of the document.
      */
+    @Override
     public String getUrl() {
         return getPropertyContent(URL_PROP);
     }
@@ -164,13 +149,15 @@ public class OpenGraphProtocolParser implements Exportable {
      * Returns the structured properties of all "image" structures.  Each "image" structure consists
      * of image, image:url, image:secure_url, image:type, image:width, and image:height.
      */
-    public Image[] getImages() {
+    @Override
+    public MarkupParser.Image[] getImages() {
         return mImageParser.getImages();
     }
 
     /**
      * Returns the optional "description" of the document.
      */
+    @Override
     public String getDescription() {
         return getPropertyContent(DESCRIPTION_PROP);
     }
@@ -178,15 +165,22 @@ public class OpenGraphProtocolParser implements Exportable {
     /**
      * Returns the optional "site_name" of the document.
      */
-    public String getSiteName() {
+    @Override
+    public String getPublisher() {
         return getPropertyContent(SITE_NAME_PROP);
+    }
+
+    @Override
+    public String getCopyright() {
+        return null;
     }
 
     /**
      * Returns the concatenated first_name and last_name (delimited by a whitespace) of the
      * "profile" object when value of "og:type" is "profile".
      */
-    public String getProfile() {
+    @Override
+    public String getAuthor() {
         return mProfileParser.getFullName(mPropertyTable);
     }
 
@@ -195,8 +189,9 @@ public class OpenGraphProtocolParser implements Exportable {
      * properties are published_time, modified_time and expiration_time, section, and a list of URLs
      * to each author's profile.
      */
-    public Article getArticle() {
-        Article article = new Article();
+    @Override
+    public MarkupParser.Article getArticle() {
+        MarkupParser.Article article = new MarkupParser.Article();
         article.publishedTime = getPropertyContent(ARTICLE_PUBLISHED_TIME_PROP);
         article.modifiedTime = getPropertyContent(ARTICLE_MODIFIED_TIME_PROP);
         article.expirationTime = getPropertyContent(ARTICLE_EXPIRATION_TIME_PROP);
@@ -212,6 +207,13 @@ public class OpenGraphProtocolParser implements Exportable {
         return article;
     }
 
+    @Override
+    public boolean optOut() {
+        // While this is not directly supported, the page owner can simply omit // the required
+        // tags and parse() will return a null OpenGraphProtocolParser.
+        return false;
+    }
+
     /**
      * The object that has successfully extracted OpenGraphProtocol markup information from |root|.
      *
@@ -225,7 +227,7 @@ public class OpenGraphProtocolParser implements Exportable {
         findPrefixes(root);
         parseMetaTags(root);
 
-        mImageParser.verifyImages();
+        mImageParser.verify();
 
         String prefix = mPrefixes.get(Prefix.OG) + ":";
         if (getTitle() == null)
@@ -266,7 +268,7 @@ public class OpenGraphProtocolParser implements Exportable {
             // - "xmlns:profile="http://ogp.me/ns/profile#"
             // - "xmlns:article="http://ogp.me/ns/article#".
             final String ogpNSRegex = "^http:\\/\\/ogp.me\\/ns(\\/\\w+)*#";
-            final JsArray<Node> attributes = getAttributes(root);
+            final JsArray<Node> attributes = DomUtil.getAttributes(root);
             for (int i = 0; i < attributes.length(); i++) {
                 final Node node = attributes.get(i);
                 // Look for attribute name that starts with "xmlns:".
@@ -344,14 +346,6 @@ public class OpenGraphProtocolParser implements Exportable {
         return mPropertyTable.get(property);
     }
 
-    /**
-     * Called when parsing a stateful property, returns true if the property and its content should
-     * be added to the property table.
-     */
-    private interface Parser {
-        public boolean parse(String property, String content, Map<String, String> propertyTable);
-    }
-
     private class ImageParser implements Parser {
         private final String[] mProperties = {
             IMAGE_PROP,
@@ -395,18 +389,19 @@ public class OpenGraphProtocolParser implements Exportable {
             mImages = new ArrayList<String[]>();
         }
 
-        private Image[] getImages() {
+        private MarkupParser.Image[] getImages() {
             if (mImages.isEmpty()) return null;
 
-            Image[] imagesOut = new Image[mImages.size()];
+            MarkupParser.Image[] imagesOut = new MarkupParser.Image[mImages.size()];
             for (int i = 0; i < mImages.size(); i++) {
                 String[] imageIn = mImages.get(i);
-                Image imageOut = new Image();
+                MarkupParser.Image imageOut = new MarkupParser.Image();
                 imagesOut[i] = imageOut;
                 imageOut.image = imageIn[0];
                 imageOut.url = imageIn[1];
                 imageOut.secureUrl = imageIn[2];
                 imageOut.type = imageIn[3];
+                // Caption is not supoprted, so ignore it.
                 try {
                     imageOut.width = Integer.parseInt(imageIn[4], 10);
                 } catch (NumberFormatException e) {
@@ -419,7 +414,7 @@ public class OpenGraphProtocolParser implements Exportable {
             return imagesOut;
         }
 
-        private void verifyImages() {
+        private void verify() {
             if (mImages.isEmpty()) return;
 
             // Remove any image without the required root IMAGE_PROP.
@@ -498,9 +493,4 @@ public class OpenGraphProtocolParser implements Exportable {
             return mAuthors.isEmpty() ? null : mAuthors.toArray(new String[mAuthors.size()]);
         }
     }
-
-    // There's no GWT API to get all attributes of an element, so resort to javascript code.
-    private static native JsArray<Node> getAttributes(Element elem) /*-{
-        return elem.attributes;
-    }-*/;
 }

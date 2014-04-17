@@ -102,6 +102,13 @@ class TestUtil {
         return m;
     }
 
+    public static MetaElement createMetaName(String name, String content) {
+        MetaElement m = Document.get().createMetaElement();
+        m.setName(name);
+        m.setContent(content);
+        return m;
+    }
+
     private static void createDivTreeImpl(Element e, int depth, List<Element> divs) {
         if (depth > 2) return;
         for (int i = 0; i < 2; i++) {

@@ -387,7 +387,7 @@ public class PagingLinksFinder implements Exportable {
         // (TODO)kuan): investigate how to get logging when running "ant test.prod" - currently,
         // nothing appears.  In the meantime, throwing an exception with a log message at suspicious
         // codepoints can produce a call stack and help debugging, albeit tediously.
-        logToConsole("numLinks=" + allLinks.getLength() + ", found " +
+        LogUtil.logToConsole("numLinks=" + allLinks.getLength() + ", found " +
                 (pageLink == PageLink.NEXT ? "next: " : "prev: ") +
                 (pagingHref != null ? pagingHref : "null"));
       
@@ -403,28 +403,10 @@ public class PagingLinksFinder implements Exportable {
                 if (w < words.length - 1) text += " ";
             }
 
-            logToConsole(i + ")" + link.getHref() + ", txt=[" + text + "], dbg=[" +
+            LogUtil.logToConsole(i + ")" + link.getHref() + ", txt=[" + text + "], dbg=[" +
                     mLinkDebugInfo.get(link) + "]");
         }
     }
-
-    private static void logToConsole(String str) {
-        // Try to log to javascript console, which is only available when running in production mode
-        // in browser; otherwise, log to regular system console.
-        if (!jsLogToConsole(str))
-            System.out.println(str);
-    }
-
-    private static native boolean jsLogToConsole(String str) /*-{
-        // Only log to javascript console if it's defined correctly.
-        // Otherwise, running "ant test.dev" or "ant test.prod" will crash or hang.
-        if ($wnd.console == null ||
-                (typeof($wnd.console.log) != 'function' && typeof($wnd.console.log) != 'object')) {
-            return false;
-        }
-        $wnd.console.log(str);
-        return true;
-    }-*/;
 
     private static class PagingLinkObj {
         private int mLinkIndex = -1;

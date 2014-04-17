@@ -18,7 +18,7 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
     }
 
     public void testRequiredPropertiesAndDescriptionAndSiteName() {
-        String expectedTitle = "This test expects to retrieve the required OpenGraph Proptocol properties and optional Description of the document.";
+        String expectedTitle = "Testing required OpenGraph Proptocol properties and optional Description of the document.";
         createMeta("og:title", expectedTitle);
         String expectedType = "video.movie";
         createMeta("og:type", expectedType);
@@ -37,10 +37,10 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
         assertEquals(expectedType, parser.getType());
         assertEquals(expectedUrl, parser.getUrl());
         assertEquals(expectedDescr, parser.getDescription());
-        assertEquals(expectedSiteName, parser.getSiteName());
-        OpenGraphProtocolParser.Image[] images = parser.getImages();
+        assertEquals(expectedSiteName, parser.getPublisher());
+        MarkupParser.Image[] images = parser.getImages();
         assertEquals(1, images.length);
-        OpenGraphProtocolParser.Image image = images[0];
+        MarkupParser.Image image = images[0];
         assertEquals(expectedImage, image.image);
         assertEquals(null, image.url);
         assertEquals(null, image.secureUrl);
@@ -78,9 +78,9 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
         
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
-        OpenGraphProtocolParser.Image[] images = parser.getImages();
+        MarkupParser.Image[] images = parser.getImages();
         assertEquals(1, images.length);
-        OpenGraphProtocolParser.Image image = images[0];
+        MarkupParser.Image image = images[0];
         assertEquals(expectedUrl, image.image);
         assertEquals(expectedUrl, image.url);
         assertEquals(expectedSecureUrl, image.secureUrl);
@@ -118,9 +118,9 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
-        OpenGraphProtocolParser.Image[] images = parser.getImages();
+        MarkupParser.Image[] images = parser.getImages();
         assertEquals(2, images.length);
-        OpenGraphProtocolParser.Image image = images[0];
+        MarkupParser.Image image = images[0];
         assertEquals(expectedUrl1, image.image);
         assertEquals(expectedUrl1, image.url);
         assertEquals(expectedSecureUrl1, image.secureUrl);
@@ -160,9 +160,9 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
-        OpenGraphProtocolParser.Image[] images = parser.getImages();
+        MarkupParser.Image[] images = parser.getImages();
         assertEquals(2, images.length);
-        OpenGraphProtocolParser.Image image = images[0];
+        MarkupParser.Image image = images[0];
         assertEquals(expectedUrl1, image.image);
         assertEquals(expectedUrl1, image.url);
         assertEquals(expectedSecureUrl1, image.secureUrl);
@@ -187,7 +187,7 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
-        assertEquals(null, parser.getProfile());
+        assertEquals(null, parser.getAuthor());
         assertEquals(null, parser.getArticle());
     }
 
@@ -204,7 +204,7 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
         
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
-        assertEquals("Jane Doe", parser.getProfile());
+        assertEquals("Jane Doe", parser.getAuthor());
     }
 
     public void testArticle() {
@@ -230,7 +230,7 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
-        OpenGraphProtocolParser.Article article = parser.getArticle();
+        MarkupParser.Article article = parser.getArticle();
         assertEquals(expectedPublishedTime, article.publishedTime);
         assertEquals(expectedModifiedTime, article.modifiedTime);
         assertEquals(expectedExpirationTime, article.expirationTime);
@@ -277,17 +277,17 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
         assertEquals("profile", parser.getType());
         assertEquals(expectedUrl, parser.getUrl());
         assertEquals(expectedDescr, parser.getDescription());
-        assertEquals(expectedSiteName, parser.getSiteName());
-        OpenGraphProtocolParser.Image[] images = parser.getImages();
+        assertEquals(expectedSiteName, parser.getPublisher());
+        MarkupParser.Image[] images = parser.getImages();
         assertEquals(1, images.length);
-        OpenGraphProtocolParser.Image image = images[0];
+        MarkupParser.Image image = images[0];
         assertEquals(expectedImage, image.image);
         assertEquals(expectedImage, image.url);
         assertEquals(expectedSecureUrl, image.secureUrl);
         assertEquals(expectedImageType, image.type);
         assertEquals(600, image.width);
         assertEquals(400, image.height);
-        assertEquals("Jane Doe", parser.getProfile());
+        assertEquals("Jane Doe", parser.getAuthor());
     }
 
     public void testArticlePrefixInHeadTag() {
@@ -318,7 +318,7 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
         assertEquals("article", parser.getType());
-        OpenGraphProtocolParser.Article article = parser.getArticle();
+        MarkupParser.Article article = parser.getArticle();
         assertEquals(expectedPublishedTime, article.publishedTime);
         assertEquals(expectedModifiedTime, article.modifiedTime);
         assertEquals(expectedExpirationTime, article.expirationTime);
@@ -384,17 +384,17 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
         assertEquals("profile", parser.getType());
         assertEquals(expectedUrl, parser.getUrl());
         assertEquals(expectedDescr, parser.getDescription());
-        assertEquals(expectedSiteName, parser.getSiteName());
-        OpenGraphProtocolParser.Image[] images = parser.getImages();
+        assertEquals(expectedSiteName, parser.getPublisher());
+        MarkupParser.Image[] images = parser.getImages();
         assertEquals(1, images.length);
-        OpenGraphProtocolParser.Image image = images[0];
+        MarkupParser.Image image = images[0];
         assertEquals(expectedImage, image.image);
         assertEquals(expectedImage, image.url);
         assertEquals(expectedSecureUrl, image.secureUrl);
         assertEquals(expectedImageType, image.type);
         assertEquals(600, image.width);
         assertEquals(400, image.height);
-        assertEquals("Jane Doe", parser.getProfile());
+        assertEquals("Jane Doe", parser.getAuthor());
     }
 
     public void testArticleXmlns() {
@@ -425,7 +425,7 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
         assertEquals("article", parser.getType());
-        OpenGraphProtocolParser.Article article = parser.getArticle();
+        MarkupParser.Article article = parser.getArticle();
         assertEquals(expectedPublishedTime, article.publishedTime);
         assertEquals(expectedModifiedTime, article.modifiedTime);
         assertEquals(expectedExpirationTime, article.expirationTime);
@@ -459,10 +459,10 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
         // Get root element.
         mRoot = Document.get().getDocumentElement();
 
-        // Get head element.
+        // Get <head> element.
         NodeList<Element> heads = mRoot.getElementsByTagName("HEAD");
         if (heads.getLength() != 1)
-            throw new Exception("There shouldn't be more than 1 \"head\" tag");
+            throw new Exception("There shouldn't be more than 1 <head> tag");
         mHead = heads.getItem(0);
 
         // Remove all attributes that specify prefix or namespace, so that each
@@ -520,7 +520,7 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
     }
 
     private void createMeta(String property, String content) {
-        mRoot.appendChild(TestUtil.createMetaProperty(property, content));
+        mHead.appendChild(TestUtil.createMetaProperty(property, content));
     }
 
     private Element mRoot;

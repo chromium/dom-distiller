@@ -29,7 +29,7 @@ public class DomToSaxParserTest extends GWTTestCase {
         Element e = Document.get().createDivElement();
         e.setInnerHTML("<div style=\"width:50px; height:100px\" id=\"f\" class=\"sdf\"></div>");
         e = Element.as(e.getChildNodes().getItem(0));
-        JsArray<Node> jsAttrs = DomToSaxParser.getAttributes(e);
+        JsArray<Node> jsAttrs = DomUtil.getAttributes(e);
         assertEquals(3, jsAttrs.length());
     }
 

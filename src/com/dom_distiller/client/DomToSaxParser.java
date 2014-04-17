@@ -86,7 +86,7 @@ public class DomToSaxParser {
     public static Attributes getSaxAttributes(Element e) {
         AttributesImpl attrs = new AttributesImpl();
 
-        JsArray<Node> jsAttrs = getAttributes(e);
+        JsArray<Node> jsAttrs = DomUtil.getAttributes(e);
         for (int i = 0; i < jsAttrs.length(); ++i) {
             final Node jsAttr = jsAttrs.get(i);
             attrs.addAttribute("", jsAttr.getNodeName(), jsAttr.getNodeName(), "CDATA", jsAttr.getNodeValue());
@@ -94,15 +94,4 @@ public class DomToSaxParser {
 
         return attrs;
     }
-
-    /**
-     * GWT does not provide a way to get a list of all attributes that have been explicitly set on a
-     * DOM element (only a way to query the value of a particular attribute). In javascript, this
-     * list is accessible as elem.attributes.
-     *
-     * @Return The element's attribute list from javascript.
-     */
-    public static native JsArray<Node> getAttributes(Element elem) /*-{
-        return elem.attributes;
-    }-*/;
 }
