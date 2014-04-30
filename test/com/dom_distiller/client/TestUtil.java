@@ -109,6 +109,12 @@ class TestUtil {
         return m;
     }
 
+    public static Element createSpan(String value) {
+        Element s = Document.get().createElement("SPAN");
+        s.setInnerHTML(value);
+        return s;
+    }
+
     private static void createDivTreeImpl(Element e, int depth, List<Element> divs) {
         if (depth > 2) return;
         for (int i = 0; i < 2; i++) {

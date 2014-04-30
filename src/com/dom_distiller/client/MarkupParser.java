@@ -142,8 +142,8 @@ public class MarkupParser implements Exportable {
 
         Parser ogp = OpenGraphProtocolParser.parse(root);
         if (ogp != null) mParsers.add(ogp);
-        Parser ie = new IEReadingViewParser(root);
-        if (ie != null) mParsers.add(ie);
+        mParsers.add(new SchemaOrgParserAccessor(root));
+        mParsers.add(new IEReadingViewParser(root));
     }
     
     public String getTitle() {
