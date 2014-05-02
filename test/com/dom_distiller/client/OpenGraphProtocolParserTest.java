@@ -1,4 +1,4 @@
-// Copyright 2014 The Chromium Authors. All rights reserved.
+// Copyright 2015 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -20,8 +20,7 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
     public void testRequiredPropertiesAndDescriptionAndSiteName() {
         String expectedTitle = "Testing required OpenGraph Proptocol properties and optional Description of the document.";
         createMeta("og:title", expectedTitle);
-        String expectedType = "video.movie";
-        createMeta("og:type", expectedType);
+        createMeta("og:type", "video.movie");
         String expectedImage = "http://test/image.jpeg";
         createMeta("og:image", expectedImage);
         String expectedUrl = "http://test/test.html";
@@ -34,17 +33,16 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
         assertEquals(expectedTitle, parser.getTitle());
-        assertEquals(expectedType, parser.getType());
+        assertEquals("", parser.getType());
         assertEquals(expectedUrl, parser.getUrl());
         assertEquals(expectedDescr, parser.getDescription());
         assertEquals(expectedSiteName, parser.getPublisher());
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(1, images.length);
         MarkupParser.Image image = images[0];
-        assertEquals(expectedImage, image.image);
-        assertEquals(null, image.url);
-        assertEquals(null, image.secureUrl);
-        assertEquals(null, image.type);
+        assertEquals(expectedImage, image.url);
+        assertEquals("", image.secureUrl);
+        assertEquals("", image.type);
         assertEquals(0, image.width);
         assertEquals(0, image.height);
     }
@@ -81,7 +79,6 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(1, images.length);
         MarkupParser.Image image = images[0];
-        assertEquals(expectedUrl, image.image);
         assertEquals(expectedUrl, image.url);
         assertEquals(expectedSecureUrl, image.secureUrl);
         assertEquals(expectedType, image.type);
@@ -121,14 +118,12 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(2, images.length);
         MarkupParser.Image image = images[0];
-        assertEquals(expectedUrl1, image.image);
         assertEquals(expectedUrl1, image.url);
         assertEquals(expectedSecureUrl1, image.secureUrl);
         assertEquals(expectedType1, image.type);
         assertEquals(600, image.width);
         assertEquals(400, image.height);
         image = images[1];
-        assertEquals(expectedUrl2, image.image);
         assertEquals(expectedUrl2, image.url);
         assertEquals(expectedSecureUrl2, image.secureUrl);
         assertEquals(expectedType2, image.type);
@@ -163,17 +158,15 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(2, images.length);
         MarkupParser.Image image = images[0];
-        assertEquals(expectedUrl1, image.image);
         assertEquals(expectedUrl1, image.url);
         assertEquals(expectedSecureUrl1, image.secureUrl);
         assertEquals(expectedType1, image.type);
         assertEquals(0, image.width);
         assertEquals(0, image.height);
         image = images[1];
-        assertEquals(expectedUrl2, image.image);
-        assertEquals(null, image.url);
-        assertEquals(null, image.secureUrl);
-        assertEquals(null, image.type);
+        assertEquals(expectedUrl2, image.url);
+        assertEquals("", image.secureUrl);
+        assertEquals("", image.type);
         assertEquals(600, image.width);
         assertEquals(400, image.height);
     }
@@ -187,7 +180,7 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
-        assertEquals(null, parser.getAuthor());
+        assertEquals("", parser.getAuthor());
         assertEquals(null, parser.getArticle());
     }
 
@@ -274,14 +267,13 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
         assertEquals(expectedTitle, parser.getTitle());
-        assertEquals("profile", parser.getType());
+        assertEquals("", parser.getType());
         assertEquals(expectedUrl, parser.getUrl());
         assertEquals(expectedDescr, parser.getDescription());
         assertEquals(expectedSiteName, parser.getPublisher());
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(1, images.length);
         MarkupParser.Image image = images[0];
-        assertEquals(expectedImage, image.image);
         assertEquals(expectedImage, image.url);
         assertEquals(expectedSecureUrl, image.secureUrl);
         assertEquals(expectedImageType, image.type);
@@ -317,7 +309,7 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
-        assertEquals("article", parser.getType());
+        assertEquals("Article", parser.getType());
         MarkupParser.Article article = parser.getArticle();
         assertEquals(expectedPublishedTime, article.publishedTime);
         assertEquals(expectedModifiedTime, article.modifiedTime);
@@ -344,7 +336,7 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
-        assertEquals(null, parser.getDescription());
+        assertEquals("", parser.getDescription());
     }
 
     public void testOGAndProfileXmlns() {
@@ -381,14 +373,13 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
         assertEquals(expectedTitle, parser.getTitle());
-        assertEquals("profile", parser.getType());
+        assertEquals("", parser.getType());
         assertEquals(expectedUrl, parser.getUrl());
         assertEquals(expectedDescr, parser.getDescription());
         assertEquals(expectedSiteName, parser.getPublisher());
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(1, images.length);
         MarkupParser.Image image = images[0];
-        assertEquals(expectedImage, image.image);
         assertEquals(expectedImage, image.url);
         assertEquals(expectedSecureUrl, image.secureUrl);
         assertEquals(expectedImageType, image.type);
@@ -424,7 +415,7 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
-        assertEquals("article", parser.getType());
+        assertEquals("Article", parser.getType());
         MarkupParser.Article article = parser.getArticle();
         assertEquals(expectedPublishedTime, article.publishedTime);
         assertEquals(expectedModifiedTime, article.modifiedTime);
@@ -451,7 +442,7 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
-        assertEquals(null, parser.getDescription());
+        assertEquals("", parser.getDescription());
     }
 
     @Override

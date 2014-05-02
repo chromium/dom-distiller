@@ -270,9 +270,8 @@ public class SchemaOrgParser {
 
         final MarkupParser.Image getImage() {
             MarkupParser.Image image = new MarkupParser.Image();
-            image.image = getStringProperty(CONTENT_URL_PROP);
-            if (image.image.isEmpty()) image.image = getStringProperty(URL_PROP);
-            image.url = image.image;
+            image.url = getStringProperty(CONTENT_URL_PROP);
+            if (image.url.isEmpty()) image.url = getStringProperty(URL_PROP);
             image.type = getStringProperty(ENCODING_FORMAT_PROP);
             image.caption = getStringProperty(CAPTION_PROP);
             try {
@@ -358,7 +357,6 @@ public class SchemaOrgParser {
             String imageUrl = getStringProperty(IMAGE_PROP);
             if (imageUrl.isEmpty()) return null;
             MarkupParser.Image image = new MarkupParser.Image();
-            image.image = imageUrl;
             image.url = imageUrl;
             return image;
         }

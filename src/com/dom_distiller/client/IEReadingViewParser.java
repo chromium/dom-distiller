@@ -23,7 +23,7 @@ import com.google.gwt.dom.client.Text;
  * copyright, and opt-out.  Some properties require the scanning and parsing of a lot of nodes, so
  * each property is scanned for and verified for legitimacy lazily, i.e. only upon request.
  */
-public class IEReadingViewParser implements MarkupParser.Parser {
+public class IEReadingViewParser implements MarkupParser.Accessor {
     private Element mRoot = null;
     private NodeList<Element> mAllMeta = null;
     // The following data members are initialized to null to indicate that they haven't been
@@ -31,6 +31,7 @@ public class IEReadingViewParser implements MarkupParser.Parser {
     private String mTitle = null;
     private String mDate = null;
     private String mAuthor = null;
+    private String mPublisher = null;
     private String mCopyright = null;
     private boolean mOptOut = false;
     private boolean mDoneOptOut = false;  // Set to true if mOptOut has been determined.
@@ -51,12 +52,12 @@ public class IEReadingViewParser implements MarkupParser.Parser {
     }
 
     public String getType() {
-        return null;  // Not supported.
+        return "";  // Not supported.
     }
 
     @Override
     public String getUrl() {
-        return null;  // Not supported.
+        return "";  // Not supported.
     }
 
     @Override
@@ -67,14 +68,16 @@ public class IEReadingViewParser implements MarkupParser.Parser {
 
     @Override
     public String getDescription() {
-        return null;  // Not supported.
+        return "";  // Not supported.
     }
 
     @Override
     public String getPublisher() {
-        // This uses OpenGraph Protocol "site_name" meta tag, so let OpenGraphProtocolParser handle.
-        // TODO(kuan): it also uses a heuristic that look at elements' attributes, implement it.
-        return null;
+        // The primary indicator is the OpenGraph Protocol "site_name" meta tag, which is handled by
+        // OpenGraphProtocolParser.  The secondary indicator is any html tag with the "publisher" or
+        // "source_organization" attribute.
+        if (mPublisher == null) findPublisher();
+        return mPublisher;
     }
 
     @Override
@@ -94,7 +97,8 @@ public class IEReadingViewParser implements MarkupParser.Parser {
         MarkupParser.Article article = new MarkupParser.Article();
         if (mDate == null) findDate();
         article.publishedTime = mDate;
-        article.authors = new String[] { getAuthor() };
+        String author = getAuthor();
+        article.authors = author.isEmpty() ? new String[0] : new String[] { author };
         return article;
     }
 
@@ -150,6 +154,18 @@ public class IEReadingViewParser implements MarkupParser.Parser {
         if (elem != null) mAuthor = elem.getInnerText();
     }
 
+    private void findPublisher() {
+        mPublisher = "";
+
+        // Look for "publisher" or "source_organization" attribute in any html tag.
+        NodeList<Element> allElems = mRoot.getElementsByTagName("*");
+        for (int i = 0; i < allElems.getLength() && mPublisher.isEmpty(); i++) {
+            Element e = allElems.getItem(i);
+            mPublisher = e.getAttribute("publisher");
+            if (mPublisher.isEmpty()) mPublisher = e.getAttribute("source_organization");
+        }
+    }
+
     private void findCopyright() {
         mCopyright = "";
 
@@ -176,8 +192,7 @@ public class IEReadingViewParser implements MarkupParser.Parser {
             if ((caption != null && !caption.isEmpty()) || isImageRelevantBySize(imgElem)) {
                 // Add relevant image to list.
                 MarkupParser.Image image = new MarkupParser.Image();
-                image.image = imgElem.getSrc();
-                image.url = image.image;
+                image.url = imgElem.getSrc();
                 image.caption = caption;
                 image.width = imgElem.getWidth();
                 image.height = imgElem.getHeight();

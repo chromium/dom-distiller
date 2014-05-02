@@ -10,14 +10,14 @@ import java.util.List;
 import com.google.gwt.dom.client.Element;
 
 /**
- * This class instantiates SchemaOrgParser and implements MarkupParser.Parser interface to provide
+ * This class instantiates SchemaOrgParser and implements MarkupParser.Accessor interface to provide
  * access to properties that SchemaOrgParser has parsed.
  */
-public class SchemaOrgParserAccessor implements MarkupParser.Parser {
+public class SchemaOrgParserAccessor implements MarkupParser.Accessor {
     private final SchemaOrgParser parser;
 
     /**
-     * The object that instantiates SchemaOrgParser and implements its MarkupParser.Parser
+     * The object that instantiates SchemaOrgParser and implements its MarkupParser.Accessor
      * interface.
      */
     public SchemaOrgParserAccessor(Element root) {
@@ -44,9 +44,8 @@ public class SchemaOrgParserAccessor implements MarkupParser.Parser {
 
     @Override
     public String getType() {
-        // TODO(kuan): consolidate/standardize types returned from all 3 parsers in MarkupParser.
-        // Returns ARTICLe if there's an article.
-        return parser.getArticleItems().isEmpty() ? "" : SchemaOrgParser.Type.ARTICLE.toString();
+        // Returns Article if there's an article.
+        return parser.getArticleItems().isEmpty() ? "" : MarkupParser.ARTICLE_TYPE;
     }
 
     @Override
@@ -59,27 +58,26 @@ public class SchemaOrgParserAccessor implements MarkupParser.Parser {
     @Override
     public MarkupParser.Image[] getImages() {
         List<MarkupParser.Image> images = new ArrayList<MarkupParser.Image>();
+        // Images are ordered as follows:
+        // 1) the "associatedMedia" or "encoding" image of the article that first declares it,
+        // 2) or the first ImageObject with "representativeOfPage" as "true",
+        // 3) then, the list of "image" property of remaining articles,
+        // 4) lastly, the list of ImageObject's.
 
         // First, get images from ArticleItem's.
         List<SchemaOrgParser.ArticleItem> articleItems = parser.getArticleItems();
-        MarkupParser.Image imageOfArticle = null;
         SchemaOrgParser.ImageItem associatedImageOfArticle = null;
 
         for (int i = 0; i < articleItems.size(); i++) {
             SchemaOrgParser.ArticleItem articleItem = articleItems.get(i);
-            // If article has an associated image or the "image" property, remember them for now;
-            // they'll be added to the list later when the position in the list can be determined.
+            // If this is the first article with an associated image, remember it for now; it'll be
+            // added to the list later when its position in the list can be determined.
             if (associatedImageOfArticle == null) {
                 associatedImageOfArticle = articleItem.getRepresentativeImageItem();
                 if (associatedImageOfArticle != null) continue;
             }
             MarkupParser.Image image = articleItem.getImage();
-            if (image == null) continue;
-            if (imageOfArticle == null) {
-                imageOfArticle = image;
-            } else {
-                images.add(image);
-            }
+            if (image != null) images.add(image);
         }
 
         // Then, get images from ImageItem's.
@@ -89,25 +87,16 @@ public class SchemaOrgParserAccessor implements MarkupParser.Parser {
         for (int i = 0; i < imageItems.size(); i++) {
             SchemaOrgParser.ImageItem imageItem = imageItems.get(i);
             MarkupParser.Image image = imageItem.getImage();
-            // Insert |image| at beginning of list if it's the first image that's representative of
-            // page or it's the associated image of the first article.
-            if (!hasRepresentativeImage && (imageItem == associatedImageOfArticle ||
-                                            imageItem.isRepresentativeOfPage())) {
+            // Insert |image| at beginning of list if it's the associated image of an article, or
+            // it's the first image that's representative of page.
+            if (imageItem == associatedImageOfArticle ||
+                (!hasRepresentativeImage && imageItem.isRepresentativeOfPage())) {
                 hasRepresentativeImage = true;
                 images.add(0, image);
             } else {
                 images.add(image);
             }
         }
-
-        // Prepend |imageOfArticle| to list if there's no image representative of page; append it
-        // otherwise.
-        if (imageOfArticle != null) {
-            if (!hasRepresentativeImage) images.add(0, imageOfArticle);
-            else images.add(imageOfArticle);
-        }
-
-        if (images.isEmpty()) return null;
 
         return images.toArray(new MarkupParser.Image[images.size()]);
     }

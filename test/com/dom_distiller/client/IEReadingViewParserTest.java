@@ -156,6 +156,26 @@ public class IEReadingViewParserTest extends GWTTestCase {
         assertEquals(expectedAuthor, authors[0]);
     }
 
+    public void testPublisherFromPublisherAttr() {
+        String expectedPublisher = "Publisher Attribute";
+        Element div = TestUtil.createDiv(0);
+        div.setAttribute("publisher", expectedPublisher);
+        mBody.appendChild(div);
+
+        IEReadingViewParser parser = new IEReadingViewParser(mRoot);
+        assertEquals(expectedPublisher, parser.getPublisher());
+    }
+
+    public void testPublisherFromSourceOrganizationrAttr() {
+        String expectedPublisher = "Source Organization Attribute";
+        Element div = TestUtil.createDiv(0);
+        div.setAttribute("source_organization", expectedPublisher);
+        mBody.appendChild(div);
+
+        IEReadingViewParser parser = new IEReadingViewParser(mRoot);
+        assertEquals(expectedPublisher, parser.getPublisher());
+    }
+
     public void testCopyrightInMeta() {
         String expectedCopyright = "Friday Apr 5th 2015 05:05";
         createMeta("copyright", expectedCopyright);
@@ -177,10 +197,9 @@ public class IEReadingViewParserTest extends GWTTestCase {
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(1, images.length);
         MarkupParser.Image image = images[0];
-        assertEquals(expectedUrl, image.image);
         assertEquals(expectedUrl, image.url);
-        assertEquals(null, image.secureUrl);
-        assertEquals(null, image.type);
+        assertEquals("", image.secureUrl);
+        assertEquals("", image.type);
         assertEquals("", image.caption);
         assertEquals(600, image.width);
         assertEquals(400, image.height);
@@ -218,10 +237,9 @@ public class IEReadingViewParserTest extends GWTTestCase {
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(1, images.length);
         MarkupParser.Image image = images[0];
-        assertEquals(expectedUrl, image.image);
         assertEquals(expectedUrl, image.url);
-        assertEquals(null, image.secureUrl);
-        assertEquals(null, image.type);
+        assertEquals("", image.secureUrl);
+        assertEquals("", image.type);
         assertEquals(expectedCaption, image.caption);
         assertEquals(400, image.width);
         assertEquals(307, image.height);
@@ -244,10 +262,9 @@ public class IEReadingViewParserTest extends GWTTestCase {
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(1, images.length);
         MarkupParser.Image image = images[0];
-        assertEquals(expectedUrl, image.image);
         assertEquals(expectedUrl, image.url);
-        assertEquals(null, image.secureUrl);
-        assertEquals(null, image.type);
+        assertEquals("", image.secureUrl);
+        assertEquals("", image.type);
         assertEquals(expectedCaption, image.caption);
         assertEquals(400, image.width);
         assertEquals(134, image.height);
@@ -270,10 +287,9 @@ public class IEReadingViewParserTest extends GWTTestCase {
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(1, images.length);
         MarkupParser.Image image = images[0];
-        assertEquals(expectedUrl, image.image);
         assertEquals(expectedUrl, image.url);
-        assertEquals(null, image.secureUrl);
-        assertEquals(null, image.type);
+        assertEquals("", image.secureUrl);
+        assertEquals("", image.type);
         assertEquals(expectedCaption, image.caption);
         assertEquals(100, image.width);
         assertEquals(100, image.height);
@@ -295,10 +311,9 @@ public class IEReadingViewParserTest extends GWTTestCase {
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(2, images.length);
         MarkupParser.Image image = images[1];
-        assertEquals(expectedUrl, image.image);
         assertEquals(expectedUrl, image.url);
-        assertEquals(null, image.secureUrl);
-        assertEquals(null, image.type);
+        assertEquals("", image.secureUrl);
+        assertEquals("", image.type);
         assertEquals("", image.caption);
         assertEquals(400, image.width);
         assertEquals(307, image.height);
@@ -320,10 +335,9 @@ public class IEReadingViewParserTest extends GWTTestCase {
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(2, images.length);
         MarkupParser.Image image = images[1];
-        assertEquals(expectedUrl, image.image);
         assertEquals(expectedUrl, image.url);
-        assertEquals(null, image.secureUrl);
-        assertEquals(null, image.type);
+        assertEquals("", image.secureUrl);
+        assertEquals("", image.type);
         assertEquals("", image.caption);
         assertEquals(400, image.width);
         assertEquals(134, image.height);
@@ -348,10 +362,9 @@ public class IEReadingViewParserTest extends GWTTestCase {
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(2, images.length);
         MarkupParser.Image image = images[1];
-        assertEquals(expectedUrl, image.image);
         assertEquals(expectedUrl, image.url);
-        assertEquals(null, image.secureUrl);
-        assertEquals(null, image.type);
+        assertEquals("", image.secureUrl);
+        assertEquals("", image.type);
         assertEquals(expectedCaption, image.caption);
         assertEquals(400, image.width);
         assertEquals(400, image.height);

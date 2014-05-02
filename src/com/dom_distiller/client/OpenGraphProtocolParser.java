@@ -35,7 +35,7 @@ import com.google.gwt.dom.client.NodeList;
  * - article object properties: section, published_time, modified_time, expiration_time, author;
  *                              each author is a URL to the author's profile.
  */
-public class OpenGraphProtocolParser implements MarkupParser.Parser {
+public class OpenGraphProtocolParser implements MarkupParser.Accessor {
     private static final String TITLE_PROP = "title";
     private static final String TYPE_PROP = "type";
     private static final String IMAGE_PROP = "image";
@@ -130,11 +130,12 @@ public class OpenGraphProtocolParser implements MarkupParser.Parser {
     }
 
     /**
-     * Returns the required "type" of the document.
+     * Returns the required "type" of the document if it's an article, empty string otherwise.
      */
     @Override
     public String getType() {
-        return getPropertyContent(TYPE_PROP);
+        String type = getPropertyContent(TYPE_PROP);
+        return type.equalsIgnoreCase(ARTICLE_OBJTYPE) ? MarkupParser.ARTICLE_TYPE : "";
     }
 
     /**
@@ -172,7 +173,7 @@ public class OpenGraphProtocolParser implements MarkupParser.Parser {
 
     @Override
     public String getCopyright() {
-        return null;
+        return "";  // Not supported.
     }
 
     /**
@@ -198,9 +199,9 @@ public class OpenGraphProtocolParser implements MarkupParser.Parser {
         article.section = getPropertyContent(ARTICLE_SECTION_PROP);
         article.authors = mArticleParser.getAuthors();
 
-        if (article.section == null && article.publishedTime == null &&
-                article.modifiedTime == null && article.expirationTime == null &&
-                article.authors == null) {
+        if (article.section.isEmpty() && article.publishedTime.isEmpty() &&
+                article.modifiedTime.isEmpty() && article.expirationTime.isEmpty() &&
+                article.authors.length == 0) {
             return null;
         }
 
@@ -209,8 +210,8 @@ public class OpenGraphProtocolParser implements MarkupParser.Parser {
 
     @Override
     public boolean optOut() {
-        // While this is not directly supported, the page owner can simply omit // the required
-        // tags and parse() will return a null OpenGraphProtocolParser.
+        // While this is not directly supported, the page owner can simply omit the required tags
+        // and parse() will return a null OpenGraphProtocolParser.
         return false;
     }
 
@@ -230,13 +231,13 @@ public class OpenGraphProtocolParser implements MarkupParser.Parser {
         mImageParser.verify();
 
         String prefix = mPrefixes.get(Prefix.OG) + ":";
-        if (getTitle() == null)
+        if (getTitle().isEmpty())
             throw new Exception("Required \"" + prefix + "title\" property is missing.");
-        if (getType() == null)
+        if (getPropertyContent(TYPE_PROP).isEmpty())
             throw new Exception("Required \"" + prefix + "type\" property is missing.");
-        if (getUrl() == null)
+        if (getUrl().isEmpty())
             throw new Exception("Required \"" + prefix + "url\" property is missing.");
-        if (getImages() == null)
+        if (getImages().length == 0)
             throw new Exception("Required \"" + prefix + "image\" property is missing.");
     }
 
@@ -341,9 +342,7 @@ public class OpenGraphProtocolParser implements MarkupParser.Parser {
     }
 
     private String getPropertyContent(String property) {
-        if (!mPropertyTable.containsKey(property))
-            return null;
-        return mPropertyTable.get(property);
+        return !mPropertyTable.containsKey(property) ? "" : mPropertyTable.get(property);
     }
 
     private class ImageParser implements Parser {
@@ -390,24 +389,22 @@ public class OpenGraphProtocolParser implements MarkupParser.Parser {
         }
 
         private MarkupParser.Image[] getImages() {
-            if (mImages.isEmpty()) return null;
-
             MarkupParser.Image[] imagesOut = new MarkupParser.Image[mImages.size()];
             for (int i = 0; i < mImages.size(); i++) {
                 String[] imageIn = mImages.get(i);
                 MarkupParser.Image imageOut = new MarkupParser.Image();
                 imagesOut[i] = imageOut;
-                imageOut.image = imageIn[0];
-                imageOut.url = imageIn[1];
-                imageOut.secureUrl = imageIn[2];
-                imageOut.type = imageIn[3];
+                imageOut.url = imageIn[1] != null && !imageIn[1].isEmpty() ?
+                        imageIn[1] : imageIn[0];
+                if (imageIn[2] != null) imageOut.secureUrl = imageIn[2];
+                if (imageIn[3] != null) imageOut.type = imageIn[3];
                 // Caption is not supoprted, so ignore it.
                 try {
-                    imageOut.width = Integer.parseInt(imageIn[4], 10);
+                    if (imageIn[4] != null) imageOut.width = Integer.parseInt(imageIn[4], 10);
                 } catch (NumberFormatException e) {
                 }
                 try {
-                    imageOut.height = Integer.parseInt(imageIn[5], 10);
+                    if (imageIn[5] != null) imageOut.height = Integer.parseInt(imageIn[5], 10);
                 } catch (NumberFormatException e) {
                 }
             }
@@ -447,7 +444,7 @@ public class OpenGraphProtocolParser implements MarkupParser.Parser {
         }
 
         private String getFullName(Map<String, String> propertyTable) {
-            if (!mIsProfileType) return null;
+            if (!mIsProfileType) return "";
 
             String fullname = propertyTable.get(PROFILE_FIRSTNAME_PROP);
             if (fullname == null) fullname = "";
@@ -490,7 +487,7 @@ public class OpenGraphProtocolParser implements MarkupParser.Parser {
         }
 
         private String[] getAuthors() {
-            return mAuthors.isEmpty() ? null : mAuthors.toArray(new String[mAuthors.size()]);
+            return mAuthors.toArray(new String[mAuthors.size()]);
         }
     }
 }

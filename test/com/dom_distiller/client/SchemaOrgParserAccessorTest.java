@@ -65,9 +65,8 @@ public class SchemaOrgParserAccessorTest extends GWTTestCase {
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(1, images.length);
         MarkupParser.Image image = images[0];
-        assertEquals(expectedUrl, image.image);
         assertEquals(expectedUrl, image.url);
-        assertEquals(null, image.secureUrl);
+        assertEquals("", image.secureUrl);
         assertEquals(expectedFormat, image.type);
         assertEquals(expectedCaption, image.caption);
         assertEquals(600, image.width);
@@ -151,17 +150,15 @@ public class SchemaOrgParserAccessorTest extends GWTTestCase {
         // The 2nd image that was inserted is representative of page, so the
         // images should be swapped in |images|.
         MarkupParser.Image image = images[0];
-        assertEquals(expectedUrl2, image.image);
         assertEquals(expectedUrl2, image.url);
-        assertEquals(null, image.secureUrl);
+        assertEquals("", image.secureUrl);
         assertEquals(expectedFormat2, image.type);
         assertEquals(expectedCaption2, image.caption);
         assertEquals(1000, image.width);
         assertEquals(600, image.height);
         image = images[1];
-        assertEquals(expectedUrl1, image.image);
         assertEquals(expectedUrl1, image.url);
-        assertEquals(null, image.secureUrl);
+        assertEquals("", image.secureUrl);
         assertEquals(expectedFormat1, image.type);
         assertEquals(expectedCaption1, image.caption);
         assertEquals(400, image.width);
@@ -217,7 +214,7 @@ public class SchemaOrgParserAccessorTest extends GWTTestCase {
         mBody.appendChild(rootDiv);
 
         SchemaOrgParserAccessor parser = new SchemaOrgParserAccessor(mRoot);
-        assertEquals("ARTICLE", parser.getType());
+        assertEquals("Article", parser.getType());
         assertEquals(expectedTitle, parser.getTitle());
         assertEquals(expectedDescription, parser.getDescription());
         assertEquals(expectedUrl, parser.getUrl());
@@ -227,12 +224,11 @@ public class SchemaOrgParserAccessorTest extends GWTTestCase {
                 parser.getCopyright());
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(1, images.length);
-        assertEquals(expectedImage, images[0].image);
         assertEquals(expectedImage, images[0].url);
         MarkupParser.Article article = parser.getArticle();
         assertEquals(expectedDatePublished, article.publishedTime);
         assertEquals(expectedTimeModified, article.modifiedTime);
-        assertEquals(null, article.expirationTime);
+        assertEquals("", article.expirationTime);
         assertEquals(expectedSection, article.section);
         assertEquals(1, article.authors.length);
         assertEquals(expectedAuthor, article.authors[0]);
@@ -262,7 +258,7 @@ public class SchemaOrgParserAccessorTest extends GWTTestCase {
                 "</span>" +
                 "<span itemprop=\"caption\">" + expectedCaption1 +
                 "</span>" +
-                "<meta itemprop=\"representativeOfPage\" content=\"false\">" +
+                "<meta itemprop=\"representativeOfPage\" content=\"true\">" +
                 "<meta itemprop=\"width\" content=\"1000\">" +
                 "<meta itemprop=\"height\" content=\"600\">" +
             "</div>" +
@@ -293,24 +289,22 @@ public class SchemaOrgParserAccessorTest extends GWTTestCase {
         mBody.appendChild(rootDiv);
 
         SchemaOrgParserAccessor parser = new SchemaOrgParserAccessor(mRoot);
-        assertEquals("ARTICLE", parser.getType());
+        assertEquals("Article", parser.getType());
         assertEquals(expectedTitle, parser.getTitle());
         assertEquals(expectedDescription, parser.getDescription());
         assertEquals(expectedUrl, parser.getUrl());
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(2, images.length);
         MarkupParser.Image image = images[0];
-        assertEquals(expectedImage2, image.image);
         assertEquals(expectedImage2, image.url);
-        assertEquals(null, image.secureUrl);
+        assertEquals("", image.secureUrl);
         assertEquals(expectedFormat2, image.type);
         assertEquals(expectedCaption2, image.caption);
         assertEquals(600, image.width);
         assertEquals(400, image.height);
         image = images[1];
-        assertEquals(expectedImage1, image.image);
         assertEquals(expectedImage1, image.url);
-        assertEquals(null, image.secureUrl);
+        assertEquals("", image.secureUrl);
         assertEquals(expectedFormat1, image.type);
         assertEquals(expectedCaption1, image.caption);
         assertEquals(1000, image.width);
@@ -326,7 +320,7 @@ public class SchemaOrgParserAccessorTest extends GWTTestCase {
         mBody.appendChild(h);
 
         SchemaOrgParserAccessor parser = new SchemaOrgParserAccessor(mRoot);
-        assertEquals("ARTICLE", parser.getType());
+        assertEquals("Article", parser.getType());
         assertEquals(expectedTitle, parser.getTitle());
         assertTrue(parser.getArticle() != null);
 
@@ -364,7 +358,7 @@ public class SchemaOrgParserAccessorTest extends GWTTestCase {
         mBody.appendChild(rootDiv);
 
         SchemaOrgParserAccessor parser = new SchemaOrgParserAccessor(mRoot);
-        assertEquals("ARTICLE", parser.getType());
+        assertEquals("Article", parser.getType());
         assertEquals(expectedTitle, parser.getTitle());
         assertEquals("", parser.getDescription());
         assertEquals("", parser.getUrl());
@@ -374,7 +368,7 @@ public class SchemaOrgParserAccessorTest extends GWTTestCase {
         MarkupParser.Article article = parser.getArticle();
         assertEquals("", article.publishedTime);
         assertEquals("", article.modifiedTime);
-        assertEquals(null, article.expirationTime);
+        assertEquals("", article.expirationTime);
         assertEquals(expectedSection, article.section);
         assertEquals(0, article.authors.length);
     }
@@ -404,7 +398,7 @@ public class SchemaOrgParserAccessorTest extends GWTTestCase {
         assertEquals("", parser.getPublisher());
         assertEquals("", parser.getCopyright());
         assertEquals(null, parser.getArticle());
-        assertEquals(null, parser.getImages());
+        assertEquals(0, parser.getImages().length);
     }
 
     public void testUnsupportedWithNestedSupported() {
@@ -447,7 +441,7 @@ public class SchemaOrgParserAccessorTest extends GWTTestCase {
         mBody.appendChild(rootDiv);
 
         SchemaOrgParserAccessor parser = new SchemaOrgParserAccessor(mRoot);
-        assertEquals("ARTICLE", parser.getType());
+        assertEquals("Article", parser.getType());
         assertEquals(expectedTitle, parser.getTitle());
         assertEquals(expectedDescription, parser.getDescription());
         assertEquals(expectedUrl, parser.getUrl());
@@ -456,11 +450,10 @@ public class SchemaOrgParserAccessorTest extends GWTTestCase {
         assertEquals("", parser.getCopyright());
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(1, images.length);
-        assertEquals(expectedImage, images[0].image);
         assertEquals(expectedImage, images[0].url);
         MarkupParser.Article article = parser.getArticle();
         assertEquals(expectedDatePublished, article.publishedTime);
-        assertEquals(null, article.expirationTime);
+        assertEquals("", article.expirationTime);
         assertEquals(1, article.authors.length);
         assertEquals(expectedAuthor, article.authors[0]);
     }
@@ -483,7 +476,7 @@ public class SchemaOrgParserAccessorTest extends GWTTestCase {
         mBody.appendChild(rootDiv);
 
         SchemaOrgParserAccessor parser = new SchemaOrgParserAccessor(mRoot);
-        assertEquals("ARTICLE", parser.getType());
+        assertEquals("Article", parser.getType());
         assertEquals(expectedAuthor, parser.getAuthor());
         MarkupParser.Article article = parser.getArticle();
         assertEquals(1, article.authors.length);
@@ -506,7 +499,7 @@ public class SchemaOrgParserAccessorTest extends GWTTestCase {
         mBody.appendChild(rootDiv);
 
         SchemaOrgParserAccessor parser = new SchemaOrgParserAccessor(mRoot);
-        assertEquals("ARTICLE", parser.getType());
+        assertEquals("Article", parser.getType());
         assertEquals(expectedPerson, parser.getAuthor());
         assertEquals(expectedPerson, parser.getPublisher());
         MarkupParser.Article article = parser.getArticle();
@@ -531,7 +524,7 @@ public class SchemaOrgParserAccessorTest extends GWTTestCase {
         mBody.appendChild(rootDiv);
 
         SchemaOrgParserAccessor parser = new SchemaOrgParserAccessor(mRoot);
-        assertEquals("ARTICLE", parser.getType());
+        assertEquals("Article", parser.getType());
         assertEquals(expectedCreator, parser.getAuthor());
         MarkupParser.Article article = parser.getArticle();
         assertEquals(1, article.authors.length);
