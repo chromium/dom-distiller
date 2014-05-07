@@ -4,22 +4,34 @@
 
 package com.dom_distiller.client;
 
-import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.dom.client.Document;
 
+import com.google.gwt.json.client.JSONObject;
 import java.util.logging.Logger;
 
+import org.timepedia.exporter.client.Export;
+import org.timepedia.exporter.client.Exportable;
 import org.timepedia.exporter.client.ExporterUtil;
 
-/**
- * Entry point classes define <code>onModuleLoad()</code>.
- */
-public class DomDistiller implements EntryPoint {
-  static Logger logger = Logger.getLogger("DomDistiller");
+import com.dom_distiller.proto.DomDistillerProtos;
 
-  /**
-   * This is the entry point method.
-   */
-  public void onModuleLoad() {
-      ExporterUtil.exportAll();
+@Export()
+public class DomDistiller implements Exportable {
+  public static DomDistillerProtos.DomDistillerResult apply() {
+      return applyWithOptions(DomDistillerProtos.DomDistillerOptions.create());
+  }
+
+  public static DomDistillerProtos.DomDistillerResult applyWithOptions(
+          DomDistillerProtos.DomDistillerOptions options) {
+      DomDistillerProtos.DomDistillerResult result = DomDistillerProtos.DomDistillerResult.create();
+      result.setTitle(DocumentTitleGetter.getDocumentTitle(
+              Document.get().getTitle(), Document.get().getDocumentElement()));
+
+      DomDistillerProtos.DistilledContent content = DomDistillerProtos.DistilledContent.create();
+      content.setHtml(ContentExtractor.extractContent());
+      result.setDistilledContent(content);
+
+      result.setPaginationInfo(PagingLinksFinder.getPaginationInfo());
+      return result;
   }
 }

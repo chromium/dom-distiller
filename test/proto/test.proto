@@ -1,0 +1,54 @@
+// Copyright 2014 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+syntax = "proto2";
+
+package dom_distiller.test.proto;
+option java_package = "com.dom_distiller.test.proto";
+option java_outer_classname = "TestProtos";
+
+message SimpleMessage {
+  optional bool value = 1;
+}
+
+message PrimitiveTypes {
+  optional bool type_bool = 1;
+
+  optional int32 type_int32 = 2;
+
+  optional float type_float = 4;
+  optional double type_double = 5;
+
+  optional string type_string = 6;
+}
+
+message Enum {
+  enum Values {
+    ONE = 1;
+    TWO = 2;
+    THREE = 3;
+  }
+
+  optional Values value = 1;
+}
+
+message MessageField {
+  optional SimpleMessage simple_message = 1;
+}
+
+message RepeatedTypes {
+  repeated int32 repeated_int32 = 1;
+  repeated SimpleMessage repeated_simple_message = 2;
+}
+
+message OuterMessage {
+  message InnerMessage {
+    optional bool value = 1;
+  }
+  optional InnerMessage inner_message = 2;
+}
+
+message QualifiedMessageField {
+  optional .dom_distiller.test.proto.SimpleMessage simple_message = 1;
+}

@@ -18,6 +18,7 @@
     <pathelement location="war/WEB-INF/classes"/>
     <pathelement location="${gwt.sdk}/gwt-user.jar"/>
     <fileset dir="${gwt.sdk}" includes="gwt-dev*.jar"/>
+    <pathelement location="" />
   </path>
 
   <target name="setup">
@@ -34,6 +35,14 @@
     <pathelement location="test" />
   </path>
 
+  <path id="protoc.java.output">
+    <pathelement location="out/proto/java" />
+  </path>
+
+  <path id="protoc.test.java.output">
+    <pathelement location="out/test/proto" />
+  </path>
+
   <property name="test.filter" value="*" />
 
   <union id="project.non.java.files">
@@ -42,13 +51,46 @@
     <fileset dir="${gwt_exporter.src}" excludes="**/*.java"/>
   </union>
 
-  <target name="javac" depends="setup" description="Compile java source to bytecode">
+  <target name="protoc.plugin.base"
+      description="Generates proto stuff needed for the gwt_overlay plugin">
+    <mkdir dir="out/proto/python" />
+    <exec executable="protoc" failonerror="true">
+      <arg value="--python_out=out/proto/python"/>
+      <arg value="--proto_path=third_party/protobuf"/>
+      <arg value="third_party/protobuf/google/protobuf/compiler/plugin.proto"/>
+    </exec>
+  </target>
+
+  <target name="protoc" depends="protoc.plugin.base"
+      description="Generates JavascriptObject proto classes.">
+    <mkdir dir="out/proto/java" />
+    <apply executable="protoc" failonerror="true" relative="true">
+      <arg value="--plugin=protoc-gen-gwt_overlay=protoc_plugins/gwt_overlay.py"/>
+      <arg value="--gwt_overlay_out=out/proto/java"/>
+      <arg value="--proto_path=proto"/>
+      <fileset dir="." includes="proto/**/*.proto"/>
+    </apply>
+  </target>
+
+  <target name="protoc.json" depends="protoc.plugin.base"
+      description="Generates base::Value-based json proto reader/writers.">
+    <mkdir dir="out/proto/json" />
+    <apply executable="protoc" failonerror="true" relative="true">
+      <arg value="--plugin=protoc-gen-json_converter=protoc_plugins/json_values_converter.py"/>
+      <arg value="--json_converter_out=output_dir=dom_distiller_js:out/proto/json"/>
+      <arg value="--proto_path=proto"/>
+      <fileset dir="." includes="proto/**/*.proto"/>
+    </apply>
+  </target>
+
+  <target name="javac" depends="setup, protoc" description="Compile java source to bytecode">
     <mkdir dir="war/WEB-INF/classes"/>
     <javac includes="**" encoding="utf-8"
         destdir="war/WEB-INF/classes"
         source="1.5" target="1.5" nowarn="true"
         debug="true" debuglevel="lines,vars,source">
       <src refid="project.java.path"/>
+      <src refid="protoc.java.output" />
       <classpath refid="project.class.path"/>
     </javac>
     <copy todir="war/WEB-INF/classes">
@@ -61,6 +103,7 @@
       <classpath>
         <path refid="project.java.path"/>
         <path refid="project.class.path"/>
+        <path refid="protoc.java.output" />
         <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA.jar" />
         <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA-sources.jar" />
       </classpath>
@@ -98,14 +141,61 @@
     </java>
   </target>
 
-  <target name="javac.tests" depends="javac" description="Compiles test code">
-    <javac srcdir="test" includes="**" encoding="utf-8"
+  <target name="package" depends="extractjs, protoc.json"
+      description="Copies the main build artifacts into the out/package directory." >
+    <mkdir dir="out/package"/>
+    <mkdir dir="out/package/js"/>
+    <mkdir dir="out/package/proto"/>
+
+    <copy file="out/domdistiller.js" todir="out/package/js" />
+    <copy todir="out/package/proto_gen">
+      <fileset dir="out/proto/json"/>
+    </copy>
+    <copy todir="out/package/proto">
+      <fileset dir="proto"/>
+    </copy>
+
+  </target>
+
+
+  <target name="protoc.tests" depends="protoc.plugin.base" description="Generates test proto code">
+    <mkdir dir="out/test/proto" />
+    <apply executable="protoc" failonerror="true" relative="true">
+      <arg value="--plugin=protoc-gen-gwt_overlay=protoc_plugins/gwt_overlay.py"/>
+      <arg value="--gwt_overlay_out=out/test/proto"/>
+      <arg value="--proto_path=test/proto"/>
+      <fileset dir="." includes="test/proto/**/*.proto"/>
+    </apply>
+  </target>
+
+  <target name="javac.tests" depends="javac, protoc.tests" description="Compiles test code">
+    <javac includes="**" encoding="utf-8"
       source="1.5" target="1.5" nowarn="true"
       destdir="war/WEB-INF/classes"
       debug="true" debuglevel="lines,vars,source">
+      <src refid="project.java.test.path" />
+      <src refid="protoc.test.java.output" />
       <classpath location="third_party/junit/junit-4.11.jar"/>
       <classpath refid="project.class.path"/>
     </javac>
+  </target>
+
+  <target name="gwtc.tests" depends="javac.tests" description="GWT compile to JavaScript (production mode)">
+    <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+      <classpath>
+        <path refid="project.class.path"/>
+        <path refid="project.java.test.path"/>
+        <path refid="protoc.test.java.output" />
+        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA.jar" />
+        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA-sources.jar" />
+      </classpath>
+      <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
+      <jvmarg value="-Xmx256M"/>
+      <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+      <arg line="${gwt.args}"/>
+      <arg line="${gwt.custom.args}"/>
+      <arg value="com.dom_distiller.DomDistiller"/>
+    </java>
   </target>
 
   <target name="test.dev" depends="javac.tests" description="Run development mode tests">
@@ -118,6 +208,7 @@
         <path refid="project.class.path" />
         <path refid="project.java.path" />
         <path refid="project.java.test.path" />
+        <path refid="protoc.test.java.output" />
         <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA.jar" />
         <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA-sources.jar" />
         <pathelement location="third_party/junit/junit-4.11.jar" />
@@ -143,6 +234,7 @@
         <path refid="project.class.path" />
         <path refid="project.java.path" />
         <path refid="project.java.test.path" />
+        <path refid="protoc.test.java.output" />
         <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA.jar" />
         <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA-sources.jar" />
         <pathelement location="third_party/junit/junit-4.11.jar" />

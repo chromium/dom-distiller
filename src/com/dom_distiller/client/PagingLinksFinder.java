@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.NodeList;
@@ -29,6 +30,8 @@ import com.google.gwt.user.client.Window.Location;
 
 import org.timepedia.exporter.client.Export;
 import org.timepedia.exporter.client.Exportable;
+
+import com.dom_distiller.proto.DomDistillerProtos;
 
 /**
  * This class finds the next and previous page links for the distilled document.  The functionality
@@ -56,6 +59,15 @@ public class PagingLinksFinder implements Exportable {
     // Examples that match PAGE_NUMBER_REGEX are: "_p3", "-pg3", "p3", "_1", "-12-2".
     // Examples that don't match PAGE_NUMBER_REGEX are: "_p3 ", "p", "p123".
     private static final String PAGE_NUMBER_REGEX = "((_|-)?p[a-z]*|(_|-))[0-9]{1,2}$";
+
+    public static DomDistillerProtos.PaginationInfo getPaginationInfo() {
+        DomDistillerProtos.PaginationInfo info = DomDistillerProtos.PaginationInfo.create();
+        String next = findNext(Document.get().getDocumentElement());
+        if (next != null) {
+            info.setNextPage(next);
+        }
+        return info;
+    }
 
     public static String findNext(Element root) {
     /**

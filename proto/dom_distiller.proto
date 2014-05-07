@@ -1,0 +1,30 @@
+// Copyright 2014 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+syntax = "proto2";
+
+package dom_distiller.proto;
+option optimize_for = LITE_RUNTIME;
+option java_package = "com.dom_distiller.proto";
+option java_outer_classname = "DomDistillerProtos";
+
+message DistilledContent {
+  optional string html = 1;
+}
+
+message PaginationInfo {
+  optional string next_page = 1;
+  optional string prev_page = 2;
+  optional string canonical_page = 3;
+}
+
+message DomDistillerResult {
+  optional string title = 1;
+  optional DistilledContent distilled_content = 2;
+  optional PaginationInfo pagination_info = 3;
+  repeated string image_urls = 4;
+}
+
+message DomDistillerOptions {
+}
