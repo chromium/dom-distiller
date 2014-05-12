@@ -72,6 +72,10 @@ public class ContentExtractor implements Exportable {
         List<Node> contentAndImages = RelevantImageFinder.findAndAddImages(
                 contentNodes, Document.get().getDocumentElement());
 
+        if (contentAndImages.isEmpty()) {
+            return "";
+        }
+
         Node clonedSubtree = NodeListExpander.expand(contentAndImages).cloneSubtree();
 
         if (clonedSubtree.getNodeType() != Node.ELEMENT_NODE) {

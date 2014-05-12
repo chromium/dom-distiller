@@ -17,6 +17,7 @@ import com.google.gwt.dom.client.NodeList;
  */
 public class NodeListExpander {
     /**
+     * @param nodes A non-empty list of DOM nodes.
      * @return The minimal part of the Node tree that contains all the nodes provided. I.e. it
      * contains a node only if it is on the shortest path between two of the provided nodes.
      */
