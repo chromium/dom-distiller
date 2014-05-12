@@ -77,7 +77,7 @@
     <mkdir dir="out/proto/json" />
     <apply executable="protoc" failonerror="true" relative="true">
       <arg value="--plugin=protoc-gen-json_converter=protoc_plugins/json_values_converter.py"/>
-      <arg value="--json_converter_out=output_dir=dom_distiller_js:out/proto/json"/>
+      <arg value="--json_converter_out=output_dir=third_party/dom_distiller_js:out/proto/json"/>
       <arg value="--proto_path=proto"/>
       <fileset dir="." includes="proto/**/*.proto"/>
     </apply>
