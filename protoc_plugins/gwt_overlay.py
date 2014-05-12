@@ -19,6 +19,8 @@ class GwtOverlayWriter(writer.CodeWriter):
       self.AddError(err)
       return
 
+    self.WriteCStyleHeader()
+
     self.Output('package {java_package};',
                 java_package=proto_file.JavaPackage())
     self.Output('')

@@ -21,6 +21,8 @@ class CppConverterWriter(writer.CodeWriter):
       self.AddError(err)
       return
 
+    self.WriteCStyleHeader()
+
     self.Output('#include "{output_dir}{generated_pb_h}"',
                 output_dir=output_dir + '/' if output_dir else '',
                 generated_pb_h=proto_file.CppBaseHeader())
