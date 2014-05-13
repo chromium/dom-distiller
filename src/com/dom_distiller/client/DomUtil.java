@@ -9,6 +9,7 @@ import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
+import com.google.gwt.dom.client.Style;
 
 public class DomUtil {
     /**
@@ -46,12 +47,24 @@ public class DomUtil {
         NodeList<Element> allElems = root.getElementsByTagName("*");
         for (int i = 0; i < allElems.getLength(); i++) {
             Element elem = allElems.getItem(i);
-            String classAttr = elem.getClassName().toLowerCase();
-            // Make sure |className| is not the substring of another name in |classAttr|, so check
-            // for whitespaces before and after.
-            if ((" " + classAttr + " ").contains(" " + className + " ")) return elem;
+            if (hasClassName(elem, className)) return elem;
         }
         return null;
     }
 
+    public static boolean hasClassName(Element elem, String className) {
+        String classAttr = elem.getClassName().toLowerCase();
+        // Make sure |className| is not the substring of another name in |classAttr|, so check
+        // for whitespaces before and after.
+        return (" " + classAttr + " ").contains(" " + className + " ");
+    }
+
+    /**
+      * @Return The CSS style of an element after applying the active stylesheets and resolving any
+      * basic computation the style's value(s) may contain.
+      * @param el - DOM element
+    */
+    public static native Style getComputedStyle(Element el) /*-{
+      return getComputedStyle(el, null);
+    }-*/;
 }

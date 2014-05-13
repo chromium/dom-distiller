@@ -27,6 +27,7 @@ import org.timepedia.exporter.client.Export;
 import org.timepedia.exporter.client.Exportable;
 
 import org.xml.sax.AttributesImpl;
+import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
 @Export()
@@ -40,7 +41,7 @@ public class ContentExtractor implements Exportable {
         try {
             htmlParser.startDocument();
             Element documentElement = Document.get().getDocumentElement();
-            textNodes = DomToSaxParser.parse(documentElement, htmlParser);
+            textNodes = parse(documentElement, htmlParser);
             htmlParser.endDocument();
         } catch (SAXException e) {
             logger.warning("Parsing failed.");
@@ -90,6 +91,13 @@ public class ContentExtractor implements Exportable {
         // TODO(cjhopman): this discards the top element and just returns its children. This might
         // break in some cases.
         return Element.as(clonedSubtree).getInnerHTML();
+    }
+
+    private static List<Node> parse(Element e, ContentHandler handler) {
+        DomToSaxVisitor domToSaxVisitor = new DomToSaxVisitor(handler);
+        FilteringDomVisitor filteringDomVisitor = new FilteringDomVisitor(domToSaxVisitor);
+        new DomWalker(filteringDomVisitor).walk(e);
+        return domToSaxVisitor.getTextNodes();
     }
 
     private static void makeAllLinksAbsolute(Node rootNode) {

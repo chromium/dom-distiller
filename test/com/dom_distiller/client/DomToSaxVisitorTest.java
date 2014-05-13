@@ -19,7 +19,7 @@ import com.google.gwt.user.client.DOM;
 
 import org.xml.sax.Attributes;
 
-public class DomToSaxParserTest extends GWTTestCase {
+public class DomToSaxVisitorTest extends GWTTestCase {
     @Override
     public String getModuleName() {
         return "com.dom_distiller.DomDistillerJUnit";
@@ -37,41 +37,42 @@ public class DomToSaxParserTest extends GWTTestCase {
         Element e = Document.get().createDivElement();
         e.setInnerHTML("<div style=\"width:50px; height:100px\" id=\"f\" class=\"sdf\"></div>");
         e = Element.as(e.getChildNodes().getItem(0));
-        Attributes attrs = DomToSaxParser.getSaxAttributes(e);
+        Attributes attrs = DomToSaxVisitor.getSaxAttributes(e);
         assertEquals(3, attrs.getLength());
         assertEquals("f", attrs.getValue("id"));
         assertEquals("sdf", attrs.getValue("class"));
     }
 
-    private void runDomParserTest(String innerHtml) throws Throwable {
+    private void runDomVisitorTest(String innerHtml) throws Throwable {
         Element container = Document.get().createDivElement();
         container.setInnerHTML(innerHtml);
         SimpleContentHandler contentHandler = new SimpleContentHandler();
-        DomToSaxParser.parse(container, contentHandler);
+        DomToSaxVisitor visitor = new DomToSaxVisitor(contentHandler);
+        new DomWalker(visitor).walk(container);
         String expectedDocument = "<div>" + innerHtml + "</div>";
         assertEquals(expectedDocument, contentHandler.getDocumentString().toLowerCase());
     }
 
-    public void testDomParserText() throws Throwable {
-        runDomParserTest("foo");
+    public void testDomVisitorText() throws Throwable {
+        runDomVisitorTest("foo");
     }
 
-    public void testDomParserElement() throws Throwable {
-        runDomParserTest("<div></div>");
+    public void testDomVisitorElement() throws Throwable {
+        runDomVisitorTest("<div></div>");
     }
 
-    public void testDomParserSiblings() throws Throwable {
-        runDomParserTest("<div></div><div></div>");
+    public void testDomVisitorSiblings() throws Throwable {
+        runDomVisitorTest("<div></div><div></div>");
     }
 
-    public void testDomParserAttribute() throws Throwable {
-        runDomParserTest("<div style=\"width:50px; height:100px\" id=\"f\" class=\"sdf\"></div>");
+    public void testDomVisitorAttribute() throws Throwable {
+        runDomVisitorTest("<div style=\"width:50px; height:100px\" id=\"f\" class=\"sdf\"></div>");
     }
 
-    public void testDomParserSimplePage() throws Throwable {
+    public void testDomVisitorSimplePage() throws Throwable {
         String simpleHtml =
                 "<div id=\"a\" class=\"foo\">foo<a href=\"x.com/#1\">x.com</a>bar</div>" +
                 "<div>baz</div>";
-        runDomParserTest(simpleHtml);
+        runDomVisitorTest(simpleHtml);
     }
 }
