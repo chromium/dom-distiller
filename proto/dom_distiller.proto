@@ -27,4 +27,6 @@ message DomDistillerResult {
 }
 
 message DomDistillerOptions {
+  // Whether to extract only the text (or to include the containing html).
+  optional bool extract_text_only = 1;
 }

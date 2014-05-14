@@ -28,7 +28,8 @@ public class DomDistiller implements Exportable {
               Document.get().getTitle(), Document.get().getDocumentElement()));
 
       DomDistillerProtos.DistilledContent content = DomDistillerProtos.DistilledContent.create();
-      content.setHtml(ContentExtractor.extractContent());
+      boolean text_only = options.hasExtractTextOnly() && options.getExtractTextOnly();
+      content.setHtml(ContentExtractor.extractContent(text_only));
       result.setDistilledContent(content);
 
       result.setPaginationInfo(PagingLinksFinder.getPaginationInfo());

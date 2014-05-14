@@ -35,6 +35,10 @@ public class ContentExtractor implements Exportable {
     static Logger logger = Logger.getLogger("DomDistiller");
 
     public static String extractContent() {
+        return extractContent(false);
+    }
+
+    public static String extractContent(boolean text_only) {
         BoilerpipeHTMLContentHandler htmlParser = new BoilerpipeHTMLContentHandler();
         List<Node> textNodes = null;
 
@@ -56,19 +60,11 @@ public class ContentExtractor implements Exportable {
             return "";
         }
 
-        List<Integer> contentTextIndexes = new ArrayList<Integer>();
-        for (TextBlock tb : document.getTextBlocks()) {
-            if (!tb.hasLabel(DefaultLabels.TITLE)) {
-                contentTextIndexes.addAll(tb.getContainedTextElements());
-            }
+        if (text_only) {
+            return document.getText(true, false);
         }
-        Collections.sort(contentTextIndexes);
 
-        // Boilerpipe's text node indexes start at 1.
-        List<Node> contentNodes = new ArrayList<Node>(contentTextIndexes.size());
-        for (Integer i : contentTextIndexes) {
-            contentNodes.add(textNodes.get(i - 1));
-        }
+        List<Node> contentNodes = getContentNodesForTextDocument(document, textNodes);
 
         List<Node> contentAndImages = RelevantImageFinder.findAndAddImages(
                 contentNodes, Document.get().getDocumentElement());
@@ -98,6 +94,24 @@ public class ContentExtractor implements Exportable {
         FilteringDomVisitor filteringDomVisitor = new FilteringDomVisitor(domToSaxVisitor);
         new DomWalker(filteringDomVisitor).walk(e);
         return domToSaxVisitor.getTextNodes();
+    }
+
+    private static List<Node> getContentNodesForTextDocument(
+            TextDocument document, List<Node> textNodes) {
+        List<Integer> contentTextIndexes = new ArrayList<Integer>();
+        for (TextBlock tb : document.getTextBlocks()) {
+            if (!tb.hasLabel(DefaultLabels.TITLE)) {
+                contentTextIndexes.addAll(tb.getContainedTextElements());
+            }
+        }
+        Collections.sort(contentTextIndexes);
+
+        // Boilerpipe's text node indexes start at 1.
+        List<Node> contentNodes = new ArrayList<Node>(contentTextIndexes.size());
+        for (Integer i : contentTextIndexes) {
+            contentNodes.add(textNodes.get(i - 1));
+        }
+        return contentNodes;
     }
 
     private static void makeAllLinksAbsolute(Node rootNode) {
