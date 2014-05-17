@@ -23,13 +23,13 @@ import de.l3s.boilerpipe.labels.LabelAction;
 
 /**
  * Default {@link TagAction}s. Seem to work well.
- * 
+ *
  * @see TagActionMap
  */
 public class DefaultTagActionMap extends TagActionMap {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -54,10 +54,11 @@ public class DefaultTagActionMap extends TagActionMap {
         setTagAction("EM", CommonTagActions.TA_INLINE_NO_WHITESPACE);
         setTagAction("STRONG", CommonTagActions.TA_INLINE_NO_WHITESPACE);
         setTagAction("SPAN", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-        
+
+
         // New in 1.1 (especially to improve extraction quality from Wikipedia etc.)
         setTagAction("SUP", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-        
+
         // New in 1.2
         setTagAction("CODE", CommonTagActions.TA_INLINE_NO_WHITESPACE);
         setTagAction("TT", CommonTagActions.TA_INLINE_NO_WHITESPACE);
@@ -68,11 +69,11 @@ public class DefaultTagActionMap extends TagActionMap {
         setTagAction("ABBR", CommonTagActions.TA_INLINE_WHITESPACE);
         setTagAction("ACRONYM", CommonTagActions.TA_INLINE_WHITESPACE);
 
-        setTagAction("FONT", CommonTagActions.TA_INLINE_NO_WHITESPACE); // could also use TA_FONT 
+        setTagAction("FONT", CommonTagActions.TA_INLINE_NO_WHITESPACE); // could also use TA_FONT
 
         // added in 1.1.1
         setTagAction("NOSCRIPT", CommonTagActions.TA_IGNORABLE_ELEMENT);
-        
+
         // New in 1.3
 		setTagAction("LI", new CommonTagActions.BlockTagLabelAction(
 				new LabelAction(DefaultLabels.LI)));
@@ -82,5 +83,12 @@ public class DefaultTagActionMap extends TagActionMap {
 				new LabelAction(DefaultLabels.H2, DefaultLabels.HEADING)));
 		setTagAction("H3", new CommonTagActions.BlockTagLabelAction(
 				new LabelAction(DefaultLabels.H3, DefaultLabels.HEADING)));
+
+        // New in DomDistiller
+        setTagAction("CITE", CommonTagActions.TA_INLINE_NO_WHITESPACE);
+        setTagAction("MARK", CommonTagActions.TA_INLINE_NO_WHITESPACE);
+        setTagAction("S", CommonTagActions.TA_INLINE_NO_WHITESPACE);
+        setTagAction("Q", CommonTagActions.TA_INLINE_NO_WHITESPACE);
+        setTagAction("TIME", CommonTagActions.TA_INLINE_NO_WHITESPACE);
 	}
 }
