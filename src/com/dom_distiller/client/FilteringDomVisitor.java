@@ -36,8 +36,7 @@ public class FilteringDomVisitor implements DomWalker.Visitor {
                 visible = false;
             } else {
                 style = DomUtil.getComputedStyle(e);
-                visible = !(style.getDisplay().equals("none") ||
-                            style.getVisibility().equals("hidden"));
+                visible = DomUtil.isVisible(e);
             }
             logDbgInfo(e, visible, style);
             if (!visible) return false;

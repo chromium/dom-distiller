@@ -4,12 +4,11 @@
 
 package com.dom_distiller.client;
 
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.ImageElement;
-import com.google.gwt.dom.client.Node;
 
 /**
  * This class is used to identify the images that correspond to a list of content nodes. An image is
@@ -17,6 +16,8 @@ import com.google.gwt.dom.client.Node;
  * them.
  */
 public class RelevantImageFinder {
+    // TODO(yfriedman): Read debug setting from Proto input to DomDistiller.
+    private static final boolean DEBUG = false;
     /**
      * @return An ordered list of both content and image nodes.
      */
@@ -37,6 +38,7 @@ public class RelevantImageFinder {
             contentAndImages = new ArrayList<Node>();
         }
 
+        @Override
         public boolean visit(Node n) {
             if (nodeMatcher.isFinished() && !inContent) {
                 return false;
@@ -53,8 +55,16 @@ public class RelevantImageFinder {
                 case Node.TEXT_NODE:
                     return true;
                 case Node.ELEMENT_NODE:
-                    if (inContent && isImageElement(n)) {
-                        contentAndImages.add(n);
+                    Element e = Element.as(n);
+                    if (inContent && isImageElement(e)) {
+                        boolean isVisible = DomUtil.isVisible(e);
+                        if (DEBUG && !isVisible) {
+                            LogUtil.logToConsole("Discarding hidden image: " +
+                                e.getAttribute("src"));
+                        }
+                        if (isVisible) {
+                            contentAndImages.add(n);
+                        }
                     }
                     return true;
                 case Node.DOCUMENT_NODE:
@@ -64,16 +74,16 @@ public class RelevantImageFinder {
             }
         }
 
+        @Override
         public void exit(Node n) {}
     }
 
-    private static boolean isImageElement(Node n) {
-        return n.getNodeType() == Node.ELEMENT_NODE && Element.as(n).hasTagName("IMG");
+    private static boolean isImageElement(Element e) {
+        return e.hasTagName("IMG");
     }
 
     private static boolean isNonWhitespaceTextNode(Node n) {
         return n.getNodeType() == Node.TEXT_NODE &&
                 !StringUtil.isStringAllWhitespace(n.getNodeValue());
     }
-
 }

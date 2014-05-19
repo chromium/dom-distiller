@@ -4,12 +4,13 @@
 
 package com.dom_distiller.client;
 
-import java.util.List;
-import java.util.Arrays;
-
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
-
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.junit.client.GWTTestCase;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class RelevantImageFinderTest extends GWTTestCase {
     @Override
@@ -42,6 +43,21 @@ public class RelevantImageFinderTest extends GWTTestCase {
         assertEquals(2, contentAndImages.size());
         assertEquals(contentText, contentAndImages.get(0));
         assertEquals(image, contentAndImages.get(1));
+    }
+
+    public void testInvisibleImageAfterContentIsHidden() {
+        Node root = TestUtil.createDiv(0);
+        Node contentText = TestUtil.createText("content");
+        Node image = TestUtil.createImage();
+        Element.as(image).getStyle().setDisplay(Display.NONE);
+        root.appendChild(contentText);
+        root.appendChild(image);
+
+        List<Node> contentNodes = Arrays.<Node>asList(contentText);
+        List<Node> contentAndImages = RelevantImageFinder.findAndAddImages(contentNodes, root);
+
+        assertEquals(1, contentAndImages.size());
+        assertEquals(contentText, contentAndImages.get(0));
     }
 
     public void testImageAfterNonContent() {

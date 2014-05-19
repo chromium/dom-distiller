@@ -5,7 +5,6 @@
 package com.dom_distiller.client;
 
 import com.google.gwt.core.client.JsArray;
-
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
@@ -67,4 +66,10 @@ public class DomUtil {
     public static native Style getComputedStyle(Element el) /*-{
       return getComputedStyle(el, null);
     }-*/;
+
+    public static boolean isVisible(Element e) {
+        Style style = getComputedStyle(e);
+        return !(style.getDisplay().equals("none") ||
+                style.getVisibility().equals("hidden"));
+    }
 }
