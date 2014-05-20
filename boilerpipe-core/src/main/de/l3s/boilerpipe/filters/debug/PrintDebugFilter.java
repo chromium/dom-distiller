@@ -17,54 +17,42 @@
  */
 package de.l3s.boilerpipe.filters.debug;
 
-import java.io.PrintWriter;
+import com.dom_distiller.client.LogUtil;
 
 import de.l3s.boilerpipe.BoilerpipeFilter;
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextDocument;
 
+
 /**
  * Prints debug information about the current state of the TextDocument. (=
  * calls {@link TextDocument#debugString()}.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public final class PrintDebugFilter implements BoilerpipeFilter {
-	/**
-	 * Returns the default instance for {@link PrintDebugFilter},
-	 * which dumps debug information to <code>System.out</code>
-	 */
-	public static final PrintDebugFilter INSTANCE = new PrintDebugFilter(
-			new PrintWriter(System.out, true));
-	private final PrintWriter out;
+    // TODO(yfriedman): Read debug setting from Proto input to DomDistiller.
+    private static final boolean DEBUG = false;
+    /**
+     * Returns the default instance for {@link PrintDebugFilter},
+     * which dumps debug information to <code>System.out</code>
+     */
+    public static final PrintDebugFilter INSTANCE = new PrintDebugFilter();
 
-	/**
-	 * Returns the default instance for {@link PrintDebugFilter},
-	 * which dumps debug information to <code>System.out</code>
-	 */
-	public static PrintDebugFilter getInstance() {
-		return INSTANCE;
-	}
 
-	/**
-	 * Creates a new instance of {@link PrintDebugFilter}.
-	 * 
-	 * Only use this method if you are not going to dump 
-	 * the debug information to <code>System.out</code> --
-	 * for this case, use {@link #getInstance()} instead. 
-	 * 
-	 * @param out The target {@link PrintWriter}. Will not be closed
-	 */
-	public PrintDebugFilter(final PrintWriter out) {
-		this.out = out;
+    @Override
+    public boolean process(TextDocument doc)
+            throws BoilerpipeProcessingException {
+        if (!DEBUG) return false;
+        LogUtil.logToConsole(doc.debugString());
+        return false;
+    }
 
-	}
-
-	@Override
-	public boolean process(TextDocument doc)
-			throws BoilerpipeProcessingException {
-		out.println(doc.debugString());
-
-		return false;
-	}
+    public boolean process(TextDocument doc, String header)
+            throws BoilerpipeProcessingException {
+        if (!DEBUG) return false;
+        LogUtil.logToConsole("<<<<< " + header + ">>>>>");
+        process(doc);
+        return false;
+    }
 }

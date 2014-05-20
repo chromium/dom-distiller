@@ -23,6 +23,7 @@ package de.l3s.boilerpipe.extractors;
 
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextDocument;
+import de.l3s.boilerpipe.filters.debug.PrintDebugFilter;
 import de.l3s.boilerpipe.filters.english.IgnoreBlocksAfterContentFilter;
 import de.l3s.boilerpipe.filters.english.NumWordsRulesClassifier;
 import de.l3s.boilerpipe.filters.english.TerminatingBlocksFinder;
@@ -57,14 +58,23 @@ public final class ArticleExtractor {
                 | TerminatingBlocksFinder.INSTANCE.process(doc)
                 | new DocumentTitleMatchClassifier(doc.getTitle()).process(doc)
                 | NumWordsRulesClassifier.INSTANCE.process(doc)
+                | PrintDebugFilter.INSTANCE.process(doc, "Classification Complete")
                 | IgnoreBlocksAfterContentFilter.DEFAULT_INSTANCE.process(doc)
+                | PrintDebugFilter.INSTANCE.process(doc, "Ignore Blocks After Content")
                 | TrailingHeadlineToBoilerplateFilter.INSTANCE.process(doc)
+                | PrintDebugFilter.INSTANCE.process(doc, "Trailing Headline To Boilerplate")
                 | BlockProximityFusion.MAX_DISTANCE_1.process(doc)
+                | PrintDebugFilter.INSTANCE.process(doc, "BlockProximityFusion: Distance 1")
                 | BoilerplateBlockFilter.INSTANCE_KEEP_TITLE.process(doc)
+                | PrintDebugFilter.INSTANCE.process(doc, "BlockFilter")
                 | BlockProximityFusion.MAX_DISTANCE_1_CONTENT_ONLY_SAME_TAGLEVEL.process(doc)
+                | PrintDebugFilter.INSTANCE.process(doc, "BlockProximityFusion: Same level content-only")
                 | KeepLargestBlockFilter.INSTANCE_EXPAND_TO_SAME_TAGLEVEL_MIN_WORDS.process(doc)
+                | PrintDebugFilter.INSTANCE.process(doc, "Keep Largest Block")
                 | ExpandTitleToContentFilter.INSTANCE.process(doc)
+                | PrintDebugFilter.INSTANCE.process(doc, "Expand Title to Content")
                 | LargeBlockSameTagLevelToContentFilter.INSTANCE.process(doc)
+                | PrintDebugFilter.INSTANCE.process(doc, "Largest Block Same Tag Level -> Content")
                 | ListAtEndFilter.INSTANCE.process(doc)
         ;
     }
