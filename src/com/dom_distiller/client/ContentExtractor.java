@@ -15,6 +15,7 @@ import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.extractors.CommonExtractors;
+import de.l3s.boilerpipe.labels.DefaultLabels;
 import de.l3s.boilerpipe.sax.BoilerpipeHTMLContentHandler;
 
 import org.timepedia.exporter.client.Export;
@@ -98,7 +99,9 @@ public class ContentExtractor implements Exportable {
             TextDocument document, List<Node> textNodes) {
         List<Integer> contentTextIndexes = new ArrayList<Integer>();
         for (TextBlock tb : document.getTextBlocks()) {
-            contentTextIndexes.addAll(tb.getContainedTextElements());
+            if (!tb.hasLabel(DefaultLabels.TITLE)) {
+                contentTextIndexes.addAll(tb.getContainedTextElements());
+            }
         }
         Collections.sort(contentTextIndexes);
 

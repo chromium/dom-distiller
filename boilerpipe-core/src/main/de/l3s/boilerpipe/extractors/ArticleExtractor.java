@@ -76,9 +76,6 @@ public final class ArticleExtractor {
                 | LargeBlockSameTagLevelToContentFilter.INSTANCE.process(doc)
                 | PrintDebugFilter.INSTANCE.process(doc, "Largest Block Same Tag Level -> Content")
                 | ListAtEndFilter.INSTANCE.process(doc)
-                // Previously we kept the title so we could expand content from the title to the body.
-                // Now omit it.
-                | BoilerplateBlockFilter.INSTANCE.process(doc)
         ;
     }
 }
