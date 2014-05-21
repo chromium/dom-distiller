@@ -4,11 +4,6 @@
 
 package com.dom_distiller.client;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.logging.Logger;
-
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -20,15 +15,17 @@ import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.extractors.CommonExtractors;
-import de.l3s.boilerpipe.labels.DefaultLabels;
 import de.l3s.boilerpipe.sax.BoilerpipeHTMLContentHandler;
 
 import org.timepedia.exporter.client.Export;
 import org.timepedia.exporter.client.Exportable;
-
-import org.xml.sax.AttributesImpl;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.logging.Logger;
 
 @Export()
 public class ContentExtractor implements Exportable {
@@ -53,6 +50,7 @@ public class ContentExtractor implements Exportable {
         }
 
         TextDocument document = htmlParser.toTextDocument();
+        document.setTitle(Document.get().getTitle().trim());
         try {
             CommonExtractors.ARTICLE_EXTRACTOR.process(document);
         } catch (BoilerpipeProcessingException e) {
@@ -100,9 +98,7 @@ public class ContentExtractor implements Exportable {
             TextDocument document, List<Node> textNodes) {
         List<Integer> contentTextIndexes = new ArrayList<Integer>();
         for (TextBlock tb : document.getTextBlocks()) {
-            if (!tb.hasLabel(DefaultLabels.TITLE)) {
-                contentTextIndexes.addAll(tb.getContainedTextElements());
-            }
+            contentTextIndexes.addAll(tb.getContainedTextElements());
         }
         Collections.sort(contentTextIndexes);
 
