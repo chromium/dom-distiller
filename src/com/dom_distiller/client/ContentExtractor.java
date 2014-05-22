@@ -73,7 +73,6 @@ public class ContentExtractor implements Exportable {
         }
 
         Node clonedSubtree = NodeListExpander.expand(contentAndImages).cloneSubtree();
-
         if (clonedSubtree.getNodeType() != Node.ELEMENT_NODE) {
             return "";
         }
@@ -99,6 +98,9 @@ public class ContentExtractor implements Exportable {
             TextDocument document, List<Node> textNodes) {
         List<Integer> contentTextIndexes = new ArrayList<Integer>();
         for (TextBlock tb : document.getTextBlocks()) {
+            if (!tb.isContent()) {
+                continue;
+            }
             if (!tb.hasLabel(DefaultLabels.TITLE)) {
                 contentTextIndexes.addAll(tb.getContainedTextElements());
             }

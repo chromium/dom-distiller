@@ -17,18 +17,19 @@
  */
 package de.l3s.boilerpipe.filters.heuristics;
 
-import java.util.Iterator;
-import java.util.List;
-
 import de.l3s.boilerpipe.BoilerpipeFilter;
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
+import de.l3s.boilerpipe.labels.DefaultLabels;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Fuses adjacent blocks if their distance (in blocks) does not exceed a certain limit.
  * This probably makes sense only in cases where an upstream filter already has removed some blocks.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public final class BlockProximityFusion implements BoilerpipeFilter {
@@ -52,7 +53,7 @@ public final class BlockProximityFusion implements BoilerpipeFilter {
      * Creates a new {@link BlockProximityFusion} instance.
      *
      * @param maxBlocksDistance The maximum distance in blocks.
-     * @param contentOnly 
+     * @param contentOnly
      */
     public BlockProximityFusion(final int maxBlocksDistance,
             final boolean contentOnly, final boolean sameTagLevelOnly) {
@@ -61,6 +62,7 @@ public final class BlockProximityFusion implements BoilerpipeFilter {
 		this.sameTagLevelOnly = sameTagLevelOnly;
     }
 
+    @Override
     public boolean process(TextDocument doc)
             throws BoilerpipeProcessingException {
         List<TextBlock> textBlocks = doc.getTextBlocks();
@@ -109,6 +111,9 @@ public final class BlockProximityFusion implements BoilerpipeFilter {
                 }
                 if(ok && sameTagLevelOnly && prevBlock.getTagLevel() != block.getTagLevel()) {
                 	ok = false;
+                }
+                if (prevBlock.hasLabel(DefaultLabels.TITLE) != block.hasLabel(DefaultLabels.TITLE)) {
+                    ok = false;
                 }
                 if (ok) {
                     prevBlock.mergeNext(block);
