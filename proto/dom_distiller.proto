@@ -29,4 +29,11 @@ message DomDistillerResult {
 message DomDistillerOptions {
   // Whether to extract only the text (or to include the containing html).
   optional bool extract_text_only = 1;
+
+  // How much debug output to dump to window.console.
+  // (0): Logs nothing
+  // (1): Text Node data for each stage of processing
+  // (2): (1) and some node visibility information
+  // (3): (2) and extracted paging information
+  optional int32 debug_level = 2;
 }

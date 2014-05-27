@@ -16,8 +16,6 @@ import java.util.List;
  * them.
  */
 public class RelevantImageFinder {
-    // TODO(yfriedman): Read debug setting from Proto input to DomDistiller.
-    private static final boolean DEBUG = false;
     /**
      * @return An ordered list of both content and image nodes.
      */
@@ -58,7 +56,8 @@ public class RelevantImageFinder {
                     Element e = Element.as(n);
                     if (inContent && isImageElement(e)) {
                         boolean isVisible = DomUtil.isVisible(e);
-                        if (DEBUG && !isVisible) {
+                        if (DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_VISIBILITY_INFO) &&
+                                !isVisible) {
                             LogUtil.logToConsole("Discarding hidden image: " +
                                 e.getAttribute("src"));
                         }

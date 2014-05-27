@@ -8,17 +8,11 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.Style;
 
-import java.util.logging.Logger;
-
 /**
  * Filters out elements that are to be ignored from the DOM tree, and passes other nodes and
  * elements on to the actual DOM visitor for processing.
  */
 public class FilteringDomVisitor implements DomWalker.Visitor {
-    // To log debug information about the filtering of processed elements, set this flag to true.
-    private static final boolean DEBUG = false;
-
-    private static Logger logger = Logger.getLogger("FilteringDomParser");
     private final DomWalker.Visitor domVisitor;
 
     FilteringDomVisitor(DomWalker.Visitor v) {
@@ -50,7 +44,7 @@ public class FilteringDomVisitor implements DomWalker.Visitor {
     }
 
     private void logDbgInfo(Element e, boolean visible, Style style) {
-        if (!DEBUG) return;
+        if (!DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_VISIBILITY_INFO)) return;
         LogUtil.logToConsole((visible ? "KEEP " : "SKIP ") + e.getTagName() + ": id=" + e.getId() +
                 ", hiddenAttr=" + (e.hasAttribute("hidden") ? "yes" : "no") +
                 (style == null ? "" :

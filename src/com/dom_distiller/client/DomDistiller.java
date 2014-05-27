@@ -4,19 +4,28 @@
 
 package com.dom_distiller.client;
 
+import com.dom_distiller.proto.DomDistillerProtos;
 import com.google.gwt.dom.client.Document;
-
-import com.google.gwt.json.client.JSONObject;
-import java.util.logging.Logger;
 
 import org.timepedia.exporter.client.Export;
 import org.timepedia.exporter.client.Exportable;
-import org.timepedia.exporter.client.ExporterUtil;
-
-import com.dom_distiller.proto.DomDistillerProtos;
 
 @Export()
 public class DomDistiller implements Exportable {
+  /**
+   * Debug level requested by the client for logging to include while distilling.
+   */
+  private static int sDebugLevel = 0;
+
+  public static final int DEBUG_LEVEL_NONE = 0;
+  public static final int DEBUG_LEVEL_BOILER_PIPE_PHASES = 1;
+  public static final int DEBUG_LEVEL_VISIBILITY_INFO = 2;
+  public static final int DEBUG_LEVEL_PAGING_INFO = 3;
+
+  public static final boolean isLoggable(int level) {
+      return sDebugLevel >= level;
+  }
+
   public static DomDistillerProtos.DomDistillerResult apply() {
       return applyWithOptions(DomDistillerProtos.DomDistillerOptions.create());
   }
@@ -26,6 +35,9 @@ public class DomDistiller implements Exportable {
       DomDistillerProtos.DomDistillerResult result = DomDistillerProtos.DomDistillerResult.create();
       result.setTitle(DocumentTitleGetter.getDocumentTitle(
               Document.get().getTitle(), Document.get().getDocumentElement()));
+
+      sDebugLevel = options.hasDebugLevel() ? options.getDebugLevel() : 0;
+      LogUtil.logToConsole("DomDistiller debug level: " + sDebugLevel);
 
       DomDistillerProtos.DistilledContent content = DomDistillerProtos.DistilledContent.create();
       boolean text_only = options.hasExtractTextOnly() && options.getExtractTextOnly();

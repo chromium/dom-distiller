@@ -11,6 +11,16 @@
 
 package com.dom_distiller.client;
 
+import com.dom_distiller.proto.DomDistillerProtos;
+import com.google.gwt.dom.client.AnchorElement;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NodeList;
+import com.google.gwt.user.client.Window;
+
+import org.timepedia.exporter.client.Export;
+import org.timepedia.exporter.client.Exportable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,19 +29,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.AnchorElement;
-import com.google.gwt.dom.client.NodeList;
-
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.Window.Location;
-
-import org.timepedia.exporter.client.Export;
-import org.timepedia.exporter.client.Exportable;
-
-import com.dom_distiller.proto.DomDistillerProtos;
 
 /**
  * This class finds the next and previous page links for the distilled document.  The functionality
@@ -46,9 +43,6 @@ import com.dom_distiller.proto.DomDistillerProtos;
  */
 @Export()
 public class PagingLinksFinder implements Exportable {
-    // To log debug information about the processed links, set this flag to true.
-    private static final boolean DEBUG = false;
-
     // Match for next page: next, continue, >, >>, » but not >|, »| as those usually mean last.
     private static final String NEXT_LINK_REGEX = "(next|weiter|continue|>([^\\|]|$)|»([^\\|]|$))";
     private static final String PREV_LINK_REGEX = "(prev|early|old|new|<|«)";
@@ -85,7 +79,9 @@ public class PagingLinksFinder implements Exportable {
 
     private static String findPagingLink(Element root, PageLink pageLink) {
         // findPagingLink() is static, so clear mLinkDebugInfo before processing the links.
-        if (DEBUG) mLinkDebugInfo.clear();
+        if (DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_PAGING_INFO)) {
+            mLinkDebugInfo.clear();
+        }
 
         String baseUrl = findBaseUrl();
         // Remove trailing '/' from window location href, because it'll be used to compare with
@@ -295,7 +291,9 @@ public class PagingLinksFinder implements Exportable {
                     topPage.mScore + ", txt=[" + topPage.mLinkText + "], " + pagingHref);
         }
 
-        if (DEBUG) logDbgInfoToConsole(pageLink, pagingHref, allLinks);
+        if (DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_PAGING_INFO)) {
+            logDbgInfoToConsole(pageLink, pagingHref, allLinks);
+        }
 
         return pagingHref;
     }
@@ -342,7 +340,7 @@ public class PagingLinksFinder implements Exportable {
 
             // Ignore an empty segment.
             if (segment.isEmpty()) continue;
-            
+
             // If this is purely a number in the first or second segment, it's probably a page
             // number, ignore it.
             if (i < 2 && StringUtil.match(segment, "^\\d{1,2}$")) continue;
@@ -376,7 +374,7 @@ public class PagingLinksFinder implements Exportable {
     }
 
     private static void appendDbgStrForLink(Element link, String message) {
-        if (!DEBUG) return;
+        if (!DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_PAGING_INFO)) return;
 
         // |message| is concatenated with the existing debug string for |link| (delimited by ";") in
         // mLinkDebugInfo.
@@ -402,7 +400,7 @@ public class PagingLinksFinder implements Exportable {
         LogUtil.logToConsole("numLinks=" + allLinks.getLength() + ", found " +
                 (pageLink == PageLink.NEXT ? "next: " : "prev: ") +
                 (pagingHref != null ? pagingHref : "null"));
-      
+
         for (int i = 0; i < allLinks.getLength(); i++) {
             AnchorElement link = AnchorElement.as(allLinks.getItem(i));
 
@@ -424,7 +422,7 @@ public class PagingLinksFinder implements Exportable {
         private int mLinkIndex = -1;
         private int mScore = 0;
         private String mLinkText;
-        private String mLinkHref;
+        private final String mLinkHref;
 
         PagingLinkObj(int linkIndex, int score, String linkText, String linkHref) {
             mLinkIndex = linkIndex;
