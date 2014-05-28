@@ -4,20 +4,14 @@
 
 package com.dom_distiller.client;
 
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
 import com.google.gwt.junit.client.GWTTestCase;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
-import com.google.gwt.dom.client.NodeList;
-import com.google.gwt.dom.client.Text;
-import com.google.gwt.user.client.DOM;
 
-import org.xml.sax.Attributes;
+import com.dom_distiller.client.sax.Attributes;
 
 public class DomToSaxVisitorTest extends GWTTestCase {
     @Override

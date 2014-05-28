@@ -20,8 +20,7 @@ import de.l3s.boilerpipe.sax.BoilerpipeHTMLContentHandler;
 
 import org.timepedia.exporter.client.Export;
 import org.timepedia.exporter.client.Exportable;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
+import com.dom_distiller.client.sax.ContentHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,17 +37,11 @@ public class ContentExtractor implements Exportable {
 
     public static String extractContent(boolean text_only) {
         BoilerpipeHTMLContentHandler htmlParser = new BoilerpipeHTMLContentHandler();
-        List<Node> textNodes = null;
 
-        try {
-            htmlParser.startDocument();
-            Element documentElement = Document.get().getDocumentElement();
-            textNodes = parse(documentElement, htmlParser);
-            htmlParser.endDocument();
-        } catch (SAXException e) {
-            logger.warning("Parsing failed.");
-            return "";
-        }
+        htmlParser.startDocument();
+        Element documentElement = Document.get().getDocumentElement();
+        List<Node> textNodes = parse(documentElement, htmlParser);
+        htmlParser.endDocument();
 
         TextDocument document = htmlParser.toTextDocument();
         document.setTitle(Document.get().getTitle().trim());

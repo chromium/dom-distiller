@@ -7,13 +7,11 @@ package com.dom_distiller.client;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
-import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Text;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.AttributesImpl;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
+import com.dom_distiller.client.sax.Attributes;
+import com.dom_distiller.client.sax.AttributesImpl;
+import com.dom_distiller.client.sax.ContentHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,39 +38,31 @@ public class DomToSaxVisitor implements DomWalker.Visitor {
 
     @Override
     public boolean visit(Node n) {
-        try {
-            switch (n.getNodeType()) {
-                case Node.TEXT_NODE:
-                    textNodes.add(n);
-                    String text = Text.as(n).getData();
-                    handler.characters(text.toCharArray(), 0, text.length());
-                    return false;
-                case Node.ELEMENT_NODE:
-                    Element e = Element.as(n);
-                    Attributes attrs = getSaxAttributes(e);
-                    handler.startElement(sHtmlNamespace, e.getTagName(), e.getTagName(), attrs);
-                    return true;
-                case Node.DOCUMENT_NODE:  // Don't recurse into sub-documents.
-                default:  // This case is for comment nodes.
-                    return false;
-            }
-        } catch (SAXException e) {
-            return false;
+        switch (n.getNodeType()) {
+            case Node.TEXT_NODE:
+                textNodes.add(n);
+                String text = Text.as(n).getData();
+                handler.characters(text.toCharArray(), 0, text.length());
+                return false;
+            case Node.ELEMENT_NODE:
+                Element e = Element.as(n);
+                Attributes attrs = getSaxAttributes(e);
+                handler.startElement(sHtmlNamespace, e.getTagName(), e.getTagName(), attrs);
+                return true;
+            case Node.DOCUMENT_NODE:  // Don't recurse into sub-documents.
+            default:  // This case is for comment nodes.
+                return false;
         }
     }
 
     @Override
     public void exit(Node n) {
         Element e = Element.as(n);
-        try {
-            handler.endElement(sHtmlNamespace, e.getTagName(), e.getTagName());
-        } catch (SAXException ex) {
-            // Intentionally ignored.
-        }
+        handler.endElement(sHtmlNamespace, e.getTagName(), e.getTagName());
     }
 
     /**
-     * @Return The element's attribute list converted to org.xml.sax.Attributes.
+     * @Return The element's attribute list converted to {@link Attributes}.
      */
     public static Attributes getSaxAttributes(Element e) {
         AttributesImpl attrs = new AttributesImpl();

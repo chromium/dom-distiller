@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
+import com.dom_distiller.client.sax.Attributes;
 
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.labels.DefaultLabels;
@@ -35,8 +34,7 @@ public final class MarkupTagAction implements TagAction {
 
 	@Override
 	public boolean start(BoilerpipeHTMLContentHandler instance,
-			String localName, String qName, Attributes atts)
-			throws SAXException {
+			String localName, String qName, Attributes atts) {
 		List<String> labels = new ArrayList<String>(5);
 		labels.add(DefaultLabels.MARKUP_PREFIX  + localName);
 
@@ -83,7 +81,7 @@ public final class MarkupTagAction implements TagAction {
 
 	@Override
 	public boolean end(BoilerpipeHTMLContentHandler instance, String localName,
-			String qName) throws SAXException {
+			String qName) {
 
 		labelStack.removeLast();
 		return isBlockLevel;

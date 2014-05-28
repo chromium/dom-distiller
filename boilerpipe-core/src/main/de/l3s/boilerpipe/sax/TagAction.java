@@ -17,8 +17,7 @@
  */
 package de.l3s.boilerpipe.sax;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
+import com.dom_distiller.client.sax.Attributes;
 
 /**
  * Defines an action that is to be performed whenever a particular tag occurs
@@ -29,11 +28,10 @@ import org.xml.sax.SAXException;
 public interface TagAction {
 
 	boolean start(final BoilerpipeHTMLContentHandler instance,
-			final String localName, final String qName, final Attributes atts)
-			throws SAXException;
+			final String localName, final String qName, final Attributes atts);
 
 	boolean end(final BoilerpipeHTMLContentHandler instance,
-			final String localName, final String qName) throws SAXException;
+			final String localName, final String qName);
 	
 	boolean changesTagLevel();
 }

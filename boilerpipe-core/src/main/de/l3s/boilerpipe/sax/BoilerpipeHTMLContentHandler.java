@@ -28,10 +28,8 @@ import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.labels.LabelAction;
 import de.l3s.boilerpipe.util.UnicodeTokenizer;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
+import com.dom_distiller.client.sax.Attributes;
+import com.dom_distiller.client.sax.ContentHandler;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -41,8 +39,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * A simple SAX {@link ContentHandler}, used by {@link BoilerpipeSAXInput}. Can
- * be used by different parser implementations, e.g. NekoHTML and TagSoup.
+ * A simple SAX {@link ContentHandler}, used by {@link com.dom_distiller.client.ContentExtractor}.
+ * Can be used by different parser implementations, e.g. NekoHTML and TagSoup.
  *
  * @author Christian Kohlschütter
  */
@@ -130,17 +128,12 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     }
 
     @Override
-    public void endDocument() throws SAXException {
+    public void endDocument() {
         flushBlock();
     }
 
     @Override
-    public void endPrefixMapping(String prefix) throws SAXException {
-    }
-
-    @Override
-    public void ignorableWhitespace(char[] ch, int start, int length)
-            throws SAXException {
+    public void ignorableWhitespace(char[] ch, int start, int length) {
         if (!sbLastWasWhitespace) {
             textBuffer.append(' ');
             tokenBuffer.append(' ');
@@ -149,30 +142,11 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     }
 
     @Override
-    public void processingInstruction(String target, String data)
-            throws SAXException {
+    public void startDocument() {
     }
 
     @Override
-    public void setDocumentLocator(Locator locator) {
-    }
-
-    @Override
-    public void skippedEntity(String name) throws SAXException {
-    }
-
-    @Override
-    public void startDocument() throws SAXException {
-    }
-
-    @Override
-    public void startPrefixMapping(String prefix, String uri)
-            throws SAXException {
-    }
-
-    @Override
-    public void startElement(String uri, String localName, String qName,
-            Attributes atts) throws SAXException {
+    public void startElement(String uri, String localName, String qName, Attributes atts) {
         labelStacks.add(null);
 
         TagAction ta = tagActions.get(localName);
@@ -191,8 +165,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     }
 
     @Override
-    public void endElement(String uri, String localName, String qName)
-            throws SAXException {
+    public void endElement(String uri, String localName, String qName) {
         TagAction ta = tagActions.get(localName);
         if (ta != null) {
             flush = ta.end(this, localName, qName) | flush;
@@ -215,8 +188,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     }
 
     @Override
-    public void characters(char[] ch, int start, int length)
-            throws SAXException {
+    public void characters(char[] ch, int start, int length) {
         textElementIdx++;
 
 

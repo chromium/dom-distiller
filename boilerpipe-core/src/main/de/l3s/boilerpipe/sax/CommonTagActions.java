@@ -20,8 +20,7 @@ package de.l3s.boilerpipe.sax;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
+import com.dom_distiller.client.sax.Attributes;
 
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.labels.LabelAction;
@@ -47,14 +46,13 @@ public abstract class CommonTagActions {
         }
 
         public boolean start(BoilerpipeHTMLContentHandler instance,
-                String localName, String qName, Attributes atts)
-                throws SAXException {
+                String localName, String qName, Attributes atts) {
             return t1.start(instance, localName, qName, atts)
                     | t2.start(instance, localName, qName, atts);
         }
 
         public boolean end(BoilerpipeHTMLContentHandler instance,
-                String localName, String qName) throws SAXException {
+                String localName, String qName) {
             return t1.end(instance, localName, qName)
                     | t2.end(instance, localName, qName);
         }
@@ -92,13 +90,13 @@ public abstract class CommonTagActions {
      * Anchor tags may not be nested.
      * 
      * There is a bug in certain versions of NekoHTML which still allows nested tags.
-     * If boilerpipe encounters such nestings, a SAXException is thrown.
+     * If boilerpipe encounters such nestings, an error is printed to stderr.
      */
     public static final TagAction TA_ANCHOR_TEXT = new TagAction() {
 
         public boolean start(BoilerpipeHTMLContentHandler instance,
                 final String localName, final String qName,
-                final Attributes atts) throws SAXException {
+                final Attributes atts) {
             if (instance.inAnchor++ > 0) {
                 // as nested A elements are not allowed per specification, we
                 // are probably reaching this branch due to a bug in the XML

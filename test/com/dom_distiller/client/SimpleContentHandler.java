@@ -4,10 +4,8 @@
 
 package com.dom_distiller.client;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
+import com.dom_distiller.client.sax.Attributes;
+import com.dom_distiller.client.sax.ContentHandler;
 
 /**
  * This is a simple SAX content handler that converts sax events to an xml document. It only handles
@@ -24,32 +22,16 @@ class SimpleContentHandler implements ContentHandler {
     }
 
     @Override
-    public void endDocument() throws SAXException {}
+    public void endDocument() {}
 
     @Override
-    public void endPrefixMapping(String prefix) throws SAXException {}
+    public void ignorableWhitespace(char[] ch, int start, int length) {}
 
     @Override
-    public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {}
+    public void startDocument() {}
 
     @Override
-    public void processingInstruction(String target, String data) throws SAXException {}
-
-    @Override
-    public void setDocumentLocator(Locator locator) {}
-
-    @Override
-    public void skippedEntity(String name) throws SAXException {}
-
-    @Override
-    public void startDocument() throws SAXException {}
-
-    @Override
-    public void startPrefixMapping(String prefix, String uri) throws SAXException {}
-
-    @Override
-    public void startElement(String uri, String localName, String qName, Attributes atts)
-            throws SAXException {
+    public void startElement(String uri, String localName, String qName, Attributes atts) {
         documentStringBuilder.append("<" + localName);
         for (int i = 0; i < atts.getLength(); i++) {
             documentStringBuilder.append(" ");
@@ -63,12 +45,12 @@ class SimpleContentHandler implements ContentHandler {
     }
 
     @Override
-    public void endElement(String uri, String localName, String qName) throws SAXException {
+    public void endElement(String uri, String localName, String qName) {
         documentStringBuilder.append("</" + localName + ">");
     }
 
     @Override
-    public void characters(char[] ch, int start, int length) throws SAXException {
+    public void characters(char[] ch, int start, int length) {
         documentStringBuilder.append(ch, start, length);
     }
 
