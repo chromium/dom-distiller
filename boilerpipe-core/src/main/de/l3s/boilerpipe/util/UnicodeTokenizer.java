@@ -21,9 +21,9 @@
  */
 package de.l3s.boilerpipe.util;
 
-import java.util.regex.Pattern;
-
 import com.dom_distiller.client.StringUtil;
+
+import java.util.regex.Pattern;
 
 /**
  * Tokenizes text according to Unicode word boundaries and strips off non-word
@@ -56,6 +56,7 @@ public class UnicodeTokenizer {
      */
     public static String[] tokenize(final CharSequence text) {
         String res = replaceWordBoundariesWithMarkers(text);
+        res = replaceNonWordBoundaries(res);
         res = replaceMarkersWithSpace(res);
         res = StringUtil.javaTrim(res);
         return res.split("[ ]+");
