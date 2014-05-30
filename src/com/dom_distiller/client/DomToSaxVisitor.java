@@ -46,8 +46,8 @@ public class DomToSaxVisitor implements DomWalker.Visitor {
                 return false;
             case Node.ELEMENT_NODE:
                 Element e = Element.as(n);
-                Attributes attrs = getSaxAttributes(e);
-                handler.startElement(sHtmlNamespace, e.getTagName(), e.getTagName(), attrs);
+                Attributes attrs = getAttributes(e);
+                handler.startElement(e, attrs);
                 return true;
             case Node.DOCUMENT_NODE:  // Don't recurse into sub-documents.
             default:  // This case is for comment nodes.
@@ -58,20 +58,19 @@ public class DomToSaxVisitor implements DomWalker.Visitor {
     @Override
     public void exit(Node n) {
         Element e = Element.as(n);
-        handler.endElement(sHtmlNamespace, e.getTagName(), e.getTagName());
+        handler.endElement(e);
     }
 
     /**
      * @Return The element's attribute list converted to {@link Attributes}.
      */
-    public static Attributes getSaxAttributes(Element e) {
+    public static Attributes getAttributes(Element e) {
         AttributesImpl attrs = new AttributesImpl();
 
         JsArray<Node> jsAttrs = DomUtil.getAttributes(e);
         for (int i = 0; i < jsAttrs.length(); ++i) {
             final Node jsAttr = jsAttrs.get(i);
-            attrs.addAttribute("", jsAttr.getNodeName(), jsAttr.getNodeName(), "CDATA",
-                               jsAttr.getNodeValue());
+            attrs.addAttribute(jsAttr.getNodeName(), jsAttr.getNodeValue());
         }
 
         return attrs;

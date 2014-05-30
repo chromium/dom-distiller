@@ -31,7 +31,7 @@ public class DomToSaxVisitorTest extends GWTTestCase {
         Element e = Document.get().createDivElement();
         e.setInnerHTML("<div style=\"width:50px; height:100px\" id=\"f\" class=\"sdf\"></div>");
         e = Element.as(e.getChildNodes().getItem(0));
-        Attributes attrs = DomToSaxVisitor.getSaxAttributes(e);
+        Attributes attrs = DomToSaxVisitor.getAttributes(e);
         assertEquals(3, attrs.getLength());
         assertEquals("f", attrs.getValue("id"));
         assertEquals("sdf", attrs.getValue("class"));

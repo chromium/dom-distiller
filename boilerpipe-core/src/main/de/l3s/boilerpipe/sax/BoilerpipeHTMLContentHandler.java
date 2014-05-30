@@ -21,7 +21,10 @@
  */
 package de.l3s.boilerpipe.sax;
 
+import com.dom_distiller.client.DomUtil;
 import com.dom_distiller.client.StringUtil;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style;
 
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
@@ -32,6 +35,7 @@ import com.dom_distiller.client.sax.Attributes;
 import com.dom_distiller.client.sax.ContentHandler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -82,6 +86,13 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     LinkedList<Integer> fontSizeStack = new LinkedList<Integer>();
 
     /**
+     * Contains the computed style of each element.
+     */
+    private final Map<Element, Style> computedStyleCache = new HashMap<Element, Style>();
+
+    private final Map<String, TagAction> displayStyleToTagAction = new HashMap<String, TagAction>();
+
+    /**
      * Recycles this instance.
      */
     public void recycle() {
@@ -125,6 +136,32 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
      */
     public BoilerpipeHTMLContentHandler(final TagActionMap tagActions) {
         this.tagActions = tagActions;
+        setupDisplayToTagActionMapping();
+    }
+
+    // TODO(nyquist) Merge with FilteringDomVisitor for display: none when this class goes away.
+    private void setupDisplayToTagActionMapping() {
+        // See http://www.w3.org/TR/CSS2/visuren.html#display-prop
+        displayStyleToTagAction.put("block", CommonTagActions.TA_BLOCK_LEVEL);
+        displayStyleToTagAction.put("inline-block", CommonTagActions.TA_INLINE_BLOCK_LEVEL);
+        displayStyleToTagAction.put("inline", CommonTagActions.TA_INLINE_NO_WHITESPACE);
+        displayStyleToTagAction.put("list-item", CommonTagActions.TA_BLOCK_LEVEL);
+
+        // See http://www.w3.org/TR/CSS2/tables.html#table-display
+        displayStyleToTagAction.put("table", CommonTagActions.TA_BLOCK_LEVEL);
+        displayStyleToTagAction.put("inline-table", CommonTagActions.TA_INLINE_BLOCK_LEVEL);
+        displayStyleToTagAction.put("table-row", CommonTagActions.TA_BLOCK_LEVEL);
+        displayStyleToTagAction.put("table-row-group", CommonTagActions.TA_BLOCK_LEVEL);
+        displayStyleToTagAction.put("table-header-group", CommonTagActions.TA_BLOCK_LEVEL);
+        displayStyleToTagAction.put("table-footer-group", CommonTagActions.TA_BLOCK_LEVEL);
+        displayStyleToTagAction.put("table-column", CommonTagActions.TA_BLOCK_LEVEL);
+        displayStyleToTagAction.put("table-column-group", CommonTagActions.TA_BLOCK_LEVEL);
+        displayStyleToTagAction.put("table-cell", CommonTagActions.TA_BLOCK_LEVEL);
+        displayStyleToTagAction.put("table-caption", CommonTagActions.TA_BLOCK_LEVEL);
+
+        // See http://www.w3.org/TR/css-flexbox-1/#flex-containers
+        displayStyleToTagAction.put("flex", CommonTagActions.TA_BLOCK_LEVEL);
+        displayStyleToTagAction.put("inline-flex", CommonTagActions.TA_INLINE_BLOCK_LEVEL);
     }
 
     @Override
@@ -146,29 +183,53 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes atts) {
+    public void startElement(Element element, Attributes atts) {
         labelStacks.add(null);
 
-        TagAction ta = tagActions.get(localName);
+        TagAction ta = getComputedTagAction(element);
+        if (tagActions.containsKey(element.getTagName())) {
+            ta = tagActions.get(element.getTagName());
+        }
+
         if (ta != null) {
             if(ta.changesTagLevel()) {
                 tagLevel++;
             }
-            flush = ta.start(this, localName, qName, atts) | flush;
+            flush = ta.start(this, atts) | flush;
         } else {
             tagLevel++;
             flush = true;
         }
 
         lastEvent = Event.START_TAG;
-        lastStartTag = localName;
+        lastStartTag = element.getTagName();
+    }
+
+    private TagAction getComputedTagAction(Element element) {
+        if (computedStyleCache.containsKey(element)) {
+            return getComputedTagAction(computedStyleCache.get(element));
+        }
+        Style computedStyle = DomUtil.getComputedStyle(element);
+        computedStyleCache.put(element, computedStyle);
+        return getComputedTagAction(computedStyle);
+    }
+
+    private TagAction getComputedTagAction(Style style) {
+        if (displayStyleToTagAction.containsKey(style.getDisplay())) {
+            return displayStyleToTagAction.get(style.getDisplay());
+        }
+        return null;
     }
 
     @Override
-    public void endElement(String uri, String localName, String qName) {
-        TagAction ta = tagActions.get(localName);
+    public void endElement(Element element) {
+        TagAction ta = getComputedTagAction(element);
+        if (tagActions.containsKey(element.getTagName())) {
+            ta = tagActions.get(element.getTagName());
+        }
+
         if (ta != null) {
-            flush = ta.end(this, localName, qName) | flush;
+            flush = ta.end(this) | flush;
         } else {
             flush = true;
         }
@@ -182,7 +243,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
         }
 
         lastEvent = Event.END_TAG;
-        lastEndTag = localName;
+        lastEndTag = element.getTagName();
 
         labelStacks.removeLast();
     }

@@ -10,65 +10,52 @@ import java.util.List;
 import java.util.Map;
 
 public class AttributesImpl implements Attributes {
-  private List<AttributeData> attributes;
-  private Map<String, Integer> attributesMap;
+    private List<AttributeData> attributes;
+    private Map<String, Integer> attributesMap;
 
-  public AttributesImpl() {
-      attributes = new ArrayList<AttributeData>();
-      attributesMap = new HashMap<String, Integer>();
-  }
+    public AttributesImpl() {
+        attributes = new ArrayList<AttributeData>();
+        attributesMap = new HashMap<String, Integer>();
+    }
 
-  public int getIndex(String key) {
-      return attributesMap.get(key);
-  }
+    @Override
+    public String getValue(String key) {
+        return getValue(getIndex(key));
+    }
 
-  public String getValue(String key) {
-      return getValue(getIndex(key));
-  }
+    @Override
+    public int getIndex(String key) {
+        return attributesMap.get(key);
+    }
 
-  public String getURI(int index) {
-      return attributes.get(index).uri;
-  }
+    @Override
+    public String getName(int index) {
+        return attributes.get(index).name;
+    }
 
-  public String getLocalName(int index) {
-      return attributes.get(index).localName;
-  }
+    @Override
+    public String getValue(int index) {
+        return attributes.get(index).value;
+    }
 
-  public String getQName(int index) {
-      return attributes.get(index).qName;
-  }
+    @Override
+    public int getLength() {
+        return attributes.size();
+    }
 
-  public String getType(int index) {
-      return attributes.get(index).type;
-  }
+    public void addAttribute(String name, String value) {
+        attributesMap.put(name, attributes.size());
+        AttributeData data = new AttributeData(name, value);
+        attributes.add(data);
+    }
 
-  public String getValue(int index) {
-      return attributes.get(index).value;
-  }
+    private static class AttributeData {
+        private final String name;
+        private final String value;
 
-  public int getLength() {
-      return attributes.size();
-  }
-
-  public void addAttribute(String uri, String localName, String qName, String type, String value) {
-      attributesMap.put(qName, attributes.size());
-      AttributeData data = new AttributeData(uri, localName, qName, type, value);
-      attributes.add(data);
-  }
-
-  private static class AttributeData {
-      String uri;
-      String localName;
-      String qName;
-      String type;
-      String value;
-
-      AttributeData(String uri, String localName, String qName, String type, String value) {
-          this.uri = uri;
-          this.localName = localName;
-          this.qName = qName;
-          this.type = type;
-          this.value = value;
-      }
-  }
+        private AttributeData(String name, String value) {
+            this.name = name;
+            this.value = value;
+        }
+    }
 }

@@ -43,38 +43,11 @@ public class DefaultTagActionMap extends TagActionMap {
         setTagAction("EMBED", CommonTagActions.TA_IGNORABLE_ELEMENT);
         setTagAction("APPLET", CommonTagActions.TA_IGNORABLE_ELEMENT);
         setTagAction("LINK", CommonTagActions.TA_IGNORABLE_ELEMENT);
+        setTagAction("NOSCRIPT", CommonTagActions.TA_IGNORABLE_ELEMENT);
 
         setTagAction("A", CommonTagActions.TA_ANCHOR_TEXT);
         setTagAction("BODY", CommonTagActions.TA_BODY);
 
-        setTagAction("STRIKE", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-        setTagAction("U", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-        setTagAction("B", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-        setTagAction("I", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-        setTagAction("EM", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-        setTagAction("STRONG", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-        setTagAction("SPAN", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-
-
-        // New in 1.1 (especially to improve extraction quality from Wikipedia etc.)
-        setTagAction("SUP", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-
-        // New in 1.2
-        setTagAction("CODE", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-        setTagAction("TT", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-        setTagAction("SUB", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-        setTagAction("VAR", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-
-
-        setTagAction("ABBR", CommonTagActions.TA_INLINE_WHITESPACE);
-        setTagAction("ACRONYM", CommonTagActions.TA_INLINE_WHITESPACE);
-
-        setTagAction("FONT", CommonTagActions.TA_INLINE_NO_WHITESPACE); // could also use TA_FONT
-
-        // added in 1.1.1
-        setTagAction("NOSCRIPT", CommonTagActions.TA_IGNORABLE_ELEMENT);
-
-        // New in 1.3
 		setTagAction("LI", new CommonTagActions.BlockTagLabelAction(
 				new LabelAction(DefaultLabels.LI)));
 		setTagAction("H1", new CommonTagActions.BlockTagLabelAction(
@@ -83,12 +56,5 @@ public class DefaultTagActionMap extends TagActionMap {
 				new LabelAction(DefaultLabels.H2, DefaultLabels.HEADING)));
 		setTagAction("H3", new CommonTagActions.BlockTagLabelAction(
 				new LabelAction(DefaultLabels.H3, DefaultLabels.HEADING)));
-
-        // New in DomDistiller
-        setTagAction("CITE", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-        setTagAction("MARK", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-        setTagAction("S", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-        setTagAction("Q", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-        setTagAction("TIME", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-	}
+    }
 }

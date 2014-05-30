@@ -22,16 +22,14 @@ import com.dom_distiller.client.sax.Attributes;
 /**
  * Defines an action that is to be performed whenever a particular tag occurs
  * during HTML parsing.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public interface TagAction {
 
-	boolean start(final BoilerpipeHTMLContentHandler instance,
-			final String localName, final String qName, final Attributes atts);
+    boolean start(final BoilerpipeHTMLContentHandler instance, final Attributes atts);
 
-	boolean end(final BoilerpipeHTMLContentHandler instance,
-			final String localName, final String qName);
-	
-	boolean changesTagLevel();
+    boolean end(final BoilerpipeHTMLContentHandler instance);
+
+    boolean changesTagLevel();
 }

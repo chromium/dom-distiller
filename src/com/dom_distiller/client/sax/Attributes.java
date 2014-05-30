@@ -5,12 +5,9 @@
 package com.dom_distiller.client.sax;
 
 public interface Attributes {
-
-  public String getValue(String key);
-  public String getURI(int index);
-  public String getLocalName(int index);
-  public String getQName(int index);
-  public String getType(int index);
-  public String getValue(int index);
-  public int getLength();
+    String getValue(String key);
+    int getIndex(String key);
+    String getName(int index);
+    String getValue(int index);
+    int getLength();
 }

@@ -32,8 +32,8 @@ import de.l3s.boilerpipe.labels.LabelAction;
  */
 public abstract class CommonTagActions {
 
-	private CommonTagActions() {
-	}
+    private CommonTagActions() {
+    }
 
     public static final class Chained implements TagAction {
 
@@ -46,19 +46,16 @@ public abstract class CommonTagActions {
         }
 
         public boolean start(BoilerpipeHTMLContentHandler instance,
-                String localName, String qName, Attributes atts) {
-            return t1.start(instance, localName, qName, atts)
-                    | t2.start(instance, localName, qName, atts);
+                             Attributes atts) {
+            return t1.start(instance, atts) | t2.start(instance, atts);
         }
 
-        public boolean end(BoilerpipeHTMLContentHandler instance,
-                String localName, String qName) {
-            return t1.end(instance, localName, qName)
-                    | t2.end(instance, localName, qName);
+        public boolean end(BoilerpipeHTMLContentHandler instance) {
+            return t1.end(instance) | t2.end(instance);
         }
 
         public boolean changesTagLevel() {
-        	return t1.changesTagLevel() || t2.changesTagLevel();
+            return t1.changesTagLevel() || t2.changesTagLevel();
         }
     }
 
@@ -68,20 +65,18 @@ public abstract class CommonTagActions {
     public static final TagAction TA_IGNORABLE_ELEMENT = new TagAction() {
 
         public boolean start(final BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName,
-                final Attributes atts) {
+                             final Attributes atts) {
             instance.inIgnorableElement++;
             return true;
         }
 
-        public boolean end(final BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName) {
+        public boolean end(final BoilerpipeHTMLContentHandler instance) {
             instance.inIgnorableElement--;
             return true;
         }
         
         public boolean changesTagLevel() {
-        	return true;
+            return true;
         }
     };
     
@@ -95,15 +90,14 @@ public abstract class CommonTagActions {
     public static final TagAction TA_ANCHOR_TEXT = new TagAction() {
 
         public boolean start(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName,
-                final Attributes atts) {
+                             final Attributes atts) {
             if (instance.inAnchor++ > 0) {
                 // as nested A elements are not allowed per specification, we
                 // are probably reaching this branch due to a bug in the XML
                 // parser
-            	System.err.println("Warning: SAX input contains nested A elements -- You have probably hit a bug in your HTML parser (e.g., NekoHTML bug #2909310). Please clean the HTML externally and feed it to boilerpipe again. Trying to recover somehow...");
-            	
-            	end(instance, localName, qName);
+                System.err.println("Warning: SAX input contains nested A elements -- You have probably hit a bug in your HTML parser (e.g., NekoHTML bug #2909310). Please clean the HTML externally and feed it to boilerpipe again. Trying to recover somehow...");
+
+                end(instance);
             }
             if (instance.inIgnorableElement == 0) {
                 instance.addWhitespaceIfNecessary();
@@ -115,8 +109,7 @@ public abstract class CommonTagActions {
             return false;
         }
 
-        public boolean end(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName) {
+        public boolean end(BoilerpipeHTMLContentHandler instance) {
             if (--instance.inAnchor == 0) {
                 if (instance.inIgnorableElement == 0) {
                     instance.addWhitespaceIfNecessary();
@@ -130,7 +123,7 @@ public abstract class CommonTagActions {
         }
 
         public boolean changesTagLevel() {
-        	return true;
+            return true;
         }
     };
     
@@ -139,98 +132,82 @@ public abstract class CommonTagActions {
      */
     public static final TagAction TA_BODY = new TagAction() {
         public boolean start(final BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName,
-                final Attributes atts) {
+                             final Attributes atts) {
             instance.flushBlock();
             instance.inBody++;
             return false;
         }
 
-        public boolean end(final BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName) {
+        public boolean end(final BoilerpipeHTMLContentHandler instance) {
             instance.flushBlock();
             instance.inBody--;
             return false;
         }
         
         public boolean changesTagLevel() {
-        	return true;
+            return true;
         }
     };
 
-    /**
-     * Marks this tag a simple "inline" element, which generates whitespace, but no new block.
-     */
-    public static final TagAction TA_INLINE_WHITESPACE = new TagAction() {
-
-        public boolean start(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName,
-                final Attributes atts) {
-            instance.addWhitespaceIfNecessary();
-            return false;
-        }
-
-        public boolean end(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName) {
-            instance.addWhitespaceIfNecessary();
-            return false;
-        }
-        
-        public boolean changesTagLevel() {
-        	return false;
-        }
-    };
-    
-    /**
-     * @deprecated Use {@link #TA_INLINE_WHITESPACE} instead
-     */
-    @Deprecated
-    public static final TagAction TA_INLINE = TA_INLINE_WHITESPACE;
-    
     /**
      * Marks this tag a simple "inline" element, which neither generates whitespace, nor a new block.
      */
     public static final TagAction TA_INLINE_NO_WHITESPACE = new TagAction() {
 
         public boolean start(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName,
-                final Attributes atts) {
+                             final Attributes atts) {
             return false;
         }
 
-        public boolean end(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName) {
+        public boolean end(BoilerpipeHTMLContentHandler instance) {
             return false;
         }
 
         public boolean changesTagLevel() {
-        	return false;
+            return false;
         }
     };
     private static final Pattern PAT_FONT_SIZE = Pattern
             .compile("([\\+\\-]?)([0-9])");
-    
+
     /**
      * Explicitly marks this tag a simple "block-level" element, which always generates whitespace
      */
     public static final TagAction TA_BLOCK_LEVEL = new TagAction() {
 
         public boolean start(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName,
-                final Attributes atts) {
+                             final Attributes atts) {
             return true;
         }
 
-        public boolean end(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName) {
+        public boolean end(BoilerpipeHTMLContentHandler instance) {
             return true;
         }
-        
+
         public boolean changesTagLevel() {
-        	return true;
+            return true;
         }
-    };    
-    
+    };
+
+    /**
+     * Explicitly marks this tag an inline-block element, which does not generate whitespace.
+     */
+    public static final TagAction TA_INLINE_BLOCK_LEVEL = new TagAction() {
+
+        public boolean start(BoilerpipeHTMLContentHandler instance,
+                             final Attributes atts) {
+            return false;
+        }
+
+        public boolean end(BoilerpipeHTMLContentHandler instance) {
+            return false;
+        }
+
+        public boolean changesTagLevel() {
+            return true;
+        }
+    };
+
     /**
      * Special TagAction for the <code>&lt;FONT&gt;</code> tag, which keeps track of the
      * absolute and relative font size.
@@ -238,8 +215,7 @@ public abstract class CommonTagActions {
     public static final TagAction TA_FONT = new TagAction() {
 
         public boolean start(final BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName,
-                final Attributes atts) {
+                             final Attributes atts) {
 
             String sizeAttr = atts.getValue("size");
             if (sizeAttr != null) {
@@ -282,14 +258,13 @@ public abstract class CommonTagActions {
             return false;
         }
 
-        public boolean end(final BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName) {
+        public boolean end(final BoilerpipeHTMLContentHandler instance) {
             instance.fontSizeStack.removeFirst();
             return false;
         }
         
         public boolean changesTagLevel() {
-        	return false;
+            return false;
         }
     };
 
@@ -306,21 +281,19 @@ public abstract class CommonTagActions {
         }
 
         public boolean start(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName,
-                final Attributes atts) {
+                             final Attributes atts) {
             instance.addWhitespaceIfNecessary();
             instance.addLabelAction(action);
             return false;
         }
 
-        public boolean end(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName) {
+        public boolean end(BoilerpipeHTMLContentHandler instance) {
             instance.addWhitespaceIfNecessary();
             return false;
         }
         
         public boolean changesTagLevel() {
-        	return false;
+            return false;
         }
     }
 
@@ -337,19 +310,17 @@ public abstract class CommonTagActions {
         }
 
         public boolean start(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName,
-                final Attributes atts) {
+                             final Attributes atts) {
             instance.addLabelAction(action);
             return true;
         }
 
-        public boolean end(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName) {
+        public boolean end(BoilerpipeHTMLContentHandler instance) {
             return true;
         }
         
         public boolean changesTagLevel() {
-        	return true;
+            return true;
         }
     }
 }

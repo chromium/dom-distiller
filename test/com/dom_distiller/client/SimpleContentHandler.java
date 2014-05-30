@@ -6,12 +6,17 @@ package com.dom_distiller.client;
 
 import com.dom_distiller.client.sax.Attributes;
 import com.dom_distiller.client.sax.ContentHandler;
+import com.google.gwt.core.client.JsArray;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
 
 /**
  * This is a simple SAX content handler that converts sax events to an xml document. It only handles
  * a small subset of those events.
  */
 class SimpleContentHandler implements ContentHandler {
+
+    private StringBuilder documentStringBuilder;
 
     SimpleContentHandler() {
         documentStringBuilder = new StringBuilder();
@@ -31,28 +36,28 @@ class SimpleContentHandler implements ContentHandler {
     public void startDocument() {}
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes atts) {
-        documentStringBuilder.append("<" + localName);
-        for (int i = 0; i < atts.getLength(); i++) {
+    public void startElement(Element element, Attributes atts) {
+        documentStringBuilder.append("<");
+        documentStringBuilder.append(element.getTagName());
+        JsArray<Node> attributes = DomUtil.getAttributes(element);
+        for (int i = 0; i < attributes.length(); i++) {
+            Node node = attributes.get(i);
             documentStringBuilder.append(" ");
-            documentStringBuilder.append(atts.getLocalName(i));
+            documentStringBuilder.append(node.getNodeName());
             documentStringBuilder.append("=\"");
-            documentStringBuilder.append(atts.getValue(i));
+            documentStringBuilder.append(node.getNodeValue());
             documentStringBuilder.append("\"");
-
         }
         documentStringBuilder.append(">");
     }
 
     @Override
-    public void endElement(String uri, String localName, String qName) {
-        documentStringBuilder.append("</" + localName + ">");
+    public void endElement(Element element) {
+        documentStringBuilder.append("</" + element.getTagName() + ">");
     }
 
     @Override
     public void characters(char[] ch, int start, int length) {
         documentStringBuilder.append(ch, start, length);
     }
-
-    private StringBuilder documentStringBuilder;
 }
