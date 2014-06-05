@@ -46,10 +46,6 @@ public class FilteringDomVisitorTest extends GWTTestCase {
         runTest("<div style=\"visibility:hidden\">visibility hidden</div>", "");
     }
 
-    public void testHiddenAttribute() throws Throwable {
-        runTest("<div hidden>hidden attribute</div>", "");
-    }
-
     public void testInvisibleInVisible() throws Throwable {
         String html = "<div>visible parent" +
                           "<div style=\"display:none\">invisible child</div>" +
@@ -72,7 +68,7 @@ public class FilteringDomVisitorTest extends GWTTestCase {
     }
 
     public void testInvisibleInInvisible() throws Throwable {
-        String html = "<div hidden>invisible parent" +
+        String html = "<div style=\"visibility:hidden\">invisible parent" +
                           "<div style=\"display:none\">invisible child</div>" +
                       "</div>";
         runTest(html, "");
@@ -82,9 +78,9 @@ public class FilteringDomVisitorTest extends GWTTestCase {
         String html = "<div>visible parent" +
                           "<div style=\"display:none\">invisible child0</div>" +
                           "<div>visible child1" +
-                              "<div hidden>invisible grandchild</div>" +
+                              "<div style=\"visibility:hidden\">invisible grandchild</div>" +
                           "</div>" +
-                          "<div hidden>invisible child2</div>" +
+                          "<div style=\"visibility:hidden\">invisible child2</div>" +
                       "</div>";
         runTest(html, "<div>visible parent<div>visible child1</div></div>");
     }
@@ -93,30 +89,40 @@ public class FilteringDomVisitorTest extends GWTTestCase {
         String html = "<div style=\"visibility:hidden\">invisible parent" +
                           "<div style=\"display:none\">invisible child0</div>" +
                           "<div>visible child1" +
-                              "<div hidden>invisible grandchild</div>" +
+                              "<div style=\"display:none\">invisible grandchild</div>" +
                           "</div>" +
-                          "<div hidden>invisible child2</div>" +
+                          "<div style=\"visibility:hidden\">invisible child2</div>" +
                       "</div>";
         runTest(html, "");
     }
 
-    // TODO(kuan): getComputedStyle() doesn't work correctly when running ant test.dev or test.prod,
-    // but it works in production mode in the browser.
-/*
-    public void testComputedDisplayNone() throws Throwable {
-        StyleElement style = Document.get().createStyleElement();
-        style.setInnerHTML("h1 {display:none;}");
-        Document.get().getDocumentElement().getElementsByTagName("HEAD").getItem(0).appendChild(
-                style);
+    // Note: getComputedStyle() doesn't work correctly when running ant test.dev or test.prod,
+    // but it works in production mode in the browser, so the test is in chrome's components/
+    // dom_distiller/content/distiller_page_web_contents_browsertest.cc::VisibilityDetection().
 
-        Element h1 = TestUtil.createHeading(1, "blah");
-        Document.get().getDocumentElement().getElementsByTagName("BODY").getItem(0).appendChild(h1);
- 
-        SimpleContentHandler contentHandler = new SimpleContentHandler();
-        DomWalker.Visitor domVisitor = new DomToSaxVisitor(contentHandler);
-        FilteringDomVisitor filteringDomVisitor = new FilteringDomVisitor(domVisitor);
-        new DomWalker(filteringDomVisitor).walk(Document.get().getDocumentElement());
-        assertFalse(contentHandler.getDocumentString().toLowerCase().contains("blah"));
+    public void testDataTable() throws Throwable {
+        String html = "<table align=\"left\">" +
+                          // <caption> tag makes this a data table.
+                          "<caption>Testing Data Table</caption>" +
+                          "<tbody align=\"left\">" +
+                              "<tr>" +
+                                  "<td>row2col1</td>" +
+                                  "<td>row2col2</td>" +
+                              "</tr>" +
+                          "</tbody>" +
+                      "</table>";
+        runTest(html, "");
     }
-*/
+
+    public void testNonDataTable() throws Throwable {
+        String html = "<table align=\"left\">" +
+                          "<tbody align=\"left\">" +
+                              "<tr>" +
+                                  "<td>row2col1</td>" +
+                                  "<td>row2col2</td>" +
+                              "</tr>" +
+                          "</tbody>" +
+                      "</table>";
+        runTest(html, html);
+    }
 }

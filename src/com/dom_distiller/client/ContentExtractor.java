@@ -40,7 +40,9 @@ public class ContentExtractor implements Exportable {
 
         htmlParser.startDocument();
         Element documentElement = Document.get().getDocumentElement();
-        List<Node> textNodes = parse(documentElement, htmlParser);
+        DomToSaxVisitor domToSaxVisitor = new DomToSaxVisitor(htmlParser);
+        FilteringDomVisitor filteringDomVisitor = new FilteringDomVisitor(domToSaxVisitor);
+        new DomWalker(filteringDomVisitor).walk(documentElement);
         htmlParser.endDocument();
 
         TextDocument document = htmlParser.toTextDocument();
@@ -56,16 +58,19 @@ public class ContentExtractor implements Exportable {
             return document.getText(true, false);
         }
 
-        List<Node> contentNodes = getContentNodesForTextDocument(document, textNodes);
+        List<Node> contentNodes = getContentNodesForTextDocument(document,
+                domToSaxVisitor.getTextNodes());
 
-        List<Node> contentAndImages = RelevantImageFinder.findAndAddImages(
-                contentNodes, Document.get().getDocumentElement());
+        List<Node> contentAndRelevantElements = RelevantElementsFinder.findAndAddElements(
+                contentNodes, filteringDomVisitor.getHiddenElements(),
+                filteringDomVisitor.getDataTables(), Document.get().getDocumentElement());
 
-        if (contentAndImages.isEmpty()) {
+        if (contentAndRelevantElements.isEmpty()) {
             return "";
         }
 
-        Node clonedSubtree = NodeListExpander.expand(contentAndImages).cloneSubtree();
+        Node clonedSubtree = NodeListExpander.expand(contentAndRelevantElements).cloneSubtree();
+
         if (clonedSubtree.getNodeType() != Node.ELEMENT_NODE) {
             return "";
         }
@@ -78,13 +83,6 @@ public class ContentExtractor implements Exportable {
         // TODO(cjhopman): this discards the top element and just returns its children. This might
         // break in some cases.
         return Element.as(clonedSubtree).getInnerHTML();
-    }
-
-    private static List<Node> parse(Element e, ContentHandler handler) {
-        DomToSaxVisitor domToSaxVisitor = new DomToSaxVisitor(handler);
-        FilteringDomVisitor filteringDomVisitor = new FilteringDomVisitor(domToSaxVisitor);
-        new DomWalker(filteringDomVisitor).walk(e);
-        return domToSaxVisitor.getTextNodes();
     }
 
     private static List<Node> getContentNodesForTextDocument(
