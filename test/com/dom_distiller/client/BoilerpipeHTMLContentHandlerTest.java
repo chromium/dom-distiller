@@ -9,10 +9,10 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.junit.client.GWTTestCase;
 
-import java.util.List;
-
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.sax.BoilerpipeHTMLContentHandler;
+
+import java.util.List;
 
 public class BoilerpipeHTMLContentHandlerTest extends GWTTestCase {
 
@@ -22,6 +22,7 @@ public class BoilerpipeHTMLContentHandlerTest extends GWTTestCase {
     private BoilerpipeHTMLContentHandler mHandler;
     private Element mBody;
 
+    @Override
     public String getModuleName() {
         return "com.dom_distiller.DomDistillerJUnit";
     }
@@ -157,7 +158,7 @@ public class BoilerpipeHTMLContentHandlerTest extends GWTTestCase {
     }
 
     private void addText(String text) {
-        mHandler.characters(text.toCharArray(), 0, text.length());
+        mHandler.textNode(Document.get().createTextNode(text));
     }
 
     private void endElement(Element e) {

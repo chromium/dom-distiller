@@ -20,10 +20,8 @@ import de.l3s.boilerpipe.sax.BoilerpipeHTMLContentHandler;
 
 import org.timepedia.exporter.client.Export;
 import org.timepedia.exporter.client.Exportable;
-import com.dom_distiller.client.sax.ContentHandler;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -58,8 +56,7 @@ public class ContentExtractor implements Exportable {
             return document.getText(true, false);
         }
 
-        List<Node> contentNodes = getContentNodesForTextDocument(document,
-                domToSaxVisitor.getTextNodes());
+        List<Node> contentNodes = getContentNodesForTextDocument(document);
 
         List<Node> contentAndRelevantElements = RelevantElementsFinder.findAndAddElements(
                 contentNodes, filteringDomVisitor.getHiddenElements(),
@@ -85,25 +82,17 @@ public class ContentExtractor implements Exportable {
         return Element.as(clonedSubtree).getInnerHTML();
     }
 
-    private static List<Node> getContentNodesForTextDocument(
-            TextDocument document, List<Node> textNodes) {
-        List<Integer> contentTextIndexes = new ArrayList<Integer>();
+    private static List<Node> getContentNodesForTextDocument(TextDocument document) {
+        List<Node> contentTextNodes = new ArrayList<Node>();
         for (TextBlock tb : document.getTextBlocks()) {
             if (!tb.isContent()) {
                 continue;
             }
             if (!tb.hasLabel(DefaultLabels.TITLE)) {
-                contentTextIndexes.addAll(tb.getContainedTextElements());
+                contentTextNodes.addAll(tb.getContainedTextElements());
             }
         }
-        Collections.sort(contentTextIndexes);
-
-        // Boilerpipe's text node indexes start at 1.
-        List<Node> contentNodes = new ArrayList<Node>(contentTextIndexes.size());
-        for (Integer i : contentTextIndexes) {
-            contentNodes.add(textNodes.get(i - 1));
-        }
-        return contentNodes;
+        return contentTextNodes;
     }
 
     private static void makeAllLinksAbsolute(Node rootNode) {

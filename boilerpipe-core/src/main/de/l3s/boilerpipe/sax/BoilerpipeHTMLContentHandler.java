@@ -23,20 +23,20 @@ package de.l3s.boilerpipe.sax;
 
 import com.dom_distiller.client.DomUtil;
 import com.dom_distiller.client.StringUtil;
+import com.dom_distiller.client.sax.Attributes;
+import com.dom_distiller.client.sax.ContentHandler;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Text;
 
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.labels.LabelAction;
 import de.l3s.boilerpipe.util.UnicodeTokenizer;
 
-import com.dom_distiller.client.sax.Attributes;
-import com.dom_distiller.client.sax.ContentHandler;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +66,6 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     int blockTagLevel = -1;
 
     boolean sbLastWasWhitespace = false;
-    private int textElementIdx = 0;
 
     private final List<TextBlock> textBlocks = new ArrayList<TextBlock>();
 
@@ -77,7 +76,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     private Event lastEvent = null;
 
     private int offsetBlocks = 0;
-    private HashSet<Integer> currentContainedTextElements = new HashSet<Integer>();
+    private List<Node> currentContainedTextElements = new LinkedList<Node>();
 
     private boolean flush = false;
     boolean inAnchorText = false;
@@ -103,7 +102,6 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
         inAnchor = 0;
         inIgnorableElement = 0;
         sbLastWasWhitespace = false;
-        textElementIdx = 0;
 
         textBlocks.clear();
 
@@ -167,15 +165,6 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     @Override
     public void endDocument() {
         flushBlock();
-    }
-
-    @Override
-    public void ignorableWhitespace(char[] ch, int start, int length) {
-        if (!sbLastWasWhitespace) {
-            textBuffer.append(' ');
-            tokenBuffer.append(' ');
-        }
-        sbLastWasWhitespace = true;
     }
 
     @Override
@@ -249,8 +238,12 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     }
 
     @Override
-    public void characters(char[] ch, int start, int length) {
-        textElementIdx++;
+    public void textNode(Text textNode) {
+        String text = textNode.getData();
+
+        char[] ch = text.toCharArray();
+        int start = 0;
+        int length = text.length();
 
 
         if (flush) {
@@ -269,12 +262,14 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
             return;
         }
 
+        // Convert all whitespaces to spaces.
         final int end = start + length;
         for (int i = start; i < end; i++) {
             if (StringUtil.isWhitespace(ch[i])) {
                 ch[i] = ' ';
             }
         }
+        // Left-trim the string.
         while (start < end) {
             c = ch[start];
             if (c == ' ') {
@@ -285,6 +280,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
                 break;
             }
         }
+        // Right-trim the string.
         while (length > 0) {
             c = ch[start + length - 1];
             if (c == ' ') {
@@ -294,6 +290,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
                 break;
             }
         }
+        // Add a space if needed.
         if (length == 0) {
             if (startWhitespace || endWhitespace) {
                 if (!sbLastWasWhitespace) {
@@ -302,6 +299,10 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
                 }
                 sbLastWasWhitespace = true;
             } else {
+                // This appears to be unreachable since the string is 0-length
+                // to start, we trimmed and it's 0-length now.
+                // TODO(yfriedman): Consider ripping out this whole function
+                // and simplifying with the parent div's innerText.
                 sbLastWasWhitespace = false;
             }
             lastEvent = Event.WHITESPACE;
@@ -328,7 +329,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
         sbLastWasWhitespace = endWhitespace;
         lastEvent = Event.CHARACTERS;
 
-        currentContainedTextElements.add(textElementIdx);
+        currentContainedTextElements.add(textNode);
     }
 
     List<TextBlock> getTextBlocks() {
@@ -400,7 +401,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
         TextBlock tb = new TextBlock(StringUtil.javaTrim(textBuffer.toString()),
                 currentContainedTextElements, numWords, numLinkedWords,
                 numWordsInWrappedLines, numWrappedLines, offsetBlocks);
-        currentContainedTextElements = new HashSet<Integer>();
+        currentContainedTextElements = new LinkedList<Node>();
 
         offsetBlocks++;
 

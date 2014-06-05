@@ -21,17 +21,21 @@
  */
 package de.l3s.boilerpipe.document;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.google.gwt.dom.client.Node;
 
 import de.l3s.boilerpipe.labels.DefaultLabels;
 
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Describes a block of text.
- * 
+ *
  * A block can be an "atomic" text element (i.e., a sequence of text that is not
  * interrupted by any HTML markup) or a compound of such atomic elements.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public class TextBlock implements Cloneable {
@@ -49,12 +53,12 @@ public class TextBlock implements Cloneable {
     float textDensity;
     float linkDensity;
 
-    HashSet<Integer> containedTextElements;
+    List<Node> containedTextElements;
 
     private int numFullTextWords = 0;
 	private int tagLevel;
 
-    private static final HashSet<Integer> EMPTY_BITSET = new HashSet<Integer>();
+    private static final List<Node> EMPTY_BITSET = new LinkedList<Node>();
     public static final TextBlock EMPTY_START = new TextBlock("", EMPTY_BITSET,
             0, 0, 0, 0, -1);
     public static final TextBlock EMPTY_END = new TextBlock("", EMPTY_BITSET,
@@ -63,8 +67,8 @@ public class TextBlock implements Cloneable {
     public TextBlock(final String text) {
         this(text, null, 0,0,0,0,0);
     }
-    
-    public TextBlock(final String text, final HashSet<Integer> containedTextElements,
+
+    public TextBlock(final String text, final List<Node> containedTextElements,
             final int numWords, final int numWordsInAnchorText,
             final int numWordsInWrappedLines, final int numWrappedLines,
             final int offsetBlocks) {
@@ -135,7 +139,7 @@ public class TextBlock implements Cloneable {
         this.isContent |= other.isContent;
 
         if(containedTextElements == null) {
-            containedTextElements = new HashSet<Integer>();
+            containedTextElements = new LinkedList<Node>();
         }
         containedTextElements.addAll(other.containedTextElements);
 
@@ -148,7 +152,7 @@ public class TextBlock implements Cloneable {
                 labels.addAll(other.labels);
             }
         }
-        
+
         tagLevel = Math.min(tagLevel, other.tagLevel);
     }
 
@@ -168,6 +172,7 @@ public class TextBlock implements Cloneable {
         return offsetBlocksEnd;
     }
 
+    @Override
     public String toString() {
         return "[" + offsetBlocksStart + "-" + offsetBlocksEnd + ";tl="+tagLevel+"; nw="+numWords+";nwl="+numWrappedLines+";ld="+linkDensity+"]\t"
                 + (isContent?"CONTENT":"boilerplate") + "," + labels + "\n" + getText();
@@ -175,7 +180,7 @@ public class TextBlock implements Cloneable {
 
     /**
      * Adds an arbitrary String label to this {@link TextBlock}.
-     * 
+     *
      * @param label The label
      * @see DefaultLabels
      */
@@ -188,37 +193,37 @@ public class TextBlock implements Cloneable {
 
     /**
      * Checks whether this TextBlock has the given label.
-     * 
+     *
      * @param label The label
      * @return <code>true</code> if this block is marked by the given label.
      */
     public boolean hasLabel(final String label) {
         return labels != null && labels.contains(label);
     }
-    
+
     public boolean removeLabel(final String label) {
     	return labels != null && labels.remove(label);
     }
-    
+
     /**
      * Returns the labels associated to this TextBlock, or <code>null</code> if no such labels
      * exist.
-     * 
+     *
      * NOTE: The returned instance is the one used directly in TextBlock. You have full access
      * to the data structure. However it is recommended to use the label-specific methods in {@link TextBlock}
      * whenever possible.
-     * 
+     *
      * @return Returns the set of labels, or <code>null</code> if no labels was added yet.
      */
     public Set<String> getLabels() {
         return labels;
     }
-    
+
     /**
      * Adds a set of labels to this {@link TextBlock}.
      * <code>null</code>-references are silently ignored.
-     * 
-     * @param l The labels to be added. 
+     *
+     * @param l The labels to be added.
      */
     public void addLabels(final Set<String> l) {
         if(l == null) {
@@ -230,12 +235,12 @@ public class TextBlock implements Cloneable {
             this.labels.addAll(l);
         }
     }
-    
+
     /**
      * Adds a set of labels to this {@link TextBlock}.
      * <code>null</code>-references are silently ignored.
-     * 
-     * @param l The labels to be added. 
+     *
+     * @param l The labels to be added.
      */
     public void addLabels(final String... l) {
         if(l == null) {
@@ -253,19 +258,19 @@ public class TextBlock implements Cloneable {
      * Returns the containedTextElements BitSet, or <code>null</code>.
      * @return
      */
-    public HashSet<Integer> getContainedTextElements() {
+    public List<Node> getContainedTextElements() {
         return containedTextElements;
     }
 
-	protected TextBlock clone() {
+    protected TextBlock clone() {
 		final TextBlock clone = new TextBlock(text.toString());
 		if(labels != null && !labels.isEmpty()) {
 			clone.labels = new HashSet<String>(labels);
 		}
 		if(containedTextElements != null) {
-			clone.containedTextElements = (HashSet<Integer>)containedTextElements.clone();
+			clone.containedTextElements.addAll(containedTextElements);
 		}
-		
+
 		return clone;
 	}
 

@@ -9,6 +9,7 @@ import com.dom_distiller.client.sax.ContentHandler;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.Text;
 
 /**
  * This is a simple SAX content handler that converts sax events to an xml document. It only handles
@@ -16,7 +17,7 @@ import com.google.gwt.dom.client.Node;
  */
 class SimpleContentHandler implements ContentHandler {
 
-    private StringBuilder documentStringBuilder;
+    private final StringBuilder documentStringBuilder;
 
     SimpleContentHandler() {
         documentStringBuilder = new StringBuilder();
@@ -28,9 +29,6 @@ class SimpleContentHandler implements ContentHandler {
 
     @Override
     public void endDocument() {}
-
-    @Override
-    public void ignorableWhitespace(char[] ch, int start, int length) {}
 
     @Override
     public void startDocument() {}
@@ -57,7 +55,7 @@ class SimpleContentHandler implements ContentHandler {
     }
 
     @Override
-    public void characters(char[] ch, int start, int length) {
-        documentStringBuilder.append(ch, start, length);
+    public void textNode(Text textNode) {
+        documentStringBuilder.append(textNode.getData());
     }
 }

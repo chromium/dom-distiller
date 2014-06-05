@@ -4,17 +4,14 @@
 
 package com.dom_distiller.client;
 
+import com.dom_distiller.client.sax.Attributes;
+import com.dom_distiller.client.sax.AttributesImpl;
+import com.dom_distiller.client.sax.ContentHandler;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.Text;
 
-import com.dom_distiller.client.sax.Attributes;
-import com.dom_distiller.client.sax.AttributesImpl;
-import com.dom_distiller.client.sax.ContentHandler;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -22,27 +19,17 @@ import java.util.logging.Logger;
  */
 public class DomToSaxVisitor implements DomWalker.Visitor {
     private static Logger logger = Logger.getLogger("DomToSaxParser");
-    private static final String sHtmlNamespace = "http://www.w3.org/1999/xhtml";
     private final ContentHandler handler;
-    private List<Node> textNodes;
 
     DomToSaxVisitor(ContentHandler h) {
         handler = h;
-        textNodes = new ArrayList<Node>();
     }
-
-    /*
-     * @Return A list of the text nodes (in order).
-     */
-    public final List<Node> getTextNodes() { return textNodes; }
 
     @Override
     public boolean visit(Node n) {
         switch (n.getNodeType()) {
             case Node.TEXT_NODE:
-                textNodes.add(n);
-                String text = Text.as(n).getData();
-                handler.characters(text.toCharArray(), 0, text.length());
+                handler.textNode(Text.as(n));
                 return false;
             case Node.ELEMENT_NODE:
                 Element e = Element.as(n);
