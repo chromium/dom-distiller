@@ -6,7 +6,6 @@ package com.dom_distiller.client;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
-import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.TableElement;
 
@@ -56,6 +55,12 @@ public class FilteringDomVisitor implements DomWalker.Visitor {
                     dataTables.add(e);
                     return false;
                 }
+            }
+
+            // Don't traverse into text that will be restored into the DOM as part of a logical
+            // block when reconstructing the HTML.
+            if (e.hasTagName("FIGURE") || e.hasTagName("VIDEO")) {
+                return false;
             }
         }
         return domVisitor.visit(n);

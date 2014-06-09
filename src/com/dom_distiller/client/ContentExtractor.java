@@ -7,7 +7,6 @@ package com.dom_distiller.client;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 
@@ -73,8 +72,8 @@ public class ContentExtractor implements Exportable {
         }
 
         // The base URL in the distilled page viewer is different from that in
-        // the live page.  This breaks all relative links (in anchors and
-        // images), so make them absolute in the distilled content.
+        // the live page.  This breaks all relative links (in anchors,
+        // images, etc.), so make them absolute in the distilled content.
         makeAllLinksAbsolute(clonedSubtree);
 
         // TODO(cjhopman): this discards the top element and just returns its children. This might
@@ -106,11 +105,13 @@ public class ContentExtractor implements Exportable {
             AnchorElement link = AnchorElement.as(allLinks.getItem(i));
             link.setHref(link.getHref());
         }
-
-        NodeList<Element> allImages = root.getElementsByTagName("IMG");
-        for (int i = 0; i < allImages.getLength(); i++) {
-            ImageElement image = ImageElement.as(allImages.getItem(i));
-            image.setSrc(image.getSrc());
-        }
+        makeAllSrcAttributesAbsolute(root);
     }
+
+    private static native void makeAllSrcAttributesAbsolute(Element root) /*-{
+        var elementsWithSrc = root.querySelectorAll('img,source,track,video');
+        for (var key in elementsWithSrc) {
+            elementsWithSrc[key].src = elementsWithSrc[key].src;
+        }
+    }-*/;
 }

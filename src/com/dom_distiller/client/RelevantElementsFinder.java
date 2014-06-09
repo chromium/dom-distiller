@@ -55,8 +55,11 @@ public class RelevantElementsFinder {
     private static final Set<String> sRelevantTags;
     static {
         sRelevantTags = new HashSet<String>();
+        sRelevantTags.add("BR");
+        sRelevantTags.add("FIGURE");
         sRelevantTags.add("IMG");
         sRelevantTags.add("TABLE");
+        sRelevantTags.add("VIDEO");
     }
 
     /**
