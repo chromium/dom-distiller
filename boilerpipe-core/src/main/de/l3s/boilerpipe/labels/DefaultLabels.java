@@ -22,7 +22,7 @@ import de.l3s.boilerpipe.document.TextBlock;
 /**
  * Some pre-defined labels which can be used in conjunction with
  * {@link TextBlock#addLabel(String)} and {@link TextBlock#hasLabel(String)}.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public final class DefaultLabels {
@@ -39,9 +39,10 @@ public final class DefaultLabels {
     public static final String H1 = "de.l3s.boilerpipe/H1";
     public static final String H2 = "de.l3s.boilerpipe/H2";
     public static final String H3 = "de.l3s.boilerpipe/H3";
-    
+
     public static final String MARKUP_PREFIX = "<";
-    
+    public static final String SIBLING_OF_MAIN_CONTENT = "SIBLING_OF_MAIN_CONTENT";
+
     private DefaultLabels() {
     	// not to be instantiated
     }

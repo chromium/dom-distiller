@@ -69,7 +69,7 @@ public final class ArticleExtractor {
                 | PrintDebugFilter.INSTANCE.process(doc, "BlockFilter")
                 | BlockProximityFusion.MAX_DISTANCE_1_CONTENT_ONLY_SAME_TAGLEVEL.process(doc)
                 | PrintDebugFilter.INSTANCE.process(doc, "BlockProximityFusion: Same level content-only")
-                | KeepLargestBlockFilter.INSTANCE_EXPAND_TO_SAME_TAGLEVEL_MIN_WORDS.process(doc)
+                | KeepLargestBlockFilter.INSTANCE_EXPAND_TO_SIBLINGS.process(doc)
                 | PrintDebugFilter.INSTANCE.process(doc, "Keep Largest Block")
                 | ExpandTitleToContentFilter.INSTANCE.process(doc)
                 | PrintDebugFilter.INSTANCE.process(doc, "Expand Title to Content")

@@ -255,11 +255,30 @@ public class TextBlock implements Cloneable {
     }
 
     /**
-     * Returns the containedTextElements BitSet, or <code>null</code>.
-     * @return
+     * @return a list of the contained Text nodes, or <code>null</code>.
      */
     public List<Node> getContainedTextElements() {
         return containedTextElements;
+    }
+
+    /**
+     * @return the first Text node, or <code>null</code>.
+     */
+    public Node getFirstTextElement() {
+        if (containedTextElements.size() > 0) {
+            return containedTextElements.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * @return the first Text node, or <code>null</code>.
+     */
+    public Node getLastTextElement() {
+        if (containedTextElements.size() > 0) {
+            return containedTextElements.get(containedTextElements.size() - 1);
+        }
+        return null;
     }
 
     protected TextBlock clone() {
