@@ -4,7 +4,6 @@
 
 package com.dom_distiller.client;
 
-import com.dom_distiller.client.sax.AttributesImpl;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.junit.client.GWTTestCase;
@@ -154,7 +153,7 @@ public class BoilerpipeHTMLContentHandlerTest extends GWTTestCase {
     }
 
     private void startElement(Element e) {
-        mHandler.startElement(e, new AttributesImpl());
+        mHandler.startElement(e);
     }
 
     private void addText(String text) {

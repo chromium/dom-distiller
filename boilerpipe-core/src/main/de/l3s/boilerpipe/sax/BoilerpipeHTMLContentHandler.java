@@ -23,7 +23,6 @@ package de.l3s.boilerpipe.sax;
 
 import com.dom_distiller.client.DomUtil;
 import com.dom_distiller.client.StringUtil;
-import com.dom_distiller.client.sax.Attributes;
 import com.dom_distiller.client.sax.ContentHandler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
@@ -59,7 +58,6 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     StringBuilder textBuffer = new StringBuilder();
 
     int inBody = 0;
-    int inAnchor = 0;
     int inIgnorableElement = 0;
 
     int tagLevel = 0;
@@ -99,7 +97,6 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
         textBuffer.setLength(0);
 
         inBody = 0;
-        inAnchor = 0;
         inIgnorableElement = 0;
         sbLastWasWhitespace = false;
 
@@ -172,7 +169,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     }
 
     @Override
-    public void startElement(Element element, Attributes atts) {
+    public void startElement(Element element) {
         labelStacks.add(null);
 
         TagAction ta = getComputedTagAction(element);
@@ -184,7 +181,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
             if(ta.changesTagLevel()) {
                 tagLevel++;
             }
-            flush = ta.start(this, atts) | flush;
+            flush = ta.start(this, element) | flush;
         } else {
             tagLevel++;
             flush = true;

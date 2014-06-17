@@ -17,7 +17,7 @@
  */
 package de.l3s.boilerpipe.sax;
 
-import com.dom_distiller.client.sax.Attributes;
+import com.google.gwt.dom.client.Element;
 
 /**
  * Defines an action that is to be performed whenever a particular tag occurs
@@ -27,7 +27,7 @@ import com.dom_distiller.client.sax.Attributes;
  */
 public interface TagAction {
 
-    boolean start(final BoilerpipeHTMLContentHandler instance, final Attributes atts);
+    boolean start(final BoilerpipeHTMLContentHandler instance, final Element e);
 
     boolean end(final BoilerpipeHTMLContentHandler instance);
 

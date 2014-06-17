@@ -1,3 +1,7 @@
+// Copyright 2014 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 /**
  * boilerpipe
  *
@@ -17,17 +21,17 @@
  */
 package de.l3s.boilerpipe.sax;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.dom_distiller.client.sax.Attributes;
+import com.google.gwt.dom.client.Element;
 
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.labels.LabelAction;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Defines an action that is to be performed whenever a particular tag occurs during HTML parsing.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public abstract class CommonTagActions {
@@ -45,15 +49,17 @@ public abstract class CommonTagActions {
             this.t2 = t2;
         }
 
-        public boolean start(BoilerpipeHTMLContentHandler instance,
-                             Attributes atts) {
-            return t1.start(instance, atts) | t2.start(instance, atts);
+        @Override
+        public boolean start(BoilerpipeHTMLContentHandler instance, Element e) {
+            return t1.start(instance, e) | t2.start(instance, e);
         }
 
+        @Override
         public boolean end(BoilerpipeHTMLContentHandler instance) {
             return t1.end(instance) | t2.end(instance);
         }
 
+        @Override
         public boolean changesTagLevel() {
             return t1.changesTagLevel() || t2.changesTagLevel();
         }
@@ -64,86 +70,82 @@ public abstract class CommonTagActions {
      */
     public static final TagAction TA_IGNORABLE_ELEMENT = new TagAction() {
 
-        public boolean start(final BoilerpipeHTMLContentHandler instance,
-                             final Attributes atts) {
+        @Override
+        public boolean start(final BoilerpipeHTMLContentHandler instance, final Element e) {
             instance.inIgnorableElement++;
             return true;
         }
 
+        @Override
         public boolean end(final BoilerpipeHTMLContentHandler instance) {
             instance.inIgnorableElement--;
             return true;
         }
-        
+
+        @Override
         public boolean changesTagLevel() {
             return true;
         }
     };
-    
+
     /**
      * Marks this tag as "anchor" (this should usually only be set for the <code>&lt;A&gt;</code> tag).
      * Anchor tags may not be nested.
-     * 
-     * There is a bug in certain versions of NekoHTML which still allows nested tags.
-     * If boilerpipe encounters such nestings, an error is printed to stderr.
      */
     public static final TagAction TA_ANCHOR_TEXT = new TagAction() {
+        private boolean lastAnchorHadHref = false;
 
-        public boolean start(BoilerpipeHTMLContentHandler instance,
-                             final Attributes atts) {
-            if (instance.inAnchor++ > 0) {
-                // as nested A elements are not allowed per specification, we
-                // are probably reaching this branch due to a bug in the XML
-                // parser
-                System.err.println("Warning: SAX input contains nested A elements -- You have probably hit a bug in your HTML parser (e.g., NekoHTML bug #2909310). Please clean the HTML externally and feed it to boilerpipe again. Trying to recover somehow...");
-
-                end(instance);
-            }
-            if (instance.inIgnorableElement == 0) {
+        @Override
+        public boolean start(BoilerpipeHTMLContentHandler instance, final Element e) {
+            lastAnchorHadHref = false;
+            if (instance.inIgnorableElement == 0  && e.hasAttribute("href")) {
                 instance.addWhitespaceIfNecessary();
                 instance.tokenBuffer
-                        .append(BoilerpipeHTMLContentHandler.ANCHOR_TEXT_START);
+                    .append(BoilerpipeHTMLContentHandler.ANCHOR_TEXT_START);
+                lastAnchorHadHref = true;
                 instance.tokenBuffer.append(' ');
                 instance.sbLastWasWhitespace = true;
             }
             return false;
         }
 
+        @Override
         public boolean end(BoilerpipeHTMLContentHandler instance) {
-            if (--instance.inAnchor == 0) {
-                if (instance.inIgnorableElement == 0) {
-                    instance.addWhitespaceIfNecessary();
-                    instance.tokenBuffer
-                            .append(BoilerpipeHTMLContentHandler.ANCHOR_TEXT_END);
-                    instance.tokenBuffer.append(' ');
-                    instance.sbLastWasWhitespace = true;
-                }
+            if (instance.inIgnorableElement == 0 && lastAnchorHadHref) {
+                instance.addWhitespaceIfNecessary();
+                instance.tokenBuffer
+                        .append(BoilerpipeHTMLContentHandler.ANCHOR_TEXT_END);
+                instance.tokenBuffer.append(' ');
+                instance.sbLastWasWhitespace = true;
             }
             return false;
         }
 
+        @Override
         public boolean changesTagLevel() {
             return true;
         }
     };
-    
+
     /**
      * Marks this tag the body element (this should usually only be set for the <code>&lt;BODY&gt;</code> tag).
      */
     public static final TagAction TA_BODY = new TagAction() {
-        public boolean start(final BoilerpipeHTMLContentHandler instance,
-                             final Attributes atts) {
+        @Override
+        public boolean start(final BoilerpipeHTMLContentHandler instance, final Element e) {
             instance.flushBlock();
             instance.inBody++;
             return false;
         }
 
+        @Override
         public boolean end(final BoilerpipeHTMLContentHandler instance) {
             instance.flushBlock();
             instance.inBody--;
             return false;
         }
-        
+
+        @Override
         public boolean changesTagLevel() {
             return true;
         }
@@ -154,15 +156,17 @@ public abstract class CommonTagActions {
      */
     public static final TagAction TA_INLINE_NO_WHITESPACE = new TagAction() {
 
-        public boolean start(BoilerpipeHTMLContentHandler instance,
-                             final Attributes atts) {
+        @Override
+        public boolean start(BoilerpipeHTMLContentHandler instance, final Element e) {
             return false;
         }
 
+        @Override
         public boolean end(BoilerpipeHTMLContentHandler instance) {
             return false;
         }
 
+        @Override
         public boolean changesTagLevel() {
             return false;
         }
@@ -175,15 +179,17 @@ public abstract class CommonTagActions {
      */
     public static final TagAction TA_BLOCK_LEVEL = new TagAction() {
 
-        public boolean start(BoilerpipeHTMLContentHandler instance,
-                             final Attributes atts) {
+        @Override
+        public boolean start(BoilerpipeHTMLContentHandler instance, final Element e) {
             return true;
         }
 
+        @Override
         public boolean end(BoilerpipeHTMLContentHandler instance) {
             return true;
         }
 
+        @Override
         public boolean changesTagLevel() {
             return true;
         }
@@ -194,15 +200,17 @@ public abstract class CommonTagActions {
      */
     public static final TagAction TA_INLINE_BLOCK_LEVEL = new TagAction() {
 
-        public boolean start(BoilerpipeHTMLContentHandler instance,
-                             final Attributes atts) {
+        @Override
+        public boolean start(BoilerpipeHTMLContentHandler instance, final Element e) {
             return false;
         }
 
+        @Override
         public boolean end(BoilerpipeHTMLContentHandler instance) {
             return false;
         }
 
+        @Override
         public boolean changesTagLevel() {
             return true;
         }
@@ -214,11 +222,12 @@ public abstract class CommonTagActions {
      */
     public static final TagAction TA_FONT = new TagAction() {
 
-        public boolean start(final BoilerpipeHTMLContentHandler instance,
-                             final Attributes atts) {
+        @Override
+        public boolean start(final BoilerpipeHTMLContentHandler instance, final Element e) {
 
-            String sizeAttr = atts.getValue("size");
-            if (sizeAttr != null) {
+            if (e.hasAttribute("size")) {
+                String sizeAttr = e.getAttribute("size");
+
                 Matcher m = PAT_FONT_SIZE.matcher(sizeAttr);
                 if (m.matches()) {
                     String rel = m.group(1);
@@ -258,11 +267,13 @@ public abstract class CommonTagActions {
             return false;
         }
 
+        @Override
         public boolean end(final BoilerpipeHTMLContentHandler instance) {
             instance.fontSizeStack.removeFirst();
             return false;
         }
-        
+
+        @Override
         public boolean changesTagLevel() {
             return false;
         }
@@ -280,18 +291,20 @@ public abstract class CommonTagActions {
             this.action = action;
         }
 
-        public boolean start(BoilerpipeHTMLContentHandler instance,
-                             final Attributes atts) {
+        @Override
+        public boolean start(BoilerpipeHTMLContentHandler instance, final Element e) {
             instance.addWhitespaceIfNecessary();
             instance.addLabelAction(action);
             return false;
         }
 
+        @Override
         public boolean end(BoilerpipeHTMLContentHandler instance) {
             instance.addWhitespaceIfNecessary();
             return false;
         }
-        
+
+        @Override
         public boolean changesTagLevel() {
             return false;
         }
@@ -309,16 +322,18 @@ public abstract class CommonTagActions {
             this.action = action;
         }
 
-        public boolean start(BoilerpipeHTMLContentHandler instance,
-                             final Attributes atts) {
+        @Override
+        public boolean start(BoilerpipeHTMLContentHandler instance, final Element e) {
             instance.addLabelAction(action);
             return true;
         }
 
+        @Override
         public boolean end(BoilerpipeHTMLContentHandler instance) {
             return true;
         }
-        
+
+        @Override
         public boolean changesTagLevel() {
             return true;
         }

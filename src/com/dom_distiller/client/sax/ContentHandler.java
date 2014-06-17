@@ -10,7 +10,7 @@ import com.google.gwt.dom.client.Text;
 public interface ContentHandler {
     public void endDocument();
     public void startDocument();
-    public void startElement(Element element, Attributes atts);
+    public void startElement(Element element);
     public void endElement(Element element);
     public void textNode(Text textNode);
 }

@@ -4,7 +4,6 @@
 
 package com.dom_distiller.client;
 
-import com.dom_distiller.client.sax.Attributes;
 import com.dom_distiller.client.sax.ContentHandler;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
@@ -34,7 +33,7 @@ class SimpleContentHandler implements ContentHandler {
     public void startDocument() {}
 
     @Override
-    public void startElement(Element element, Attributes atts) {
+    public void startElement(Element element) {
         documentStringBuilder.append("<");
         documentStringBuilder.append(element.getTagName());
         JsArray<Node> attributes = DomUtil.getAttributes(element);

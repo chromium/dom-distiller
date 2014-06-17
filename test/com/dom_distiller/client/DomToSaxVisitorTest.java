@@ -4,37 +4,14 @@
 
 package com.dom_distiller.client;
 
-import com.google.gwt.junit.client.GWTTestCase;
-
-import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Node;
-
-import com.dom_distiller.client.sax.Attributes;
+import com.google.gwt.junit.client.GWTTestCase;
 
 public class DomToSaxVisitorTest extends GWTTestCase {
     @Override
     public String getModuleName() {
         return "com.dom_distiller.DomDistillerJUnit";
-    }
-
-    public void testGetAttributes() {
-        Element e = Document.get().createDivElement();
-        e.setInnerHTML("<div style=\"width:50px; height:100px\" id=\"f\" class=\"sdf\"></div>");
-        e = Element.as(e.getChildNodes().getItem(0));
-        JsArray<Node> jsAttrs = DomUtil.getAttributes(e);
-        assertEquals(3, jsAttrs.length());
-    }
-
-    public void testGetSaxAttributes() {
-        Element e = Document.get().createDivElement();
-        e.setInnerHTML("<div style=\"width:50px; height:100px\" id=\"f\" class=\"sdf\"></div>");
-        e = Element.as(e.getChildNodes().getItem(0));
-        Attributes attrs = DomToSaxVisitor.getAttributes(e);
-        assertEquals(3, attrs.getLength());
-        assertEquals("f", attrs.getValue("id"));
-        assertEquals("sdf", attrs.getValue("class"));
     }
 
     private void runDomVisitorTest(String innerHtml) throws Throwable {
