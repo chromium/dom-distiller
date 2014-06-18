@@ -112,6 +112,9 @@ public final class BlockProximityFusion implements BoilerpipeFilter {
                 if(ok && sameTagLevelOnly && prevBlock.getTagLevel() != block.getTagLevel()) {
                 	ok = false;
                 }
+                if (prevBlock.hasLabel(DefaultLabels.STRICTLY_NOT_CONTENT) != block.hasLabel(DefaultLabels.STRICTLY_NOT_CONTENT)) {
+                    ok = false;
+                }
                 if (prevBlock.hasLabel(DefaultLabels.TITLE) != block.hasLabel(DefaultLabels.TITLE)) {
                     ok = false;
                 }

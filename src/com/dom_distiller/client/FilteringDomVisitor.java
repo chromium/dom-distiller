@@ -22,21 +22,12 @@ public class FilteringDomVisitor implements DomWalker.Visitor {
     private final Set<Node> dataTables;
 
     /**
-     * Tags which a website employs to indicate that this content is non-critical.
-     */
-    private static final Set<String> sTagsHiddenFromTextProcessing = new HashSet<String>();
-
-    /**
      * Tags that have special handling (i.e. they're restored based on context, after text
      * processing.)
      */
     private static final Set<String> sTagsProcessedAsABlock = new HashSet<String>();
 
     static {
-        sTagsHiddenFromTextProcessing.add("ASIDE");
-        sTagsHiddenFromTextProcessing.add("NAV");
-        // TODO(yfriedman): There are more of these that we can likely exclude from processing.
-
         sTagsProcessedAsABlock.add("FIGURE");
         sTagsProcessedAsABlock.add("VIDEO");
     }
@@ -63,7 +54,7 @@ public class FilteringDomVisitor implements DomWalker.Visitor {
             // Skip invisible or uninteresting elements.
             boolean visible = DomUtil.isVisible(e);
             logVisibilityInfo(e, visible);
-            if (!visible || sTagsHiddenFromTextProcessing.contains(e.getTagName())) {
+            if (!visible) {
                 hiddenElements.add(e);
                 return false;
             }

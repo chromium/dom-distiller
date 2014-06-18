@@ -24,7 +24,6 @@ package de.l3s.boilerpipe.extractors;
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.filters.debug.PrintDebugFilter;
-import de.l3s.boilerpipe.filters.english.IgnoreBlocksAfterContentFilter;
 import de.l3s.boilerpipe.filters.english.NumWordsRulesClassifier;
 import de.l3s.boilerpipe.filters.english.TerminatingBlocksFinder;
 import de.l3s.boilerpipe.filters.heuristics.BlockProximityFusion;
@@ -35,6 +34,7 @@ import de.l3s.boilerpipe.filters.heuristics.LargeBlockSameTagLevelToContentFilte
 import de.l3s.boilerpipe.filters.heuristics.ListAtEndFilter;
 import de.l3s.boilerpipe.filters.heuristics.TrailingHeadlineToBoilerplateFilter;
 import de.l3s.boilerpipe.filters.simple.BoilerplateBlockFilter;
+import de.l3s.boilerpipe.filters.simple.LabelToBoilerplateFilter;
 
 /**
  * A full-text extractor which is tuned towards news articles. In this scenario
@@ -59,8 +59,8 @@ public final class ArticleExtractor {
                 | new DocumentTitleMatchClassifier(doc.getTitle()).process(doc)
                 | NumWordsRulesClassifier.INSTANCE.process(doc)
                 | PrintDebugFilter.INSTANCE.process(doc, "Classification Complete")
-                | IgnoreBlocksAfterContentFilter.DEFAULT_INSTANCE.process(doc)
-                | PrintDebugFilter.INSTANCE.process(doc, "Ignore Blocks After Content")
+                | LabelToBoilerplateFilter.INSTANCE_STRICTLY_NOT_CONTENT.process(doc)
+                | PrintDebugFilter.INSTANCE.process(doc, "Ignore Strictly Not Content blocks")
                 | TrailingHeadlineToBoilerplateFilter.INSTANCE.process(doc)
                 | PrintDebugFilter.INSTANCE.process(doc, "Trailing Headline To Boilerplate")
                 | BlockProximityFusion.MAX_DISTANCE_1.process(doc)
