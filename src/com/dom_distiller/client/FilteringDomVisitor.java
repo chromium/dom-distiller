@@ -61,7 +61,7 @@ public class FilteringDomVisitor implements DomWalker.Visitor {
 
             // Skip data tables, keep track of them to be extracted by RelevantElementsFinder later.
             if (e.hasTagName("TABLE")) {
-                TableClassifier.Type type = TableClassifier.getType(TableElement.as(e));
+                TableClassifier.Type type = TableClassifier.table(TableElement.as(e));
                 logTableInfo(e, type);
                 if (type == TableClassifier.Type.DATA) {
                     dataTables.add(e);
@@ -97,8 +97,12 @@ public class FilteringDomVisitor implements DomWalker.Visitor {
 
     private static void logTableInfo(Element e, TableClassifier.Type type) {
         if (!DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_VISIBILITY_INFO)) return;
+        Element parent = e.getParentElement();
         LogUtil.logToConsole("TABLE: " + type +
                 ", id=" + e.getId() +
-                ", parent=" + e.getParentElement().getTagName());
+                ", parent=[" + parent.getTagName() +
+                ", id=" + parent.getId() +
+                ", class=" + parent.getClassName() +
+                "]");
     }
 }
