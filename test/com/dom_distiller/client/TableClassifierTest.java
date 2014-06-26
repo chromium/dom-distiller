@@ -270,7 +270,7 @@ public class TableClassifierTest extends GWTTestCase {
         assertEquals(TableClassifier.Reason.LESS_EQ_1_ROW, TableClassifier.sReason);
     }
 
-    public void test1Col() {
+    public void test1ColInSameCols() {
         String tableStr = "<tbody>" +
                               "<tr>" +
                                   "<td>row1col1</td>" +
@@ -282,6 +282,21 @@ public class TableClassifierTest extends GWTTestCase {
         TableElement table = createTable(tableStr);
         assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
         assertEquals(TableClassifier.Reason.LESS_EQ_1_COL, TableClassifier.sReason);
+    }
+
+    public void test1ColInDifferentCols() {
+        String tableStr = "<tbody>" +
+                              "<tr>" +
+                                  "<td>row1col1</td>" +
+                              "</tr>" +
+                              "<tr>" +
+                                  "<td>row2col1</td>" +
+                                  "<td>row2col2</td>" +
+                              "</tr>" +
+                          "</tbody>";
+        TableElement table = createTable(tableStr);
+        assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
+        assertEquals(TableClassifier.Reason.LESS_EQ_10_CELLS, TableClassifier.sReason);
     }
 
     public void test5Cols() {

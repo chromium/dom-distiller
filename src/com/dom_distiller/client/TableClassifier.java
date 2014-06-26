@@ -51,6 +51,9 @@ public class TableClassifier {
     }
     static Reason sReason;
 
+    private static final String[] sHeaderTags = { "COLGROUP", "COL", "TH" };
+    private static final String[] sObjectTags = { "EMBED", "OBJECT", "APPLET", "IFRAME" };
+
     private static final Set<String> sARIATableRoles;
     private static final Set<String> sARIATableDescendantRoles;
     private static final Set<String> sARIARoles;
@@ -132,8 +135,7 @@ public class TableClassifier {
         // a) table has <caption>, <thead>, <tfoot>, <colgroup>, <col>, or <th> elements
         if (t.hasAttribute("summary") ||
                 t.getCaption() != null || t.getTHead() != null || t.getTFoot() != null ||
-                hasElement(directDescendants, "COLGROUP") || hasElement(directDescendants, "COL") ||
-                hasElement(directDescendants, "TH")) {
+                hasOneOfElements(directDescendants, sHeaderTags)) {
             return logAndReturn(Reason.SUMMARY_CAPTION_THEAD_TFOOT_COLGROUP_COL_TH, "", Type.DATA);
         }
  
@@ -161,8 +163,10 @@ public class TableClassifier {
         // 8) Table having only one row or column is layout table.
         NodeList<TableRowElement> rows = t.getRows();
         if (rows.getLength() <= 1) return logAndReturn(Reason.LESS_EQ_1_ROW, "", Type.LAYOUT);
-        NodeList<TableCellElement> cols = rows.getItem(0).getCells();
-        if (cols.getLength() <= 1) return logAndReturn(Reason.LESS_EQ_1_COL, "", Type.LAYOUT);
+        NodeList<TableCellElement> cols = getMaxColsAmongRows(rows);
+        if (cols == null || cols.getLength() <= 1) {
+            return logAndReturn(Reason.LESS_EQ_1_COL, "", Type.LAYOUT);
+        }
  
         // 9) Table having >=5 columns is data table.
         if (cols.getLength() >= 5) return logAndReturn(Reason.MORE_EQ_5_COLS, "", Type.DATA);
@@ -194,7 +198,8 @@ public class TableClassifier {
         // 13) Table occupying > 95% of document width without viewport meta is layout table;
         // viewport condition is not in said url, added here for typical mobile-optimized sites.
         Element docElement = t.getOwnerDocument().getDocumentElement();
-        if ((double) t.getOffsetWidth() > 0.95 * (double) docElement.getOffsetWidth()) {
+        int docWidth = docElement.getOffsetWidth();
+        if (docWidth > 0 && (double) t.getOffsetWidth() > 0.95 * (double) docWidth) {
             boolean viewport = false;
             NodeList<Element> allMeta = docElement.getElementsByTagName("META");
             for (int i = 0; i < allMeta.getLength() && !viewport; i++) {
@@ -209,11 +214,8 @@ public class TableClassifier {
  
         // 15) Table containing <embed>, <object>, <applet> or <iframe> elements (typical
         //     advertisement elements) is layout table.
-        for (Element e : directDescendants) {
-            if (e.hasTagName("EMBED") || e.hasTagName("OBJECT") || e.hasTagName("APPLET") ||
-                    e.hasTagName("IFRAME")) {
-                return logAndReturn(Reason.EMBED_OBJECT_APPLET_IFRAME, "", Type.LAYOUT);
-            }
+        if (hasOneOfElements(directDescendants, sObjectTags)) {
+            return logAndReturn(Reason.EMBED_OBJECT_APPLET_IFRAME, "", Type.LAYOUT);
         }
  
         // Otherwise, it's data table.
@@ -249,11 +251,26 @@ public class TableClassifier {
         return directDescendants;
     }
 
-    private static boolean hasElement(List<Element> list, String tagname) {
+    private static boolean hasOneOfElements(List<Element> list, String[] tagNames) {
         for (Element e : list) {
-            if (e.hasTagName(tagname)) return true;
+            for (int i = 0; i < tagNames.length; i++) {
+                if (e.hasTagName(tagNames[i])) return true;
+            }
         }
         return false;
+    }
+
+    private static NodeList<TableCellElement> getMaxColsAmongRows(NodeList<TableRowElement> rows) {
+        NodeList<TableCellElement> cols = null;
+        int maxCols = 0;
+        for (int i = 0; i < rows.getLength(); i++) {
+            NodeList<TableCellElement> currCols = rows.getItem(i).getCells();
+            if (currCols.getLength() > maxCols) {
+                maxCols = currCols.getLength();
+                cols = currCols;
+            }
+        }
+        return cols;
     }
 
     private static Type logAndReturn(Reason reason, String append, Type type) {
