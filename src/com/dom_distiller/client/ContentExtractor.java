@@ -32,7 +32,7 @@ public class ContentExtractor implements Exportable {
         return extractContent(false);
     }
 
-    public static String extractContent(boolean text_only) {
+    public static String extractContent(boolean textOnly) {
         BoilerpipeHTMLContentHandler htmlParser = new BoilerpipeHTMLContentHandler();
 
         htmlParser.startDocument();
@@ -51,9 +51,6 @@ public class ContentExtractor implements Exportable {
             return "";
         }
 
-        if (text_only) {
-            return document.getText(true, false);
-        }
 
         List<Node> contentNodes = getContentNodesForTextDocument(document);
 
@@ -76,10 +73,52 @@ public class ContentExtractor implements Exportable {
         // images, etc.), so make them absolute in the distilled content.
         makeAllLinksAbsolute(clonedSubtree);
 
+        if (textOnly) {
+            return getTextFromTree(clonedSubtree);
+        }
+
         // TODO(cjhopman): this discards the top element and just returns its children. This might
         // break in some cases.
         return Element.as(clonedSubtree).getInnerHTML();
     }
+
+    /**
+     * Strips all "id" attributes from nodes in the tree rooted at |clonedSubtree|
+     */
+    private static void stripIds(Node node) {
+        switch (node.getNodeType()) {
+            case Node.ELEMENT_NODE:
+                Element e = Element.as(node);
+                if (e.hasAttribute("id")) {
+                    e.setAttribute("id", "");
+                }
+                // Intentional fall-through.
+            case Node.DOCUMENT_NODE:
+                for (int i = 0; i < node.getChildCount(); i++) {
+                    stripIds(node.getChild(i));
+                }
+        }
+    }
+
+    private static String getTextFromTree(Node node) {
+        stripIds(node);
+
+        // Temporarily add the node to the DOM so that style is calculated.
+        Document.get().getBody().appendChild(node);
+        String output = javascriptInnerText(node);
+
+        // And remove it again.
+        Document.get().getBody().removeChild(node);
+        return output;
+    }
+
+    /**
+     * Use jsni for direct access to javascript's inner text. This avoid's GWT's implementation
+     * which is intentionally different to mimic an old IE behaviour.
+     */
+    private static native String javascriptInnerText(Node node) /*-{
+        return node.innerText;
+    }-*/;
 
     private static List<Node> getContentNodesForTextDocument(TextDocument document) {
         List<Node> contentTextNodes = new ArrayList<Node>();
