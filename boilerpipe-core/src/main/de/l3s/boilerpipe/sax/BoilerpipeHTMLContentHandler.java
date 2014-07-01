@@ -191,9 +191,9 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
      */
     private void applyDomBasedLabels(Element element, String tagName) {
         String className = element.getClassName();
-        String id = element.getId();
-        if ((className != null && PAT_COMMENT.matcher(className).find()) ||
-                (id != null && element.hasAttribute("id") && PAT_COMMENT.matcher(id).find())) {
+        String id = element.getAttribute("id");
+
+        if (PAT_COMMENT.matcher(className).find() || PAT_COMMENT.matcher(id).find()) {
            addLabelAction(new LabelAction(DefaultLabels.STRICTLY_NOT_CONTENT));
         }
 
