@@ -98,6 +98,18 @@ public class PagingLinksFinder implements Exportable {
         for (int i = 0; i < allLinks.getLength(); i++) {
             AnchorElement link = AnchorElement.as(allLinks.getItem(i));
 
+            int width = link.getOffsetWidth();
+            int height = link.getOffsetHeight();
+            if (width == 0 || height == 0) {
+                appendDbgStrForLink(link, "ignored: sz=" + width + "x" + height);
+                continue;
+            }
+
+            if (!DomUtil.isVisible(link)) {
+                appendDbgStrForLink(link, "ignored: invisible");
+                continue;
+            }
+ 
             // Remove url anchor and then trailing '/' from link's href.
             // Note that AnchorElement.getHref() returns the absolute URI, so there's no need to
             // worry about relative links.
@@ -112,7 +124,8 @@ public class PagingLinksFinder implements Exportable {
             if (linkHref.isEmpty() || !StringUtil.match(linkHref, "^https?://") ||
                     linkHref.equalsIgnoreCase(wndLocationHref) ||
                     (pageLink == PageLink.NEXT && linkHref.equalsIgnoreCase(baseUrl))) {
-                appendDbgStrForLink(link, "ignored: empty or same as current or base url" + baseUrl);
+                appendDbgStrForLink(link,
+                        "ignored: empty or same as current or base url" + baseUrl);
                 continue;
             }
 
@@ -164,7 +177,8 @@ public class PagingLinksFinder implements Exportable {
             // current window location, even though it appears to be so the way it's used here.
             if (linkHref.indexOf(baseUrl) != 0) {
                 linkObj.mScore -= 25;
-                appendDbgStrForLink(link, "score=" + linkObj.mScore + ": not part of base url " + baseUrl);
+                appendDbgStrForLink(link, "score=" + linkObj.mScore +
+                        ": not part of base url " + baseUrl);
             }
 
             // Concatenate the link text with class name and id, and determine the score based on
@@ -191,7 +205,8 @@ public class PagingLinksFinder implements Exportable {
                     (pageLink == PageLink.PREV &&
                         !StringUtil.match(linkObj.mLinkText, PREV_LINK_REGEX))) {
                     linkObj.mScore -= 65;
-                    appendDbgStrForLink(link, "score=" + linkObj.mScore + ": has first|last but no " +
+                    appendDbgStrForLink(link, "score=" + linkObj.mScore +
+                            ": has first|last but no " +
                             (pageLink == PageLink.NEXT ? "next" : "prev") + " regex");
                 }
             }
@@ -204,7 +219,7 @@ public class PagingLinksFinder implements Exportable {
                     pageLink == PageLink.NEXT ? PREV_LINK_REGEX : NEXT_LINK_REGEX)) {
                 linkObj.mScore -= 200;
                 appendDbgStrForLink(link, "score=" + linkObj.mScore + ": has opp of " +
-                            (pageLink == PageLink.NEXT ? "next" : "prev") + " regex");
+                        (pageLink == PageLink.NEXT ? "next" : "prev") + " regex");
             }
 
             // Check if a parent element contains page or paging or paginate.
@@ -215,7 +230,8 @@ public class PagingLinksFinder implements Exportable {
                 if (!positiveMatch && StringUtil.match(parentClassAndId, "pag(e|ing|inat)")) {
                     linkObj.mScore += 25;
                     positiveMatch = true;
-                    appendDbgStrForLink(link, "score=" + linkObj.mScore + ": posParent - " + parentClassAndId);
+                    appendDbgStrForLink(link,"score=" + linkObj.mScore +
+                            ": posParent - " + parentClassAndId);
                 }
                 // TODO(kuan): to get 1st page for prev page link, this can't be applied; however,
                 // the non-application might be the cause of recursive prev page being returned,
