@@ -90,9 +90,11 @@ public class FilteringDomVisitor implements DomWalker.Visitor {
     private static void logVisibilityInfo(Element e, boolean visible) {
         if (!DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_VISIBILITY_INFO)) return;
         Style style = DomUtil.getComputedStyle(e);
-        LogUtil.logToConsole((visible ? "KEEP " : "SKIP ") + e.getTagName() + ": id=" + e.getId() +
-                ", hiddenAttr=" + (e.hasAttribute("hidden") ? "yes" : "no") +
-                (", dsp=" + style.getDisplay() + ", vis=" + style.getVisibility()));
+        LogUtil.logToConsole((visible ? "KEEP " : "SKIP ") + e.getTagName() +
+                ": id=" + e.getId() +
+                ", dsp=" + style.getDisplay() +
+                ", vis=" + style.getVisibility() +
+                ", opaq=" + style.getOpacity());
     }
 
     private static void logTableInfo(Element e, TableClassifier.Type type) {
