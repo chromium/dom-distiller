@@ -44,7 +44,7 @@ public class DefaultExtractor {
         return
 
         SimpleBlockFusionProcessor.INSTANCE.process(doc)
-                | BlockProximityFusion.MAX_DISTANCE_1.process(doc)
+                | BlockProximityFusion.CONTENT_AGNOSTIC.process(doc)
                 | DensityRulesClassifier.INSTANCE.process(doc);
     }
 }

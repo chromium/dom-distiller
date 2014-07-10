@@ -58,10 +58,10 @@ public class TextBlock implements Cloneable {
     private int numFullTextWords = 0;
 	private int tagLevel;
 
-    private static final List<Node> EMPTY_BITSET = new LinkedList<Node>();
-    public static final TextBlock EMPTY_START = new TextBlock("", EMPTY_BITSET,
+    public static final List<Node> EMPTY_NODE_LIST = new LinkedList<Node>();
+    public static final TextBlock EMPTY_START = new TextBlock("", EMPTY_NODE_LIST,
             0, 0, 0, 0, -1);
-    public static final TextBlock EMPTY_END = new TextBlock("", EMPTY_BITSET,
+    public static final TextBlock EMPTY_END = new TextBlock("", EMPTY_NODE_LIST,
             0, 0, 0, 0, Integer.MAX_VALUE);
 
     public TextBlock(final String text) {

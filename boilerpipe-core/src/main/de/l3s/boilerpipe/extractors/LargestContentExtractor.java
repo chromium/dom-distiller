@@ -46,7 +46,7 @@ public final class LargestContentExtractor {
     public boolean process(TextDocument doc)
             throws BoilerpipeProcessingException {
         return NumWordsRulesClassifier.INSTANCE.process(doc)
-                | BlockProximityFusion.MAX_DISTANCE_1.process(doc)
+                | BlockProximityFusion.CONTENT_AGNOSTIC.process(doc)
                 | KeepLargestBlockFilter.INSTANCE.process(doc);
     }
 

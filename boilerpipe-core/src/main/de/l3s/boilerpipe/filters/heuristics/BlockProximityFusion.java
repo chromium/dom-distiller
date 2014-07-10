@@ -1,3 +1,7 @@
+// Copyright 2014 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 /**
  * boilerpipe
  *
@@ -34,32 +38,21 @@ import java.util.List;
  */
 public final class BlockProximityFusion implements BoilerpipeFilter {
 
-    private final int maxBlocksDistance;
+    public static final BlockProximityFusion CONTENT_AGNOSTIC = new BlockProximityFusion(false);
+    public static final BlockProximityFusion CONTENT_ONLY_SAME_TAGLEVEL =
+            new BlockProximityFusion(true);
 
-    public static final BlockProximityFusion MAX_DISTANCE_1 = new BlockProximityFusion(
-            1, false, false);
-    public static final BlockProximityFusion MAX_DISTANCE_1_SAME_TAGLEVEL = new BlockProximityFusion(
-            1, false, true);
-    public static final BlockProximityFusion MAX_DISTANCE_1_CONTENT_ONLY = new BlockProximityFusion(
-            1, true, false);
-    public static final BlockProximityFusion MAX_DISTANCE_1_CONTENT_ONLY_SAME_TAGLEVEL = new BlockProximityFusion(
-            1, true, true);
+    private final boolean contentAndSameTagLevelOnly;
 
-    private final boolean contentOnly;
-
-	private final boolean sameTagLevelOnly;
+    private static final int MAX_BLOCK_DISTANCE = 1;
 
     /**
      * Creates a new {@link BlockProximityFusion} instance.
      *
-     * @param maxBlocksDistance The maximum distance in blocks.
-     * @param contentOnly
+     * @param contentAndSameTagLevelOnly
      */
-    public BlockProximityFusion(final int maxBlocksDistance,
-            final boolean contentOnly, final boolean sameTagLevelOnly) {
-        this.maxBlocksDistance = maxBlocksDistance;
-        this.contentOnly = contentOnly;
-		this.sameTagLevelOnly = sameTagLevelOnly;
+    public BlockProximityFusion(boolean contentAndSameTagLevelOnly) {
+        this.contentAndSameTagLevelOnly = contentAndSameTagLevelOnly;
     }
 
     @Override
@@ -74,7 +67,7 @@ public final class BlockProximityFusion implements BoilerpipeFilter {
         TextBlock prevBlock;
 
         int offset;
-        if (contentOnly) {
+        if (contentAndSameTagLevelOnly) {
             prevBlock = null;
             offset = 0;
             for (TextBlock tb : textBlocks) {
@@ -101,21 +94,24 @@ public final class BlockProximityFusion implements BoilerpipeFilter {
             }
             int diffBlocks = block.getOffsetBlocksStart()
                     - prevBlock.getOffsetBlocksEnd() - 1;
-            if (diffBlocks <= maxBlocksDistance) {
+            if (diffBlocks <= MAX_BLOCK_DISTANCE) {
                 boolean ok = true;
-                if (contentOnly) {
-                    if (!prevBlock.isContent()
-                            || !block.isContent()) {
+                if (contentAndSameTagLevelOnly) {
+                    if (!prevBlock.isContent() || !block.isContent()) {
                         ok = false;
                     }
-                }
-                if(ok && sameTagLevelOnly && prevBlock.getTagLevel() != block.getTagLevel()) {
-                	ok = false;
+                    if (prevBlock.getTagLevel() != block.getTagLevel()) {
+                        ok = false;
+                    }
                 }
                 if (prevBlock.hasLabel(DefaultLabels.STRICTLY_NOT_CONTENT) != block.hasLabel(DefaultLabels.STRICTLY_NOT_CONTENT)) {
                     ok = false;
                 }
                 if (prevBlock.hasLabel(DefaultLabels.TITLE) != block.hasLabel(DefaultLabels.TITLE)) {
+                    ok = false;
+                }
+                if (!prevBlock.isContent() && prevBlock.hasLabel(DefaultLabels.LI) &&
+                        !block.hasLabel(DefaultLabels.LI)) {
                     ok = false;
                 }
                 if (ok) {
@@ -129,8 +125,11 @@ public final class BlockProximityFusion implements BoilerpipeFilter {
                 prevBlock = block;
             }
         }
-
         return changes;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getName() + ": contentAndSameTagLevelOnly=" + contentAndSameTagLevelOnly;
+    }
 }
