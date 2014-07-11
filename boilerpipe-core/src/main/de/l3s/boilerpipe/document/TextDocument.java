@@ -1,3 +1,6 @@
+// Copyright 2014 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 /**
  * boilerpipe
  *
@@ -17,12 +20,11 @@
  */
 package de.l3s.boilerpipe.document;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A text document, consisting of one or more {@link TextBlock}s.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public class TextDocument implements Cloneable {
@@ -32,7 +34,7 @@ public class TextDocument implements Cloneable {
     /**
      * Creates a new {@link TextDocument} with given {@link TextBlock}s, and no
      * title.
-     * 
+     *
      * @param textBlocks
      *            The text blocks of this document.
      */
@@ -43,7 +45,7 @@ public class TextDocument implements Cloneable {
     /**
      * Creates a new {@link TextDocument} with given {@link TextBlock}s and
      * given title.
-     * 
+     *
      * @param title
      *            The "main" title for this text document.
      * @param textBlocks
@@ -56,7 +58,7 @@ public class TextDocument implements Cloneable {
 
     /**
      * Returns the {@link TextBlock}s of this document.
-     * 
+     *
      * @return A list of {@link TextBlock}s, in sequential order of appearance.
      */
     public List<TextBlock> getTextBlocks() {
@@ -66,16 +68,16 @@ public class TextDocument implements Cloneable {
     /**
      * Returns the "main" title for this document, or <code>null</code> if no
      * such title has ben set.
-     * 
+     *
      * @return The "main" title.
      */
     public String getTitle() {
         return title;
     }
-    
+
     /**
      * Updates the "main" title for this document.
-     * 
+     *
      * @param title
      */
     public void setTitle(final String title) {
@@ -84,17 +86,16 @@ public class TextDocument implements Cloneable {
 
     /**
      * Returns the {@link TextDocument}'s content.
-     * 
+     *
      * @return The content text.
      */
     public String getContent() {
         return getText(true, false);
     }
 
-    
     /**
      * Returns the {@link TextDocument}'s content, non-content or both
-     * 
+     *
      * @param includeContent Whether to include TextBlocks marked as "content".
      * @param includeNonContent Whether to include TextBlocks marked as "non-content".
      * @return The text.
@@ -116,10 +117,10 @@ public class TextDocument implements Cloneable {
         }
         return sb.toString();
     }
-    
+
     /**
      * Returns detailed debugging information about the contained {@link TextBlock}s.
-     *  
+     *
      * @return Debug information.
      */
     public String debugString() {
@@ -129,13 +130,5 @@ public class TextDocument implements Cloneable {
             sb.append('\n');
         }
         return sb.toString();
-    }
-    
-    public TextDocument clone() {
-    	final List<TextBlock> list = new ArrayList<TextBlock>(textBlocks.size());
-    	for(TextBlock tb : textBlocks) {
-    		list.add(tb.clone());
-    	}
-    	return new TextDocument(title, list);
     }
 }

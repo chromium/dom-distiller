@@ -281,18 +281,6 @@ public class TextBlock implements Cloneable {
         return null;
     }
 
-    protected TextBlock clone() {
-		final TextBlock clone = new TextBlock(text.toString());
-		if(labels != null && !labels.isEmpty()) {
-			clone.labels = new HashSet<String>(labels);
-		}
-		if(containedTextElements != null) {
-			clone.containedTextElements.addAll(containedTextElements);
-		}
-
-		return clone;
-	}
-
 	public int getTagLevel() {
 		return tagLevel;
 	}
