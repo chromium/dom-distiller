@@ -9,6 +9,7 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
+import com.google.gwt.dom.client.VideoElement;
 
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
@@ -142,7 +143,16 @@ public class ContentExtractor implements Exportable {
         NodeList<Element> allLinks = root.getElementsByTagName("A");
         for (int i = 0; i < allLinks.getLength(); i++) {
             AnchorElement link = AnchorElement.as(allLinks.getItem(i));
-            link.setHref(link.getHref());
+            if (!link.getHref().isEmpty()) {
+                link.setHref(link.getHref());
+            }
+        }
+        NodeList<Element> videoTags = root.getElementsByTagName("VIDEO");
+        for (int i = 0; i < videoTags.getLength(); i++) {
+            VideoElement video = (VideoElement) videoTags.getItem(i);
+            if (!video.getPoster().isEmpty()) {
+                video.setPoster(video.getPoster());
+            }
         }
         makeAllSrcAttributesAbsolute(root);
     }
@@ -157,7 +167,9 @@ public class ContentExtractor implements Exportable {
         }
         var elementsWithSrc = root.querySelectorAll('img,source,track,video');
         for (var key in elementsWithSrc) {
-            elementsWithSrc[key].src = elementsWithSrc[key].src;
+            if (elementsWithSrc[key].src) {
+                elementsWithSrc[key].src = elementsWithSrc[key].src;
+            }
         }
     }-*/;
 }
