@@ -54,27 +54,29 @@ public class TextBlock implements Cloneable {
     float textDensity;
     float linkDensity;
 
-    List<Node> containedTextElements;
+    List<Node> nonWhitespaceTextElements;
+    List<Node> allTextElements;
 
     private int numFullTextWords = 0;
 	private int tagLevel;
 
     public static final List<Node> EMPTY_NODE_LIST = new LinkedList<Node>();
-    public static final TextBlock EMPTY_START = new TextBlock("", EMPTY_NODE_LIST,
+    public static final TextBlock EMPTY_START = new TextBlock("", EMPTY_NODE_LIST, EMPTY_NODE_LIST,
             0, 0, 0, 0, -1);
-    public static final TextBlock EMPTY_END = new TextBlock("", EMPTY_NODE_LIST,
+    public static final TextBlock EMPTY_END = new TextBlock("", EMPTY_NODE_LIST, EMPTY_NODE_LIST,
             0, 0, 0, 0, Integer.MAX_VALUE);
 
     public TextBlock(final String text) {
-        this(text, null, 0,0,0,0,0);
+        this(text, EMPTY_NODE_LIST, EMPTY_NODE_LIST, 0,0,0,0,0);
     }
 
     public TextBlock(final String text, final List<Node> containedTextElements,
-            final int numWords, final int numWordsInAnchorText,
+            List<Node> allTextElements, final int numWords, final int numWordsInAnchorText,
             final int numWordsInWrappedLines, final int numWrappedLines,
             final int offsetBlocks) {
         this.text = text;
-        this.containedTextElements = containedTextElements;
+        this.nonWhitespaceTextElements = new LinkedList<Node>(containedTextElements);
+        this.allTextElements = new LinkedList<Node>(allTextElements);
         this.numWords = numWords;
         this.numWordsInAnchorText = numWordsInAnchorText;
         this.numWordsInWrappedLines = numWordsInWrappedLines;
@@ -139,10 +141,14 @@ public class TextBlock implements Cloneable {
 
         this.isContent |= other.isContent;
 
-        if(containedTextElements == null) {
-            containedTextElements = new LinkedList<Node>();
+        if (nonWhitespaceTextElements == null) {
+            nonWhitespaceTextElements = new LinkedList<Node>();
         }
-        containedTextElements.addAll(other.containedTextElements);
+        nonWhitespaceTextElements.addAll(other.nonWhitespaceTextElements);
+        if (allTextElements == null) {
+            allTextElements = new LinkedList<Node>();
+        }
+        allTextElements.addAll(other.allTextElements);
 
         numFullTextWords += other.numFullTextWords;
 
@@ -257,28 +263,35 @@ public class TextBlock implements Cloneable {
     }
 
     /**
-     * @return a list of the contained Text nodes, or <code>null</code>.
+     * @return a list of the non whitespace Text nodes, or <code>null</code>.
      */
-    public List<Node> getContainedTextElements() {
-        return containedTextElements;
+    public List<Node> getNonWhitespaceTextElements() {
+        return nonWhitespaceTextElements;
     }
 
     /**
-     * @return the first Text node, or <code>null</code>.
+     * @return a list of all Text nodes (including whitespace-only ones), or <code>null</code>.
      */
-    public Node getFirstTextElement() {
-        if (containedTextElements.size() > 0) {
-            return containedTextElements.get(0);
+    public List<Node> getAllTextElements() {
+        return allTextElements;
+    }
+
+    /**
+     * @return the first non-whitespace Text node, or <code>null</code>.
+     */
+    public Node getFirstNonWhitespaceTextElement() {
+        if (nonWhitespaceTextElements.size() > 0) {
+            return nonWhitespaceTextElements.get(0);
         }
         return null;
     }
 
     /**
-     * @return the first Text node, or <code>null</code>.
+     * @return the first non-whitespace Text node, or <code>null</code>.
      */
-    public Node getLastTextElement() {
-        if (containedTextElements.size() > 0) {
-            return containedTextElements.get(containedTextElements.size() - 1);
+    public Node getLastNonWhitespaceTextElement() {
+        if (nonWhitespaceTextElements.size() > 0) {
+            return nonWhitespaceTextElements.get(nonWhitespaceTextElements.size() - 1);
         }
         return null;
     }

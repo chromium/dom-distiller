@@ -128,7 +128,7 @@ public class ContentExtractor implements Exportable {
                 continue;
             }
             if (!tb.hasLabel(DefaultLabels.TITLE)) {
-                contentTextNodes.addAll(tb.getContainedTextElements());
+                contentTextNodes.addAll(tb.getAllTextElements());
             }
         }
         return contentTextNodes;

@@ -98,38 +98,38 @@ public final class KeepLargestBlockFilter implements BoilerpipeFilter {
 
     private static void maybeExpandContentToEarlierTextBlocks(List<TextBlock> textBlocks,
             TextBlock largestBlock, int largestBlockIndex) {
-        Element firstTextElement = largestBlock.getFirstTextElement().getParentElement();
+        Element firstTextElement = largestBlock.getFirstNonWhitespaceTextElement().getParentElement();
         for (ListIterator<TextBlock> it = textBlocks.listIterator(largestBlockIndex);
                 it.hasPrevious();) {
             TextBlock candidate = it.previous();
-            if (candidate.getContainedTextElements().size() < 1) {
+            if (candidate.getNonWhitespaceTextElements().size() < 1) {
                 // This seems unnecessary but it's possible that a text block is empty.
                 continue;
             }
-            Element candidateLastTextElement = candidate.getLastTextElement().getParentElement();
+            Element candidateLastTextElement = candidate.getLastNonWhitespaceTextElement().getParentElement();
             if (isSibling(firstTextElement, candidateLastTextElement)) {
                 candidate.setIsContent(true);
                 candidate.addLabel(DefaultLabels.SIBLING_OF_MAIN_CONTENT);
-                firstTextElement = candidate.getFirstTextElement().getParentElement();
+                firstTextElement = candidate.getFirstNonWhitespaceTextElement().getParentElement();
             }
         }
     }
 
     private static void maybeExpandContentToLaterTextBlocks(List<TextBlock> textBlocks,
             TextBlock largestBlock, int largestBlockIndex) {
-        Element lastTextElement = largestBlock.getLastTextElement().getParentElement();
+        Element lastTextElement = largestBlock.getLastNonWhitespaceTextElement().getParentElement();
         for (ListIterator<TextBlock> it = textBlocks.listIterator(largestBlockIndex + 1);
                 it.hasNext();) {
             TextBlock candidate = it.next();
-            if (candidate.getContainedTextElements().size() < 1) {
+            if (candidate.getNonWhitespaceTextElements().size() < 1) {
                 // This seems unnecessary but it's possible that a text block is empty.
                 continue;
             }
-            Element candidateFirstTextElement = candidate.getFirstTextElement().getParentElement();
+            Element candidateFirstTextElement = candidate.getFirstNonWhitespaceTextElement().getParentElement();
             if (isSibling(lastTextElement, candidateFirstTextElement)) {
                 candidate.setIsContent(true);
                 candidate.addLabel(DefaultLabels.SIBLING_OF_MAIN_CONTENT);
-                lastTextElement = candidate.getLastTextElement().getParentElement();
+                lastTextElement = candidate.getLastNonWhitespaceTextElement().getParentElement();
             }
         }
     }

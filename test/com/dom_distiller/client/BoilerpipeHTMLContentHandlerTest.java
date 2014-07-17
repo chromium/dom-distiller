@@ -4,8 +4,10 @@
 
 package com.dom_distiller.client;
 
+import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
 
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.sax.BoilerpipeHTMLContentHandler;
@@ -142,6 +144,244 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         endBodyAndDocument();
 
         assertBlock();
+    }
+
+    public void testKeepsWhitespaceWithinTextBlock() {
+        //
+        // <div>
+        //   TEXT1
+        //
+        //   <span>
+        //     TEXT2
+        //   </span>
+        //   TEXT3
+        // </div>
+        //
+        Element outerDiv = Document.get().createDivElement();
+        addText("\n"); // ignored
+        startElement(outerDiv);
+        addText("\n");
+        addText(TEXT1);
+        addText("\n");
+        Element innerSpan = Document.get().createSpanElement();
+        startElement(innerSpan);
+        addText("\n");
+        addText(TEXT2);
+        addText("\n");
+        endElement(innerSpan);
+        addText("\n");
+        addText(TEXT3);
+        addText("\n");
+        endElement(outerDiv);
+        addText("\n"); // ignored
+        endBodyAndDocument();
+        List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
+        assertEquals(1, textBlocks.size());
+        assertEquals(TEXT1 + " " + TEXT2 + " " + TEXT3, textBlocks.get(0).getText());
+        assertEquals(3, textBlocks.get(0).getNonWhitespaceTextElements().size());
+        assertEquals(
+                "\n" +
+                "TEXT1\n" +
+                "\n" +
+                "TEXT2\n" +
+                "\n" +
+                "TEXT3\n",
+                joinTextNodes(textBlocks.get(0).getAllTextElements()));
+    }
+
+    public void testDiscardsWhitespaceBetweenTextBlocks() {
+        //
+        // <div>
+        //   TEXT1
+        // </div>
+        //
+        // <div>
+        //   TEXT2
+        //   TEXT3</div>
+        //
+        Element firstDiv = Document.get().createDivElement();
+        addText("\n"); // ignored
+        startElement(firstDiv);
+        addText("\n");
+        addText(TEXT1);
+        addText("\n");
+        endElement(firstDiv);
+
+        addText("\n \n"); // ignored
+
+        Element secondDiv = Document.get().createDivElement();
+        startElement(secondDiv);
+        addText("\n");
+        addText(TEXT2);
+        addText("\n");
+        addText(TEXT3);
+        endElement(secondDiv);
+
+        addText("\n"); // ignored
+        addText("\n"); // ignored
+        endBodyAndDocument();
+
+        List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
+        assertEquals(2, textBlocks.size());
+        assertEquals(TEXT1, textBlocks.get(0).getText());
+        assertEquals(1, textBlocks.get(0).getNonWhitespaceTextElements().size());
+        assertEquals(
+                "\n" +
+                "TEXT1\n",
+                joinTextNodes(textBlocks.get(0).getAllTextElements()));
+
+        assertEquals(TEXT2 + " " + TEXT3, textBlocks.get(1).getText());
+        assertEquals(2, textBlocks.get(1).getNonWhitespaceTextElements().size());
+        assertEquals(
+                "\n" +
+                "TEXT2\n" +
+                "TEXT3",
+                joinTextNodes(textBlocks.get(1).getAllTextElements()));
+    }
+
+    public void testNonWordCharcterMergedWithNextInlineTextBlock() {
+        //
+        // <div>
+        //   -
+        //   <span>TEXT1</span>
+        //   <div>TEXT2</div>
+        // </div>
+        Element firstDiv = Document.get().createDivElement();
+        addText("\n"); // ignored
+        startElement(firstDiv);
+        addText("\n");
+        addText("-");
+        addText("\n");
+        Element innerSpan = Document.get().createSpanElement();
+        startElement(innerSpan);
+        addText(TEXT1);
+        endElement(innerSpan);
+        addText("\n");
+        Element innerDiv = Document.get().createDivElement();
+        startElement(innerDiv);
+        addText(TEXT2);
+        endElement(innerDiv);
+        addText("\n"); // ignored
+        endElement(firstDiv);
+
+        endBodyAndDocument();
+
+        List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
+        assertEquals(2, textBlocks.size());
+        assertEquals("- " + TEXT1, textBlocks.get(0).getText());
+        assertEquals(2, textBlocks.get(0).getNonWhitespaceTextElements().size());
+        assertEquals(
+                "\n" +
+                "-\n" +
+                "TEXT1\n",
+                joinTextNodes(textBlocks.get(0).getAllTextElements()));
+
+        assertEquals(TEXT2, textBlocks.get(1).getText());
+        assertEquals(1, textBlocks.get(1).getNonWhitespaceTextElements().size());
+        assertEquals("TEXT2",
+                    joinTextNodes(textBlocks.get(1).getAllTextElements()));
+    }
+
+    public void testNonWordCharcterNotMergedWithNextBlockLevelTextBlock() {
+        //
+        // <div>
+        //   -
+        //   <div>TEXT1</div>
+        //   <span>TEXT2</span>
+        // </div>
+        Element firstDiv = Document.get().createDivElement();
+        addText("\n"); // ignored
+        startElement(firstDiv);
+        addText("\n");
+        addText("-");
+        addText("\n");
+        Element innerDiv = Document.get().createDivElement();
+        startElement(innerDiv);
+        addText(TEXT1);
+        endElement(innerDiv);
+        addText("\n");
+        Element innerSpan = Document.get().createSpanElement();
+        startElement(innerSpan);
+        addText(TEXT2);
+        endElement(innerSpan);
+        addText("\n"); // ignored
+        endElement(firstDiv);
+
+        endBodyAndDocument();
+
+        List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
+        assertEquals(3, textBlocks.size());
+        assertEquals("-", textBlocks.get(0).getText());
+        assertEquals(1, textBlocks.get(0).getNonWhitespaceTextElements().size());
+        assertEquals(
+                "\n" +
+                "-\n",
+                joinTextNodes(textBlocks.get(0).getAllTextElements()));
+
+        assertEquals(TEXT1, textBlocks.get(1).getText());
+        assertEquals(1, textBlocks.get(1).getNonWhitespaceTextElements().size());
+        assertEquals(
+                "TEXT1",
+                joinTextNodes(textBlocks.get(1).getAllTextElements()));
+
+        assertEquals(TEXT2, textBlocks.get(2).getText());
+        assertEquals(1, textBlocks.get(2).getNonWhitespaceTextElements().size());
+        assertEquals(
+                "\n" +
+                "TEXT2\n",
+                joinTextNodes(textBlocks.get(2).getAllTextElements()));
+    }
+
+    // Simulates many social-bar/leading-link type UIs where lists are used for laying out images.
+    public void testEmptyBlockNotMergedWithNextBlock() {
+        // <ul>
+        //   <li><a href="foo.html> </a>
+        //   </li>
+        //   <li>TEXT1
+        //   </li>
+        // </ul>
+        Element ul = Document.get().createULElement();
+        startElement(ul);
+        addText("\n");
+
+        Element li = Document.get().createLIElement();
+        startElement(li);
+        AnchorElement anchor = Document.get().createAnchorElement();
+        anchor.setHref("foo.html");
+        startElement(anchor);
+        addText(" ");
+        endElement(anchor);
+        addText("\n");
+        endElement(li);
+        addText("\n");
+
+        startElement(li);
+        addText(TEXT1);
+        addText("\n");
+        endElement(li);
+        endElement(ul);
+
+        endBodyAndDocument();
+
+        List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
+        assertEquals(1, textBlocks.size());
+        assertEquals(TEXT1, textBlocks.get(0).getText());
+        assertEquals(1, textBlocks.get(0).getNonWhitespaceTextElements().size());
+        assertEquals(
+                "TEXT1\n",
+                joinTextNodes(textBlocks.get(0).getAllTextElements()));    }
+
+    private static String joinTextNodes(List<Node> elements) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < elements.size(); i++) {
+            String value = elements.get(i).getNodeValue();
+            // Convert back to the constant names to make tests easier to parse.
+            value = value.replaceAll(TEXT1, "TEXT1").
+                    replaceAll(TEXT2, "TEXT2").
+                    replaceAll(TEXT3, "TEXT3");
+            sb.append(value);
+        }
+        return sb.toString();
     }
 
     private void startElement(Element e) {

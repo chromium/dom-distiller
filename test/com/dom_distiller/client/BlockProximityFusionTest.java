@@ -189,7 +189,8 @@ public class BlockProximityFusionTest extends DomDistillerTestCase {
 
     private TextBlock newNonContentBlock(String text, String... labels) {
         int numWords = text.split(" ").length;
-        TextBlock block = new TextBlock(text, TextBlock.EMPTY_NODE_LIST, 0, numWords, numWords, 0, textBlockIndex++);
+        TextBlock block = new TextBlock(text, TextBlock.EMPTY_NODE_LIST, TextBlock.EMPTY_NODE_LIST,
+                0, numWords, numWords, 0, textBlockIndex++);
         block.setIsContent(false);
         for (String label : labels) {
             block.addLabel(label);
@@ -199,7 +200,8 @@ public class BlockProximityFusionTest extends DomDistillerTestCase {
 
     private TextBlock newContentBlock(String text, String... labels) {
         int numWords = text.split(" ").length;
-        TextBlock block = new TextBlock(text, TextBlock.EMPTY_NODE_LIST, numWords, 0, numWords, 0, textBlockIndex++);
+        TextBlock block = new TextBlock(text, TextBlock.EMPTY_NODE_LIST, TextBlock.EMPTY_NODE_LIST,
+                numWords, 0, numWords, 0, textBlockIndex++);
         block.setIsContent(true);
         for (String label : labels) {
             block.addLabel(label);

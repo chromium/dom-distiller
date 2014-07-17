@@ -51,4 +51,26 @@ public class ContentExtractorTest extends DomDistillerTestCase {
                 extractedContent + " must not contain 'title':" +TITLE_TEXT,
                 extractedContent.contains(titleDiv.getInnerText()));
     }
+
+    public void testExtractsEssentialWhitespace() {
+        Element root = Document.get().getDocumentElement();
+        Element body = Document.get().createElement("body");
+        root.appendChild(body);
+
+        Element div = TestUtil.createDiv(0);
+        body.appendChild(div);
+
+        div.appendChild(TestUtil.createSpan(CONTENT_TEXT));
+        div.appendChild(TestUtil.createText(" "));
+        div.appendChild(TestUtil.createSpan(CONTENT_TEXT));
+        div.appendChild(TestUtil.createText("\n"));
+        div.appendChild(TestUtil.createSpan(CONTENT_TEXT));
+        div.appendChild(TestUtil.createText(" "));
+
+        String extractedContent = ContentExtractor.extractContent();
+        assertEquals("<span>" + CONTENT_TEXT + "</span> " +
+                     "<span>" + CONTENT_TEXT + "</span>\n" +
+                     "<span>" + CONTENT_TEXT + "</span> ",
+                extractedContent);
+    }
 }

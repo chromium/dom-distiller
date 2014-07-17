@@ -68,7 +68,8 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     private final List<TextBlock> textBlocks = new ArrayList<TextBlock>();
 
     private int offsetBlocks = 0;
-    private List<Node> currentContainedTextElements = new LinkedList<Node>();
+    private final List<Node> nonWhitespaceTextElements = new LinkedList<Node>();
+    private final List<Node> allTextElements = new LinkedList<Node>();
 
     private boolean flush = false;
     boolean inAnchorText = false;
@@ -90,26 +91,6 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     private final Map<Element, Style> computedStyleCache = new HashMap<Element, Style>();
 
     private final Map<String, TagAction> displayStyleToTagAction = new HashMap<String, TagAction>();
-
-    /**
-     * Recycles this instance.
-     */
-    public void recycle() {
-        tokenBuffer.setLength(0);
-        textBuffer.setLength(0);
-
-        inBody = 0;
-        inIgnorableElement = 0;
-        sbLastWasWhitespace = false;
-
-        textBlocks.clear();
-
-        offsetBlocks = 0;
-        currentContainedTextElements.clear();
-
-        flush = false;
-        inAnchorText = false;
-    }
 
     /**
      * Constructs a {@link BoilerpipeHTMLContentHandler} using the
@@ -312,6 +293,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
                 // and simplifying with the parent div's innerText.
                 sbLastWasWhitespace = false;
             }
+            allTextElements.add(textNode);
             return;
         }
         if (startWhitespace) {
@@ -334,7 +316,8 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 
         sbLastWasWhitespace = endWhitespace;
 
-        currentContainedTextElements.add(textNode);
+        nonWhitespaceTextElements.add(textNode);
+        allTextElements.add(textNode);
     }
 
     List<TextBlock> getTextBlocks() {
@@ -343,19 +326,19 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 
     public void flushBlock() {
         if (inBody == 0) {
-            textBuffer.setLength(0);
-            tokenBuffer.setLength(0);
+            clearTextBuffers();
             return;
         }
 
         final int length = tokenBuffer.length();
         switch (length) {
         case 0:
+            // We may have some whitespace text nodes to clear.
+            allTextElements.clear();
             return;
         case 1:
             if (sbLastWasWhitespace) {
-                textBuffer.setLength(0);
-                tokenBuffer.setLength(0);
+                clearTextBuffers();
                 return;
             }
         }
@@ -393,6 +376,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
             }
         }
         if (numTokens == 0) {
+            clearTextBuffers();
             return;
         }
         int numWordsInWrappedLines;
@@ -404,18 +388,23 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
         }
 
         TextBlock tb = new TextBlock(StringUtil.javaTrim(textBuffer.toString()),
-                currentContainedTextElements, numWords, numLinkedWords,
+                nonWhitespaceTextElements, allTextElements, numWords, numLinkedWords,
                 numWordsInWrappedLines, numWrappedLines, offsetBlocks);
-        currentContainedTextElements = new LinkedList<Node>();
 
         offsetBlocks++;
 
-        textBuffer.setLength(0);
-        tokenBuffer.setLength(0);
+        clearTextBuffers();
 
         tb.setTagLevel(blockTagLevel);
         addTextBlock(tb);
         blockTagLevel = -1;
+    }
+
+    private void clearTextBuffers() {
+        textBuffer.setLength(0);
+        tokenBuffer.setLength(0);
+        nonWhitespaceTextElements.clear();
+        allTextElements.clear();
     }
 
     protected void addTextBlock(final TextBlock tb) {
