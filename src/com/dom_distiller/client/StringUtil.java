@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 public class StringUtil {
     /**
      * This is equivalent  to Java's Character.isWhitespace(). That function is not available
-     * with GWT.
+     * with GWT. The ranges are generated with tools/UnicodePatternGenerator.java.
      */
     public static boolean isWhitespace(Character c) {
         int code = (int)c.charValue();
