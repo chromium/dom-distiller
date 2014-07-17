@@ -46,31 +46,21 @@ public class NumWordsRulesClassifier implements BoilerpipeFilter {
     public boolean process(TextDocument doc)
             throws BoilerpipeProcessingException {
         List<TextBlock> textBlocks = doc.getTextBlocks();
+
+        if (textBlocks.isEmpty()) return false;
+
         boolean hasChanges = false;
 
         ListIterator<TextBlock> it = textBlocks.listIterator();
-        if (!it.hasNext()) {
-            return false;
-        }
         TextBlock prevBlock = TextBlock.EMPTY_START;
-        TextBlock currentBlock = it.next();
-        TextBlock nextBlock = it.hasNext() ? it.next() : TextBlock.EMPTY_START;
+        TextBlock currentBlock = TextBlock.EMPTY_START;
+        TextBlock nextBlock = it.next();
 
-        hasChanges = classify(prevBlock, currentBlock, nextBlock) | hasChanges;
-
-        if (nextBlock != TextBlock.EMPTY_START) {
-            while (it.hasNext()) {
-                prevBlock = currentBlock;
-                currentBlock = nextBlock;
-                nextBlock = it.next();
-                hasChanges = classify(prevBlock, currentBlock, nextBlock)
-                        | hasChanges;
-            }
+        while (nextBlock != TextBlock.EMPTY_START) {
             prevBlock = currentBlock;
             currentBlock = nextBlock;
-            nextBlock = TextBlock.EMPTY_START;
-            hasChanges = classify(prevBlock, currentBlock, nextBlock)
-                    | hasChanges;
+            nextBlock = it.hasNext() ? it.next() : TextBlock.EMPTY_START;
+            hasChanges |= classify(prevBlock, currentBlock, nextBlock);
         }
 
         return hasChanges;
