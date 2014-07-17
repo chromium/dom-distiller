@@ -6,16 +6,10 @@ package com.dom_distiller.client;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.junit.client.GWTTestCase;
 
-public class ContentExtractorTest extends GWTTestCase {
+public class ContentExtractorTest extends DomDistillerTestCase {
     private static final String CONTENT_TEXT = "Lorem Ipsum Lorem Ipsum Lorem Ipsum.";
     private static final String TITLE_TEXT = "I am the document title";
-
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
 
     public void testDoesNotExtractTitle() {
         Element root = Document.get().getDocumentElement();

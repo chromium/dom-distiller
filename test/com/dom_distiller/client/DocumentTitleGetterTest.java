@@ -4,19 +4,9 @@
 
 package com.dom_distiller.client;
 
-import java.util.List;
-import java.util.Arrays;
-
 import com.google.gwt.dom.client.Element;
 
-import com.google.gwt.junit.client.GWTTestCase;
-
-public class DocumentTitleGetterTest extends GWTTestCase {
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
-
+public class DocumentTitleGetterTest extends DomDistillerTestCase {
     public void testNonStringWithoutRoot() {
         Element img = TestUtil.createImage();
         String title = DocumentTitleGetter.getDocumentTitle(img, null);

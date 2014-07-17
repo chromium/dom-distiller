@@ -4,18 +4,11 @@
 
 package com.dom_distiller.client;
 
-import com.google.gwt.junit.client.GWTTestCase;
-
 import de.l3s.boilerpipe.util.UnicodeTokenizer;
 
 import java.util.Arrays;
 
-public class UnicodeTokenizerTest extends GWTTestCase {
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
-
+public class UnicodeTokenizerTest extends DomDistillerTestCase {
     public void testTokenize() {
         assertArrayEquals(new String[]{"JULIE'S", "CALAMARI"},
                 UnicodeTokenizer.tokenize("JULIE'S CALAMARI"));

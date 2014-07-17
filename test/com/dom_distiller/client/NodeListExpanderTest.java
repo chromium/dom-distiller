@@ -4,23 +4,13 @@
 
 package com.dom_distiller.client;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import com.google.gwt.junit.client.GWTTestCase;
-
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
-import com.google.gwt.dom.client.NodeList;
-import com.google.gwt.dom.client.Document;
 
-public class NodeListExpanderTest extends GWTTestCase {
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
+import java.util.ArrayList;
+import java.util.List;
 
+public class NodeListExpanderTest extends DomDistillerTestCase {
     public void testNodeListExpander() {
         List<Element> divs = TestUtil.createDivTree();
         List<Node> leafNodes = new ArrayList<Node>();

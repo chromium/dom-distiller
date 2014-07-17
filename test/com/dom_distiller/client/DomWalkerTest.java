@@ -4,24 +4,15 @@
 
 package com.dom_distiller.client;
 
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-import com.google.gwt.junit.client.GWTTestCase;
-
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Node;
-import com.google.gwt.dom.client.NodeList;
-import com.google.gwt.dom.client.Document;
-
-public class DomWalkerTest extends GWTTestCase {
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
-
+public class DomWalkerTest extends DomDistillerTestCase {
     private static class VisitData {
         final int expectedId;
         final boolean shouldVisit;

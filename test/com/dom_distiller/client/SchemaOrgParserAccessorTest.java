@@ -4,18 +4,10 @@
 
 package com.dom_distiller.client;
 
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.NodeList;
 
-import com.google.gwt.junit.client.GWTTestCase;
-
-public class SchemaOrgParserAccessorTest extends GWTTestCase {
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
+public class SchemaOrgParserAccessorTest extends DomDistillerTestCase {
 
     public void testImageWithEmbeddedPublisher() {
         String expectedUrl = "http://test_image_with_embedded_item.html";
@@ -547,32 +539,6 @@ public class SchemaOrgParserAccessorTest extends GWTTestCase {
 
         // Remove anchor from parent, so that other testcases won't be affected.
         link.removeFromParent();
-   }
-
-    @Override
-    protected void gwtSetUp() throws Exception {
-        // Get root element.
-        mRoot = Document.get().getDocumentElement();
-
-        // Get <body> element.
-        NodeList<Element> bodies = mRoot.getElementsByTagName("BODY");
-        if (bodies.getLength() != 1)
-            throw new Exception("There shouldn't be more than 1 <body> tag");
-        mBody = bodies.getItem(0);
-
-        // Remove all meta tags, otherwise a testcase may run with the meta tags
-        // set up in a previous testcase, resulting in unexpected results.
-        NodeList<Element> allMeta = mRoot.getElementsByTagName("META");
-        for (int i = allMeta.getLength() - 1; i >= 0; i--) {
-            allMeta.getItem(i).removeFromParent();
-        }
-
-        // Remove all div tags, otherwise a testcase may run with the div tags
-        // set up in a previous testcase, resulting in unexpected results.
-        NodeList<Element> allDiv = mRoot.getElementsByTagName("DIV");
-        for (int i = allDiv.getLength() - 1; i >= 0; i--) {
-            allDiv.getItem(i).removeFromParent();
-        }
     }
 
     private void setItemScopeAndType(Element e, String type) {
@@ -583,7 +549,4 @@ public class SchemaOrgParserAccessorTest extends GWTTestCase {
     private void setItemProp(Element e, String name) {
         e.setAttribute("itemprop", name);
     }
-
-    private Element mRoot;
-    private Element mBody;
 }

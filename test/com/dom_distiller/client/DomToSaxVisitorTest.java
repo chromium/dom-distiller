@@ -6,14 +6,8 @@ package com.dom_distiller.client;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.junit.client.GWTTestCase;
 
-public class DomToSaxVisitorTest extends GWTTestCase {
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
-
+public class DomToSaxVisitorTest extends DomDistillerTestCase {
     private void runDomVisitorTest(String innerHtml) throws Throwable {
         Element container = Document.get().createDivElement();
         container.setInnerHTML(innerHtml);

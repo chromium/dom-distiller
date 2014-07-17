@@ -4,20 +4,12 @@
 
 package com.dom_distiller.client;
 
-import java.util.List;
-import java.util.Iterator;
-import java.util.Arrays;
-
-import com.google.gwt.junit.client.GWTTestCase;
-
 import com.google.gwt.dom.client.Node;
 
-public class OrderedNodeMatcherTest extends GWTTestCase {
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
+import java.util.Arrays;
+import java.util.List;
 
+public class OrderedNodeMatcherTest extends DomDistillerTestCase {
     public void testOrderedNodeMatcher() {
         List<Node> matchNodes = Arrays.<Node>asList(
                 TestUtil.createDiv(0),

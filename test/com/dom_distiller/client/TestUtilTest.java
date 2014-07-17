@@ -4,18 +4,11 @@
 
 package com.dom_distiller.client;
 
-import java.util.List;
-
 import com.google.gwt.dom.client.Element;
 
-import com.google.gwt.junit.client.GWTTestCase;
+import java.util.List;
 
-public class TestUtilTest extends GWTTestCase {
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
-
+public class TestUtilTest extends DomDistillerTestCase {
     public void testCreateDivTree() {
         List<Element> divs = TestUtil.createDivTree();
         assertEquals(

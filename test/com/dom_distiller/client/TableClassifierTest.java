@@ -9,14 +9,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.TableElement;
 
-import com.google.gwt.junit.client.GWTTestCase;
-
-public class TableClassifierTest extends GWTTestCase {
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
-
+public class TableClassifierTest extends DomDistillerTestCase {
     public void testInputElement() {
         Element input = Document.get().createTextInputElement();
         TableElement table = createDefaultTableWithTH();
@@ -360,7 +353,7 @@ public class TableClassifierTest extends GWTTestCase {
     public void testWideTable() {
         TableElement table = createDefaultTableWithNoTH();
         Element root = Document.get().getDocumentElement();
-        int width = (int) ((0.95 * (double) root.getOffsetWidth()) + 1.0);
+        int width = (int) ((0.95 * root.getOffsetWidth()) + 1.0);
         table.setAttribute("style", "width:" + width + "px");
         NodeList<Element> bodies = root.getElementsByTagName("BODY");
         assertTrue(bodies.getLength() > 0);

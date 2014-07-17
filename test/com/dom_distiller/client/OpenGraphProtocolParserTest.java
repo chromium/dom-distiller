@@ -4,19 +4,8 @@
 
 package com.dom_distiller.client;
 
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.MetaElement;
-import com.google.gwt.dom.client.NodeList;
 
-import com.google.gwt.junit.client.GWTTestCase;
-
-public class OpenGraphProtocolParserTest extends GWTTestCase {
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
-
+public class OpenGraphProtocolParserTest extends DomDistillerTestCase {
     public void testRequiredPropertiesAndDescriptionAndSiteName() {
         String expectedTitle = "Testing required OpenGraph Proptocol properties and optional Description of the document.";
         createMeta("og:title", expectedTitle);
@@ -73,7 +62,7 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
         createMeta("og:image:type", expectedType);
         createMeta("og:image:width", "600");
         createMeta("og:image:height", "400");
-        
+
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
         MarkupParser.Image[] images = parser.getImages();
@@ -194,7 +183,7 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
         createMeta("og:type", "profile");
         createMeta("profile:first_name", "Jane");
         createMeta("profile:last_name", "Doe");
-        
+
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
         assertTrue(parser != null);
         assertEquals("Jane Doe", parser.getAuthor());
@@ -329,7 +318,7 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
         createCustomizedType();
         createCustomizedUrl();
         createCustomizedImage();
-        
+
         // Create the description property with the common "og" prefix, instead
         // of the customized "tstog" prefix.
         createMeta("og:description", "this description should be ignored");
@@ -447,31 +436,16 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
 
     @Override
     protected void gwtSetUp() throws Exception {
-        // Get root element.
-        mRoot = Document.get().getDocumentElement();
-
-        // Get <head> element.
-        NodeList<Element> heads = mRoot.getElementsByTagName("HEAD");
-        if (heads.getLength() != 1)
-            throw new Exception("There shouldn't be more than 1 <head> tag");
-        mHead = heads.getItem(0);
+        super.gwtSetUp();
 
         // Remove all attributes that specify prefix or namespace, so that each
         // testcase starts with clean HTML and HEAD tags.  Otherwise. a testcase
         // may run with the attributes set in a previous testcase, resulting in
         // unexpected results.
         mRoot.removeAttribute("prefix");
-        mHead.removeAttribute("prefix");
         mRoot.removeAttribute("xmlns:tstog");
         mRoot.removeAttribute("xmlns:tstpf");
         mRoot.removeAttribute("xmlns:tsta");
-
-        // Remove all meta tags, otherwise a testcase may run with the meta tags
-        // set up in a previous testcase, resulting in unexpected results.
-        NodeList<Element> allMeta = mRoot.getElementsByTagName("META");
-        for (int i = allMeta.getLength() - 1; i >= 0; i--) {
-            allMeta.getItem(i).removeFromParent();
-        }
     }
 
     private void createDefaultTitle() {
@@ -513,7 +487,4 @@ public class OpenGraphProtocolParserTest extends GWTTestCase {
     private void createMeta(String property, String content) {
         mHead.appendChild(TestUtil.createMetaProperty(property, content));
     }
-
-    private Element mRoot;
-    private Element mHead;
 }

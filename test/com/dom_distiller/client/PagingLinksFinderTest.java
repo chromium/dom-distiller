@@ -4,20 +4,11 @@
 
 package com.dom_distiller.client;
 
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.AnchorElement;
-
-import com.google.gwt.junit.client.GWTTestCase;
-
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.Window.Location;
 
-public class PagingLinksFinderTest extends GWTTestCase {
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
-
+public class PagingLinksFinderTest extends DomDistillerTestCase {
     public void testNoLink() {
         Element root = TestUtil.createDiv(0);
         assertEquals(null, PagingLinksFinder.findNext(root));

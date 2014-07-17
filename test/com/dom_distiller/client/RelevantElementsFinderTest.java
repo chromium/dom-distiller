@@ -9,20 +9,14 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.junit.client.GWTTestCase;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class RelevantElementsFinderTest extends GWTTestCase {
+public class RelevantElementsFinderTest extends DomDistillerTestCase {
     private static final Set<Node> mEmptySet = Collections.emptySet();
-
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
 
     public void testNoImage() {
         Node root = TestUtil.createDiv(0);
@@ -60,7 +54,7 @@ public class RelevantElementsFinderTest extends GWTTestCase {
         Element.as(image).getStyle().setDisplay(Display.NONE);
         root.appendChild(contentText);
         root.appendChild(image);
- 
+
         List<Node> contentNodes = Arrays.<Node>asList(contentText);
         Set<Node> hiddenElems = Collections.singleton(image);
         List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,
@@ -79,7 +73,7 @@ public class RelevantElementsFinderTest extends GWTTestCase {
         parent.appendChild(image);
         root.appendChild(contentText);
         root.appendChild(parent);
- 
+
         List<Node> contentNodes = Arrays.<Node>asList(contentText);
         Set<Node> hiddenElems = Collections.singleton(parent);
         List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,

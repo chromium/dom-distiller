@@ -6,32 +6,24 @@ package com.dom_distiller.client;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.junit.client.GWTTestCase;
 
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.sax.BoilerpipeHTMLContentHandler;
 
 import java.util.List;
 
-public class BoilerpipeHTMLContentHandlerTest extends GWTTestCase {
+public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
 
     private static final String TEXT1 = "Some really long text which should be content.";
     private static final String TEXT2 = "Another really long text thing which should be content.";
     private static final String TEXT3 = "And again a third long text for testing.";
     private BoilerpipeHTMLContentHandler mHandler;
-    private Element mBody;
-
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
 
     @Override
     protected void gwtSetUp() throws Exception {
         super.gwtSetUp();
         mHandler = new BoilerpipeHTMLContentHandler();
         mHandler.startDocument();
-        mBody = Document.get().createElement("body");
         startElement(mBody);
     }
 

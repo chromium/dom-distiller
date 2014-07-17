@@ -4,8 +4,6 @@
 
 package com.dom_distiller.client;
 
-import com.google.gwt.junit.client.GWTTestCase;
-
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
@@ -14,7 +12,7 @@ import de.l3s.boilerpipe.labels.DefaultLabels;
 
 import java.util.LinkedList;
 
-public class BlockProximityFusionTest extends GWTTestCase {
+public class BlockProximityFusionTest extends DomDistillerTestCase {
     private static final String LONG_TEXT =
             "Lorem Ipsum Lorem Ipsum Lorem Ipsum. " +
             "Lorem Ipsum Lorem Ipsum Lorem Ipsum. " +
@@ -23,11 +21,6 @@ public class BlockProximityFusionTest extends GWTTestCase {
             "Leading text that's used to start a document but just to offset a " +
             "few text blocks. This will allow testing in-page merges.";
     private static final String SHORT_TEXT = "I might be a header.";
-
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
 
     private int textBlockIndex;
 

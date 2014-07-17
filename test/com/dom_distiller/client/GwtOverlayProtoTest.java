@@ -4,23 +4,16 @@
 
 package com.dom_distiller.client;
 
-import java.util.Arrays;
-
+import com.dom_distiller.test.proto.TestProtos;
 import com.google.gwt.core.client.JavaScriptException;
 import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.junit.client.GWTTestCase;
 
-import com.dom_distiller.test.proto.TestProtos;
+import java.util.Arrays;
 
 /**
  * Tests of protoc generated gwt overlay types.
  */
-public class GwtOverlayProtoTest extends GWTTestCase {
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
-
+public class GwtOverlayProtoTest extends DomDistillerTestCase {
     public void testSimpleMessage() {
         TestProtos.SimpleMessage message = TestProtos.SimpleMessage.create();
         assertNotNull(message);

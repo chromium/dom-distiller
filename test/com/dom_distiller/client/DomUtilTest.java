@@ -8,14 +8,8 @@ import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
-import com.google.gwt.junit.client.GWTTestCase;
 
-public class DomUtilTest extends GWTTestCase {
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
-
+public class DomUtilTest extends DomDistillerTestCase {
     public void testGetAttributes() {
         Element e = Document.get().createDivElement();
         e.setInnerHTML("<div style=\"width:50px; height:100px\" id=\"f\" class=\"sdf\"></div>");

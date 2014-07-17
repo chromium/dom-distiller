@@ -4,19 +4,10 @@
 
 package com.dom_distiller.client;
 
-import com.google.gwt.junit.client.GWTTestCase;
-
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.NodeList;
-import com.google.gwt.dom.client.StyleElement;
 
-public class FilteringDomVisitorTest extends GWTTestCase {
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
-
+public class FilteringDomVisitorTest extends DomDistillerTestCase {
     private void runTest(String innerHtml, String expectedHtml) throws Throwable {
         Element container = Document.get().createDivElement();
         container.setInnerHTML(innerHtml);

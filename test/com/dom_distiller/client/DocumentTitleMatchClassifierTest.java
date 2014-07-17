@@ -4,8 +4,6 @@
 
 package com.dom_distiller.client;
 
-import com.google.gwt.junit.client.GWTTestCase;
-
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
@@ -14,14 +12,9 @@ import de.l3s.boilerpipe.labels.DefaultLabels;
 
 import java.util.Arrays;
 
-public class DocumentTitleMatchClassifierTest extends GWTTestCase {
+public class DocumentTitleMatchClassifierTest extends DomDistillerTestCase {
     private static final String CONTENT_TEXT = "Lorem Ipsum Lorem Ipsum Lorem Ipsum.";
     private static final String TITLE_TEXT = "I am the document title";
-
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
 
     public void testLabelsTitle() throws BoilerpipeProcessingException {
         DocumentTitleMatchClassifier classifier = new DocumentTitleMatchClassifier(TITLE_TEXT);

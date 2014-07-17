@@ -4,10 +4,8 @@
 
 package com.dom_distiller.client;
 
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-
-import com.google.gwt.junit.client.GWTTestCase;
+import java.util.regex.Pattern;
 
 /**
  * This tests the super-sourced java.util.Pattern/Matcher.
@@ -17,12 +15,7 @@ import com.google.gwt.junit.client.GWTTestCase;
  * benefit of ensuring that the behavior that the tests expect are actually the behavior of the real
  * java implementations.
  */
-public class RegExpTest extends GWTTestCase {
-    @Override
-    public String getModuleName() {
-        return "com.dom_distiller.DomDistillerJUnit";
-    }
-
+public class RegExpTest extends DomDistillerTestCase {
     public void testMatcherCaseSensitiveFind() {
         Pattern pattern = Pattern.compile("match");
         String goodString = "sdfmatchsdf";
