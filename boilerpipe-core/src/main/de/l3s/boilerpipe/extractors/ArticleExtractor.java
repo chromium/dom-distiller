@@ -54,28 +54,44 @@ public final class ArticleExtractor {
 
     public boolean process(TextDocument doc)
             throws BoilerpipeProcessingException {
-        return true
-                | TerminatingBlocksFinder.INSTANCE.process(doc)
-                | new DocumentTitleMatchClassifier(doc.getTitle()).process(doc)
-                | NumWordsRulesClassifier.INSTANCE.process(doc)
-                | PrintDebugFilter.INSTANCE.process(doc, "Classification Complete")
-                | LabelToBoilerplateFilter.INSTANCE_STRICTLY_NOT_CONTENT.process(doc)
-                | PrintDebugFilter.INSTANCE.process(doc, "Ignore Strictly Not Content blocks")
-                | TrailingHeadlineToBoilerplateFilter.INSTANCE.process(doc)
-                | PrintDebugFilter.INSTANCE.process(doc, "Trailing Headline To Boilerplate")
-                | BlockProximityFusion.CONTENT_AGNOSTIC.process(doc)
-                | PrintDebugFilter.INSTANCE.process(doc, "BlockProximityFusion: Distance 1")
-                | BoilerplateBlockFilter.INSTANCE_KEEP_TITLE.process(doc)
-                | PrintDebugFilter.INSTANCE.process(doc, "BlockFilter")
-                | BlockProximityFusion.CONTENT_ONLY_SAME_TAGLEVEL.process(doc)
-                | PrintDebugFilter.INSTANCE.process(doc, "BlockProximityFusion: Same level content-only")
-                | KeepLargestBlockFilter.INSTANCE_EXPAND_TO_SIBLINGS.process(doc)
-                | PrintDebugFilter.INSTANCE.process(doc, "Keep Largest Block")
-                | ExpandTitleToContentFilter.INSTANCE.process(doc)
-                | PrintDebugFilter.INSTANCE.process(doc, "Expand Title to Content")
-                | LargeBlockSameTagLevelToContentFilter.INSTANCE.process(doc)
-                | PrintDebugFilter.INSTANCE.process(doc, "Largest Block Same Tag Level -> Content")
-                | ListAtEndFilter.INSTANCE.process(doc)
-        ;
+        boolean changed;
+
+        PrintDebugFilter.INSTANCE.process(doc, true, "Start");
+
+        TerminatingBlocksFinder.INSTANCE.process(doc);
+        new DocumentTitleMatchClassifier(doc.getTitle()).process(doc);
+        // Intentionally don't print changes from these two steps.
+
+        changed = NumWordsRulesClassifier.INSTANCE.process(doc);
+        PrintDebugFilter.INSTANCE.process(doc, changed, "Classification Complete");
+
+        changed = LabelToBoilerplateFilter.INSTANCE_STRICTLY_NOT_CONTENT.process(doc);
+        PrintDebugFilter.INSTANCE.process(doc, changed, "Ignore Strictly Not Content blocks");
+
+        changed = TrailingHeadlineToBoilerplateFilter.INSTANCE.process(doc);
+        PrintDebugFilter.INSTANCE.process(doc, changed, "Trailing Headline To Boilerplate");
+
+        changed = BlockProximityFusion.CONTENT_AGNOSTIC.process(doc);
+        PrintDebugFilter.INSTANCE.process(doc, changed, "BlockProximityFusion: Distance 1");
+
+        changed = BoilerplateBlockFilter.INSTANCE_KEEP_TITLE.process(doc);
+        PrintDebugFilter.INSTANCE.process(doc, changed, "BlockFilter");
+
+        changed = BlockProximityFusion.CONTENT_ONLY_SAME_TAGLEVEL.process(doc);
+        PrintDebugFilter.INSTANCE.process(doc, changed, "BlockProximityFusion: Same level content-only");
+
+        changed = KeepLargestBlockFilter.INSTANCE_EXPAND_TO_SIBLINGS.process(doc);
+        PrintDebugFilter.INSTANCE.process(doc, changed, "Keep Largest Block");
+
+        changed = ExpandTitleToContentFilter.INSTANCE.process(doc);
+        PrintDebugFilter.INSTANCE.process(doc, changed, "Expand Title to Content");
+
+        changed = LargeBlockSameTagLevelToContentFilter.INSTANCE.process(doc);
+        PrintDebugFilter.INSTANCE.process(doc, changed, "Largest Block Same Tag Level -> Content");
+
+        changed = ListAtEndFilter.INSTANCE.process(doc);
+        PrintDebugFilter.INSTANCE.process(doc, changed, "List at end filter");
+
+        return true;
     }
 }

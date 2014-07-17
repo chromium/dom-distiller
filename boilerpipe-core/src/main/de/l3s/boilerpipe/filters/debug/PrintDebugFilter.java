@@ -1,3 +1,7 @@
+// Copyright 2014 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 /**
  * boilerpipe
  *
@@ -47,11 +51,16 @@ public final class PrintDebugFilter implements BoilerpipeFilter {
         return false;
     }
 
-    public boolean process(TextDocument doc, String header)
+    public boolean process(TextDocument doc, boolean changed, String header)
             throws BoilerpipeProcessingException {
         if (!DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_BOILER_PIPE_PHASES)) return false;
-        LogUtil.logToConsole("<<<<< " + header + ">>>>>");
-        process(doc);
+        if (changed) {
+            LogUtil.logToConsole(LogUtil.kBlue + "<<<<< " + header + " >>>>>");
+            process(doc);
+            LogUtil.logToConsole(LogUtil.kBlue + "<<<<<                >>>>>");
+        } else {
+            LogUtil.logToConsole(LogUtil.kRed + "~~~~~ No Changes: " + header + " ~~~~~");
+        }
         return false;
     }
 }
