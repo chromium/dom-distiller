@@ -21,6 +21,7 @@
  */
 package de.l3s.boilerpipe.document;
 
+import com.dom_distiller.client.LogUtil;
 import com.google.gwt.dom.client.Node;
 
 import de.l3s.boilerpipe.labels.DefaultLabels;
@@ -174,8 +175,9 @@ public class TextBlock implements Cloneable {
 
     @Override
     public String toString() {
-        return "[" + offsetBlocksStart + "-" + offsetBlocksEnd + ";tl="+tagLevel+"; nw="+numWords+";nwl="+numWrappedLines+";ld="+linkDensity+"]\t"
-                + (isContent?"CONTENT":"boilerplate") + "," + labels + "\n" + getText();
+        return "[" + offsetBlocksStart + "-" + offsetBlocksEnd + ";tl="+tagLevel+"; nw="+numWords+";nwl="+numWrappedLines+";ld="+linkDensity+"]\t" +
+                (isContent ? LogUtil.kGreen + "CONTENT" : LogUtil.kPurple + "boilerplate") + LogUtil.kReset +
+                "," + LogUtil.kDarkGray + labels + LogUtil.kReset + "\n" + getText();
     }
 
     /**
