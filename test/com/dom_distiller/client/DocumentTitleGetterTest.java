@@ -7,49 +7,45 @@ package com.dom_distiller.client;
 import com.google.gwt.dom.client.Element;
 
 public class DocumentTitleGetterTest extends DomDistillerTestCase {
-    public void testNonStringWithoutRoot() {
-        Element img = TestUtil.createImage();
-        String title = DocumentTitleGetter.getDocumentTitle(img, null);
+
+    public void testEmptyStringWithoutRoot() {
+        String title = DocumentTitleGetter.getDocumentTitle("", null);
         assertEquals("", title);
     }
 
-    public void testNonStringWithTitlelessRoot() {
+    public void testEmptyStringWithTitlelessRoot() {
         Element root = TestUtil.createDiv(0);
-        Element img = TestUtil.createImage();
-        String title = DocumentTitleGetter.getDocumentTitle(img, root);
+        String title = DocumentTitleGetter.getDocumentTitle("", root);
         assertEquals("", title);
     }
 
-    public void testNonStringWithTitledRoot() {
+    public void testEmptyStringWithTitledRoot() {
         Element root = TestUtil.createDiv(0);
-        Element img = TestUtil.createImage();
         String titleString = "testing non-string document.title with a titled root";
         Element titleElem = TestUtil.createTitle(titleString);
         root.appendChild(titleElem);
-        String title = DocumentTitleGetter.getDocumentTitle(img, root);
+        String title = DocumentTitleGetter.getDocumentTitle("", root);
         assertEquals(titleString, title);
     }
 
-    public void testNonStringWithMultiTitledRoot() {
+    public void testEmptyStringWithMultiTitledRoot() {
         Element root = TestUtil.createDiv(0);
-        Element img = TestUtil.createImage();
         String titleString = "first testing non-string document.title with a titled root";
         Element titleElem1 = TestUtil.createTitle(titleString);
         Element titleElem2 = TestUtil.createTitle(
             "second testing non-string document.title with a titled root");
         root.appendChild(titleElem1);
         root.appendChild(titleElem2);
-        String title = DocumentTitleGetter.getDocumentTitle(img, root);
+        String title = DocumentTitleGetter.getDocumentTitle("", root);
         assertEquals(titleString, title);
     }
 
-    public void testNonStringWithHTMLTitledRoot() {
+    public void testEmptyStringWithHTMLTitledRoot() {
         Element root = TestUtil.createDiv(0);
-        Element img = TestUtil.createImage();
         Element titleElem = TestUtil.createTitle(
                 "<a href=\"http://htmledtitle.com\">testing non-string <br>document.title</a> with a <b>HTML</b>-titled <br>root");
         root.appendChild(titleElem);
-        String title = DocumentTitleGetter.getDocumentTitle(img, root);
+        String title = DocumentTitleGetter.getDocumentTitle("", root);
         assertEquals("testing non-string document.title with a HTML-titled root", title);
     }
 

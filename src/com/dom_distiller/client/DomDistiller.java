@@ -33,15 +33,15 @@ public class DomDistiller implements Exportable {
   public static DomDistillerProtos.DomDistillerResult applyWithOptions(
           DomDistillerProtos.DomDistillerOptions options) {
       DomDistillerProtos.DomDistillerResult result = DomDistillerProtos.DomDistillerResult.create();
-      result.setTitle(DocumentTitleGetter.getDocumentTitle(
-              Document.get().getTitle(), Document.get().getDocumentElement()));
+      ContentExtractor contentExtractor = new ContentExtractor(Document.get().getDocumentElement());
+      result.setTitle(contentExtractor.extractTitle());
 
       sDebugLevel = options.hasDebugLevel() ? options.getDebugLevel() : 0;
       LogUtil.logToConsole("DomDistiller debug level: " + sDebugLevel);
 
       DomDistillerProtos.DistilledContent content = DomDistillerProtos.DistilledContent.create();
-      boolean text_only = options.hasExtractTextOnly() && options.getExtractTextOnly();
-      content.setHtml(ContentExtractor.extractContent(text_only));
+      boolean textOnly = options.hasExtractTextOnly() && options.getExtractTextOnly();
+      content.setHtml(contentExtractor.extractContent(textOnly));
       result.setDistilledContent(content);
 
       result.setPaginationInfo(PagingLinksFinder.getPaginationInfo());

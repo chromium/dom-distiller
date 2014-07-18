@@ -11,11 +11,6 @@
 
 package com.dom_distiller.client;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
 
@@ -42,19 +37,17 @@ public class DocumentTitleGetter implements Exportable {
     /**
      * @return The title of the distilled document.
      */
-    public static String getDocumentTitle(Object objTitle, Element root) {
-        String currTitle  = "", origTitle = "";
+    public static String getDocumentTitle(String currTitle, Element root) {
 
-        if (objTitle.getClass() == currTitle.getClass()) {  // If objTitle is of String type.
-            currTitle = origTitle = objTitle.toString();
-        } else if (root != null) {  // Otherwise, use text of first TITLE element.
+        if (currTitle.isEmpty() && root != null) {  // Otherwise, use text of first TITLE element.
             NodeList<Element> titles = root.getElementsByTagName("TITLE");
             if (titles.getLength() > 0) {
-              currTitle = origTitle = titles.getItem(0).getInnerText();
+              currTitle = titles.getItem(0).getInnerText();
             }
         }
-        if (currTitle == "") return "";
-        
+        if (currTitle.isEmpty()) return "";
+
+        String origTitle = currTitle;
         if (StringUtil.match(currTitle, " [\\|\\-] ")) {  // Title has '|' and/or '-'.
             // Get part before last '|' or '-'.
             currTitle = StringUtil.findAndReplace(origTitle, "(.*)[\\|\\-] .*", "$1");

@@ -59,7 +59,7 @@ public final class ArticleExtractor {
         PrintDebugFilter.INSTANCE.process(doc, true, "Start");
 
         TerminatingBlocksFinder.INSTANCE.process(doc);
-        new DocumentTitleMatchClassifier(doc.getTitle()).process(doc);
+        new DocumentTitleMatchClassifier(doc.getCandidateTitles()).process(doc);
         // Intentionally don't print changes from these two steps.
 
         changed = NumWordsRulesClassifier.INSTANCE.process(doc);

@@ -28,6 +28,7 @@ import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.labels.DefaultLabels;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -40,58 +41,63 @@ import java.util.regex.Pattern;
  */
 public final class DocumentTitleMatchClassifier implements BoilerpipeFilter {
 
-    private final Set<String> potentialTitles;
+    private  Set<String> potentialTitles;
 
-    public DocumentTitleMatchClassifier(String title) {
-        if (title == null) {
+    public DocumentTitleMatchClassifier(List<String> titles) {
+        if (titles == null) {
             this.potentialTitles = null;
         } else {
+            this.potentialTitles = new HashSet<String>();
 
-            title = title.replace('\u00a0', ' ');
-            title = title.replace("'", "");
-
-            title = title.trim().toLowerCase();
-
-            if (title.length() == 0) {
-                this.potentialTitles = null;
-            } else {
-                this.potentialTitles = new HashSet<String>();
-
-                potentialTitles.add(title);
-
-                String p;
-
-                p = getLongestPart(title, "[ ]*[\\|»|-][ ]*");
-                if (p != null) {
-                    potentialTitles.add(p);
-                }
-                p = getLongestPart(title, "[ ]*[\\|»|:][ ]*");
-                if (p != null) {
-                    potentialTitles.add(p);
-                }
-                p = getLongestPart(title, "[ ]*[\\|»|:\\(\\)][ ]*");
-                if (p != null) {
-                    potentialTitles.add(p);
-                }
-                p = getLongestPart(title, "[ ]*[\\|»|:\\(\\)\\-][ ]*");
-                if (p != null) {
-                    potentialTitles.add(p);
-                }
-                p = getLongestPart(title, "[ ]*[\\|»|,|:\\(\\)\\-][ ]*");
-                if (p != null) {
-                    potentialTitles.add(p);
-                }
-                p = getLongestPart(title, "[ ]*[\\|»|,|:\\(\\)\\-\u00a0][ ]*");
-                if (p != null) {
-                    potentialTitles.add(p);
-                }
-
-                addPotentialTitles(potentialTitles, title, "[ ]+[\\|][ ]+", 4);
-                addPotentialTitles(potentialTitles, title, "[ ]+[\\-][ ]+", 4);
-
-                potentialTitles.add(title.replaceFirst(" - [^\\-]+$", ""));
-                potentialTitles.add(title.replaceFirst("^[^\\-]+ - ", ""));
+            for (String title : titles) {
+                processPotentialTitle(title);
             }
+        }
+    }
+
+    private void processPotentialTitle(String title) {
+        title = title.replace('\u00a0', ' ');
+        title = title.replace("'", "");
+
+        title = title.trim().toLowerCase();
+
+        if (title.length() != 0) {
+            if (!potentialTitles.add(title)) {
+                return;
+            }
+
+            String p;
+
+            p = getLongestPart(title, "[ ]*[\\|»|-][ ]*");
+            if (p != null) {
+                potentialTitles.add(p);
+            }
+            p = getLongestPart(title, "[ ]*[\\|»|:][ ]*");
+            if (p != null) {
+                potentialTitles.add(p);
+            }
+            p = getLongestPart(title, "[ ]*[\\|»|:\\(\\)][ ]*");
+            if (p != null) {
+                potentialTitles.add(p);
+            }
+            p = getLongestPart(title, "[ ]*[\\|»|:\\(\\)\\-][ ]*");
+            if (p != null) {
+                potentialTitles.add(p);
+            }
+            p = getLongestPart(title, "[ ]*[\\|»|,|:\\(\\)\\-][ ]*");
+            if (p != null) {
+                potentialTitles.add(p);
+            }
+            p = getLongestPart(title, "[ ]*[\\|»|,|:\\(\\)\\-\u00a0][ ]*");
+            if (p != null) {
+                potentialTitles.add(p);
+            }
+
+            addPotentialTitles(potentialTitles, title, "[ ]+[\\|][ ]+", 4);
+            addPotentialTitles(potentialTitles, title, "[ ]+[\\-][ ]+", 4);
+
+            potentialTitles.add(title.replaceFirst(" - [^\\-]+$", ""));
+            potentialTitles.add(title.replaceFirst("^[^\\-]+ - ", ""));
         }
     }
 

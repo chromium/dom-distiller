@@ -22,6 +22,7 @@ import org.timepedia.exporter.client.Export;
 import org.timepedia.exporter.client.Exportable;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -29,22 +30,56 @@ import java.util.logging.Logger;
 public class ContentExtractor implements Exportable {
     static Logger logger = Logger.getLogger("DomDistiller");
 
-    public static String extractContent() {
+    private final Element documentElement;
+
+    private final MarkupParser parser;
+
+    private final List<String> candidateTitles;
+
+    public ContentExtractor(Element root) {
+        this.documentElement = root;
+        this.parser = new MarkupParser(root);
+        this.candidateTitles = new LinkedList<String>();
+    }
+
+    // Grabs a list of candidate titles in descending priority order:
+    // 1) meta-information
+    // 2) The document's title element
+    // 3) document.title
+    private void ensureTitleInitialized() {
+        if (candidateTitles.size() > 0) return;
+
+        String title = parser.getTitle();
+        if (!title.isEmpty()) {
+            candidateTitles.add(title);
+        }
+        candidateTitles.add(DocumentTitleGetter.getDocumentTitle(
+                    Document.get().getTitle(), Document.get().getDocumentElement()));
+        candidateTitles.add(Document.get().getTitle());
+    }
+
+    public String extractTitle() {
+        ensureTitleInitialized();
+        assert candidateTitles.size() > 0;
+        return candidateTitles.get(0);
+    }
+
+    public String extractContent() {
         return extractContent(false);
     }
 
-    public static String extractContent(boolean textOnly) {
+    public String extractContent(boolean textOnly) {
         BoilerpipeHTMLContentHandler htmlParser = new BoilerpipeHTMLContentHandler();
 
         htmlParser.startDocument();
-        Element documentElement = Document.get().getDocumentElement();
         DomToSaxVisitor domToSaxVisitor = new DomToSaxVisitor(htmlParser);
         FilteringDomVisitor filteringDomVisitor = new FilteringDomVisitor(domToSaxVisitor);
         new DomWalker(filteringDomVisitor).walk(documentElement);
         htmlParser.endDocument();
 
         TextDocument document = htmlParser.toTextDocument();
-        document.setTitle(Document.get().getTitle().trim());
+        ensureTitleInitialized();
+        document.setCanddiateTitles(candidateTitles);
         try {
             CommonExtractors.ARTICLE_EXTRACTOR.process(document);
         } catch (BoilerpipeProcessingException e) {

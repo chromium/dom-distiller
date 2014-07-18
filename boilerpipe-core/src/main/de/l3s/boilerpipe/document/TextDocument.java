@@ -20,6 +20,7 @@
  */
 package de.l3s.boilerpipe.document;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ import java.util.List;
  */
 public class TextDocument implements Cloneable {
     final List<TextBlock> textBlocks;
-    String title;
+    List<String> candidateTitles;
 
     /**
      * Creates a new {@link TextDocument} with given {@link TextBlock}s, and no
@@ -46,13 +47,13 @@ public class TextDocument implements Cloneable {
      * Creates a new {@link TextDocument} with given {@link TextBlock}s and
      * given title.
      *
-     * @param title
-     *            The "main" title for this text document.
+     * @param titles
+     *            The possible titles for this text document.
      * @param textBlocks
      *            The text blocks of this document.
      */
-    public TextDocument(final String title, final List<TextBlock> textBlocks) {
-        this.title = title;
+    public TextDocument(final List<String> titles, final List<TextBlock> textBlocks) {
+        this.candidateTitles = titles;
         this.textBlocks = textBlocks;
     }
 
@@ -66,24 +67,23 @@ public class TextDocument implements Cloneable {
     }
 
     /**
-     * Returns the "main" title for this document, or <code>null</code> if no
-     * such title has ben set.
+     * Returns a list of candidate titles for this document, or <code>null</code> if no
+     * such title has been identified. There can be multiple competing titles specified
+     * in the document (e.g. document.title vs opengraph info)
      *
-     * @return The "main" title.
+     * @return The list of possible titles.
      */
-    public String getTitle() {
-        return title;
+    public List<String> getCandidateTitles() {
+        return candidateTitles;
     }
 
     /**
-     * Updates the "main" title for this document.
-     *
-     * @param title
+     * Sets the list of candidate titles.
+     * @param candidateTitles
      */
-    public void setTitle(final String title) {
-    	this.title = title;
+    public void setCanddiateTitles(List<String> candidateTitles) {
+        this.candidateTitles = new LinkedList<String>(candidateTitles);
     }
-
     /**
      * Returns the {@link TextDocument}'s content.
      *
