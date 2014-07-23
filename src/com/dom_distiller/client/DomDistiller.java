@@ -45,6 +45,9 @@ public class DomDistiller implements Exportable {
       result.setDistilledContent(content);
 
       result.setPaginationInfo(PagingLinksFinder.getPaginationInfo());
+
+      result.setMarkupInfo(contentExtractor.getMarkupParser().getMarkupInfo());
+
       return result;
   }
 }

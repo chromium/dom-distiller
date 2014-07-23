@@ -14,9 +14,6 @@ package com.dom_distiller.client;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
 
-import org.timepedia.exporter.client.Export;
-import org.timepedia.exporter.client.Exportable;
-
 /**
  * This class gets the title for the distilled document, whose functionality is migrated from
  * readability.getArticleTitle() in chromium codebase's third_party/readability/js/readability.js.
@@ -32,8 +29,7 @@ import org.timepedia.exporter.client.Exportable;
  * TextBlock's to further mark more TextBlocks as content.  Lastly, BoilerplateBlockFilter makes
  * sure to block filtering of these TITLE-marked TextBlock's.
  */
-@Export()
-public class DocumentTitleGetter implements Exportable {
+public class DocumentTitleGetter {
     /**
      * @return The title of the distilled document.
      */

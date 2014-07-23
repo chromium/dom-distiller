@@ -19,11 +19,41 @@ message PaginationInfo {
   optional string canonical_page = 3;
 }
 
+message MarkupArticle {
+  optional string published_time = 1;
+  optional string modified_time = 2;
+  optional string expiration_time = 3;
+  optional string section = 4;
+  repeated string authors = 5;
+}
+
+message MarkupImage {
+  optional string url = 1;
+  optional string secure_url = 2;
+  optional string type = 3;
+  optional string caption = 4;
+  optional int32 width = 5;
+  optional int32 height = 6;
+}
+
+message MarkupInfo {
+  optional string title = 1;
+  optional string type = 2;
+  optional string url = 3;
+  optional string description = 4;
+  optional string publisher = 5;
+  optional string copyright = 6;
+  optional string author = 7;
+  optional MarkupArticle article = 8;
+  repeated MarkupImage images = 9;
+}
+
 message DomDistillerResult {
   optional string title = 1;
   optional DistilledContent distilled_content = 2;
   optional PaginationInfo pagination_info = 3;
   repeated string image_urls = 4;
+  optional MarkupInfo markup_info = 5;
 }
 
 message DomDistillerOptions {

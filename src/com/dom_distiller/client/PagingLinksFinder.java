@@ -18,9 +18,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.user.client.Window;
 
-import org.timepedia.exporter.client.Export;
-import org.timepedia.exporter.client.Exportable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,8 +38,7 @@ import java.util.Map;
  * href, text, class name and ID,  Lastly, the page link with the highest score of at least 50 is
  * considered to have enough confidence as the next or previous page link.
  */
-@Export()
-public class PagingLinksFinder implements Exportable {
+public class PagingLinksFinder {
     // Match for next page: next, continue, >, >>, » but not >|, »| as those usually mean last.
     private static final String NEXT_LINK_REGEX = "(next|weiter|continue|>([^\\|]|$)|»([^\\|]|$))";
     private static final String PREV_LINK_REGEX = "(prev|early|old|new|<|«)";

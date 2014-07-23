@@ -24,6 +24,7 @@ public class DomDistillerTestSuite extends GWTTestSuite {
         suite.addTestSuite(GwtOverlayProtoTest.class);
         suite.addTestSuite(IEReadingViewParserTest.class);
         suite.addTestSuite(MarkupParserTest.class);
+        suite.addTestSuite(MarkupParserProtoTest.class);
         suite.addTestSuite(NodeListExpanderTest.class);
         suite.addTestSuite(OpenGraphProtocolParserTest.class);
         suite.addTestSuite(OrderedNodeMatcherTest.class);

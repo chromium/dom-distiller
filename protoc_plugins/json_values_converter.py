@@ -185,8 +185,8 @@ class CppConverterWriter(writer.CodeWriter):
           'if (!field_list->Get(i, &inner_message_value)) {{\n'
           '  goto error;\n'
           '}}\n'
-          'message.add_{field_name}(\n'
-          '    {inner_class_parser}::ReadFromValue(inner_message_value));\n'
+          '*message.add_{field_name}() =\n'
+          '    {inner_class_parser}::ReadFromValue(inner_message_value);\n'
           )
     else:
       middle = (
@@ -203,7 +203,7 @@ class CppConverterWriter(writer.CodeWriter):
         field_name=field.name,
         cpp_type=field.CppPrimitiveType() if not field.IsClassType() else None,
         value_type=field.CppValueType() if not field.IsClassType() else None,
-        inner_class_converter=field.CppConverterType(),
+        inner_class_parser=field.CppConverterType()
         )
 
   def OptionalMemberFieldRead(self, field):

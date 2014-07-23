@@ -18,16 +18,12 @@ import de.l3s.boilerpipe.extractors.CommonExtractors;
 import de.l3s.boilerpipe.labels.DefaultLabels;
 import de.l3s.boilerpipe.sax.BoilerpipeHTMLContentHandler;
 
-import org.timepedia.exporter.client.Export;
-import org.timepedia.exporter.client.Exportable;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
-@Export()
-public class ContentExtractor implements Exportable {
+public class ContentExtractor {
     static Logger logger = Logger.getLogger("DomDistiller");
 
     private final Element documentElement;
@@ -57,6 +53,8 @@ public class ContentExtractor implements Exportable {
                     Document.get().getTitle(), Document.get().getDocumentElement()));
         candidateTitles.add(Document.get().getTitle());
     }
+
+    public MarkupParser getMarkupParser() { return parser; }
 
     public String extractTitle() {
         ensureTitleInitialized();

@@ -7,10 +7,8 @@ package com.dom_distiller.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dom_distiller.proto.DomDistillerProtos;
 import com.google.gwt.dom.client.Element;
-
-import org.timepedia.exporter.client.Export;
-import org.timepedia.exporter.client.Exportable;
 
 /**
  * This class loads the different parsers that are based on different markup specifications, and
@@ -31,8 +29,7 @@ import org.timepedia.exporter.client.Exportable;
  // TODO(kuan): for some properties, e.g. dominant and inline images, we might want to retrieve from
  // multiple parsers; IEReadingViewParser provides more information as it scans all images in the
  // document.  If we do so, we would need to merge the multiple versions in a meaningful way.
-@Export()
-public class MarkupParser implements Exportable {
+public class MarkupParser {
     public static final String ARTICLE_TYPE = "Article";
 
     /**
@@ -95,40 +92,25 @@ public class MarkupParser implements Exportable {
     /**
      * The object that contains the properties of an image in the document.
      */
-    @Export()
-    public static class Image implements Exportable {
+    public static class Image {
         public String url = "";
         public String secureUrl = "";
         public String type = "";
         public String caption = "";
         public int width = 0;
         public int height = 0;
-
-        public String getUrl() { return url; }
-        public String getSecureUrl() { return secureUrl; }
-        public String getType() { return type; }
-        public String getCaption() { return caption; }
-        public int getWidth() { return width; }
-        public int getHeight() { return height; }
     }
 
     /**
      * The object that contains the properties of an article document.
      */
-    @Export()
-    public static class Article implements Exportable {
+    public static class Article {
         public String publishedTime = "";
         public String modifiedTime = "";
         public String expirationTime = "";
         public String section = "";
         // |authors| should be an empty array (not null) if there's no author.
         public String[] authors = null;
-
-        public String getPublishedTime() { return publishedTime; }
-        public String getModifiedTime() { return modifiedTime; }
-        public String getExpirationTime() { return expirationTime; }
-        public String getSection() { return section; }
-        public String[] getAuthors() { return authors; }
     }
 
     private final List<Accessor> mAccessors;
@@ -225,5 +207,46 @@ public class MarkupParser implements Exportable {
             optOut = mAccessors.get(i).optOut();
         }
         return optOut;
+    }
+
+    public DomDistillerProtos.MarkupInfo getMarkupInfo() {
+        DomDistillerProtos.MarkupInfo info = DomDistillerProtos.MarkupInfo.create();
+        if (optOut()) return info;
+
+        info.setTitle(getTitle());
+        info.setType(getType());
+        info.setUrl(getUrl());
+        info.setDescription(getDescription());
+        info.setPublisher(getPublisher());
+        info.setCopyright(getCopyright());
+        info.setAuthor(getAuthor());
+
+        Article article = getArticle();
+        if (article != null) {
+            DomDistillerProtos.MarkupArticle articleInfo =
+                    DomDistillerProtos.MarkupArticle.create();
+            articleInfo.setPublishedTime(article.publishedTime);
+            articleInfo.setModifiedTime(article.modifiedTime);
+            articleInfo.setExpirationTime(article.expirationTime);
+            articleInfo.setSection(article.section);
+            for (int i = 0; i < article.authors.length; i++) {
+                articleInfo.addAuthors(article.authors[i]);
+            }
+            info.setArticle(articleInfo);
+        }
+
+        Image[] images = getImages();
+        for (int i = 0; i < images.length; i++) {
+            Image image = images[i];
+            DomDistillerProtos.MarkupImage imageInfo = info.addImages();
+            imageInfo.setUrl(image.url);
+            imageInfo.setSecureUrl(image.secureUrl);
+            imageInfo.setType(image.type);
+            imageInfo.setCaption(image.caption);
+            imageInfo.setWidth(image.width);
+            imageInfo.setHeight(image.height);
+        }
+        
+        return info;
     }
 }
