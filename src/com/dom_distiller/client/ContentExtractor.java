@@ -40,8 +40,8 @@ public class ContentExtractor {
 
     // Grabs a list of candidate titles in descending priority order:
     // 1) meta-information
-    // 2) The document's title element
-    // 3) document.title
+    // 2) The document's title element, modified based on some readability heuristics
+    // 3) The document's title element, if it's a string
     private void ensureTitleInitialized() {
         if (candidateTitles.size() > 0) return;
 
@@ -51,7 +51,9 @@ public class ContentExtractor {
         }
         candidateTitles.add(DocumentTitleGetter.getDocumentTitle(
                     Document.get().getTitle(), Document.get().getDocumentElement()));
-        candidateTitles.add(Document.get().getTitle());
+        if (Document.get().getTitle().getClass() == String.class) {
+            candidateTitles.add(Document.get().getTitle());
+        }
     }
 
     public MarkupParser getMarkupParser() { return parser; }
@@ -77,6 +79,7 @@ public class ContentExtractor {
 
         TextDocument document = htmlParser.toTextDocument();
         ensureTitleInitialized();
+
         document.setCanddiateTitles(candidateTitles);
         try {
             CommonExtractors.ARTICLE_EXTRACTOR.process(document);

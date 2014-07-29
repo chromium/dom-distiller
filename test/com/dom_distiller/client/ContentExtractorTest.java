@@ -40,7 +40,7 @@ public class ContentExtractorTest extends DomDistillerTestCase {
                 extractedContent.contains(titleDiv.getInnerText()));
 
         // Now set the title and it should excluded from the content.
-        mRoot.appendChild(TestUtil.createTitle(TITLE_TEXT));
+        mHead.appendChild(TestUtil.createTitle(TITLE_TEXT));
         extractor = new ContentExtractor(mRoot);
         extractedContent = extractor.extractContent();
         assertTrue(extractedContent + " must contain 'content':" + CONTENT_TEXT,

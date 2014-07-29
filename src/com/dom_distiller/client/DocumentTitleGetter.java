@@ -33,17 +33,19 @@ public class DocumentTitleGetter {
     /**
      * @return The title of the distilled document.
      */
-    public static String getDocumentTitle(String currTitle, Element root) {
+    public static String getDocumentTitle(Object objTitle, Element root) {
+        String currTitle  = "", origTitle = "";
 
-        if (currTitle.isEmpty() && root != null) {  // Otherwise, use text of first TITLE element.
+        if (objTitle.getClass() == currTitle.getClass()) {  // If objTitle is of String type.
+            currTitle = origTitle = objTitle.toString();
+        } else if (root != null) {  // Otherwise, use text of first TITLE element.
             NodeList<Element> titles = root.getElementsByTagName("TITLE");
             if (titles.getLength() > 0) {
-              currTitle = titles.getItem(0).getInnerText();
+              currTitle = origTitle = titles.getItem(0).getInnerText();
             }
         }
-        if (currTitle.isEmpty()) return "";
+        if (currTitle == "") return "";
 
-        String origTitle = currTitle;
         if (StringUtil.match(currTitle, " [\\|\\-] ")) {  // Title has '|' and/or '-'.
             // Get part before last '|' or '-'.
             currTitle = StringUtil.findAndReplace(origTitle, "(.*)[\\|\\-] .*", "$1");
