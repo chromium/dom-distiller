@@ -173,7 +173,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
      * Adds additional labels to the text block based on heuristics calculated from the DOM.
      */
     private void applyDomBasedLabels(Element element, String tagName) {
-        String className = element.getAttribute("className");
+        String className = element.getAttribute("class");
         String id = element.getAttribute("id");
 
         if (PAT_COMMENT.matcher(className).find() || PAT_COMMENT.matcher(id).find()) {
