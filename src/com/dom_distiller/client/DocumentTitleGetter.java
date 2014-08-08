@@ -34,14 +34,16 @@ public class DocumentTitleGetter {
      * @return The title of the distilled document.
      */
     public static String getDocumentTitle(Object objTitle, Element root) {
-        String currTitle  = "", origTitle = "";
+        String currTitle = "", origTitle = "";
 
         if (objTitle.getClass() == currTitle.getClass()) {  // If objTitle is of String type.
             currTitle = origTitle = objTitle.toString();
         } else if (root != null) {  // Otherwise, use text of first TITLE element.
             NodeList<Element> titles = root.getElementsByTagName("TITLE");
             if (titles.getLength() > 0) {
-              currTitle = origTitle = titles.getItem(0).getInnerText();
+              // Use javacript textContent instead of javascript innerText; the latter only returns
+              // visible text, but <title> tags are invisible.
+              currTitle = origTitle = DomUtil.javascriptTextContent(titles.getItem(0));
             }
         }
         if (currTitle == "") return "";
@@ -65,8 +67,8 @@ public class DocumentTitleGetter {
             // TODO(kuan): this is what readability does, but this block may make more sense as an
             // if rather than else-if, e.g. currently this else-if block is used when original title
             // is "foo" but not when it is "foo |" or "foo:".
-            currTitle = findTheOnlyH1(root);
-            if (currTitle == null) currTitle = origTitle;
+            currTitle = findFirstH1(root);
+            if (currTitle.isEmpty()) currTitle = origTitle;
         }
 
         currTitle = StringUtil.trim(currTitle);
@@ -77,8 +79,14 @@ public class DocumentTitleGetter {
     }
 
 
-    private static String findTheOnlyH1(Element root) {
+    private static String findFirstH1(Element root) {
         NodeList<Element> hOnes = root.getElementsByTagName("H1");
-        return hOnes.getLength() == 1 ? hOnes.getItem(0).getInnerText() : null;
+        // Use javacript innerText instead of javascript textContent; the former only returns
+        // visible text, and we assume visible H1's are more inclined to being potential titles.
+        String h1 = "";
+        for (int i = 0; i < hOnes.getLength() && h1.isEmpty(); i++) {
+            h1 = DomUtil.getInnerText(hOnes.getItem(i));
+        }
+        return h1;
     }
 }

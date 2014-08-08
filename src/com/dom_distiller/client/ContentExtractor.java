@@ -142,20 +142,12 @@ public class ContentExtractor {
 
         // Temporarily add the node to the DOM so that style is calculated.
         Document.get().getBody().appendChild(node);
-        String output = javascriptInnerText(node);
+        String output = DomUtil.getInnerText(node);
 
         // And remove it again.
         Document.get().getBody().removeChild(node);
         return output;
     }
-
-    /**
-     * Use jsni for direct access to javascript's inner text. This avoid's GWT's implementation
-     * which is intentionally different to mimic an old IE behaviour.
-     */
-    private static native String javascriptInnerText(Node node) /*-{
-        return node.innerText;
-    }-*/;
 
     private static List<Node> getContentNodesForTextDocument(TextDocument document) {
         List<Node> contentTextNodes = new ArrayList<Node>();

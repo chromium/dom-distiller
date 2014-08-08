@@ -34,20 +34,20 @@ public class ContentExtractorTest extends DomDistillerTestCase {
         ContentExtractor extractor = new ContentExtractor(mRoot);
         String extractedContent = extractor.extractContent();
         assertTrue(extractedContent + " must contain 'content':" + CONTENT_TEXT,
-                extractedContent.contains(contentDiv.getInnerText()));
+                extractedContent.contains(DomUtil.getInnerText(contentDiv)));
         assertTrue(
                 extractedContent + " must contain 'title':" + TITLE_TEXT,
-                extractedContent.contains(titleDiv.getInnerText()));
+                extractedContent.contains(DomUtil.getInnerText(titleDiv)));
 
         // Now set the title and it should excluded from the content.
         mHead.appendChild(TestUtil.createTitle(TITLE_TEXT));
         extractor = new ContentExtractor(mRoot);
         extractedContent = extractor.extractContent();
         assertTrue(extractedContent + " must contain 'content':" + CONTENT_TEXT,
-                extractedContent.contains(contentDiv.getInnerText()));
+                extractedContent.contains(DomUtil.getInnerText(contentDiv)));
         assertFalse(
-                extractedContent + " must not contain 'title':" +TITLE_TEXT,
-                extractedContent.contains(titleDiv.getInnerText()));
+                extractedContent + " must not contain 'title':" + TITLE_TEXT,
+                extractedContent.contains(DomUtil.getInnerText(titleDiv)));
     }
 
     public void testExtractsEssentialWhitespace() {

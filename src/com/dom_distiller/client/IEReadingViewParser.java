@@ -133,7 +133,9 @@ public class IEReadingViewParser implements MarkupParser.Accessor {
         // Get date from any element that includes the "dateline" class.
         Element elem = DomUtil.getFirstElementWithClassName(mRoot, "dateline");
         if (elem != null) {
-            mDate = elem.getInnerText();
+            // Use javascript textContent (instead of javascript innerText) to include invisible
+            // text.
+            mDate = DomUtil.javascriptTextContent(elem);
         } else {  // Otherwise, get date from meta tag with "displaydate" as name.
             for (int i = 0; i < mAllMeta.getLength(); i++) {
                 MetaElement meta = MetaElement.as(mAllMeta.getItem(i));
@@ -151,7 +153,8 @@ public class IEReadingViewParser implements MarkupParser.Accessor {
         // Get author from the first element that includes the "byline-name" class.
         // Note that we ignore the order of this element for now.
         Element elem = DomUtil.getFirstElementWithClassName(mRoot, "byline-name");
-        if (elem != null) mAuthor = elem.getInnerText();
+        // Use javascript textContent (instead of javascript innerText) to include invisible text.
+        if (elem != null) mAuthor = DomUtil.javascriptTextContent(elem);
     }
 
     private void findPublisher() {
@@ -228,16 +231,27 @@ public class IEReadingViewParser implements MarkupParser.Accessor {
         if (!parent.hasTagName("FIGURE")) return "";
         NodeList<Element> captions = parent.getElementsByTagName("FIGCAPTION");
         int numCaptions = captions.getLength();
-        if (numCaptions > 0 && numCaptions <= 2)
-            return captions.getItem(0).getInnerText();  // Just use the first one.
-        return "";
+        String caption = "";
+        if (numCaptions > 0 && numCaptions <= 2) {
+            // Use javascript innerText (instead of javascript textContent) to get only visible
+            // captions.
+            for (int i = 0; i < numCaptions && caption.isEmpty(); i++) {
+                caption = DomUtil.getInnerText(captions.getItem(i));
+            }
+        }
+        return caption;
     }
 
     private static boolean isTextInBody(Element root, String text) {
         String lowerText = text.toLowerCase();
         NodeList<Element> bodies = root.getElementsByTagName("BODY");
         for (int i = 0; i < bodies.getLength(); i++) {
-            if (bodies.getItem(i).getInnerText().toLowerCase().contains(lowerText)) return true;
+            // Use javascript textContent (instead of javascript innerText) to include invisible
+            // text.
+            if (DomUtil.javascriptTextContent(
+                    bodies.getItem(i)).toLowerCase().contains(lowerText)) {
+                return true;
+            }
         }
         return false;
     }

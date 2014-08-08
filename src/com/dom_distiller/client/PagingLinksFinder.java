@@ -133,7 +133,9 @@ public class PagingLinksFinder {
                 continue;
             }
 
-            String linkText = link.getInnerText();
+            // Use javascript innerText (instead of javascript textContent) to only get visible
+            // text.
+            String linkText = DomUtil.getInnerText(link);
 
             // If the linkText looks like it's not the next or previous page, skip it.
             if (StringUtil.match(linkText, EXTRANEOUS_REGEX) || linkText.length() > 25) {
@@ -416,7 +418,9 @@ public class PagingLinksFinder {
         for (int i = 0; i < allLinks.getLength(); i++) {
             AnchorElement link = AnchorElement.as(allLinks.getItem(i));
 
-            String text = link.getInnerText();
+            // Use javascript innerText (instead of javascript textContent) to get only visible
+            // text.
+            String text = DomUtil.getInnerText(link);
             // Trim unnecessary whitespaces from text.
             String[] words = StringUtil.split(text, "\\s+");
             text = "";

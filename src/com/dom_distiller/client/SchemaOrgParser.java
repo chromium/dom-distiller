@@ -444,7 +444,8 @@ public class SchemaOrgParser {
         if (sTagAttributeMap.containsKey(tagName)) {
             value = e.getAttribute(sTagAttributeMap.get(tagName));
         }
-        if (value.isEmpty()) value = e.getInnerText();
+        // Use javascript textContent (instead of javascript innerText) to include invisible text.
+        if (value.isEmpty()) value = DomUtil.javascriptTextContent(e);
         return value;
     }
 
@@ -454,7 +455,9 @@ public class SchemaOrgParser {
         String tagName = e.getTagName();
         if ((tagName.equalsIgnoreCase("A") || tagName.equalsIgnoreCase("LINK")) &&
                 e.getAttribute("REL").equalsIgnoreCase(AUTHOR_REL)) {
-            author = e.getInnerText();
+            // Use javascript textContent (instead of javascript innerText) to include invisible
+            // text.
+            author = DomUtil.javascriptTextContent(e);
         }
         return author;
     }

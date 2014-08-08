@@ -78,4 +78,33 @@ public class DomUtil {
                 style.getVisibility().equals("hidden") ||
                 opacity == 0.0F);
     }
+
+    /*
+     * We want to use jsni for direct access to javascript's innerText.  This avoids GWT's
+     * implementation of Element::getInnerText(), which is intentionally different to mimic an old
+     * IE behaviour, which returns text within <script> tags.
+     * However, in GWT, javascript innerText always returns null, so we fall back to the GWT
+     * implementation in that case to cater to GWT tests.
+     */
+    public static String getInnerText(Node node) {
+        String text = javascriptInnerText(node);
+        if (text != null) return text;
+        return node.getNodeType() == Node.ELEMENT_NODE ? Element.as(node).getInnerText() : "";
+    }
+
+    private static native String javascriptInnerText(Node node) /*-{
+        return node.innerText;
+    }-*/;
+
+    /**
+     * Use jsni for direct access to javascript's textContent.  textContent is different from
+     * innerText (see http://www.kellegous.com/j/2013/02/27/innertext-vs-textcontent):
+     * - textContent is the raw textual content, doesn't require layout, and is basically a
+     *   concatenation of the values of all text nodes within a subtree.
+     * - innerText is what is presented to the user, requires layout, and excludes text in invisible
+     *   elements, e.g. <title> tags.
+     */
+    public static native String javascriptTextContent(Node node) /*-{
+        return node.textContent;
+    }-*/;
 }
