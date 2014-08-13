@@ -102,6 +102,7 @@ public class FilteringDomVisitor implements DomWalker.Visitor {
         Element parent = e.getParentElement();
         LogUtil.logToConsole("TABLE: " + type +
                 ", id=" + e.getId() +
+                ", class=" + e.getClassName() +
                 ", parent=[" + parent.getTagName() +
                 ", id=" + parent.getId() +
                 ", class=" + parent.getClassName() +

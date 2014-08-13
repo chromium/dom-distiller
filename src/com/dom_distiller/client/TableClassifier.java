@@ -1,4 +1,4 @@
-// Copyright 2014 The Chromium Authors. All rights reserved.
+// Copyright 2015 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -33,9 +33,11 @@ public class TableClassifier {
         ROLE_TABLE,
         ROLE_DESCENDANT,
         DATATABLE_0,
-        SUMMARY_CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
+        CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
         ABBR_HEADERS_SCOPE,
         ONLY_HAS_ABBR,
+        MORE_95_PERCENT_DOC_WIDTH,
+        SUMMARY,
         NESTED_TABLE,
         LESS_EQ_1_ROW,
         LESS_EQ_1_COL,
@@ -43,7 +45,6 @@ public class TableClassifier {
         CELLS_HAVE_BORDER,
         DIFFERENTLY_COLORED_ROWS,
         MORE_EQ_20_ROWS,
-        MORE_95_PERCENT_DOC_WIDTH,
         LESS_EQ_10_CELLS,
         EMBED_OBJECT_APPLET_IFRAME,
         DEFAULT,
@@ -130,15 +131,14 @@ public class TableClassifier {
         if (t.getAttribute("datatable").equals("0")) {
             return logAndReturn(Reason.DATATABLE_0, "", Type.LAYOUT);
         }
- 
-        // 6) Table having summary attribute or legitimate data table structures is data table:
+
+        // 6) Table having legitimate data table structures is data table:
         // a) table has <caption>, <thead>, <tfoot>, <colgroup>, <col>, or <th> elements
-        if (t.hasAttribute("summary") ||
-                t.getCaption() != null || t.getTHead() != null || t.getTFoot() != null ||
+        if (t.getCaption() != null || t.getTHead() != null || t.getTFoot() != null ||
                 hasOneOfElements(directDescendants, sHeaderTags)) {
-            return logAndReturn(Reason.SUMMARY_CAPTION_THEAD_TFOOT_COLGROUP_COL_TH, "", Type.DATA);
+            return logAndReturn(Reason.CAPTION_THEAD_TFOOT_COLGROUP_COL_TH, "", Type.DATA);
         }
- 
+
         // Extract all <td> elements from direct descendants, for easier/faster multiple access.
         List<Element> directTDs = new ArrayList<Element>();
         for (Element e : directDescendants) {
@@ -156,47 +156,12 @@ public class TableClassifier {
                 return logAndReturn(Reason.ONLY_HAS_ABBR, "", Type.DATA);
             }
         }
- 
-        // 7) Table having nested table(s) is layout table.
-        if (hasNestedTables(t)) return logAndReturn(Reason.NESTED_TABLE, "", Type.LAYOUT);
- 
-        // 8) Table having only one row or column is layout table.
-        NodeList<TableRowElement> rows = t.getRows();
-        if (rows.getLength() <= 1) return logAndReturn(Reason.LESS_EQ_1_ROW, "", Type.LAYOUT);
-        NodeList<TableCellElement> cols = getMaxColsAmongRows(rows);
-        if (cols == null || cols.getLength() <= 1) {
-            return logAndReturn(Reason.LESS_EQ_1_COL, "", Type.LAYOUT);
-        }
- 
-        // 9) Table having >=5 columns is data table.
-        if (cols.getLength() >= 5) return logAndReturn(Reason.MORE_EQ_5_COLS, "", Type.DATA);
- 
-        // 10) Table having borders around cells is data table.
-        for (Element e : directTDs) {
-            String border = DomUtil.getComputedStyle(e).getBorderStyle();
-            if (!border.isEmpty() && !border.equals("none") && !border.equals("hidden")) {
-                return logAndReturn(Reason.CELLS_HAVE_BORDER, "_" + border, Type.DATA);
-            }
-        }
- 
-        // 11) Table having differently-colored rows is data table.
-        String prevBackgroundColor = null;
-        for (int i = 0; i < rows.getLength(); i++) {
-            String color = DomUtil.getComputedStyle(rows.getItem(i)).getBackgroundColor();
-            if (prevBackgroundColor == null) {
-                prevBackgroundColor = color;
-                continue;
-            }
-            if (!prevBackgroundColor.equalsIgnoreCase(color)) {
-                return logAndReturn(Reason.DIFFERENTLY_COLORED_ROWS, "", Type.DATA);
-            }
-        }
-       
-        // 12) Table having >=20 rows is data table.
-        if (rows.getLength() >= 20) return logAndReturn(Reason.MORE_EQ_20_ROWS, "", Type.DATA);
- 
-        // 13) Table occupying > 95% of document width without viewport meta is layout table;
+
+        // 7) Table occupying > 95% of document width without viewport meta is layout table;
         // viewport condition is not in said url, added here for typical mobile-optimized sites.
+        // The order here is different from said url: the latter has it after #14 (>=20 rows is
+        // data table), but our eval sets indicate the need to bump this way up to here, because
+        // many (old) pages have layout tables with the "summary" attribute (#8).
         Element docElement = t.getOwnerDocument().getDocumentElement();
         int docWidth = docElement.getOffsetWidth();
         if (docWidth > 0 && (double) t.getOffsetWidth() > 0.95 * (double) docWidth) {
@@ -209,16 +174,61 @@ public class TableClassifier {
             if (!viewport) return logAndReturn(Reason.MORE_95_PERCENT_DOC_WIDTH, "", Type.LAYOUT);
         }
  
-        // 14) Table having <=10 cells is layout table.
+        // 8) Table having summary attribute is data table.
+        // This is different from said url: the latter lumps "summary" attribute with #6, but we
+        // split it so as to insert #7 in between.  Many (old) pages have tables that are clearly
+        // layout: their "summary" attributes say they're for layout.  They also occupy > 95% of
+        // document width, so #7 coming before #8 will correctly classify them as layout.
+        if (t.hasAttribute("summary")) return logAndReturn(Reason.SUMMARY, "", Type.DATA);
+ 
+        // 9) Table having nested table(s) is layout table.
+        if (hasNestedTables(t)) return logAndReturn(Reason.NESTED_TABLE, "", Type.LAYOUT);
+ 
+        // 10) Table having only one row or column is layout table.
+        NodeList<TableRowElement> rows = t.getRows();
+        if (rows.getLength() <= 1) return logAndReturn(Reason.LESS_EQ_1_ROW, "", Type.LAYOUT);
+        NodeList<TableCellElement> cols = getMaxColsAmongRows(rows);
+        if (cols == null || cols.getLength() <= 1) {
+            return logAndReturn(Reason.LESS_EQ_1_COL, "", Type.LAYOUT);
+        }
+ 
+        // 11) Table having >=5 columns is data table.
+        if (cols.getLength() >= 5) return logAndReturn(Reason.MORE_EQ_5_COLS, "", Type.DATA);
+ 
+        // 12) Table having borders around cells is data table.
+        for (Element e : directTDs) {
+            String border = DomUtil.getComputedStyle(e).getBorderStyle();
+            if (!border.isEmpty() && !border.equals("none") && !border.equals("hidden")) {
+                return logAndReturn(Reason.CELLS_HAVE_BORDER, "_" + border, Type.DATA);
+            }
+        }
+ 
+        // 13) Table having differently-colored rows is data table.
+        String prevBackgroundColor = null;
+        for (int i = 0; i < rows.getLength(); i++) {
+            String color = DomUtil.getComputedStyle(rows.getItem(i)).getBackgroundColor();
+            if (prevBackgroundColor == null) {
+                prevBackgroundColor = color;
+                continue;
+            }
+            if (!prevBackgroundColor.equalsIgnoreCase(color)) {
+                return logAndReturn(Reason.DIFFERENTLY_COLORED_ROWS, "", Type.DATA);
+            }
+        }
+       
+        // 14) Table having >=20 rows is data table.
+        if (rows.getLength() >= 20) return logAndReturn(Reason.MORE_EQ_20_ROWS, "", Type.DATA);
+ 
+        // 15) Table having <=10 cells is layout table.
         if (directTDs.size() <= 10) return logAndReturn(Reason.LESS_EQ_10_CELLS, "", Type.LAYOUT);
  
-        // 15) Table containing <embed>, <object>, <applet> or <iframe> elements (typical
+        // 16) Table containing <embed>, <object>, <applet> or <iframe> elements (typical
         //     advertisement elements) is layout table.
         if (hasOneOfElements(directDescendants, sObjectTags)) {
             return logAndReturn(Reason.EMBED_OBJECT_APPLET_IFRAME, "", Type.LAYOUT);
         }
  
-        // Otherwise, it's data table.
+        // 17) Otherwise, it's data table.
         return logAndReturn(Reason.DEFAULT, "", Type.DATA);
     }
 

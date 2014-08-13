@@ -127,11 +127,10 @@ public class TableClassifierTest extends DomDistillerTestCase {
     }
 
     public void testSummaryAttribute() {
-        TableElement table = createDefaultTableWithTH();
+        TableElement table = createDefaultTableWithNoTH();
         table.setAttribute("summary", "Testing summary attribute");
         assertEquals(TableClassifier.Type.DATA, TableClassifier.table(table));
-        assertEquals(TableClassifier.Reason.SUMMARY_CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
-                     TableClassifier.sReason);
+        assertEquals(TableClassifier.Reason.SUMMARY, TableClassifier.sReason);
     }
 
     public void testCaptionTag() {
@@ -139,7 +138,7 @@ public class TableClassifierTest extends DomDistillerTestCase {
         TableElement table = createDefaultTableWithNoTH();
         table.setInnerHTML(caption + table.getInnerHTML());
         assertEquals(TableClassifier.Type.DATA, TableClassifier.table(table));
-        assertEquals(TableClassifier.Reason.SUMMARY_CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
+        assertEquals(TableClassifier.Reason.CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
                      TableClassifier.sReason);
     }
 
@@ -153,7 +152,7 @@ public class TableClassifierTest extends DomDistillerTestCase {
         TableElement table = createDefaultTableWithNoTH();
         table.setInnerHTML(thead + table.getInnerHTML());
         assertEquals(TableClassifier.Type.DATA, TableClassifier.table(table));
-        assertEquals(TableClassifier.Reason.SUMMARY_CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
+        assertEquals(TableClassifier.Reason.CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
                      TableClassifier.sReason);
     }
 
@@ -167,7 +166,7 @@ public class TableClassifierTest extends DomDistillerTestCase {
         TableElement table = createDefaultTableWithNoTH();
         table.setInnerHTML(tfoot + table.getInnerHTML());
         assertEquals(TableClassifier.Type.DATA, TableClassifier.table(table));
-        assertEquals(TableClassifier.Reason.SUMMARY_CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
+        assertEquals(TableClassifier.Reason.CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
                      TableClassifier.sReason);
     }
 
@@ -179,7 +178,7 @@ public class TableClassifierTest extends DomDistillerTestCase {
         TableElement table = createDefaultTableWithNoTH();
         table.setInnerHTML(colgroup + table.getInnerHTML());
         assertEquals(TableClassifier.Type.DATA, TableClassifier.table(table));
-        assertEquals(TableClassifier.Reason.SUMMARY_CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
+        assertEquals(TableClassifier.Reason.CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
                      TableClassifier.sReason);
     }
 
@@ -188,14 +187,14 @@ public class TableClassifierTest extends DomDistillerTestCase {
         TableElement table = createDefaultTableWithNoTH();
         table.setInnerHTML(col + table.getInnerHTML());
         assertEquals(TableClassifier.Type.DATA, TableClassifier.table(table));
-        assertEquals(TableClassifier.Reason.SUMMARY_CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
+        assertEquals(TableClassifier.Reason.CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
                      TableClassifier.sReason);
     }
 
     public void testTHTag() {
         TableElement table = createDefaultTableWithTH();
         assertEquals(TableClassifier.Type.DATA, TableClassifier.table(table));
-        assertEquals(TableClassifier.Reason.SUMMARY_CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
+        assertEquals(TableClassifier.Reason.CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
                      TableClassifier.sReason);
     }
 
@@ -205,7 +204,7 @@ public class TableClassifierTest extends DomDistillerTestCase {
         assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
         assertEquals(TableClassifier.Reason.NESTED_TABLE, TableClassifier.sReason);
         assertEquals(TableClassifier.Type.DATA, TableClassifier.table(nestedTable));
-        assertEquals(TableClassifier.Reason.SUMMARY_CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
+        assertEquals(TableClassifier.Reason.CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
                      TableClassifier.sReason);
     }
 
@@ -426,7 +425,7 @@ public class TableClassifierTest extends DomDistillerTestCase {
                           "</tbody>";
         TableElement table = createTable(tableStr);
         assertEquals(TableClassifier.Type.DATA, TableClassifier.table(table));
-        assertEquals(TableClassifier.Reason.SUMMARY_CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
+        assertEquals(TableClassifier.Reason.CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
                      TableClassifier.sReason);
         return table;
     }
