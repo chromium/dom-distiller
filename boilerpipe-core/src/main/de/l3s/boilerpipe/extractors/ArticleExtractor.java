@@ -29,6 +29,7 @@ import de.l3s.boilerpipe.filters.english.TerminatingBlocksFinder;
 import de.l3s.boilerpipe.filters.heuristics.BlockProximityFusion;
 import de.l3s.boilerpipe.filters.heuristics.DocumentTitleMatchClassifier;
 import de.l3s.boilerpipe.filters.heuristics.ExpandTitleToContentFilter;
+import de.l3s.boilerpipe.filters.heuristics.HeadingFusion;
 import de.l3s.boilerpipe.filters.heuristics.KeepLargestBlockFilter;
 import de.l3s.boilerpipe.filters.heuristics.LargeBlockSameTagLevelToContentFilter;
 import de.l3s.boilerpipe.filters.heuristics.ListAtEndFilter;
@@ -70,6 +71,9 @@ public final class ArticleExtractor {
 
         changed = TrailingHeadlineToBoilerplateFilter.INSTANCE.process(doc);
         PrintDebugFilter.INSTANCE.process(doc, changed, "Trailing Headline To Boilerplate");
+
+        changed = new HeadingFusion().process(doc);
+        PrintDebugFilter.INSTANCE.process(doc, changed, "HeadingFusion");
 
         changed = BlockProximityFusion.CONTENT_AGNOSTIC.process(doc);
         PrintDebugFilter.INSTANCE.process(doc, changed, "BlockProximityFusion: Distance 1");

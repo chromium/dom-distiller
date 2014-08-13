@@ -44,6 +44,8 @@ public final class DefaultLabels {
 
     public static final String MARKUP_PREFIX = "<";
 
+    public static final String BOILERPLATE_HEADING_FUSED = "BOILERPLATE_HEADING_FUSED";
+
     public static final String STRICTLY_NOT_CONTENT = "STRICTLY_NOT_CONTENT";
     public static final String SIBLING_OF_MAIN_CONTENT = "SIBLING_OF_MAIN_CONTENT";
 

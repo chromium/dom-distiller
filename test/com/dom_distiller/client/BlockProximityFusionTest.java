@@ -22,13 +22,6 @@ public class BlockProximityFusionTest extends DomDistillerTestCase {
             "few text blocks. This will allow testing in-page merges.";
     private static final String SHORT_TEXT = "I might be a header.";
 
-    private int textBlockIndex;
-
-    @Override
-    protected void gwtSetUp() throws Exception {
-        super.gwtSetUp();
-        textBlockIndex = 0;
-    }
 
     // ***** Tests for special-handling of leading text *****
 
@@ -39,9 +32,10 @@ public class BlockProximityFusionTest extends DomDistillerTestCase {
     }
 
     private void doTestMergeShortLeadingContent(BlockProximityFusion classifier) throws BoilerpipeProcessingException {
-        TextDocument document = createDocumentWithTextBlocks(
-                newContentBlock(SHORT_TEXT),
-                newContentBlock(LONG_TEXT));
+        TextDocument document = new TestTextDocumentBuilder()
+                .addContentBlock(SHORT_TEXT)
+                .addContentBlock(LONG_TEXT)
+                .build();
         classifier.process(document);
 
         assertEquals("Classifier: " + classifier,
@@ -59,9 +53,10 @@ public class BlockProximityFusionTest extends DomDistillerTestCase {
     }
 
     private void doTestDoesNotMergeShortLeadingLiNonContent(BlockProximityFusion classifier) throws BoilerpipeProcessingException {
-        TextDocument document = createDocumentWithTextBlocks(
-                newNonContentBlock(SHORT_TEXT, DefaultLabels.LI),
-                newContentBlock(LONG_TEXT));
+        TextDocument document = new TestTextDocumentBuilder()
+                .addNonContentBlock(SHORT_TEXT, DefaultLabels.LI)
+                .addContentBlock(LONG_TEXT)
+                .build();
         classifier.process(document);
 
         assertEquals("Classifier: " + classifier,
@@ -76,9 +71,10 @@ public class BlockProximityFusionTest extends DomDistillerTestCase {
     public void testContentOnlyDoesNotMergeShortLeadingNonContent() throws BoilerpipeProcessingException {
         BlockProximityFusion classifier = BlockProximityFusion.CONTENT_ONLY_SAME_TAGLEVEL;
 
-        TextDocument document = createDocumentWithTextBlocks(
-                newNonContentBlock(SHORT_TEXT),
-                newContentBlock(LONG_TEXT));
+        TextDocument document = new TestTextDocumentBuilder()
+                .addNonContentBlock(SHORT_TEXT)
+                .addContentBlock(LONG_TEXT)
+                .build();
         classifier.process(document);
 
         assertEquals(2, document.getTextBlocks().size());
@@ -90,9 +86,10 @@ public class BlockProximityFusionTest extends DomDistillerTestCase {
     public void testContentAgnosticMergeShortLeadingNonContent() throws BoilerpipeProcessingException {
         BlockProximityFusion classifier = BlockProximityFusion.CONTENT_AGNOSTIC;
 
-        TextDocument document = createDocumentWithTextBlocks(
-                newNonContentBlock(SHORT_TEXT),
-                newContentBlock(LONG_TEXT));
+        TextDocument document = new TestTextDocumentBuilder()
+                .addNonContentBlock(SHORT_TEXT)
+                .addContentBlock(LONG_TEXT)
+                .build();
         classifier.process(document);
 
         assertEquals(1, document.getTextBlocks().size());
@@ -109,13 +106,14 @@ public class BlockProximityFusionTest extends DomDistillerTestCase {
     }
 
     private void doTestMergeLotsOfContent(BlockProximityFusion classifier) throws BoilerpipeProcessingException {
-        TextDocument document = createDocumentWithTextBlocks(
-                newContentBlock(LONG_LEADING_TEXT),
-                newContentBlock(LONG_LEADING_TEXT),
-                newContentBlock(SHORT_TEXT),
-                newContentBlock(LONG_TEXT),
-                newContentBlock(LONG_TEXT),
-                newContentBlock(SHORT_TEXT));
+        TextDocument document = new TestTextDocumentBuilder()
+                .addContentBlock(LONG_LEADING_TEXT)
+                .addContentBlock(LONG_LEADING_TEXT)
+                .addContentBlock(SHORT_TEXT)
+                .addContentBlock(LONG_TEXT)
+                .addContentBlock(LONG_TEXT)
+                .addContentBlock(SHORT_TEXT)
+                .build();
         classifier.process(document);
 
         assertEquals("Classifier: " + classifier,
@@ -132,11 +130,12 @@ public class BlockProximityFusionTest extends DomDistillerTestCase {
     public void testContentOnlySkipsNonContentInBody() throws BoilerpipeProcessingException {
         BlockProximityFusion classifier = BlockProximityFusion.CONTENT_ONLY_SAME_TAGLEVEL;
 
-        TextDocument document = createDocumentWithTextBlocks(
-                newContentBlock(LONG_LEADING_TEXT),
-                newContentBlock(LONG_LEADING_TEXT),
-                newNonContentBlock(SHORT_TEXT),
-                newContentBlock(LONG_TEXT));
+        TextDocument document = new TestTextDocumentBuilder()
+                .addContentBlock(LONG_LEADING_TEXT)
+                .addContentBlock(LONG_LEADING_TEXT)
+                .addNonContentBlock(SHORT_TEXT)
+                .addContentBlock(LONG_TEXT)
+                .build();
         classifier.process(document);
 
         assertEquals(3, document.getTextBlocks().size());
@@ -149,11 +148,12 @@ public class BlockProximityFusionTest extends DomDistillerTestCase {
     public void testContentAgnosticIncludesNonContentInBody() throws BoilerpipeProcessingException {
         BlockProximityFusion classifier = BlockProximityFusion.CONTENT_AGNOSTIC;
 
-        TextDocument document = createDocumentWithTextBlocks(
-                newContentBlock(LONG_LEADING_TEXT),
-                newContentBlock(LONG_LEADING_TEXT),
-                newNonContentBlock(SHORT_TEXT), // begins a new block but is included in the document.
-                newContentBlock(LONG_TEXT));
+        TextDocument document = new TestTextDocumentBuilder()
+                .addContentBlock(LONG_LEADING_TEXT)
+                .addContentBlock(LONG_LEADING_TEXT)
+                .addNonContentBlock(SHORT_TEXT) // begins a new block but is included in the document.
+                .addContentBlock(LONG_TEXT)
+                .build();
         classifier.process(document);
 
         assertEquals(2, document.getTextBlocks().size());
@@ -166,46 +166,17 @@ public class BlockProximityFusionTest extends DomDistillerTestCase {
     public void testContentAgnosticSkipsNonContentListInBody() throws BoilerpipeProcessingException {
         BlockProximityFusion classifier = BlockProximityFusion.CONTENT_AGNOSTIC;
 
-        TextDocument document = createDocumentWithTextBlocks(
-                newContentBlock(LONG_LEADING_TEXT),
-                newContentBlock(LONG_LEADING_TEXT),
-                newNonContentBlock(SHORT_TEXT, DefaultLabels.LI),
-                newContentBlock(LONG_TEXT));
+        TextDocument document = new TestTextDocumentBuilder()
+                .addContentBlock(LONG_LEADING_TEXT)
+                .addContentBlock(LONG_LEADING_TEXT)
+                .addNonContentBlock(SHORT_TEXT, DefaultLabels.LI)
+                .addContentBlock(LONG_TEXT)
+                .build();
         classifier.process(document);
 
         assertEquals(3, document.getTextBlocks().size());
         assertTrue(document.getContent().contains(LONG_LEADING_TEXT));
         assertFalse(document.getContent().contains(SHORT_TEXT));
         assertTrue(document.getContent().contains(LONG_TEXT));
-    }
-
-    private TextDocument createDocumentWithTextBlocks(TextBlock... blocks) {
-        LinkedList<TextBlock> documentTextBlocks = new LinkedList<TextBlock>();
-        for (TextBlock block : blocks) {
-            documentTextBlocks.add(block);
-        }
-        return new TextDocument(documentTextBlocks);
-    }
-
-    private TextBlock newNonContentBlock(String text, String... labels) {
-        int numWords = text.split(" ").length;
-        TextBlock block = new TextBlock(text, TextBlock.EMPTY_NODE_LIST, TextBlock.EMPTY_NODE_LIST,
-                0, numWords, numWords, 0, textBlockIndex++);
-        block.setIsContent(false);
-        for (String label : labels) {
-            block.addLabel(label);
-        }
-        return block;
-    }
-
-    private TextBlock newContentBlock(String text, String... labels) {
-        int numWords = text.split(" ").length;
-        TextBlock block = new TextBlock(text, TextBlock.EMPTY_NODE_LIST, TextBlock.EMPTY_NODE_LIST,
-                numWords, 0, numWords, 0, textBlockIndex++);
-        block.setIsContent(true);
-        for (String label : labels) {
-            block.addLabel(label);
-        }
-        return block;
     }
 }

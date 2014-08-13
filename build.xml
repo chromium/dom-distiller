@@ -198,7 +198,14 @@
 
   <target name="test.dev" depends="javac.tests" description="Run development mode tests">
     <mkdir dir="out/reports/htmlunit.dev" />
-    <junit fork="yes" printsummary="yes" haltonfailure="no" failureproperty="test.dev.failed">
+    <junit
+        fork="yes"
+        printsummary="yes"
+        haltonfailure="no"
+        failureproperty="test.dev.failed"
+        showoutput="yes"
+        logfailedtests="yes"
+        >
       <jvmarg line="-Xmx256m" />
       <sysproperty key="gwt.args" value="-standardsMode -logLevel WARN" />
       <sysproperty key="java.awt.headless" value="true" />
@@ -216,6 +223,7 @@
           <include name="**/DomDistillerTestSuite.java" />
         </fileset>
       </batchtest>
+      <formatter type="brief" usefile="false" />
       <formatter type="plain" />
       <formatter type="xml" />
     </junit>
@@ -249,6 +257,7 @@
           <include name="**/${test.filter}Test.java" />
         </fileset>
       </batchtest>
+      <formatter type="brief" usefile="false" />
       <formatter type="plain" />
       <formatter type="xml" />
     </junit>
@@ -257,7 +266,14 @@
 
   <target name="test.prod" depends="javac.tests" description="Run production mode tests">
     <mkdir dir="out/reports/htmlunit.prod" />
-    <junit fork="yes" printsummary="yes" haltonfailure="no" failureproperty="test.prod.failed">
+    <junit
+        fork="yes"
+        printsummary="yes"
+        haltonfailure="no"
+        failureproperty="test.dev.failed"
+        showoutput="yes"
+        logfailedtests="yes"
+        >
       <jvmarg line="-Xmx256m" />
       <sysproperty key="gwt.args" value="-prod -standardsMode -logLevel WARN -out out/www-test" />
       <sysproperty key="java.awt.headless" value="true" />
@@ -275,6 +291,7 @@
           <include name="**/DomDistillerTestSuite.java" />
         </fileset>
       </batchtest>
+      <formatter type="brief" usefile="false" />
       <formatter type="plain" />
       <formatter type="xml" />
     </junit>
@@ -308,6 +325,7 @@
           <include name="**/${test.filter}Test.java" />
         </fileset>
       </batchtest>
+      <formatter type="brief" usefile="false" />
       <formatter type="plain" />
       <formatter type="xml" />
     </junit>

@@ -103,6 +103,10 @@ public final class BlockProximityFusion implements BoilerpipeFilter {
                     if (prevBlock.getTagLevel() != block.getTagLevel()) {
                         ok = false;
                     }
+                } else {
+                    if (block.hasLabel(DefaultLabels.BOILERPLATE_HEADING_FUSED)) {
+                        ok = false;
+                    }
                 }
                 if (prevBlock.hasLabel(DefaultLabels.STRICTLY_NOT_CONTENT) != block.hasLabel(DefaultLabels.STRICTLY_NOT_CONTENT)) {
                     ok = false;
@@ -114,6 +118,7 @@ public final class BlockProximityFusion implements BoilerpipeFilter {
                         !block.hasLabel(DefaultLabels.LI)) {
                     ok = false;
                 }
+
                 if (ok) {
                     prevBlock.mergeNext(block);
                     it.remove();
