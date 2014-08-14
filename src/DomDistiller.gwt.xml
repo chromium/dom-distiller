@@ -10,7 +10,6 @@
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
   <inherits name='com.google.gwt.json.JSON'/>
-  <inherits name='Boilerpipe'/>
   <inherits name='Proto'/>
 
   <inherits name='org.timepedia.exporter.Exporter'/>
@@ -23,7 +22,9 @@
   <entry-point class='com.dom_distiller.client.DomDistillerEntry'/>
 
   <!-- Specify the paths for translatable code                    -->
-  <source path='client'/>
+  <source path='com/dom_distiller/client'/>
+  <source path='de'/>
+
   <!-- This provides simple implementations of java platform features used by boilerpipe but not
   available in a gwt project -->
   <super-source path='fake_java_platform'/>

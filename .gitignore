@@ -6,3 +6,4 @@ war/domdistiller
 war/*.JUnit/
 .*.swp
 *.pyc
+junitvmwatcher*.properties

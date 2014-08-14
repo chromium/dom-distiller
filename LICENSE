@@ -30,7 +30,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Parts of the following directories are available under Apache v2.0
 
-boilerpipe-core/
+src/de
 Copyright (c) 2009-2011 Christian Kohlschütter
 
 third_party/gwt_exporter

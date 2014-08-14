@@ -26,7 +26,6 @@
   </target>
 
   <path id="project.java.path">
-    <pathelement location="boilerpipe-core/src/main"/>
     <pathelement location="src"/>
     <pathelement location="${gwt_exporter.src}"/>
   </path>
@@ -44,7 +43,6 @@
   </path>
 
   <union id="project.non.java.files">
-    <fileset dir="boilerpipe-core/src/main" excludes="**/*.java"/>
     <fileset dir="src" excludes="**/*.java"/>
     <fileset dir="${gwt_exporter.src}" excludes="**/*.java"/>
   </union>
@@ -110,7 +108,7 @@
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
       <arg line="${gwt.args}"/>
       <arg line="${gwt.custom.args}"/>
-      <arg value="com.dom_distiller.DomDistiller"/>
+      <arg value="DomDistiller"/>
     </java>
   </target>
 
