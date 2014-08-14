@@ -33,7 +33,6 @@ import de.l3s.boilerpipe.filters.heuristics.HeadingFusion;
 import de.l3s.boilerpipe.filters.heuristics.KeepLargestBlockFilter;
 import de.l3s.boilerpipe.filters.heuristics.LargeBlockSameTagLevelToContentFilter;
 import de.l3s.boilerpipe.filters.heuristics.ListAtEndFilter;
-import de.l3s.boilerpipe.filters.heuristics.TrailingHeadlineToBoilerplateFilter;
 import de.l3s.boilerpipe.filters.simple.BoilerplateBlockFilter;
 import de.l3s.boilerpipe.filters.simple.LabelToBoilerplateFilter;
 
