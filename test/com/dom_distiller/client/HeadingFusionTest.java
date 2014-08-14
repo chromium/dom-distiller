@@ -56,16 +56,16 @@ public class HeadingFusionTest extends DomDistillerTestCase {
         assertTrue(document.getContent().contains(SHORT_TEXT));
     }
 
-    public void testHeadingNotFusedWithBoilerplate() throws Exception {
+    public void testHeadingBeforeBoilerplate() throws Exception {
         TextDocument document = new TestTextDocumentBuilder()
                 .addContentBlock(HEADING_TEXT, DefaultLabels.HEADING)
                 .addNonContentBlock(LONG_TEXT)
                 .addContentBlock(SHORT_TEXT)
                 .build();
 
-        assertFalse(new HeadingFusion().process(document));
-
+        assertTrue(new HeadingFusion().process(document));
         assertEquals(3, document.getTextBlocks().size());
+        assertFalse(document.getTextBlocks().get(0).isContent());
     }
 
     public void testTitleNotFused() throws Exception {

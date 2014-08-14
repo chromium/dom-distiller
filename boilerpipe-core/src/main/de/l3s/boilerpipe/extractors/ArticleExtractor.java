@@ -69,9 +69,6 @@ public final class ArticleExtractor {
         changed = LabelToBoilerplateFilter.INSTANCE_STRICTLY_NOT_CONTENT.process(doc);
         PrintDebugFilter.INSTANCE.process(doc, changed, "Ignore Strictly Not Content blocks");
 
-        changed = TrailingHeadlineToBoilerplateFilter.INSTANCE.process(doc);
-        PrintDebugFilter.INSTANCE.process(doc, changed, "Trailing Headline To Boilerplate");
-
         changed = new HeadingFusion().process(doc);
         PrintDebugFilter.INSTANCE.process(doc, changed, "HeadingFusion");
 

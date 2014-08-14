@@ -42,6 +42,10 @@ public final class HeadingFusion implements BoilerpipeFilter {
             prevBlock = currBlock;
             currBlock = it.next();
 
+            if (!prevBlock.hasLabel(DefaultLabels.HEADING)) {
+                continue;
+            }
+
             if (prevBlock.hasLabel(DefaultLabels.STRICTLY_NOT_CONTENT)
                     || currBlock.hasLabel(DefaultLabels.STRICTLY_NOT_CONTENT)) {
                 continue;
@@ -52,17 +56,21 @@ public final class HeadingFusion implements BoilerpipeFilter {
                 continue;
             }
 
-            if (prevBlock.hasLabel(DefaultLabels.HEADING) && currBlock.isContent()) {
+            if (currBlock.isContent()) {
+                changes = true;
+
                 boolean headingWasContent = prevBlock.isContent();
                 prevBlock.mergeNext(currBlock);
                 currBlock = prevBlock;
                 it.remove();
-                changes = true;
 
                 currBlock.removeLabel(DefaultLabels.HEADING);
                 if (!headingWasContent) {
                     currBlock.addLabel(DefaultLabels.BOILERPLATE_HEADING_FUSED);
                 }
+            } else if (prevBlock.isContent()) {
+                changes = true;
+                prevBlock.setIsContent(false);
             }
         }
 
