@@ -495,6 +495,10 @@ public class TableClassifierTest extends DomDistillerTestCase {
                                         "<th>row1col1</th>" +
                                         "<th>row1col2</th>" +
                                     "</tr>" +
+                                    "<tr>" +
+                                        "<td>row2col1</td>" +
+                                        "<td>row2col2</td>" +
+                                    "</tr>" +
                                 "</tbody>";
         return createNestedTable(nestedTableStr, parentTable);
     }

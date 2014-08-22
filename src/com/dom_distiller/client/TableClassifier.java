@@ -132,9 +132,22 @@ public class TableClassifier {
             return logAndReturn(Reason.DATATABLE_0, "", Type.LAYOUT);
         }
 
-        // 6) Table having legitimate data table structures is data table:
+        // 6) Table having only one row or column is layout table.
+        // The order here is different from said url: the latter has it after #10 (nested table is
+        // layout table), but our eval sets indicate the need to bump this way up to here, because
+        // many (old) pages have layout tables with <TH>/<CAPTION>s but only 1 row or col.
+        NodeList<TableRowElement> rows = t.getRows();
+        if (rows.getLength() <= 1) return logAndReturn(Reason.LESS_EQ_1_ROW, "", Type.LAYOUT);
+        NodeList<TableCellElement> cols = getMaxColsAmongRows(rows);
+        if (cols == null || cols.getLength() <= 1) {
+            return logAndReturn(Reason.LESS_EQ_1_COL, "", Type.LAYOUT);
+        }
+
+        // 7) Table having legitimate data table structures is data table:
         // a) table has <caption>, <thead>, <tfoot>, <colgroup>, <col>, or <th> elements
-        if (t.getCaption() != null || t.getTHead() != null || t.getTFoot() != null ||
+        Element caption = t.getCaption();
+        if ((caption != null && !DomUtil.getInnerText(caption).isEmpty()) ||
+                t.getTHead() != null || t.getTFoot() != null ||
                 hasOneOfElements(directDescendants, sHeaderTags)) {
             return logAndReturn(Reason.CAPTION_THEAD_TFOOT_COLGROUP_COL_TH, "", Type.DATA);
         }
@@ -157,11 +170,11 @@ public class TableClassifier {
             }
         }
 
-        // 7) Table occupying > 95% of document width without viewport meta is layout table;
+        // 8) Table occupying > 95% of document width without viewport meta is layout table;
         // viewport condition is not in said url, added here for typical mobile-optimized sites.
         // The order here is different from said url: the latter has it after #14 (>=20 rows is
         // data table), but our eval sets indicate the need to bump this way up to here, because
-        // many (old) pages have layout tables with the "summary" attribute (#8).
+        // many (old) pages have layout tables with the "summary" attribute (#9).
         Element docElement = t.getOwnerDocument().getDocumentElement();
         int docWidth = docElement.getOffsetWidth();
         if (docWidth > 0 && (double) t.getOffsetWidth() > 0.95 * (double) docWidth) {
@@ -174,23 +187,15 @@ public class TableClassifier {
             if (!viewport) return logAndReturn(Reason.MORE_95_PERCENT_DOC_WIDTH, "", Type.LAYOUT);
         }
  
-        // 8) Table having summary attribute is data table.
-        // This is different from said url: the latter lumps "summary" attribute with #6, but we
-        // split it so as to insert #7 in between.  Many (old) pages have tables that are clearly
+        // 9) Table having summary attribute is data table.
+        // This is different from said url: the latter lumps "summary" attribute with #7, but we
+        // split it so as to insert #8 in between.  Many (old) pages have tables that are clearly
         // layout: their "summary" attributes say they're for layout.  They also occupy > 95% of
-        // document width, so #7 coming before #8 will correctly classify them as layout.
+        // document width, so #8 coming before #9 will correctly classify them as layout.
         if (t.hasAttribute("summary")) return logAndReturn(Reason.SUMMARY, "", Type.DATA);
  
-        // 9) Table having nested table(s) is layout table.
+        // 10) Table having nested table(s) is layout table.
         if (hasNestedTables(t)) return logAndReturn(Reason.NESTED_TABLE, "", Type.LAYOUT);
- 
-        // 10) Table having only one row or column is layout table.
-        NodeList<TableRowElement> rows = t.getRows();
-        if (rows.getLength() <= 1) return logAndReturn(Reason.LESS_EQ_1_ROW, "", Type.LAYOUT);
-        NodeList<TableCellElement> cols = getMaxColsAmongRows(rows);
-        if (cols == null || cols.getLength() <= 1) {
-            return logAndReturn(Reason.LESS_EQ_1_COL, "", Type.LAYOUT);
-        }
  
         // 11) Table having >=5 columns is data table.
         if (cols.getLength() >= 5) return logAndReturn(Reason.MORE_EQ_5_COLS, "", Type.DATA);
