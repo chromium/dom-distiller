@@ -20,17 +20,23 @@
  */
 package de.l3s.boilerpipe.document;
 
+import com.google.gwt.dom.client.Node;
+
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
- * A text document, consisting of one or more {@link TextBlock}s.
+ * A text document, consisting of one or more {@link TextBlock}s, and features
+ * of the original page (e.g. candidate titles, hidden elements, etc).
  *
  * @author Christian Kohlschütter
  */
 public class TextDocument implements Cloneable {
     final List<TextBlock> textBlocks;
     List<String> candidateTitles;
+    private Set<Node> dataTables;
+    private Set<Node> hiddenElements;
 
     /**
      * Creates a new {@link TextDocument} with given {@link TextBlock}s, and no
@@ -81,9 +87,10 @@ public class TextDocument implements Cloneable {
      * Sets the list of candidate titles.
      * @param candidateTitles
      */
-    public void setCanddiateTitles(List<String> candidateTitles) {
+    public void setCandidateTitles(List<String> candidateTitles) {
         this.candidateTitles = new LinkedList<String>(candidateTitles);
     }
+
     /**
      * Returns the {@link TextDocument}'s content.
      *
@@ -131,4 +138,39 @@ public class TextDocument implements Cloneable {
         }
         return sb.toString();
     }
+
+    /**
+     * Returns a list of nodes from the original Document which were classified as data tables
+     * (i.e. are treated as an atomic block of text).
+     * @return the set of data tables
+     */
+    public Set<Node> getDataTables() {
+        return dataTables;
+    }
+
+    /**
+     * Sets the data tables identified while processing the document.
+     * @param dataTables the set of data tables
+     */
+    public void setDataTables(Set<Node> dataTables) {
+        this.dataTables = dataTables;
+    }
+
+    /**
+     * Returns a list of nodes fro mteh original Document which weren't actually visible. These
+     * are typically omitted from boilerpipe text processing but are tracked for post-processing.
+     * @return the set of hidden elements
+     */
+    public Set<Node> getHiddenElements() {
+        return hiddenElements;
+    }
+
+    /**
+     * Sets the hidden elements identified while processing the document.
+     * @param hiddenElements the set of hidden elements
+     */
+    public void setHiddenElements(Set<Node> hiddenElements) {
+        this.hiddenElements = hiddenElements;
+    }
+
 }

@@ -96,6 +96,11 @@ public class DomUtil {
         return node.innerText;
     }-*/;
 
+    public static native double getTime() /*-{
+        // window.performance is unavailable in Gwt's dev environment.
+        return window.performance ? window.performance.now() : 0;
+    }-*/;
+
     /**
      * Use jsni for direct access to javascript's textContent.  textContent is different from
      * innerText (see http://www.kellegous.com/j/2013/02/27/innertext-vs-textcontent):

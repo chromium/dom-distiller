@@ -4,6 +4,8 @@
 
 package com.dom_distiller.client;
 
+import com.dom_distiller.proto.DomDistillerProtos;
+import com.dom_distiller.proto.DomDistillerProtos.TimingInfo;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -21,21 +23,24 @@ import de.l3s.boilerpipe.sax.BoilerpipeHTMLContentHandler;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class ContentExtractor {
-    static Logger logger = Logger.getLogger("DomDistiller");
-
     private final Element documentElement;
-
-    private final MarkupParser parser;
 
     private final List<String> candidateTitles;
 
+    private final TimingInfo mTimingInfo;
+
+    private final MarkupParser parser;
+
     public ContentExtractor(Element root) {
         this.documentElement = root;
-        this.parser = new MarkupParser(root);
         this.candidateTitles = new LinkedList<String>();
+        this.mTimingInfo = DomDistillerProtos.TimingInfo.create();
+
+        double startTime = DomUtil.getTime();
+        this.parser = new MarkupParser(root);
+        this.mTimingInfo.setMarkupParsingTime(DomUtil.getTime() - startTime);
     }
 
     // Grabs a list of candidate titles in descending priority order:
@@ -69,38 +74,89 @@ public class ContentExtractor {
     }
 
     public String extractContent(boolean textOnly) {
-        BoilerpipeHTMLContentHandler htmlParser = new BoilerpipeHTMLContentHandler();
+        double now = DomUtil.getTime();
+        TextDocument document = createTextBlocksFromPage();
+        mTimingInfo.setDocumentConstructionTime(DomUtil.getTime() - now);
 
+        now = DomUtil.getTime();
+        List<Node> contentNodes = processTextBlocks(document);
+        mTimingInfo.setArticleProcessingTime(DomUtil.getTime() - now);
+
+        if (contentNodes.isEmpty()) {
+            return "";
+        }
+
+        now = DomUtil.getTime();
+        String html = formatExtractedNodes(textOnly, contentNodes);
+        mTimingInfo.setFormattingTime(DomUtil.getTime() - now);
+        return html;
+    }
+
+
+    /**
+     * Returns timing information about the most recent extraction run.
+     * @return an instance of DomDistillerProtos.TimingInfo with detailed timing statistics.
+     */
+    public TimingInfo getTimingInfo() {
+        return mTimingInfo;
+    }
+
+    /**
+     * Converts the original HTML page into a series of TextBlock for analysis.
+     * @return a document with the list of extracted TextBlocks and additional information
+     *         that can be useful for identifying the core elements of the page.
+     */
+    private TextDocument createTextBlocksFromPage() {
+        BoilerpipeHTMLContentHandler htmlParser = new BoilerpipeHTMLContentHandler();
         htmlParser.startDocument();
         DomToSaxVisitor domToSaxVisitor = new DomToSaxVisitor(htmlParser);
         FilteringDomVisitor filteringDomVisitor = new FilteringDomVisitor(domToSaxVisitor);
         new DomWalker(filteringDomVisitor).walk(documentElement);
         htmlParser.endDocument();
-
         TextDocument document = htmlParser.toTextDocument();
         ensureTitleInitialized();
+        document.setCandidateTitles(candidateTitles);
+        document.setHiddenElements(filteringDomVisitor.getHiddenElements());
+        document.setDataTables(filteringDomVisitor.getDataTables());
+        return document;
+    }
 
-        document.setCanddiateTitles(candidateTitles);
+    /**
+     * Implements the actual analysis of the page content, identifying the core elements of the
+     * page.
+     * @param document the TextBlock representation of the page extracted from the DOM.
+     * @return a list of DOM nodes from the original document that contain the core elements of the
+     *         page.
+     */
+    private List<Node> processTextBlocks(TextDocument document) {
         try {
             CommonExtractors.ARTICLE_EXTRACTOR.process(document);
         } catch (BoilerpipeProcessingException e) {
-            logger.warning("Processing failed.");
-            return "";
+            LogUtil.logToConsole("DomDistiller Processing failed: " + e);
+            return new LinkedList<Node>();
         }
-
 
         List<Node> contentNodes = getContentNodesForTextDocument(document);
 
         List<Node> contentAndRelevantElements = RelevantElementsFinder.findAndAddElements(
-                contentNodes, filteringDomVisitor.getHiddenElements(),
-                filteringDomVisitor.getDataTables(), Document.get().getDocumentElement());
+                contentNodes, document.getHiddenElements(),
+                document.getDataTables(), Document.get().getDocumentElement());
+        return contentAndRelevantElements;
+    }
 
-        if (contentAndRelevantElements.isEmpty()) {
-            return "";
-        }
-
-        Node clonedSubtree = NodeListExpander.expand(contentAndRelevantElements).cloneSubtree();
-
+    /**
+     * Creates a new minimal HTML document containing copies of the DOM nodes identified as the
+     * core elements of the page. Some additional re-formatting hints may be included in the new
+     * document.
+     *
+     * @param textOnly indicates whether to simply return the aggregated text content instead of
+     *        HTML
+     * @param contentNodes the DOM nodes containing text to be included in the final docuemnt.
+     * @return A HTML or text document which includes the aggregated content of the provided HTML
+     *        nodes.
+     */
+    private String formatExtractedNodes(boolean textOnly, List<Node> contentNodes) {
+        Node clonedSubtree = NodeListExpander.expand(contentNodes).cloneSubtree();
         if (clonedSubtree.getNodeType() != Node.ELEMENT_NODE) {
             return "";
         }
@@ -109,7 +165,6 @@ public class ContentExtractor {
         // the live page.  This breaks all relative links (in anchors,
         // images, etc.), so make them absolute in the distilled content.
         makeAllLinksAbsolute(clonedSubtree);
-
         if (textOnly) {
             return getTextFromTree(clonedSubtree);
         }

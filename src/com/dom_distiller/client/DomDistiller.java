@@ -5,6 +5,7 @@
 package com.dom_distiller.client;
 
 import com.dom_distiller.proto.DomDistillerProtos;
+import com.dom_distiller.proto.DomDistillerProtos.TimingInfo;
 import com.google.gwt.dom.client.Document;
 
 import org.timepedia.exporter.client.Export;
@@ -32,6 +33,7 @@ public class DomDistiller implements Exportable {
 
   public static DomDistillerProtos.DomDistillerResult applyWithOptions(
           DomDistillerProtos.DomDistillerOptions options) {
+      double startTime = DomUtil.getTime();
       DomDistillerProtos.DomDistillerResult result = DomDistillerProtos.DomDistillerResult.create();
       ContentExtractor contentExtractor = new ContentExtractor(Document.get().getDocumentElement());
       result.setTitle(contentExtractor.extractTitle());
@@ -43,11 +45,11 @@ public class DomDistiller implements Exportable {
       boolean textOnly = options.hasExtractTextOnly() && options.getExtractTextOnly();
       content.setHtml(contentExtractor.extractContent(textOnly));
       result.setDistilledContent(content);
-
       result.setPaginationInfo(PagingLinksFinder.getPaginationInfo());
-
       result.setMarkupInfo(contentExtractor.getMarkupParser().getMarkupInfo());
-
+      TimingInfo timingInfo = contentExtractor.getTimingInfo();
+      timingInfo.setTotalTime(DomUtil.getTime() - startTime);
+      result.setTimingInfo(timingInfo);
       return result;
   }
 }

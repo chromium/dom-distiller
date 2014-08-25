@@ -48,12 +48,21 @@ message MarkupInfo {
   repeated MarkupImage images = 9;
 }
 
+message TimingInfo {
+  optional double markup_parsing_time = 1;
+  optional double document_construction_time = 2;
+  optional double article_processing_time = 3;
+  optional double formatting_time = 4;
+  optional double total_time = 5;
+}
+
 message DomDistillerResult {
   optional string title = 1;
   optional DistilledContent distilled_content = 2;
   optional PaginationInfo pagination_info = 3;
   repeated string image_urls = 4;
   optional MarkupInfo markup_info = 5;
+  optional TimingInfo timing_info = 6;
 }
 
 message DomDistillerOptions {
