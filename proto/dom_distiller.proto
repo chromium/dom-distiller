@@ -56,6 +56,10 @@ message TimingInfo {
   optional double total_time = 5;
 }
 
+message DebugInfo {
+  optional string log = 1;
+}
+
 message DomDistillerResult {
   optional string title = 1;
   optional DistilledContent distilled_content = 2;
@@ -63,6 +67,7 @@ message DomDistillerResult {
   repeated string image_urls = 4;
   optional MarkupInfo markup_info = 5;
   optional TimingInfo timing_info = 6;
+  optional DebugInfo debug_info = 7;
 }
 
 message DomDistillerOptions {

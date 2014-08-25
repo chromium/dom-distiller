@@ -7,7 +7,6 @@ package com.dom_distiller.client;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.MetaElement;
 import com.google.gwt.dom.client.NodeList;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.TableCellElement;
 import com.google.gwt.dom.client.TableElement;
 import com.google.gwt.dom.client.TableRowElement;
@@ -289,7 +288,7 @@ public class TableClassifier {
     }
 
     private static Type logAndReturn(Reason reason, String append, Type type) {
-        if (DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_VISIBILITY_INFO)) {
+        if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_VISIBILITY_INFO)) {
             LogUtil.logToConsole(reason + append + " -> " + type);
         }
         sReason = reason;

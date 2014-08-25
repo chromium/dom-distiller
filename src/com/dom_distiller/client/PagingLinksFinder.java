@@ -75,7 +75,7 @@ public class PagingLinksFinder {
 
     private static String findPagingLink(Element root, PageLink pageLink) {
         // findPagingLink() is static, so clear mLinkDebugInfo before processing the links.
-        if (DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_PAGING_INFO)) {
+        if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_PAGING_INFO)) {
             mLinkDebugInfo.clear();
         }
 
@@ -305,7 +305,7 @@ public class PagingLinksFinder {
                     topPage.mScore + ", txt=[" + topPage.mLinkText + "], " + pagingHref);
         }
 
-        if (DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_PAGING_INFO)) {
+        if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_PAGING_INFO)) {
             logDbgInfoToConsole(pageLink, pagingHref, allLinks);
         }
 
@@ -388,7 +388,7 @@ public class PagingLinksFinder {
     }
 
     private static void appendDbgStrForLink(Element link, String message) {
-        if (!DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_PAGING_INFO)) return;
+        if (!LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_PAGING_INFO)) return;
 
         // |message| is concatenated with the existing debug string for |link| (delimited by ";") in
         // mLinkDebugInfo.

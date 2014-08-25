@@ -5,6 +5,7 @@
 package com.dom_distiller.client;
 
 import com.dom_distiller.proto.DomDistillerProtos;
+import com.dom_distiller.proto.DomDistillerProtos.DebugInfo;
 import com.dom_distiller.proto.DomDistillerProtos.TimingInfo;
 import com.google.gwt.dom.client.Document;
 
@@ -13,43 +14,35 @@ import org.timepedia.exporter.client.Exportable;
 
 @Export()
 public class DomDistiller implements Exportable {
-  /**
-   * Debug level requested by the client for logging to include while distilling.
-   */
-  private static int sDebugLevel = 0;
+    public static DomDistillerProtos.DomDistillerResult apply() {
+        return applyWithOptions(DomDistillerProtos.DomDistillerOptions.create());
+    }
 
-  public static final int DEBUG_LEVEL_NONE = 0;
-  public static final int DEBUG_LEVEL_BOILER_PIPE_PHASES = 1;
-  public static final int DEBUG_LEVEL_VISIBILITY_INFO = 2;
-  public static final int DEBUG_LEVEL_PAGING_INFO = 3;
+    public static DomDistillerProtos.DomDistillerResult applyWithOptions(
+            DomDistillerProtos.DomDistillerOptions options) {
+        double startTime = DomUtil.getTime();
+        DomDistillerProtos.DomDistillerResult result =
+                DomDistillerProtos.DomDistillerResult.create();
+        ContentExtractor contentExtractor =
+                new ContentExtractor(Document.get().getDocumentElement());
+        result.setTitle(contentExtractor.extractTitle());
 
-  public static final boolean isLoggable(int level) {
-      return sDebugLevel >= level;
-  }
+        LogUtil.setDebugLevel(
+                options.hasDebugLevel() ? options.getDebugLevel() : LogUtil.DEBUG_LEVEL_NONE);
+        LogUtil.logToConsole("DomDistiller debug level: " + LogUtil.getDebugLevel());
 
-  public static DomDistillerProtos.DomDistillerResult apply() {
-      return applyWithOptions(DomDistillerProtos.DomDistillerOptions.create());
-  }
-
-  public static DomDistillerProtos.DomDistillerResult applyWithOptions(
-          DomDistillerProtos.DomDistillerOptions options) {
-      double startTime = DomUtil.getTime();
-      DomDistillerProtos.DomDistillerResult result = DomDistillerProtos.DomDistillerResult.create();
-      ContentExtractor contentExtractor = new ContentExtractor(Document.get().getDocumentElement());
-      result.setTitle(contentExtractor.extractTitle());
-
-      sDebugLevel = options.hasDebugLevel() ? options.getDebugLevel() : 0;
-      LogUtil.logToConsole("DomDistiller debug level: " + sDebugLevel);
-
-      DomDistillerProtos.DistilledContent content = DomDistillerProtos.DistilledContent.create();
-      boolean textOnly = options.hasExtractTextOnly() && options.getExtractTextOnly();
-      content.setHtml(contentExtractor.extractContent(textOnly));
-      result.setDistilledContent(content);
-      result.setPaginationInfo(PagingLinksFinder.getPaginationInfo());
-      result.setMarkupInfo(contentExtractor.getMarkupParser().getMarkupInfo());
-      TimingInfo timingInfo = contentExtractor.getTimingInfo();
-      timingInfo.setTotalTime(DomUtil.getTime() - startTime);
-      result.setTimingInfo(timingInfo);
-      return result;
-  }
+        DomDistillerProtos.DistilledContent content = DomDistillerProtos.DistilledContent.create();
+        boolean textOnly = options.hasExtractTextOnly() && options.getExtractTextOnly();
+        content.setHtml(contentExtractor.extractContent(textOnly));
+        result.setDistilledContent(content);
+        result.setPaginationInfo(PagingLinksFinder.getPaginationInfo());
+        result.setMarkupInfo(contentExtractor.getMarkupParser().getMarkupInfo());
+        TimingInfo timingInfo = contentExtractor.getTimingInfo();
+        timingInfo.setTotalTime(DomUtil.getTime() - startTime);
+        result.setTimingInfo(timingInfo);
+        DebugInfo debugInfo = DebugInfo.create();
+        debugInfo.setLog(LogUtil.getAndClearLog());
+        result.setDebugInfo(debugInfo);
+        return result;
+    }
 }

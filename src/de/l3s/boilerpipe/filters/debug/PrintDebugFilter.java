@@ -21,11 +21,9 @@
  */
 package de.l3s.boilerpipe.filters.debug;
 
-import com.dom_distiller.client.DomDistiller;
 import com.dom_distiller.client.LogUtil;
 
 import de.l3s.boilerpipe.BoilerpipeFilter;
-import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextDocument;
 
 
@@ -44,16 +42,14 @@ public final class PrintDebugFilter implements BoilerpipeFilter {
 
 
     @Override
-    public boolean process(TextDocument doc)
-            throws BoilerpipeProcessingException {
-        if (!DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_BOILER_PIPE_PHASES)) return false;
+    public boolean process(TextDocument doc) {
+        if (!LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_BOILER_PIPE_PHASES)) return false;
         LogUtil.logToConsole(doc.debugString());
         return false;
     }
 
-    public boolean process(TextDocument doc, boolean changed, String header)
-            throws BoilerpipeProcessingException {
-        if (!DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_BOILER_PIPE_PHASES)) return false;
+    public boolean process(TextDocument doc, boolean changed, String header) {
+        if (!LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_BOILER_PIPE_PHASES)) return false;
         if (changed) {
             LogUtil.logToConsole(LogUtil.kBlue + "<<<<< " + header + " >>>>>");
             process(doc);

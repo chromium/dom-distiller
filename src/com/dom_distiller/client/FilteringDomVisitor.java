@@ -72,7 +72,7 @@ public class FilteringDomVisitor implements DomWalker.Visitor {
             // Some components are revisited later in context as they break text-flow of a document.
             // e.g. <video> can contain text if format is unsupported.
             if (sTagsProcessedAsABlock.contains(e.getTagName())) {
-                if (DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_VISIBILITY_INFO)) {
+                if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_VISIBILITY_INFO)) {
                     LogUtil.logToConsole("SKIP " + e.getTagName() + " from processing. " +
                             "It may be restored later.");
                 }
@@ -88,7 +88,7 @@ public class FilteringDomVisitor implements DomWalker.Visitor {
     }
 
     private static void logVisibilityInfo(Element e, boolean visible) {
-        if (!DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_VISIBILITY_INFO)) return;
+        if (!LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_VISIBILITY_INFO)) return;
         Style style = DomUtil.getComputedStyle(e);
         LogUtil.logToConsole((visible ? "KEEP " : "SKIP ") + e.getTagName() +
                 ": id=" + e.getId() +
@@ -98,7 +98,7 @@ public class FilteringDomVisitor implements DomWalker.Visitor {
     }
 
     private static void logTableInfo(Element e, TableClassifier.Type type) {
-        if (!DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_VISIBILITY_INFO)) return;
+        if (!LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_VISIBILITY_INFO)) return;
         Element parent = e.getParentElement();
         LogUtil.logToConsole("TABLE: " + type +
                 ", id=" + e.getId() +

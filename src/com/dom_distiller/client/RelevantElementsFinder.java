@@ -132,7 +132,7 @@ public class RelevantElementsFinder {
         }
 
         private void logDiscardElement(Element e, String reason) {
-            if (!DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_VISIBILITY_INFO)) return;
+            if (!LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_VISIBILITY_INFO)) return;
             LogUtil.logToConsole("NOT adding [" +
                     "tag=" + e.getTagName() +
                     ", id=" + e.getId() +
@@ -142,7 +142,7 @@ public class RelevantElementsFinder {
         }
 
         private void logAddElement(Element e) {
-            if (!DomDistiller.isLoggable(DomDistiller.DEBUG_LEVEL_VISIBILITY_INFO)) return;
+            if (!LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_VISIBILITY_INFO)) return;
             int last = contentAndElements.size() - 1;
             Node n = last < 0 ? null : contentAndElements.get(last);
             LogUtil.logToConsole("Adding [" +
