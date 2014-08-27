@@ -176,7 +176,8 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
         String className = element.getAttribute("class");
         String id = element.getAttribute("id");
 
-        if (PAT_COMMENT.matcher(className).find() || PAT_COMMENT.matcher(id).find()) {
+        if (!tagName.equals("BODY") &&
+                (PAT_COMMENT.matcher(className).find() || PAT_COMMENT.matcher(id).find())) {
            addLabelAction(new LabelAction(DefaultLabels.STRICTLY_NOT_CONTENT));
         }
 
