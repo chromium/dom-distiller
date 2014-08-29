@@ -90,11 +90,12 @@ public class NodeListExpander {
 
     /**
      * Prunes any unnecessary chain at the top of the tree. If the root of the subtree has only a
-     * single child, then it can be removed while still containing all the requested nodes (unless
-     * the root is the first requested node).
+     * single non-text child, then it can be removed while still containing all the requested nodes
+     * (unless the root is the first requested node).
      */
     private static NodeTree pruneTopNodeChain(NodeTree subtree, Node firstContentNode) {
-        while (subtree.getChildren().size() == 1 && !subtree.getNode().equals(firstContentNode)) {
+        while (subtree.getChildren().size() == 1 && !subtree.getNode().equals(firstContentNode) &&
+                subtree.getChildren().get(0).getNode().getNodeType() != Node.TEXT_NODE) {
             subtree = subtree.getChildren().get(0);
         }
         return subtree;
