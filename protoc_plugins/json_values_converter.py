@@ -67,8 +67,8 @@ class CppConverterWriter(writer.CodeWriter):
       # Nothing to write for enums.
 
       self.Output(
-          'static {generated_class_name} ReadFromValue(const base::Value* json) {{\n'
-          '  {generated_class_name} message;\n'
+          'static bool ReadFromValue(const base::Value* json, {generated_class_name}* message) {{\n'
+          #'  {generated_class_name} message;\n'
           '  const base::DictionaryValue* dict;\n'
           '  if (!json->GetAsDictionary(&dict)) goto error;\n'
           '',
@@ -79,10 +79,10 @@ class CppConverterWriter(writer.CodeWriter):
           self.WriteFieldRead(field_proto)
 
       self.Output(
-          '  return message;\n'
+          '  return true;\n'
           '\n'
           'error:\n'
-          '  return {generated_class_name}();\n'
+          '  return false;\n'
           '}}\n'
           '\n'
           'static scoped_ptr<base::Value> WriteToValue(const {generated_class_name}& message) {{\n'
@@ -185,8 +185,9 @@ class CppConverterWriter(writer.CodeWriter):
           'if (!field_list->Get(i, &inner_message_value)) {{\n'
           '  goto error;\n'
           '}}\n'
-          '*message.add_{field_name}() =\n'
-          '    {inner_class_parser}::ReadFromValue(inner_message_value);\n'
+          'if (!{inner_class_parser}::ReadFromValue(inner_message_value, message->add_{field_name}())) {{\n'
+          '  goto error;\n'
+          '}}\n'
           )
     else:
       middle = (
@@ -194,7 +195,7 @@ class CppConverterWriter(writer.CodeWriter):
           'if (!field_list->Get{value_type}(i, &field_value)) {{\n'
           '  goto error;\n'
           '}}\n'
-          'message.add_{field_name}(field_value);\n'
+          'message->add_{field_name}(field_value);\n'
           )
 
     self.Output(
@@ -213,8 +214,9 @@ class CppConverterWriter(writer.CodeWriter):
           'if (!dict->Get("{field_number}", &inner_message_value)) {{\n'
           '  goto error;\n'
           '}}\n'
-          '*message.mutable_{field_name}() =\n'
-          '    {inner_class_parser}::ReadFromValue(inner_message_value);\n'
+          'if (!{inner_class_parser}::ReadFromValue(inner_message_value, message->mutable_{field_name}())) {{\n'
+          '  goto error;\n'
+          '}}\n'
           '',
           field_number=field.JavascriptIndex(),
           field_name=field.name,
@@ -226,7 +228,7 @@ class CppConverterWriter(writer.CodeWriter):
           'if (!dict->Get{value_type}("{field_number}", &field_value)) {{\n'
           '  goto error;\n'
           '}}\n'
-          'message.set_{field_name}(field_value);\n'
+          'message->set_{field_name}(field_value);\n'
           '',
           field_number=field.JavascriptIndex(),
           field_name=field.name,
