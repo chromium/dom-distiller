@@ -46,6 +46,7 @@ public class TableClassifier {
         MORE_EQ_20_ROWS,
         LESS_EQ_10_CELLS,
         EMBED_OBJECT_APPLET_IFRAME,
+        MORE_90_PERCENT_DOC_HEIGHT,
         DEFAULT,
         UNKNOWN,
     }
@@ -183,13 +184,15 @@ public class TableClassifier {
         Element docElement = t.getOwnerDocument().getDocumentElement();
         int docWidth = docElement.getOffsetWidth();
         if (docWidth > 0 && (double) t.getOffsetWidth() > 0.95 * (double) docWidth) {
-            boolean viewport = false;
+            boolean viewportFound = false;
             NodeList<Element> allMeta = docElement.getElementsByTagName("META");
-            for (int i = 0; i < allMeta.getLength() && !viewport; i++) {
+            for (int i = 0; i < allMeta.getLength() && !viewportFound; i++) {
                 MetaElement meta = MetaElement.as(allMeta.getItem(i));
-                viewport = meta.getName().equalsIgnoreCase("viewport");
+                viewportFound = meta.getName().equalsIgnoreCase("viewport");
             }
-            if (!viewport) return logAndReturn(Reason.MORE_95_PERCENT_DOC_WIDTH, "", Type.LAYOUT);
+            if (!viewportFound) {
+                return logAndReturn(Reason.MORE_95_PERCENT_DOC_WIDTH, "", Type.LAYOUT);
+            }
         }
  
         // 10) Table having summary attribute is data table.
@@ -234,8 +237,17 @@ public class TableClassifier {
         if (hasOneOfElements(directDescendants, sObjectTags)) {
             return logAndReturn(Reason.EMBED_OBJECT_APPLET_IFRAME, "", Type.LAYOUT);
         }
+
+        // 17) Table occupying > 90% of document height is layout table.
+        // This is not in said url, added here because many (old) pages have tables that don't fall
+        // into any of the above heuristics but are for layout, and hence shouldn't default to data
+        // by #18.
+        int docHeight = docElement.getOffsetHeight();
+        if (docHeight > 0 && (double) t.getOffsetHeight() > 0.9 * (double) docHeight) {
+            return logAndReturn(Reason.MORE_90_PERCENT_DOC_HEIGHT, "", Type.LAYOUT);
+        }
  
-        // 17) Otherwise, it's data table.
+        // 18) Otherwise, it's data table.
         return logAndReturn(Reason.DEFAULT, "", Type.DATA);
     }
 

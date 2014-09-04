@@ -402,6 +402,18 @@ public class TableClassifierTest extends DomDistillerTestCase {
         assertEquals(TableClassifier.Reason.EMBED_OBJECT_APPLET_IFRAME, TableClassifier.sReason);
     }
 
+    public void testTallTable() {
+        TableElement table = createBigDefaultTableWithNoTH();
+        Element root = Document.get().getDocumentElement();
+        int height = (int) ((0.90 * root.getOffsetHeight()) + 1.0);
+        table.setAttribute("style", "height:" + height + "px");
+        NodeList<Element> bodies = root.getElementsByTagName("BODY");
+        assertTrue(bodies.getLength() > 0);
+        bodies.getItem(0).appendChild(table);
+        assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
+        assertEquals(TableClassifier.Reason.MORE_90_PERCENT_DOC_HEIGHT, TableClassifier.sReason);
+    }
+
     private TableElement createTable(String html) {
         TableElement table = Document.get().createTableElement();
         table.setInnerHTML(html);
