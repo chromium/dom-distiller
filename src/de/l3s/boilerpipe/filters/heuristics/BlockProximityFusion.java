@@ -38,57 +38,36 @@ import java.util.List;
  */
 public final class BlockProximityFusion implements BoilerpipeFilter {
 
-    public static final BlockProximityFusion CONTENT_AGNOSTIC = new BlockProximityFusion(false);
-    public static final BlockProximityFusion CONTENT_ONLY_SAME_TAGLEVEL =
+    public static final BlockProximityFusion PRE_FILTERING = new BlockProximityFusion(false);
+    public static final BlockProximityFusion POST_FILTERING =
             new BlockProximityFusion(true);
 
-    private final boolean contentAndSameTagLevelOnly;
+    private final boolean postFiltering;
 
     private static final int MAX_BLOCK_DISTANCE = 1;
 
     /**
      * Creates a new {@link BlockProximityFusion} instance.
      *
-     * @param contentAndSameTagLevelOnly
+     * @param postFiltering
      */
-    public BlockProximityFusion(boolean contentAndSameTagLevelOnly) {
-        this.contentAndSameTagLevelOnly = contentAndSameTagLevelOnly;
+    public BlockProximityFusion(boolean postFiltering) {
+        this.postFiltering = postFiltering;
     }
 
     @Override
-    public boolean process(TextDocument doc)
-            throws BoilerpipeProcessingException {
+    public boolean process(TextDocument doc) {
         List<TextBlock> textBlocks = doc.getTextBlocks();
         if (textBlocks.size() < 2) {
             return false;
         }
 
         boolean changes = false;
-        TextBlock prevBlock;
+        TextBlock prevBlock = textBlocks.get(0);
 
-        int offset;
-        if (contentAndSameTagLevelOnly) {
-            prevBlock = null;
-            offset = 0;
-            for (TextBlock tb : textBlocks) {
-                offset++;
-                if (tb.isContent()) {
-                    prevBlock = tb;
-                    break;
-                }
-            }
-            if (prevBlock == null) {
-                return false;
-            }
-        } else {
-            prevBlock = textBlocks.get(0);
-            offset = 1;
-        }
-
-        for (Iterator<TextBlock> it = textBlocks.listIterator(offset); it
-                .hasNext();) {
+        for (Iterator<TextBlock> it = textBlocks.listIterator(1); it.hasNext();) {
             TextBlock block = it.next();
-            if (!block.isContent()) {
+            if (!block.isContent() || !prevBlock.isContent()) {
                 prevBlock = block;
                 continue;
             }
@@ -96,10 +75,7 @@ public final class BlockProximityFusion implements BoilerpipeFilter {
                     - prevBlock.getOffsetBlocksEnd() - 1;
             if (diffBlocks <= MAX_BLOCK_DISTANCE) {
                 boolean ok = true;
-                if (contentAndSameTagLevelOnly) {
-                    if (!prevBlock.isContent() || !block.isContent()) {
-                        ok = false;
-                    }
+                if (postFiltering) {
                     if (prevBlock.getTagLevel() != block.getTagLevel()) {
                         ok = false;
                     }
@@ -135,6 +111,6 @@ public final class BlockProximityFusion implements BoilerpipeFilter {
 
     @Override
     public String toString() {
-        return getClass().getName() + ": contentAndSameTagLevelOnly=" + contentAndSameTagLevelOnly;
+        return getClass().getName() + ": postFiltering=" + postFiltering;
     }
 }

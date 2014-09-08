@@ -4,10 +4,15 @@
 
 package com.dom_distiller.client;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
+
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
+import de.l3s.boilerpipe.sax.BoilerpipeHTMLContentHandler;
 
 import java.util.LinkedList;
+import java.util.List;
 
 class TestTextDocumentBuilder {
     LinkedList<TextBlock> textBlocks;
@@ -44,5 +49,14 @@ class TestTextDocumentBuilder {
 
     TextDocument build() {
         return new TextDocument(textBlocks);
+    }
+
+    static TextDocument fromPage(Element docElement) {
+        BoilerpipeHTMLContentHandler htmlParser = new BoilerpipeHTMLContentHandler();
+        htmlParser.startDocument();
+        DomToSaxVisitor domToSaxVisitor = new DomToSaxVisitor(htmlParser);
+        new DomWalker(domToSaxVisitor).walk(docElement);
+        htmlParser.endDocument();
+        return htmlParser.toTextDocument();
     }
 }

@@ -27,8 +27,8 @@ public class BlockProximityFusionTest extends DomDistillerTestCase {
 
     // Both kinds of BlockProximityFusion should merge two content blocks.
     public void testMergeShortLeadingContent() throws BoilerpipeProcessingException {
-        doTestMergeShortLeadingContent(BlockProximityFusion.CONTENT_AGNOSTIC);
-        doTestMergeShortLeadingContent(BlockProximityFusion.CONTENT_ONLY_SAME_TAGLEVEL);
+        doTestMergeShortLeadingContent(BlockProximityFusion.PRE_FILTERING);
+        doTestMergeShortLeadingContent(BlockProximityFusion.POST_FILTERING);
     }
 
     private void doTestMergeShortLeadingContent(BlockProximityFusion classifier) throws BoilerpipeProcessingException {
@@ -48,8 +48,8 @@ public class BlockProximityFusionTest extends DomDistillerTestCase {
 
     // Both kinds of BlockProximityFusion should not merge an LI non-content followed by content.
     public void testDoesNotMergeShortLeadingLiNonContent() throws BoilerpipeProcessingException {
-        doTestDoesNotMergeShortLeadingLiNonContent(BlockProximityFusion.CONTENT_AGNOSTIC);
-        doTestDoesNotMergeShortLeadingLiNonContent(BlockProximityFusion.CONTENT_ONLY_SAME_TAGLEVEL);
+        doTestDoesNotMergeShortLeadingLiNonContent(BlockProximityFusion.PRE_FILTERING);
+        doTestDoesNotMergeShortLeadingLiNonContent(BlockProximityFusion.POST_FILTERING);
     }
 
     private void doTestDoesNotMergeShortLeadingLiNonContent(BlockProximityFusion classifier) throws BoilerpipeProcessingException {
@@ -67,10 +67,13 @@ public class BlockProximityFusionTest extends DomDistillerTestCase {
                 document.getContent().contains(LONG_TEXT));
     }
 
-    // If only merging content blocks, leading non-content of any kind is not merged.
-    public void testContentOnlyDoesNotMergeShortLeadingNonContent() throws BoilerpipeProcessingException {
-        BlockProximityFusion classifier = BlockProximityFusion.CONTENT_ONLY_SAME_TAGLEVEL;
+    // Both kinds of BlockProximityFusion should not merge a non-content followed by content.
+    public void testDoesNotMergeShortLeadingNonContent() throws BoilerpipeProcessingException {
+        doTestDoesNotMergeShortLeadingNonContent(BlockProximityFusion.PRE_FILTERING);
+        doTestDoesNotMergeShortLeadingNonContent(BlockProximityFusion.POST_FILTERING);
+    }
 
+    public void doTestDoesNotMergeShortLeadingNonContent(BlockProximityFusion classifier) throws BoilerpipeProcessingException {
         TextDocument document = new TestTextDocumentBuilder()
                 .addNonContentBlock(SHORT_TEXT)
                 .addContentBlock(LONG_TEXT)
@@ -82,27 +85,12 @@ public class BlockProximityFusionTest extends DomDistillerTestCase {
         assertTrue(document.getContent().contains(LONG_TEXT));
     }
 
-    // If "content" flag is ignored, a non-LI leading text (e.g. headline?) can be merged with subsequent content.
-    public void testContentAgnosticMergeShortLeadingNonContent() throws BoilerpipeProcessingException {
-        BlockProximityFusion classifier = BlockProximityFusion.CONTENT_AGNOSTIC;
-
-        TextDocument document = new TestTextDocumentBuilder()
-                .addNonContentBlock(SHORT_TEXT)
-                .addContentBlock(LONG_TEXT)
-                .build();
-        classifier.process(document);
-
-        assertEquals(1, document.getTextBlocks().size());
-        assertTrue(document.getContent().contains(SHORT_TEXT));
-        assertTrue(document.getContent().contains(LONG_TEXT));
-    }
-
     // ***** Larger-document tests *****
 
     // Both kinds of BlockProximityFusion should merge a document full of content.
     public void testMergeLotsOfContent() throws BoilerpipeProcessingException {
-        doTestMergeLotsOfContent(BlockProximityFusion.CONTENT_AGNOSTIC);
-        doTestMergeLotsOfContent(BlockProximityFusion.CONTENT_ONLY_SAME_TAGLEVEL);
+        doTestMergeLotsOfContent(BlockProximityFusion.PRE_FILTERING);
+        doTestMergeLotsOfContent(BlockProximityFusion.POST_FILTERING);
     }
 
     private void doTestMergeLotsOfContent(BlockProximityFusion classifier) throws BoilerpipeProcessingException {
@@ -127,9 +115,12 @@ public class BlockProximityFusionTest extends DomDistillerTestCase {
     }
 
     // If only merging content blocks, non-content in the body of any kind is not merged.
-    public void testContentOnlySkipsNonContentInBody() throws BoilerpipeProcessingException {
-        BlockProximityFusion classifier = BlockProximityFusion.CONTENT_ONLY_SAME_TAGLEVEL;
+    public void testSkipsNonContentInBody() throws BoilerpipeProcessingException {
+        doTestSkipsNonContentInBody(BlockProximityFusion.PRE_FILTERING);
+        doTestSkipsNonContentInBody(BlockProximityFusion.POST_FILTERING);
+    }
 
+    public void doTestSkipsNonContentInBody(BlockProximityFusion classifier) throws BoilerpipeProcessingException {
         TextDocument document = new TestTextDocumentBuilder()
                 .addContentBlock(LONG_LEADING_TEXT)
                 .addContentBlock(LONG_LEADING_TEXT)
@@ -144,27 +135,9 @@ public class BlockProximityFusionTest extends DomDistillerTestCase {
         assertTrue(document.getContent().contains(LONG_TEXT));
     }
 
-    // If "content" flag is ignored, a single non-content in the body is merged with subsequent content.
-    public void testContentAgnosticIncludesNonContentInBody() throws BoilerpipeProcessingException {
-        BlockProximityFusion classifier = BlockProximityFusion.CONTENT_AGNOSTIC;
-
-        TextDocument document = new TestTextDocumentBuilder()
-                .addContentBlock(LONG_LEADING_TEXT)
-                .addContentBlock(LONG_LEADING_TEXT)
-                .addNonContentBlock(SHORT_TEXT) // begins a new block but is included in the document.
-                .addContentBlock(LONG_TEXT)
-                .build();
-        classifier.process(document);
-
-        assertEquals(2, document.getTextBlocks().size());
-        assertTrue(document.getContent().contains(LONG_LEADING_TEXT));
-        assertTrue(document.getContent().contains(SHORT_TEXT));
-        assertTrue(document.getContent().contains(LONG_TEXT));
-    }
-
     // If "content" flag is ignored, a single non-content LI in the body is not merged.
-    public void testContentAgnosticSkipsNonContentListInBody() throws BoilerpipeProcessingException {
-        BlockProximityFusion classifier = BlockProximityFusion.CONTENT_AGNOSTIC;
+    public void testPreFilteringSkipsNonContentListInBody() throws BoilerpipeProcessingException {
+        BlockProximityFusion classifier = BlockProximityFusion.PRE_FILTERING;
 
         TextDocument document = new TestTextDocumentBuilder()
                 .addContentBlock(LONG_LEADING_TEXT)

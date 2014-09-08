@@ -33,6 +33,7 @@ import de.l3s.boilerpipe.filters.heuristics.HeadingFusion;
 import de.l3s.boilerpipe.filters.heuristics.KeepLargestBlockFilter;
 import de.l3s.boilerpipe.filters.heuristics.LargeBlockSameTagLevelToContentFilter;
 import de.l3s.boilerpipe.filters.heuristics.ListAtEndFilter;
+import de.l3s.boilerpipe.filters.heuristics.SimilarSiblingContentExpansion;
 import de.l3s.boilerpipe.filters.simple.BoilerplateBlockFilter;
 import de.l3s.boilerpipe.filters.simple.LabelToBoilerplateFilter;
 
@@ -68,16 +69,23 @@ public final class ArticleExtractor {
         changed = LabelToBoilerplateFilter.INSTANCE_STRICTLY_NOT_CONTENT.process(doc);
         PrintDebugFilter.INSTANCE.process(doc, changed, "Ignore Strictly Not Content blocks");
 
+        changed = new SimilarSiblingContentExpansion.Builder()
+                .maxLinkDensity(0.5)
+                .maxBlockDistance(3)
+                .build()
+                .process(doc);
+        PrintDebugFilter.INSTANCE.process(doc, changed, "SimilarSiblingContentExpansion");
+
         changed = new HeadingFusion().process(doc);
         PrintDebugFilter.INSTANCE.process(doc, changed, "HeadingFusion");
 
-        changed = BlockProximityFusion.CONTENT_AGNOSTIC.process(doc);
+        changed = BlockProximityFusion.PRE_FILTERING.process(doc);
         PrintDebugFilter.INSTANCE.process(doc, changed, "BlockProximityFusion: Distance 1");
 
         changed = BoilerplateBlockFilter.INSTANCE_KEEP_TITLE.process(doc);
         PrintDebugFilter.INSTANCE.process(doc, changed, "BlockFilter");
 
-        changed = BlockProximityFusion.CONTENT_ONLY_SAME_TAGLEVEL.process(doc);
+        changed = BlockProximityFusion.POST_FILTERING.process(doc);
         PrintDebugFilter.INSTANCE.process(doc, changed, "BlockProximityFusion: Same level content-only");
 
         changed = KeepLargestBlockFilter.INSTANCE_EXPAND_TO_SIBLINGS.process(doc);
