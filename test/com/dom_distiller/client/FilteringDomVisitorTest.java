@@ -92,13 +92,11 @@ public class FilteringDomVisitorTest extends DomDistillerTestCase {
     // dom_distiller/content/distiller_page_web_contents_browsertest.cc::VisibilityDetection().
 
     public void testDataTable() throws Throwable {
-        String html = "<table align=\"left\">" +
-                          // <caption> tag makes this a data table.
-                          "<caption>Testing Data Table</caption>" +
+        String html = "<table align=\"left\" role=\"grid\">" + // role=grid make this a data table.
                           "<tbody align=\"left\">" +
                               "<tr>" +
-                                  "<td>row2col1</td>" +
-                                  "<td>row2col2</td>" +
+                                  "<td>row1col1</td>" +
+                                  "<td>row1col2</td>" +
                               "</tr>" +
                           "</tbody>" +
                       "</table>";
@@ -109,8 +107,8 @@ public class FilteringDomVisitorTest extends DomDistillerTestCase {
         String html = "<table align=\"left\">" +
                           "<tbody align=\"left\">" +
                               "<tr>" +
-                                  "<td>row2col1</td>" +
-                                  "<td>row2col2</td>" +
+                                  "<td>row1col1</td>" +
+                                  "<td>row1col2</td>" +
                               "</tr>" +
                           "</tbody>" +
                       "</table>";

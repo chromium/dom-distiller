@@ -21,6 +21,7 @@ public class DomDistillerTestSuite extends GWTTestSuite {
         suite.addTestSuite(DomToSaxVisitorTest.class);
         suite.addTestSuite(DomUtilTest.class);
         suite.addTestSuite(DomWalkerTest.class);
+        suite.addTestSuite(FilteringDomVisitorTest.class);
         suite.addTestSuite(GwtOverlayProtoTest.class);
         suite.addTestSuite(HeadingFusionTest.class);
         suite.addTestSuite(IEReadingViewParserTest.class);
@@ -36,6 +37,7 @@ public class DomDistillerTestSuite extends GWTTestSuite {
         suite.addTestSuite(SimilarSiblingContentExpansionTest.class);
         suite.addTestSuite(TableClassifierTest.class);
         suite.addTestSuite(TestUtilTest.class);
+        suite.addTestSuite(UnicodeTokenizerTest.class);
         return suite;
     }
 }
