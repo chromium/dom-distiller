@@ -126,13 +126,6 @@ public class TableClassifierTest extends DomDistillerTestCase {
         assertEquals(TableClassifier.Reason.DATATABLE_0, TableClassifier.sReason);
     }
 
-    public void testSummaryAttribute() {
-        TableElement table = createDefaultTableWithNoTH();
-        table.setAttribute("summary", "Testing summary attribute");
-        assertEquals(TableClassifier.Type.DATA, TableClassifier.table(table));
-        assertEquals(TableClassifier.Reason.SUMMARY, TableClassifier.sReason);
-    }
-
     public void testCaptionTag() {
         String caption = "<caption>Testing Caption</caption>";
         TableElement table = createDefaultTableWithNoTH();
@@ -241,6 +234,34 @@ public class TableClassifierTest extends DomDistillerTestCase {
         assertEquals(TableClassifier.Reason.ONLY_HAS_ABBR, TableClassifier.sReason);
     }
 
+    public void testWideTable() {
+        TableElement table = createDefaultTableWithNoTH();
+        Element root = Document.get().getDocumentElement();
+        int width = (int) ((0.95 * root.getOffsetWidth()) + 1.0);
+        table.setAttribute("style", "width:" + width + "px");
+        NodeList<Element> bodies = root.getElementsByTagName("BODY");
+        assertTrue(bodies.getLength() > 0);
+        bodies.getItem(0).appendChild(table);
+        assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
+        assertEquals(TableClassifier.Reason.MORE_95_PERCENT_DOC_WIDTH, TableClassifier.sReason);
+
+        // Test same wide table with viewport meta.
+        NodeList<Element> heads = root.getElementsByTagName("HEAD");
+        assertTrue(heads.getLength() > 0);
+        Element meta = TestUtil.createMetaName("viewport", "width=device-width");
+        heads.getItem(0).appendChild(meta);
+        assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
+        assertEquals(TableClassifier.Reason.LESS_EQ_10_CELLS, TableClassifier.sReason);
+        meta.removeFromParent();
+    }
+
+    public void testSummaryAttribute() {
+        TableElement table = createDefaultTableWithNoTH();
+        table.setAttribute("summary", "Testing summary attribute");
+        assertEquals(TableClassifier.Type.DATA, TableClassifier.table(table));
+        assertEquals(TableClassifier.Reason.SUMMARY, TableClassifier.sReason);
+    }
+
     public void testEmptyTable() {
         String tableStr = "<tbody>" +
                               "<p>empty table</p>" +
@@ -347,27 +368,6 @@ public class TableClassifierTest extends DomDistillerTestCase {
         }
         assertEquals(TableClassifier.Type.DATA, TableClassifier.table(table));
         assertEquals(TableClassifier.Reason.MORE_EQ_20_ROWS, TableClassifier.sReason);
-    }
-
-    public void testWideTable() {
-        TableElement table = createDefaultTableWithNoTH();
-        Element root = Document.get().getDocumentElement();
-        int width = (int) ((0.95 * root.getOffsetWidth()) + 1.0);
-        table.setAttribute("style", "width:" + width + "px");
-        NodeList<Element> bodies = root.getElementsByTagName("BODY");
-        assertTrue(bodies.getLength() > 0);
-        bodies.getItem(0).appendChild(table);
-        assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
-        assertEquals(TableClassifier.Reason.MORE_95_PERCENT_DOC_WIDTH, TableClassifier.sReason);
-
-        // Test same wide table with viewport meta.
-        NodeList<Element> heads = root.getElementsByTagName("HEAD");
-        assertTrue(heads.getLength() > 0);
-        Element meta = TestUtil.createMetaName("viewport", "width=device-width");
-        heads.getItem(0).appendChild(meta);
-        assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
-        assertEquals(TableClassifier.Reason.LESS_EQ_10_CELLS, TableClassifier.sReason);
-        meta.removeFromParent();
     }
 
     public void testEmbedElement() {
