@@ -70,11 +70,23 @@ public final class ArticleExtractor {
         PrintDebugFilter.INSTANCE.process(doc, changed, "Ignore Strictly Not Content blocks");
 
         changed = new SimilarSiblingContentExpansion.Builder()
+                .allowCrossHeadings()
                 .maxLinkDensity(0.5)
-                .maxBlockDistance(3)
+                .maxBlockDistance(10)
                 .build()
                 .process(doc);
-        PrintDebugFilter.INSTANCE.process(doc, changed, "SimilarSiblingContentExpansion");
+        PrintDebugFilter.INSTANCE.process(doc, changed,
+                "SimilarSiblingContentExpansion: Cross headings");
+
+        changed = new SimilarSiblingContentExpansion.Builder()
+                .allowCrossHeadings()
+                .allowMixedTags()
+                .maxLinkDensity(0.0)
+                .maxBlockDistance(10)
+                .build()
+                .process(doc);
+        PrintDebugFilter.INSTANCE.process(doc, changed,
+                "SimilarSiblingContentExpansion: Mixed tags");
 
         changed = new HeadingFusion().process(doc);
         PrintDebugFilter.INSTANCE.process(doc, changed, "HeadingFusion");
