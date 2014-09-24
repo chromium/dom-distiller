@@ -82,9 +82,7 @@ public class ContentExtractor {
         List<Node> contentNodes = processTextBlocks(document);
         mTimingInfo.setArticleProcessingTime(DomUtil.getTime() - now);
 
-        if (contentNodes.isEmpty()) {
-            return "";
-        }
+        if (contentNodes.isEmpty()) return "";
 
         now = DomUtil.getTime();
         String html = formatExtractedNodes(textOnly, contentNodes);
@@ -157,14 +155,13 @@ public class ContentExtractor {
      */
     private String formatExtractedNodes(boolean textOnly, List<Node> contentNodes) {
         Node clonedSubtree = NodeListExpander.expand(contentNodes).cloneSubtree();
-        if (clonedSubtree.getNodeType() != Node.ELEMENT_NODE) {
-            return "";
-        }
+        if (clonedSubtree.getNodeType() != Node.ELEMENT_NODE) return "";
 
         // The base URL in the distilled page viewer is different from that in
         // the live page.  This breaks all relative links (in anchors,
         // images, etc.), so make them absolute in the distilled content.
         makeAllLinksAbsolute(clonedSubtree);
+
         if (textOnly) {
             return getTextFromTree(clonedSubtree);
         }
@@ -255,4 +252,5 @@ public class ContentExtractor {
             }
         }
     }-*/;
+
 }

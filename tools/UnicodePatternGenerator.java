@@ -7,8 +7,7 @@ import java.util.regex.Matcher;
 
 /**
  * This class generates unicode patterns (of the form \u0000-\u0005\u0009\u000c-\u0010) for a
- * couple of character matching routines used in boilerpipe (e.g. Character.isWhitespace(), unicode
- * character classes, etc.).
+ * couple of character matching routines used in boilerpipe (e.g. unicode character classes, etc.).
  *
  * It only supports Unicode's Basic Multilingual Plane (i.e. code points \u0000 to \uFFFF).
  */

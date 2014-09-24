@@ -241,6 +241,17 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
             throw new Exception("Required \"" + prefix + "image\" property is missing.");
     }
 
+    private static final String sOgpNsPrefixRegex =
+            "((\\w+):\\s+(http:\\/\\/ogp.me\\/ns(\\/\\w+)*#))\\s*";
+    private static final Pattern sOgpNsPrefixPattern =
+            Pattern.compile(sOgpNsPrefixRegex, Pattern.CASE_INSENSITIVE);
+    private static final Pattern sOgpNsNonPrefixNamePattern =
+            Pattern.compile("^xmlns:(\\w+)", Pattern.CASE_INSENSITIVE);
+    private static final String sOgpNsNonPrefixValueRegex =
+            "^http:\\/\\/ogp.me\\/ns(\\/\\w+)*#";
+    private static final Pattern sOgpNsNonPrefixValuePattern =
+            Pattern.compile(sOgpNsNonPrefixValueRegex, Pattern.CASE_INSENSITIVE);
+
     private void findPrefixes(Element root) {
         String prefixes = "";
 
@@ -257,9 +268,7 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
         // If there's "prefix" attribute, its value is something like
        // "og: http://ogp.me/ns# profile: http://og.me/ns/profile# article: http://ogp.me/ns/article#".
         if (!prefixes.isEmpty()) {
-            final String ogpNSRegex = "((\\w+):\\s+(http:\\/\\/ogp.me\\/ns(\\/\\w+)*#))\\s*";
-            Pattern pattern = Pattern.compile(ogpNSRegex, Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(prefixes);
+            Matcher matcher = sOgpNsPrefixPattern.matcher(prefixes);
             while (matcher.find()) {  // There could be multiple prefixes.
                 setPrefixForObjectType(matcher.group(2), matcher.group(4)); 
             }
@@ -268,20 +277,17 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
             // - "xmlns:og="http://ogp.me/ns#"
             // - "xmlns:profile="http://ogp.me/ns/profile#"
             // - "xmlns:article="http://ogp.me/ns/article#".
-            final String ogpNSRegex = "^http:\\/\\/ogp.me\\/ns(\\/\\w+)*#";
             final JsArray<Node> attributes = DomUtil.getAttributes(root);
             for (int i = 0; i < attributes.length(); i++) {
                 final Node node = attributes.get(i);
                 // Look for attribute name that starts with "xmlns:".
                 String attributeName = node.getNodeName().toLowerCase();
-                Pattern namePattern = Pattern.compile("^xmlns:(\\w+)", Pattern.CASE_INSENSITIVE);
-                Matcher nameMatcher = namePattern.matcher(attributeName);
+                Matcher nameMatcher = sOgpNsNonPrefixNamePattern.matcher(attributeName);
                 if (!nameMatcher.find()) continue;
 
                 // Extract OGP namespace URI from attribute value, if available.
                 String attributeValue = node.getNodeValue();
-                Pattern valuePattern = Pattern.compile(ogpNSRegex, Pattern.CASE_INSENSITIVE);
-                Matcher valueMatcher = valuePattern.matcher(attributeValue);
+                Matcher valueMatcher = sOgpNsNonPrefixValuePattern.matcher(attributeValue);
                 if (valueMatcher.find()) {
                     setPrefixForObjectType(nameMatcher.group(1), valueMatcher.group(1)); 
                 }

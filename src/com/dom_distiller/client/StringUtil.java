@@ -8,42 +8,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringUtil {
-    /**
-     * This is equivalent  to Java's Character.isWhitespace(). That function is not available
-     * with GWT. The ranges are generated with tools/UnicodePatternGenerator.java.
-     */
-    public static boolean isWhitespace(Character c) {
-        int code = (int)c.charValue();
-        return between(code, 0x0009, 0x000d) ||
-                between(code, 0x001c, 0x0020) ||
-                code == 0x1680 ||
-                code == 0x180e ||
-                between(code, 0x2000, 0x2006) ||
-                between(code, 0x2028, 0x2029) ||
-                code == 0x205f ||
-                code == 0x3000;
-
-    }
-
-    private static boolean between(int t, int lo, int hi) {
-        return lo <= t && t <= hi;
-    }
-
-    public static boolean isStringAllWhitespace(String s) {
-        for (int i = 0; i < s.length(); ++i) {
-            if (!isWhitespace(s.charAt(i))) return false;
-        }
-        return true;
-    }
-
-    // The version of gwt that we use implements trim improperly (it uses a javascript regex with \s
-    // where java's trim explicitly matches \u0000-\u0020). This version is from GWT's trunk.
-    public static native String javaTrim(String s) /*-{
-        if (s.length == 0 || (s[0] > '\u0020' && s[s.length - 1] > '\u0020')) {
-            return s;
-        }
-        return s.replace(/^[\u0000-\u0020]*|[\u0000-\u0020]*$/g, '');
-    }-*/;
+    private static final Pattern sWhitespacePattern =
+            Pattern.compile("\\s", Pattern.CASE_INSENSITIVE);
+    private static final Pattern sNonWhitespacePattern =
+            Pattern.compile("\\S", Pattern.CASE_INSENSITIVE);
+    private static final Pattern sTrimPattern =
+            Pattern.compile("^\\s+|\\s+$", Pattern.CASE_INSENSITIVE);
 
     public static boolean match(String input, String regex) {
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
@@ -56,6 +26,23 @@ public class StringUtil {
         Matcher matcher = pattern.matcher(input);
         return matcher.replaceAll(replace);
     }
+
+    public static boolean isWhitespace(Character c) {
+        return sWhitespacePattern.matcher(c.toString()).find();
+    }
+
+    public static boolean isStringAllWhitespace(String s) {
+        return !sNonWhitespacePattern.matcher(s).find();
+    }
+
+    // The version of gwt that we use implements trim improperly (it uses a javascript regex with \s
+    // where java's trim explicitly matches \u0000-\u0020). This version is from GWT's trunk.
+    public static native String javaTrim(String s) /*-{
+        if (s.length == 0 || (s[0] > '\u0020' && s[s.length - 1] > '\u0020')) {
+            return s;
+        }
+        return s.replace(/^[\u0000-\u0020]*|[\u0000-\u0020]*$/g, '');
+    }-*/;
 
     public static String[] split(String input, String regex) {
         // Either use String.split(), which is rumored to be very slow
@@ -83,8 +70,6 @@ public class StringUtil {
     }
 
     public static String trim(String input) {
-        Pattern pattern = Pattern.compile("^\\s+|\\s+$", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(input);
-        return matcher.replaceAll("");
+        return sTrimPattern.matcher(input).replaceAll("");
     }
 }
