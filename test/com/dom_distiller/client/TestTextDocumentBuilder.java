@@ -4,7 +4,6 @@
 
 package com.dom_distiller.client;
 
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 
 import de.l3s.boilerpipe.document.TextBlock;
@@ -12,7 +11,6 @@ import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.sax.BoilerpipeHTMLContentHandler;
 
 import java.util.LinkedList;
-import java.util.List;
 
 class TestTextDocumentBuilder {
     LinkedList<TextBlock> textBlocks;
@@ -27,7 +25,7 @@ class TestTextDocumentBuilder {
         TextBlock block = new TextBlock(
                 text,
                 TextBlock.EMPTY_NODE_LIST, TextBlock.EMPTY_NODE_LIST,
-                0, numWords, numWords, 0,
+                numWords, numWords, numWords, 0,
                 textBlockIndex++);
         block.setIsContent(false);
         for (String label : labels) {

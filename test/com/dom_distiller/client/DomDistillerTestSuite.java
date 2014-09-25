@@ -37,6 +37,7 @@ public class DomDistillerTestSuite extends GWTTestSuite {
         suite.addTestSuite(SimilarSiblingContentExpansionTest.class);
         suite.addTestSuite(TableClassifierTest.class);
         suite.addTestSuite(TestUtilTest.class);
+        suite.addTestSuite(TextDocumentStatisticsTest.class);
         suite.addTestSuite(UnicodeTokenizerTest.class);
         return suite;
     }

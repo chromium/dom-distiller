@@ -60,6 +60,10 @@ message DebugInfo {
   optional string log = 1;
 }
 
+message StatisticsInfo {
+  optional int32 word_count = 1;
+}
+
 message DomDistillerResult {
   optional string title = 1;
   optional DistilledContent distilled_content = 2;
@@ -68,6 +72,7 @@ message DomDistillerResult {
   optional MarkupInfo markup_info = 5;
   optional TimingInfo timing_info = 6;
   optional DebugInfo debug_info = 7;
+  optional StatisticsInfo statistics_info = 8;
 }
 
 message DomDistillerOptions {

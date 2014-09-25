@@ -40,6 +40,7 @@ public class DomDistiller implements Exportable {
         TimingInfo timingInfo = contentExtractor.getTimingInfo();
         timingInfo.setTotalTime(DomUtil.getTime() - startTime);
         result.setTimingInfo(timingInfo);
+        result.setStatisticsInfo(contentExtractor.getStatisticsInfo());
         DebugInfo debugInfo = DebugInfo.create();
         debugInfo.setLog(LogUtil.getAndClearLog());
         result.setDebugInfo(debugInfo);

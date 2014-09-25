@@ -4,7 +4,7 @@
 
 package com.dom_distiller.client;
 
-import com.dom_distiller.proto.DomDistillerProtos;
+import com.dom_distiller.proto.DomDistillerProtos.StatisticsInfo;
 import com.dom_distiller.proto.DomDistillerProtos.TimingInfo;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
@@ -16,6 +16,7 @@ import com.google.gwt.dom.client.VideoElement;
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
+import de.l3s.boilerpipe.document.TextDocumentStatistics;
 import de.l3s.boilerpipe.extractors.ArticleExtractor;
 import de.l3s.boilerpipe.labels.DefaultLabels;
 import de.l3s.boilerpipe.sax.BoilerpipeHTMLContentHandler;
@@ -31,16 +32,19 @@ public class ContentExtractor {
 
     private final TimingInfo mTimingInfo;
 
+    private final StatisticsInfo mStatisticsInfo;
+
     private final MarkupParser parser;
 
     public ContentExtractor(Element root) {
-        this.documentElement = root;
-        this.candidateTitles = new LinkedList<String>();
-        this.mTimingInfo = DomDistillerProtos.TimingInfo.create();
+        documentElement = root;
+        candidateTitles = new LinkedList<String>();
+        mTimingInfo = TimingInfo.create();
+        mStatisticsInfo = StatisticsInfo.create();
 
         double startTime = DomUtil.getTime();
-        this.parser = new MarkupParser(root);
-        this.mTimingInfo.setMarkupParsingTime(DomUtil.getTime() - startTime);
+        parser = new MarkupParser(root);
+        mTimingInfo.setMarkupParsingTime(DomUtil.getTime() - startTime);
     }
 
     // Grabs a list of candidate titles in descending priority order:
@@ -86,10 +90,10 @@ public class ContentExtractor {
 
         now = DomUtil.getTime();
         String html = formatExtractedNodes(textOnly, contentNodes);
+        mStatisticsInfo.setWordCount(TextDocumentStatistics.countWordsInContent(document));
         mTimingInfo.setFormattingTime(DomUtil.getTime() - now);
         return html;
     }
-
 
     /**
      * Returns timing information about the most recent extraction run.
@@ -97,6 +101,14 @@ public class ContentExtractor {
      */
     public TimingInfo getTimingInfo() {
         return mTimingInfo;
+    }
+
+    /**
+     * Returns statistical information about the most recent extraction run.
+     * @return an instance of DomDistillerProtos.StatisticsInfo with detailed statistics.
+     */
+    public StatisticsInfo getStatisticsInfo() {
+        return mStatisticsInfo;
     }
 
     /**
