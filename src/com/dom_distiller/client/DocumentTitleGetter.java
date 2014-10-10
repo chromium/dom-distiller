@@ -71,7 +71,7 @@ public class DocumentTitleGetter {
             if (currTitle.isEmpty()) currTitle = origTitle;
         }
 
-        currTitle = StringUtil.trim(currTitle);
+        currTitle = StringUtil.jsTrim(currTitle);
 
         if (StringUtil.splitLength(currTitle, "\\s+") <= 4) currTitle = origTitle;
 

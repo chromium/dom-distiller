@@ -369,7 +369,8 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         assertEquals(1, textBlocks.get(0).getNonWhitespaceTextElements().size());
         assertEquals(
                 "TEXT1\n",
-                joinTextNodes(textBlocks.get(0).getAllTextElements()));    }
+                joinTextNodes(textBlocks.get(0).getAllTextElements()));
+    }
 
     private static String joinTextNodes(List<Node> elements) {
         StringBuffer sb = new StringBuffer();

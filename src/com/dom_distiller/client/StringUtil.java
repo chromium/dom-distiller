@@ -8,32 +8,27 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringUtil {
-    private static final Pattern sWhitespacePattern =
-            Pattern.compile("\\s", Pattern.CASE_INSENSITIVE);
-    private static final Pattern sNonWhitespacePattern =
-            Pattern.compile("\\S", Pattern.CASE_INSENSITIVE);
-    private static final Pattern sTrimPattern =
-            Pattern.compile("^\\s+|\\s+$", Pattern.CASE_INSENSITIVE);
+    // For the whitespace-related functions below, Java's and Javascript's versions of '\s' and '\S'
+    // are different.  E.g. java doesn't recognize &nbsp; in a text node as whitespace but
+    // javascript does.  The former causes GWT tests to fail; the latter is what we want.
+    // Don't use the "g" global search flag, or subsequent searches, even with different Character
+    // or String, become unpredictable.
 
-    public static boolean match(String input, String regex) {
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(input);
-        return matcher.find();
-    }
+    public static native boolean isWhitespace(Character c) /*-{
+        return /\s/.test(c);
+    }-*/;
 
-    public static String findAndReplace(String input, String regex, String replace) {
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(input);
-        return matcher.replaceAll(replace);
-    }
+    public static native boolean isStringAllWhitespace(String s) /*-{
+        return !/\S/.test(s);
+    }-*/;
 
-    public static boolean isWhitespace(Character c) {
-        return sWhitespacePattern.matcher(c.toString()).find();
-    }
-
-    public static boolean isStringAllWhitespace(String s) {
-        return !sNonWhitespacePattern.matcher(s).find();
-    }
+    // String.trim() is not defined in GWT, so use String.replace(RegEx) for GWT tests.
+    // '\s' in RegEx for String.replace() doesn't include &nbsp (\u00a0), even though Regex.test()
+    // does, so specifically add the unicode to the RegEx.
+    public static native String jsTrim(String s) /*-{
+        if (s.trim) return s.trim();
+        return s.replace(/^[\s,\u00a0]+|[\s,\u00a0]+$/g, '');
+    }-*/;
 
     // The version of gwt that we use implements trim improperly (it uses a javascript regex with \s
     // where java's trim explicitly matches \u0000-\u0020). This version is from GWT's trunk.
@@ -69,7 +64,15 @@ public class StringUtil {
         return StringUtil.split(input, regex).length;
     }
 
-    public static String trim(String input) {
-        return sTrimPattern.matcher(input).replaceAll("");
+    public static boolean match(String input, String regex) {
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(input);
+        return matcher.find();
+    }
+
+    public static String findAndReplace(String input, String regex, String replace) {
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(input);
+        return matcher.replaceAll(replace);
     }
 }

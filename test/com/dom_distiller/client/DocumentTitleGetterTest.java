@@ -158,6 +158,16 @@ public class DocumentTitleGetterTest extends DomDistillerTestCase {
         assertEquals("long heading with 5 words", title);
     }
 
+    public void testH1WithLongHTMLWithNbsp() {
+        Element root = TestUtil.createDiv(0);
+        Element h1 = TestUtil.createHeading(1,
+                "<a href=\"http://longheading.com\"><b> &nbsp;long heading</b></a> with 5 words &nbsp; ");
+        root.appendChild(h1);
+
+        String title = DocumentTitleGetter.getDocumentTitle("short title", root);
+        assertEquals("long heading with 5 words", title);
+    }
+
     public void testShortTitleWithoutRoot() {
         String title = DocumentTitleGetter.getDocumentTitle("short title", null);
         assertEquals("short title", title);

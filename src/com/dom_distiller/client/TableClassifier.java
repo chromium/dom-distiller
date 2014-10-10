@@ -12,8 +12,10 @@ import com.google.gwt.dom.client.TableElement;
 import com.google.gwt.dom.client.TableRowElement;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -52,13 +54,26 @@ public class TableClassifier {
     }
     static Reason sReason;
 
-    private static final String[] sHeaderTags = { "COLGROUP", "COL", "TH" };
-    private static final String[] sObjectTags = { "EMBED", "OBJECT", "APPLET", "IFRAME" };
-
+    // sHeaderTags and sObjectTags have the same Map entry type:
+    // - String: tagname of element to search for in <table>
+    // - Boolean: whether to check if element has valid (not empty or all-whitespaced) innerText.
+    private static final Map<String, Boolean> sHeaderTags;
+    private static final Map<String, Boolean> sObjectTags;
     private static final Set<String> sARIATableRoles;
     private static final Set<String> sARIATableDescendantRoles;
     private static final Set<String> sARIARoles;
     static {
+        sHeaderTags = new HashMap<String, Boolean>();
+        sHeaderTags.put("COLGROUP", Boolean.FALSE);
+        sHeaderTags.put("COL", Boolean.FALSE);
+        sHeaderTags.put("TH", Boolean.TRUE);
+
+        sObjectTags = new HashMap<String, Boolean>();
+        sObjectTags.put("EMBED", Boolean.FALSE);
+        sObjectTags.put("OBJECT", Boolean.FALSE);
+        sObjectTags.put("APPLET", Boolean.FALSE);
+        sObjectTags.put("IFRAME", Boolean.FALSE);
+
         // ARIA roles for table - http://www.w3.org/TR/wai-aria/roles#widget_roles_header.
         sARIATableRoles = new HashSet<String>();
         sARIATableRoles.add("grid");
@@ -152,9 +167,8 @@ public class TableClassifier {
         // 8) Table having legitimate data table structures is data table:
         // a) table has <caption>, <thead>, <tfoot>, <colgroup>, <col>, or <th> elements
         Element caption = t.getCaption();
-        if ((caption != null && !DomUtil.getInnerText(caption).isEmpty()) ||
-                t.getTHead() != null || t.getTFoot() != null ||
-                hasOneOfElements(directDescendants, sHeaderTags)) {
+        if ((caption != null && hasValidText(caption)) || t.getTHead() != null ||
+                t.getTFoot() != null || hasOneOfElements(directDescendants, sHeaderTags)) {
             return logAndReturn(Reason.CAPTION_THEAD_TFOOT_COLGROUP_COL_TH, "", Type.DATA);
         }
 
@@ -280,13 +294,19 @@ public class TableClassifier {
         return directDescendants;
     }
 
-    private static boolean hasOneOfElements(List<Element> list, String[] tagNames) {
+    private static boolean hasOneOfElements(List<Element> list, Map<String, Boolean> tags) {
         for (Element e : list) {
-            for (int i = 0; i < tagNames.length; i++) {
-                if (e.hasTagName(tagNames[i])) return true;
+            String tagName = e.getTagName();
+            if (tags.containsKey(tagName)) {
+                return !tags.get(tagName) || hasValidText(e);
             }
         }
         return false;
+    }
+
+    private static boolean hasValidText(Element e) {
+        String txt = DomUtil.getInnerText(e);
+        return !txt.isEmpty() && !StringUtil.isStringAllWhitespace(txt);
     }
 
     private static NodeList<TableCellElement> getMaxColsAmongRows(NodeList<TableRowElement> rows) {

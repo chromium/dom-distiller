@@ -135,6 +135,22 @@ public class TableClassifierTest extends DomDistillerTestCase {
                      TableClassifier.sReason);
     }
 
+    public void testEmptyCaptionTag() {
+        String caption = "<caption></caption>";
+        TableElement table = createDefaultTableWithNoTH();
+        table.setInnerHTML(caption + table.getInnerHTML());
+        assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
+        assertEquals(TableClassifier.Reason.LESS_EQ_10_CELLS, TableClassifier.sReason);
+    }
+
+    public void testAllWhitespacedCaptionTag() {
+        String caption = "<caption>&nbsp;  &nbsp;</caption>";
+        TableElement table = createDefaultTableWithNoTH();
+        table.setInnerHTML(caption + table.getInnerHTML());
+        assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
+        assertEquals(TableClassifier.Reason.LESS_EQ_10_CELLS, TableClassifier.sReason);
+    }
+
     public void testTHeadTag() {
         String thead = "<thead>" +
                           "<tr>" +
@@ -199,6 +215,46 @@ public class TableClassifierTest extends DomDistillerTestCase {
         assertEquals(TableClassifier.Type.DATA, TableClassifier.table(nestedTable));
         assertEquals(TableClassifier.Reason.CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
                      TableClassifier.sReason);
+    }
+
+    public void testEmptyTHTag() {
+        String tableStr = "<tbody>" +
+                              "<tr>" +
+                                  "<th></th>" +
+                                  "<th></th>" +
+                              "</tr>" +
+                              "<tr>" +
+                                  "<td>row1col1</td>" +
+                                  "<td>row1col2</td>" +
+                              "</tr>" +
+                              "<tr>" +
+                                  "<td>row2col1</td>" +
+                                  "<td>row2col2</td>" +
+                              "</tr>" +
+                          "</tbody>";
+        TableElement table = createTable(tableStr);
+        assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
+        assertEquals(TableClassifier.Reason.LESS_EQ_10_CELLS, TableClassifier.sReason);
+    }
+
+    public void testAllWhitespacedTHTag() {
+        String tableStr = "<tbody>" +
+                              "<tr>" +
+                                  "<th>&nbsp;&nbsp;</th>" +
+                                  "<th>  </th>" +
+                              "</tr>" +
+                              "<tr>" +
+                                  "<td>row1col1</td>" +
+                                  "<td>row1col2</td>" +
+                              "</tr>" +
+                              "<tr>" +
+                                  "<td>row2col1</td>" +
+                                  "<td>row2col2</td>" +
+                              "</tr>" +
+                          "</tbody>";
+        TableElement table = createTable(tableStr);
+        assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
+        assertEquals(TableClassifier.Reason.LESS_EQ_10_CELLS, TableClassifier.sReason);
     }
 
     public void testAbbrAttribute() {
