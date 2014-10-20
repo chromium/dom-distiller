@@ -95,7 +95,7 @@ class CppConverterWriter(writer.CodeWriter):
           self.FieldWriteToValue(field_proto)
 
       self.Output(
-          '  return dict.PassAs<base::Value>();\n'
+          '  return dict.Pass();\n'
           '',
           generated_class_name=generated_class_name)
       self.Output('}}')
