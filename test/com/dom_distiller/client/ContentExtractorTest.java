@@ -6,6 +6,7 @@ package com.dom_distiller.client;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
 
 public class ContentExtractorTest extends DomDistillerTestCase {
     private static final String CONTENT_TEXT = "Lorem Ipsum Lorem Ipsum Lorem Ipsum.";
@@ -66,7 +67,7 @@ public class ContentExtractorTest extends DomDistillerTestCase {
         assertEquals("<span>" + CONTENT_TEXT + "</span> " +
                      "<span>" + CONTENT_TEXT + "</span>\n" +
                      "<span>" + CONTENT_TEXT + "</span> ",
-                extractedContent);
+                TestUtil.removeAllDirAttributes(extractedContent));
     }
 
     public void testPrefersMarkupParserOverDocumentTitle() {

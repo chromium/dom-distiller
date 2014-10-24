@@ -140,4 +140,8 @@ class TestUtil {
         return noUrlParams + strToAppend;
     }
 
+    public static String removeAllDirAttributes(String originalHtml) {
+        return originalHtml.replaceAll(" dir=\\\"(ltr|rtl|inherit)\\\"","");
+    }
+
 }

@@ -36,6 +36,8 @@ public class ContentExtractor {
 
     private final MarkupParser parser;
 
+    private String textDirection;
+
     public ContentExtractor(Element root) {
         documentElement = root;
         candidateTitles = new LinkedList<String>();
@@ -45,6 +47,7 @@ public class ContentExtractor {
         double startTime = DomUtil.getTime();
         parser = new MarkupParser(root);
         mTimingInfo.setMarkupParsingTime(DomUtil.getTime() - startTime);
+        textDirection = "";
     }
 
     // Grabs a list of candidate titles in descending priority order:
@@ -112,6 +115,17 @@ public class ContentExtractor {
     }
 
     /**
+     * Get the page's text directionality ("ltr", "rtl", or "auto").
+     * @return The page's text direction (default is "auto").
+     */
+    public String getTextDirection() {
+        if (textDirection == null || textDirection.isEmpty()) {
+            textDirection = "auto";
+        }
+        return textDirection;
+    }
+
+    /**
      * Converts the original HTML page into a series of TextBlock for analysis.
      * @return a document with the list of extracted TextBlocks and additional information
      *         that can be useful for identifying the core elements of the page.
@@ -166,8 +180,12 @@ public class ContentExtractor {
      *        nodes.
      */
     private String formatExtractedNodes(boolean textOnly, List<Node> contentNodes) {
-        Node clonedSubtree = NodeListExpander.expand(contentNodes).cloneSubtree();
+        NodeTree expandedList = NodeListExpander.expand(contentNodes);
+        Node clonedSubtree = expandedList.cloneSubtreeRetainDirection();
         if (clonedSubtree.getNodeType() != Node.ELEMENT_NODE) return "";
+
+        // determine text directionality
+        textDirection = Element.as(clonedSubtree).getAttribute("dir");
 
         // The base URL in the distilled page viewer is different from that in
         // the live page.  This breaks all relative links (in anchors,

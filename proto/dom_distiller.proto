@@ -73,6 +73,7 @@ message DomDistillerResult {
   optional TimingInfo timing_info = 6;
   optional DebugInfo debug_info = 7;
   optional StatisticsInfo statistics_info = 8;
+  optional string text_direction = 9;
 }
 
 message DomDistillerOptions {

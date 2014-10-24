@@ -7,6 +7,7 @@ package com.dom_distiller.client;
 import java.util.List;
 import java.util.LinkedList;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 
 /**
@@ -45,5 +46,22 @@ public class NodeTree {
         return clone;
     }
 
+    /**
+     * Clone this subtree while retaining text directionality from its computed style. The
+     * "dir" attribute for each node will be set for each node.
+     *
+     * @return The root node of the cloned tree
+     */
+    public Node cloneSubtreeRetainDirection() {
+        Node clone = node.cloneNode(false);
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+            String direction = DomUtil.getComputedStyle(Element.as(node)).getProperty("direction");
+            Element.as(clone).setAttribute("dir", direction);
+        }
+        for (NodeTree child : children) {
+            clone.appendChild(child.cloneSubtreeRetainDirection());
+        }
+        return clone;
+    }
 }
 

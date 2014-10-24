@@ -35,6 +35,7 @@ public class DomDistiller implements Exportable {
         boolean textOnly = options.hasExtractTextOnly() && options.getExtractTextOnly();
         content.setHtml(contentExtractor.extractContent(textOnly));
         result.setDistilledContent(content);
+        result.setTextDirection(contentExtractor.getTextDirection());
         result.setPaginationInfo(PagingLinksFinder.getPaginationInfo());
         result.setMarkupInfo(contentExtractor.getMarkupParser().getMarkupInfo());
         TimingInfo timingInfo = contentExtractor.getTimingInfo();
