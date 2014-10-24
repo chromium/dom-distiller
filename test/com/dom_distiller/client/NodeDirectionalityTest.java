@@ -31,11 +31,13 @@ public class NodeDirectionalityTest extends DomDistillerTestCase {
     public void testDirAttributeRtlAddedToTree() {
         Element div = TestUtil.createDiv(0);
         div.getStyle().setProperty("direction","rtl");
+        div.appendChild(TestUtil.createSpan(CONTENT_TEXT));
+        div.appendChild(TestUtil.createSpan(CONTENT_TEXT));
         mBody.appendChild(div);
 
         NodeTree tree = new NodeTree(div);
-        tree.addChild(TestUtil.createSpan(CONTENT_TEXT));
-        tree.addChild(TestUtil.createSpan(CONTENT_TEXT));
+        tree.addChild(div.getChild(0));
+        tree.addChild(div.getChild(1));
 
         Node cloned = tree.cloneSubtreeRetainDirection();
 
