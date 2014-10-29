@@ -11,8 +11,8 @@ import com.google.gwt.user.client.Window;
 public class PagingLinksFinderTest extends DomDistillerTestCase {
     public void testNoLink() {
         Element root = TestUtil.createDiv(0);
-        assertEquals(null, PagingLinksFinder.findNext(root));
-        assertEquals(null, PagingLinksFinder.findPrevious(root));
+        assertEquals(null, PagingLinksFinder.findNext(root, ""));
+        assertEquals(null, PagingLinksFinder.findPrevious(root, ""));
     }
 
     public void test1NextLink() {
@@ -20,17 +20,26 @@ public class PagingLinksFinderTest extends DomDistillerTestCase {
         AnchorElement anchor = TestUtil.createAnchor("next", "next page");
         root.appendChild(anchor);
 
-        assertEquals(anchor.getHref(), PagingLinksFinder.findNext(root));
-        assertEquals(null, PagingLinksFinder.findPrevious(root));
+        assertEquals(anchor.getHref(), PagingLinksFinder.findNext(root, ""));
+        assertEquals(null, PagingLinksFinder.findPrevious(root, ""));
     }
 
     public void test1NextLinkWithDifferentDomain() {
         Element root = TestUtil.createDiv(0);
-        AnchorElement anchor = TestUtil.createAnchor("http://testing.com/next", "next page");
+        AnchorElement anchor = TestUtil.createAnchor("http://testing.com/page2", "next page");
         root.appendChild(anchor);
 
-        assertEquals(null, PagingLinksFinder.findNext(root));
-        assertEquals(null, PagingLinksFinder.findPrevious(root));
+        assertEquals(null, PagingLinksFinder.findNext(root, ""));
+        assertEquals(null, PagingLinksFinder.findPrevious(root, ""));
+    }
+
+    public void test1NextLinkWithOriginalDomain() {
+        Element root = TestUtil.createDiv(0);
+        AnchorElement anchor = TestUtil.createAnchor("http://testing.com/page2", "next page");
+        root.appendChild(anchor);
+
+        assertEquals(anchor.getHref(), PagingLinksFinder.findNext(root, "testing.com"));
+        assertEquals(null, PagingLinksFinder.findPrevious(root, ""));
     }
 
     public void test1PageNumberedLink() {
@@ -43,8 +52,8 @@ public class PagingLinksFinderTest extends DomDistillerTestCase {
 
         // The word "page" in the link text increases its score confidently enough to be considered
         // as a paging link.
-        assertEquals(anchor.getHref(), PagingLinksFinder.findNext(root));
-        assertEquals(anchor.getHref(), PagingLinksFinder.findPrevious(root));
+        assertEquals(anchor.getHref(), PagingLinksFinder.findNext(root, ""));
+        assertEquals(anchor.getHref(), PagingLinksFinder.findPrevious(root, ""));
     }
 
     public void test3NumberedLinks() {
@@ -63,8 +72,8 @@ public class PagingLinksFinderTest extends DomDistillerTestCase {
 
         // Because link text contains only digits with no paging-related words, no link has a score
         // high enough to be confidently considered paging link.
-        assertEquals(null, PagingLinksFinder.findNext(root));
-        assertEquals(null, PagingLinksFinder.findPrevious(root));
+        assertEquals(null, PagingLinksFinder.findNext(root, ""));
+        assertEquals(null, PagingLinksFinder.findPrevious(root, ""));
     }
 
     public void test2NextLinksWithSameHref() {
@@ -80,8 +89,8 @@ public class PagingLinksFinderTest extends DomDistillerTestCase {
 
         // anchor1 by itself is not a confident next page link, but anchor2's link text helps bump
         // up the score for the shared href, so anchor1 is now a confident next page link.
-        assertEquals(anchor1.getHref(), PagingLinksFinder.findNext(root));
-        assertEquals(null, PagingLinksFinder.findPrevious(root));
+        assertEquals(anchor1.getHref(), PagingLinksFinder.findNext(root, ""));
+        assertEquals(null, PagingLinksFinder.findPrevious(root, ""));
     }
 
     public void testPagingParent() {
@@ -98,16 +107,16 @@ public class PagingLinksFinderTest extends DomDistillerTestCase {
         // While it may seem strange that both previous and next links are the same, this test is
         // testing that the anchor's parents will affect its paging score even if it has a
         // meaningless link text like "dummy link".
-        assertEquals(anchor.getHref(), PagingLinksFinder.findPrevious(root));
-        assertEquals(anchor.getHref(), PagingLinksFinder.findNext(root));
+        assertEquals(anchor.getHref(), PagingLinksFinder.findPrevious(root, ""));
+        assertEquals(anchor.getHref(), PagingLinksFinder.findNext(root, ""));
     }
 
     public void test1PrevLink() {
         Element root = TestUtil.createDiv(0);
         AnchorElement anchor = TestUtil.createAnchor("prev", "prev page");
         root.appendChild(anchor);
-        assertEquals(anchor.getHref(), PagingLinksFinder.findPrevious(root));
-        assertEquals(null, PagingLinksFinder.findNext(root));
+        assertEquals(anchor.getHref(), PagingLinksFinder.findPrevious(root, ""));
+        assertEquals(null, PagingLinksFinder.findNext(root, ""));
     }
 
     public void test1PrevAnd1NextLinks() {
@@ -117,8 +126,8 @@ public class PagingLinksFinderTest extends DomDistillerTestCase {
         root.appendChild(prevAnchor);
         root.appendChild(nextAnchor);
 
-        assertEquals(prevAnchor.getHref(), PagingLinksFinder.findPrevious(root));
-        assertEquals(nextAnchor.getHref(), PagingLinksFinder.findNext(root));
+        assertEquals(prevAnchor.getHref(), PagingLinksFinder.findPrevious(root, ""));
+        assertEquals(nextAnchor.getHref(), PagingLinksFinder.findNext(root, ""));
     }
 
     public void testFirstPageLinkAsBaseUrl() {
@@ -138,7 +147,7 @@ public class PagingLinksFinderTest extends DomDistillerTestCase {
         AnchorElement anchor = TestUtil.createAnchor(href, "PREV");
         root.appendChild(anchor);
 
-        assertEquals(anchor.getHref(), PagingLinksFinder.findPrevious(root));
+        assertEquals(anchor.getHref(), PagingLinksFinder.findPrevious(root, ""));
     }
 
     public void testNonHttpOrHttpsLink() {
@@ -146,10 +155,10 @@ public class PagingLinksFinderTest extends DomDistillerTestCase {
         AnchorElement anchor = TestUtil.createAnchor("javascript:void(0)",
                                                      "NEXT");
         root.appendChild(anchor);
-        assertEquals(null, PagingLinksFinder.findNext(root));
+        assertEquals(null, PagingLinksFinder.findNext(root, ""));
 
         anchor.setHref("file://test.html");
-        assertEquals(null, PagingLinksFinder.findNext(root));
+        assertEquals(null, PagingLinksFinder.findNext(root, ""));
     }
 
 }

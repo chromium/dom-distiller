@@ -86,4 +86,8 @@ message DomDistillerOptions {
   // (2): (1) and some node visibility information
   // (3): (2) and extracted paging information
   optional int32 debug_level = 2;
+
+  // The original domain of the page if it's a file://, used for detecting next/prev page links
+  // which expects the same domain for both current page and paging links.
+  optional string original_domain = 3;
 }

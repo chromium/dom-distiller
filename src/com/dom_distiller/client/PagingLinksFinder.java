@@ -50,36 +50,38 @@ public class PagingLinksFinder {
     // Examples that don't match PAGE_NUMBER_REGEX are: "_p3 ", "p", "p123".
     private static final String PAGE_NUMBER_REGEX = "((_|-)?p[a-z]*|(_|-))[0-9]{1,2}$";
 
-    public static DomDistillerProtos.PaginationInfo getPaginationInfo() {
+    public static DomDistillerProtos.PaginationInfo getPaginationInfo(String original_domain) {
         DomDistillerProtos.PaginationInfo info = DomDistillerProtos.PaginationInfo.create();
-        String next = findNext(Document.get().getDocumentElement());
+        String next = findNext(Document.get().getDocumentElement(), original_domain);
         if (next != null) {
             info.setNextPage(next);
         }
         return info;
     }
 
-    public static String findNext(Element root) {
     /**
+     * @param original_domain The original domain of the page being processed if it's a file://.
      * @return The next page link for the document.
      */
-        return findPagingLink(root, PageLink.NEXT);
+    public static String findNext(Element root, String original_domain) {
+        return findPagingLink(root, original_domain, PageLink.NEXT);
     }
 
-    public static String findPrevious(Element root) {
     /**
+     * @param original_domain The original domain of the page being processed if it's a file://.
      * @return The previous page link for the document.
      */
-        return findPagingLink(root, PageLink.PREV);
+    public static String findPrevious(Element root, String original_domain) {
+        return findPagingLink(root, original_domain, PageLink.PREV);
     }
 
-    private static String findPagingLink(Element root, PageLink pageLink) {
+    private static String findPagingLink(Element root, String original_domain, PageLink pageLink) {
         // findPagingLink() is static, so clear mLinkDebugInfo before processing the links.
         if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_PAGING_INFO)) {
             mLinkDebugInfo.clear();
         }
 
-        String baseUrl = findBaseUrl();
+        String baseUrl = findBaseUrl(original_domain);
         // Remove trailing '/' from window location href, because it'll be used to compare with
         // other href's whose trailing '/' are also removed.
         String wndLocationHref = StringUtil.findAndReplace(Window.Location.getHref(), "\\/$", "");
@@ -128,7 +130,7 @@ public class PagingLinksFinder {
             // If it's on a different domain, skip it.
             String[] urlSlashes = StringUtil.split(linkHref, "\\/+");
             if (urlSlashes.length < 3 ||  // Expect at least the protocol, domain, and path.
-                    !Window.Location.getHost().equalsIgnoreCase(urlSlashes[1])) {
+                    !getLocationHost(original_domain).equalsIgnoreCase(urlSlashes[1])) {
                 appendDbgStrForLink(link, "ignored: different domain");
                 continue;
             }
@@ -312,7 +314,11 @@ public class PagingLinksFinder {
         return pagingHref;
     }
 
-    private static String findBaseUrl() {
+    private static String getLocationHost(String original_domain) {
+        return original_domain.isEmpty() ? Window.Location.getHost() : original_domain;
+    }
+
+    private static String findBaseUrl(String original_domain) {
         // This extracts relevant parts from the window location's path based on various heuristics
         // to determine the path of the base URL of the document.  This path is then appended to the
         // window location protocol and host to form the base URL of the document.  This base URL is
@@ -372,7 +378,7 @@ public class PagingLinksFinder {
             cleanedSegments.add(segment);
         }  // for all urlSlashes
 
-        return Window.Location.getProtocol() + "//" + Window.Location.getHost() + "/" +
+        return Window.Location.getProtocol() + "//" + getLocationHost(original_domain) + "/" +
                 reverseJoin(cleanedSegments, "/");
     }
 
