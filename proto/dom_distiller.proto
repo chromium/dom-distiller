@@ -54,6 +54,15 @@ message TimingInfo {
   optional double article_processing_time = 3;
   optional double formatting_time = 4;
   optional double total_time = 5;
+
+  // A place to hold arbitrary breakdowns of time. The perf scoring/server
+  // should display these entries with appropriate names.
+  repeated TimingEntry other_times = 6;
+}
+
+message TimingEntry {
+  optional string name = 1;
+  optional double time = 2;
 }
 
 message DebugInfo {
