@@ -48,6 +48,11 @@ message MarkupInfo {
   repeated MarkupImage images = 9;
 }
 
+message TimingEntry {
+  optional string name = 1;
+  optional double time = 2;
+}
+
 message TimingInfo {
   optional double markup_parsing_time = 1;
   optional double document_construction_time = 2;
@@ -58,11 +63,6 @@ message TimingInfo {
   // A place to hold arbitrary breakdowns of time. The perf scoring/server
   // should display these entries with appropriate names.
   repeated TimingEntry other_times = 6;
-}
-
-message TimingEntry {
-  optional string name = 1;
-  optional double time = 2;
 }
 
 message DebugInfo {
