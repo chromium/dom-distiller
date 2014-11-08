@@ -27,6 +27,18 @@ public class RelevantElementsFinder {
         RelevantElementsFinder finder = new RelevantElementsFinder(contentNodes, hiddenElements,
                                dataTables);
         finder.find(root);
+
+        // remove all but one potential header image
+        ImageInfo topImage = null;
+        for (ImageInfo info : finder.headerImageScores) {
+            if (topImage == null || info.imageScore > topImage.imageScore) {
+                if (topImage != null) {
+                    finder.contentAndElements.remove(topImage.imageNode);
+                }
+                topImage = info;
+            }
+        }
+
         return finder.contentAndElements;
     }
 
@@ -35,13 +47,22 @@ public class RelevantElementsFinder {
     private final OrderedNodeMatcher nodeMatcher;
     private final List<Node> contentAndElements;
 
+    private final Node firstContentNode;
+    private final List<ImageInfo> headerImageScores;
+
     private RelevantElementsFinder(final List<Node> contentNodes, final Set<Node> hiddenElements,
                                    final Set<Node> dataTables) {
         nodeMatcher = new OrderedNodeMatcher(contentNodes);
         this.hiddenElements = hiddenElements;
         this.dataTables = dataTables;
         contentAndElements = new ArrayList<Node>();
-
+ 
+        if (contentNodes != null && contentNodes.size() > 0) {
+            firstContentNode = contentNodes.get(0);
+        } else {
+            firstContentNode = null;
+        }
+        headerImageScores = new ArrayList<ImageInfo>();
     }
 
     /**
@@ -96,7 +117,18 @@ public class RelevantElementsFinder {
                     Element e = Element.as(n);
                     if (hiddenElements.contains(e)) return false;
                     // Check if element needs to be extracted.
-                    if (!inContent || !sRelevantTags.contains(e.getTagName())) return true;
+                    if (!inContent || !sRelevantTags.contains(e.getTagName())) {
+                        // if this node is an image, reconsider retaining it
+                        if ("IMG".equals(e.getTagName())) {
+                            int score = HeaderImageFinder.scoreNonContentImage(e, firstContentNode);
+                            if (score > HeaderImageFinder.MINIMUM_ACCEPTED_SCORE) {
+                                headerImageScores.add(new ImageInfo(e, score));
+                                contentAndElements.add(n);
+                            }
+                        }
+                        return true;
+                    }
+
                     return addElementAndChildren(e);
 
                 case Node.DOCUMENT_NODE:
@@ -193,4 +225,18 @@ public class RelevantElementsFinder {
         @Override
         public void exit(Node n) {}
     }  // ElementVisitor
+
+    /**
+     * This class is used to track potential header image information as the dom is being walked.
+     */
+    private static class ImageInfo {
+        public final Node imageNode;
+        public final int imageScore;
+
+        public ImageInfo(Node image, int score) {
+            imageNode = image;
+            imageScore = score;
+        }
+    }
+
 }

@@ -48,4 +48,51 @@ public class DomUtilTest extends DomDistillerTestCase {
         assertEquals(null, DomUtil.javaGetFirstElementWithClassName(rootDiv, "tes"));
         assertEquals(div3, DomUtil.javaGetFirstElementWithClassName(rootDiv, "foo"));
     }
+
+    public void testNearestCommonAncestor() {
+        Element div = TestUtil.createDiv(1);
+
+        Element div2 = TestUtil.createDiv(2);
+        div.appendChild(div2);
+
+        Element currDiv = TestUtil.createDiv(3);
+        div2.appendChild(currDiv);
+        Element finalDiv1 = currDiv;
+
+        currDiv = TestUtil.createDiv(4);
+        div2.appendChild(currDiv);
+        currDiv.appendChild(TestUtil.createDiv(5));
+
+        assertEquals(div2, DomUtil.getNearestCommonAncestor(finalDiv1, currDiv.getChild(0)));
+    }
+
+    public void testNearestCommonAncestorIsRoot() {
+        Element div = TestUtil.createDiv(1);
+
+        Element div2 = TestUtil.createDiv(2);
+        div.appendChild(div2);
+
+        Element div3 = TestUtil.createDiv(3);
+        div2.appendChild(div3);
+
+        assertEquals(div, DomUtil.getNearestCommonAncestor(div, div3));
+    }
+
+    public void testNodeDepth() {
+        Element div = TestUtil.createDiv(1);
+
+        Element div2 = TestUtil.createDiv(2);
+        div.appendChild(div2);
+
+        Element div3 = TestUtil.createDiv(3);
+        div2.appendChild(div3);
+
+        assertEquals(2, DomUtil.getNodeDepth(div3));
+    }
+
+    public void testZeroOrNoNodeDepth() {
+        Element div = TestUtil.createDiv(0);
+        assertEquals(0, DomUtil.getNodeDepth(div));
+        assertEquals(-1, DomUtil.getNodeDepth(null));
+    }
 }

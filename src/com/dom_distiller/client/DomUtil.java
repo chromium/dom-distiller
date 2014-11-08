@@ -10,6 +10,9 @@ import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DomUtil {
     /**
      * GWT does not provide a way to get a list of all attributes that have been explicitly set on a
@@ -112,4 +115,52 @@ public class DomUtil {
     public static native String javascriptTextContent(Node node) /*-{
         return node.textContent;
     }-*/;
+
+    /**
+     * Get a list of all the parents of this node starting with the node itself.
+     * @param n The node to get the parents of.
+     * @return A list of the provided node's partnts.
+     */
+    public static List<Node> getParentNodes(Node n) {
+        ArrayList<Node> result = new ArrayList<Node>();
+        Node curr = n;
+        while (curr != null) {
+            result.add(curr);
+            curr = curr.getParentNode();
+        }
+        return result;
+    }
+
+    /**
+     * Get the depth of the given node in the DOM tree (only counting elements).
+     * @param n The node to find the depth of.
+     * @return The depth of the provided node; -1 if n is null.
+     */
+    public static int getNodeDepth(final Node n) {
+        return getParentNodes(n).size()-1;
+    }
+
+    /**
+     * Get the nearest common ancestor of two nodes.
+     * @param n1 First node.
+     * @param n2 Second node.
+     * @return The nearest common ancestor node of n1 and n2.
+     */
+    public static Node getNearestCommonAncestor(final Node n1, final Node n2) {
+        List<Node> n1Parents = getParentNodes(n1);
+        List<Node> n2Parents = getParentNodes(n2);
+        int i = n1Parents.size()-1;
+        int j = n2Parents.size()-1;
+        // This boolean helps in the case where one of the nodes is the root.
+        boolean lastMatch = false;
+        while (i >= 0 && j >= 0 && n1Parents.get(i).equals(n2Parents.get(j))) {
+            lastMatch = true;
+            i--;
+            j--;
+        }
+        if (lastMatch) {
+            return n1Parents.get(i+1);
+        }
+        return null;
+    }
 }

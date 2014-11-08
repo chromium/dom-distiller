@@ -31,6 +31,104 @@ public class RelevantElementsFinderTest extends DomDistillerTestCase {
         assertEquals(contentText, contentAndImages.get(0));
     }
 
+    public void testHeaderImageBeforeContent() {
+        Node root = TestUtil.createDiv(0);
+        Element image = TestUtil.createImage();
+        image.getStyle().setProperty("width", "600px");
+        image.getStyle().setProperty("height", "350px");
+        image.getStyle().setProperty("display", "block");
+
+        Node contentText = TestUtil.createText("content");
+        root.appendChild(image);
+        root.appendChild(contentText);
+
+        List<Node> contentNodes = Arrays.<Node>asList(contentText);
+        List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,
+                mEmptySet, mEmptySet, root);
+
+        assertEquals(2, contentAndImages.size());
+        assertEquals(image, contentAndImages.get(0));
+        assertEquals(contentText, contentAndImages.get(1));
+    }
+
+    public void testNoHeaderImage() {
+        Node root = TestUtil.createDiv(0);
+        Element image = TestUtil.createImage();
+        // This image is likely an ad or logo (by size/ratio).
+        image.getStyle().setProperty("width", "200px");
+        image.getStyle().setProperty("height", "200px");
+        image.getStyle().setProperty("display", "block");
+        // Nest content to distance image.
+        Element div1 = TestUtil.createDiv(1);
+        Element div2 = TestUtil.createDiv(2);
+        Element div3 = TestUtil.createDiv(3);
+        Node contentText = TestUtil.createText("content");
+        div3.appendChild(contentText);
+        div2.appendChild(div3);
+        div1.appendChild(div2);
+
+        root.appendChild(image);
+        root.appendChild(div1);
+
+        List<Node> contentNodes = Arrays.<Node>asList(contentText);
+        List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,
+                mEmptySet, mEmptySet, root);
+
+        assertEquals(1, contentAndImages.size());
+        assertEquals(contentText, contentAndImages.get(0));
+    }
+
+    public void testSmallHeaderImageInFigureBeforeContent() {
+        Node root = TestUtil.createDiv(0);
+        Element image = TestUtil.createImage();
+        Element fig = Document.get().createElement("figure");
+        image.getStyle().setProperty("width", "300px");
+        image.getStyle().setProperty("height", "175px");
+        image.getStyle().setProperty("display", "block");
+        fig.appendChild(image);
+
+        Node contentText = TestUtil.createText("content");
+        root.appendChild(fig);
+        root.appendChild(contentText);
+
+        List<Node> contentNodes = Arrays.<Node>asList(contentText);
+        List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,
+                mEmptySet, mEmptySet, root);
+
+        assertEquals(2, contentAndImages.size());
+        assertEquals(image, contentAndImages.get(0));
+        assertEquals(contentText, contentAndImages.get(1));
+    }
+
+    public void testMultipleHeaderImageCandidates() {
+        // This test should only select the better of the two candidates.
+        Node root = TestUtil.createDiv(0);
+        Element fig = Document.get().createElement("figure");
+        Element image = TestUtil.createImage();
+        image.getStyle().setProperty("width", "600px");
+        image.getStyle().setProperty("height", "350px");
+        image.getStyle().setProperty("display", "block");
+        fig.appendChild(image);
+
+        Element image2 = TestUtil.createImage();
+        image2.getStyle().setProperty("width", "300px");
+        image2.getStyle().setProperty("height", "175px");
+        image2.getStyle().setProperty("display", "block");
+
+        Node contentText = TestUtil.createText("content");
+        root.appendChild(image2);
+        root.appendChild(fig);
+        root.appendChild(contentText);
+
+        List<Node> contentNodes = Arrays.<Node>asList(contentText);
+        List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,
+                mEmptySet, mEmptySet, root);
+
+        assertEquals(2, contentAndImages.size());
+        assertEquals(image, contentAndImages.get(0));
+        assertEquals(contentText, contentAndImages.get(1));
+    }
+
     public void testImageAfterContent() {
         Node root = TestUtil.createDiv(0);
         Node contentText = TestUtil.createText("content");
