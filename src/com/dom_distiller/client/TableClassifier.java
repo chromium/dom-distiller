@@ -108,7 +108,7 @@ public class TableClassifier {
         // The following heuristics are dropped from said url:
         // - table created by CSS display style is layout table, because we only handle actual
         //   <table> elements.
- 
+
         // 1) Table inside editable area is layout table, different from said url because we ignore
         //    editable areas during distillation.
         Element parent = t.getParentElement();
@@ -119,7 +119,7 @@ public class TableClassifier {
             }
             parent = parent.getParentElement();
         }
- 
+
         // 2) Table having role="presentation" is layout table.
         String tableRole = t.getAttribute("role").toLowerCase();
         if (tableRole.equals("presentation")) {
@@ -131,7 +131,7 @@ public class TableClassifier {
             return logAndReturn(Reason.ROLE_TABLE, "_" + tableRole, Type.DATA);
         }
 
-        // 4) Table having ARIA table-related roles in its descendants is data table. 
+        // 4) Table having ARIA table-related roles in its descendants is data table.
         // This may have deviated from said url if it only checks for <table> element but not its
         // descendants.
         List<Element> directDescendants = getDirectDescendants(t);
@@ -141,7 +141,7 @@ public class TableClassifier {
                 return logAndReturn(Reason.ROLE_DESCENDANT, "_" + role, Type.DATA);
             }
         }
-      
+
         // 5) Table having datatable="0" attribute is layout table.
         if (t.getAttribute("datatable").equals("0")) {
             return logAndReturn(Reason.DATATABLE_0, "", Type.LAYOUT);
@@ -154,7 +154,7 @@ public class TableClassifier {
         // many (old) pages have layout tables that are nested or with <TH>/<CAPTION>s but only 1
         // row or col.
         if (hasNestedTables(t)) return logAndReturn(Reason.NESTED_TABLE, "", Type.LAYOUT);
- 
+
         // 7) Table having only one row or column is layout table.
         // See comments for #6 about deviation from said url.
         NodeList<TableRowElement> rows = t.getRows();
@@ -177,7 +177,7 @@ public class TableClassifier {
         for (Element e : directDescendants) {
             if (e.hasTagName("TD")) directTDs.add(e);
         }
- 
+
         for (Element e : directTDs) {
             // b) table cell has abbr, headers, or scope attributes
             if (e.hasAttribute("abbr") || e.hasAttribute("headers") || e.hasAttribute("scope")) {
@@ -208,17 +208,17 @@ public class TableClassifier {
                 return logAndReturn(Reason.MORE_95_PERCENT_DOC_WIDTH, "", Type.LAYOUT);
             }
         }
- 
+
         // 10) Table having summary attribute is data table.
         // This is different from said url: the latter lumps "summary" attribute with #8, but we
         // split it so as to insert #9 in between.  Many (old) pages have tables that are clearly
         // layout: their "summary" attributes say they're for layout.  They also occupy > 95% of
         // document width, so #9 coming before #10 will correctly classify them as layout.
         if (t.hasAttribute("summary")) return logAndReturn(Reason.SUMMARY, "", Type.DATA);
- 
+
         // 11) Table having >=5 columns is data table.
         if (cols.getLength() >= 5) return logAndReturn(Reason.MORE_EQ_5_COLS, "", Type.DATA);
- 
+
         // 12) Table having borders around cells is data table.
         for (Element e : directTDs) {
             String border = DomUtil.getComputedStyle(e).getBorderStyle();
@@ -226,7 +226,7 @@ public class TableClassifier {
                 return logAndReturn(Reason.CELLS_HAVE_BORDER, "_" + border, Type.DATA);
             }
         }
- 
+
         // 13) Table having differently-colored rows is data table.
         String prevBackgroundColor = null;
         for (int i = 0; i < rows.getLength(); i++) {
@@ -239,13 +239,13 @@ public class TableClassifier {
                 return logAndReturn(Reason.DIFFERENTLY_COLORED_ROWS, "", Type.DATA);
             }
         }
-       
+
         // 14) Table having >=20 rows is data table.
         if (rows.getLength() >= 20) return logAndReturn(Reason.MORE_EQ_20_ROWS, "", Type.DATA);
- 
+
         // 15) Table having <=10 cells is layout table.
         if (directTDs.size() <= 10) return logAndReturn(Reason.LESS_EQ_10_CELLS, "", Type.LAYOUT);
- 
+
         // 16) Table containing <embed>, <object>, <applet> or <iframe> elements (typical
         //     advertisement elements) is layout table.
         if (hasOneOfElements(directDescendants, sObjectTags)) {
@@ -260,7 +260,7 @@ public class TableClassifier {
         if (docHeight > 0 && (double) t.getOffsetHeight() > 0.9 * (double) docHeight) {
             return logAndReturn(Reason.MORE_90_PERCENT_DOC_HEIGHT, "", Type.LAYOUT);
         }
- 
+
         // 18) Otherwise, it's data table.
         return logAndReturn(Reason.DEFAULT, "", Type.DATA);
     }

@@ -107,7 +107,7 @@ public class PagingLinksFinder {
                 appendDbgStrForLink(link, "ignored: invisible");
                 continue;
             }
- 
+
             // Remove url anchor and then trailing '/' from link's href.
             // Note that AnchorElement.getHref() returns the absolute URI, so there's no need to
             // worry about relative links.

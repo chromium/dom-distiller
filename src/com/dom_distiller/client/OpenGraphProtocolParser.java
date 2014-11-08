@@ -120,7 +120,7 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
             return null;
         }
     }
-    
+
     /**
      * Returns the required "title" of the document.
      */
@@ -270,7 +270,7 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
         if (!prefixes.isEmpty()) {
             Matcher matcher = sOgpNsPrefixPattern.matcher(prefixes);
             while (matcher.find()) {  // There could be multiple prefixes.
-                setPrefixForObjectType(matcher.group(2), matcher.group(4)); 
+                setPrefixForObjectType(matcher.group(2), matcher.group(4));
             }
         } else {
             // Still no "prefix" attribute, see if HTMl tag has "xmlns" attributes e.g.:
@@ -289,7 +289,7 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
                 String attributeValue = node.getNodeValue();
                 Matcher valueMatcher = sOgpNsNonPrefixValuePattern.matcher(attributeValue);
                 if (valueMatcher.find()) {
-                    setPrefixForObjectType(nameMatcher.group(1), valueMatcher.group(1)); 
+                    setPrefixForObjectType(nameMatcher.group(1), valueMatcher.group(1));
                 }
             }
         }
@@ -386,7 +386,7 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
                     }
                 }
             }
-    
+
             return false;   // Don't insert into property table.
         }
 
@@ -481,7 +481,7 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
                 mAuthors.add(content);
                 return false; // We've handled it, don't insert into propertyTable.
             }
-                
+
             // Other properties are stateless, so inserting into property table is good enough.
             return true;
         }

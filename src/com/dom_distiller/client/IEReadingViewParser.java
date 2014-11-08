@@ -110,7 +110,7 @@ public class IEReadingViewParser implements MarkupParser.Accessor {
 
     private void findTitle() {
         mTitle = "";
-            
+
         if (mAllMeta.getLength() == 0) return;
 
         // Make sure there's a <title> element.
@@ -184,7 +184,7 @@ public class IEReadingViewParser implements MarkupParser.Accessor {
 
     private void findImages() {
         mImages = new ArrayList<MarkupParser.Image>();
-          
+
         NodeList<Element> allImages = mRoot.getElementsByTagName("IMG");
         for (int i = 0; i < allImages.getLength(); i++) {
             ImageElement imgElem = ImageElement.as(allImages.getItem(i));

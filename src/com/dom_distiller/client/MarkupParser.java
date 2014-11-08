@@ -127,7 +127,7 @@ public class MarkupParser {
         mAccessors.add(new SchemaOrgParserAccessor(root));
         mAccessors.add(new IEReadingViewParser(root));
     }
-    
+
     public String getTitle() {
         String title = "";
         for (int i = 0; i < mAccessors.size() && title.isEmpty(); i++) {
@@ -246,7 +246,7 @@ public class MarkupParser {
             imageInfo.setWidth(image.width);
             imageInfo.setHeight(image.height);
         }
-        
+
         return info;
     }
 }
