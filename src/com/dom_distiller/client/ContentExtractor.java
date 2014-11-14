@@ -6,6 +6,7 @@ package com.dom_distiller.client;
 
 import com.dom_distiller.proto.DomDistillerProtos.StatisticsInfo;
 import com.dom_distiller.proto.DomDistillerProtos.TimingInfo;
+import com.dom_distiller.proto.DomDistillerProtos.TimingEntry;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -95,6 +96,24 @@ public class ContentExtractor {
         String html = formatExtractedNodes(textOnly, contentNodes);
         mStatisticsInfo.setWordCount(TextDocumentStatistics.countWordsInContent(document));
         mTimingInfo.setFormattingTime(DomUtil.getTime() - now);
+
+        if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_TIMING_INFO)) {
+            for (int i = 0; i < mTimingInfo.getOtherTimesCount(); i++) {
+                TimingEntry entry =  mTimingInfo.getOtherTimes(i);
+                LogUtil.logToConsole("Timing: " + entry.getName() + " = " + entry.getTime());
+            }
+
+            LogUtil.logToConsole(
+                    "Timing: MarkupParsingTime = " +
+                    mTimingInfo.getMarkupParsingTime() +
+                    "\nTiming: DocumentConstructionTime = " +
+                    mTimingInfo.getDocumentConstructionTime() +
+                    "\nTiming: ArticleProcessingTime = " +
+                    mTimingInfo.getArticleProcessingTime() +
+                    "\nTiming: FormattingTime = " +
+                    mTimingInfo.getFormattingTime()
+                    );
+        }
         return html;
     }
 

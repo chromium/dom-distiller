@@ -10,6 +10,7 @@ public class LogUtil {
     public static final int DEBUG_LEVEL_BOILER_PIPE_PHASES = 1;
     public static final int DEBUG_LEVEL_VISIBILITY_INFO = 2;
     public static final int DEBUG_LEVEL_PAGING_INFO = 3;
+    public static final int DEBUG_LEVEL_TIMING_INFO = 4;
 
     private static final StringBuilder LOG_BUILDER = new StringBuilder();
 
