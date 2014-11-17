@@ -151,7 +151,8 @@ public class DomUtil {
         List<Node> n2Parents = getParentNodes(n2);
         int i = n1Parents.size()-1;
         int j = n2Parents.size()-1;
-        // This boolean helps in the case where one of the nodes is the root.
+        // This boolean helps in the case where one of the nodes is the root or the common
+        // ancestor we are looking for.
         boolean lastMatch = false;
         while (i >= 0 && j >= 0 && n1Parents.get(i).equals(n2Parents.get(j))) {
             lastMatch = true;

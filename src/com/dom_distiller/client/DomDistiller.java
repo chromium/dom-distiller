@@ -36,6 +36,11 @@ public class DomDistiller implements Exportable {
         content.setHtml(contentExtractor.extractContent(textOnly));
         result.setDistilledContent(content);
         result.setTextDirection(contentExtractor.getTextDirection());
+
+        for (String url : contentExtractor.getImageUrls()) {
+            result.addContentImages().setUrl(url);
+        }
+
         String original_domain = options.hasOriginalDomain() ? options.getOriginalDomain() : "";
         result.setPaginationInfo(PagingLinksFinder.getPaginationInfo(original_domain));
         result.setMarkupInfo(contentExtractor.getMarkupParser().getMarkupInfo());

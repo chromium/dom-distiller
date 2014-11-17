@@ -39,11 +39,14 @@ public class ContentExtractor {
 
     private String textDirection;
 
+    private final List<String> imageUrls;
+
     public ContentExtractor(Element root) {
         documentElement = root;
         candidateTitles = new LinkedList<String>();
         mTimingInfo = TimingInfo.create();
         mStatisticsInfo = StatisticsInfo.create();
+        imageUrls = new ArrayList<String>();
 
         double startTime = DomUtil.getTime();
         parser = new MarkupParser(root);
@@ -88,6 +91,19 @@ public class ContentExtractor {
 
         now = DomUtil.getTime();
         List<Node> contentNodes = processTextBlocks(document);
+        // Get URLs of the extracted images.
+        for (Node n : contentNodes) {
+            if (n.getNodeType() == Node.ELEMENT_NODE) {
+                Element e = Element.as(n);
+                if ("IMG".equals(e.getTagName())) {
+                    String src = e.getAttribute("src");
+                    if (!src.isEmpty()) {
+                        imageUrls.add(src);
+                    }
+                }
+            }
+        }
+
         mTimingInfo.setArticleProcessingTime(DomUtil.getTime() - now);
 
         if (contentNodes.isEmpty()) return "";
@@ -142,6 +158,14 @@ public class ContentExtractor {
             textDirection = "auto";
         }
         return textDirection;
+    }
+
+    /**
+     * Get a list of the content image URLs in the provided document.
+     * @return A list of image URLs.
+     */
+    public List<String> getImageUrls() {
+        return imageUrls;
     }
 
     /**

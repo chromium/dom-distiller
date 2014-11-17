@@ -77,12 +77,18 @@ message DomDistillerResult {
   optional string title = 1;
   optional DistilledContent distilled_content = 2;
   optional PaginationInfo pagination_info = 3;
-  repeated string image_urls = 4;
   optional MarkupInfo markup_info = 5;
   optional TimingInfo timing_info = 6;
   optional DebugInfo debug_info = 7;
   optional StatisticsInfo statistics_info = 8;
   optional string text_direction = 9;
+
+  // Represents an image found in the content of a page.
+  message ContentImage {
+    optional string url = 1;
+  }
+
+  repeated ContentImage content_images = 10;
 }
 
 message DomDistillerOptions {
