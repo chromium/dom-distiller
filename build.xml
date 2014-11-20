@@ -139,6 +139,7 @@
 
   <target name="package" depends="extractjs, protoc.json"
       description="Copies the main build artifacts into the out/package directory." >
+    <mkdir dir="out/extension"/>
     <mkdir dir="out/package"/>
     <mkdir dir="out/package/js"/>
     <mkdir dir="out/package/proto"/>
@@ -151,6 +152,10 @@
       <fileset dir="proto"/>
     </copy>
 
+    <copy file="out/domdistiller.js" todir="out/extension" />
+    <copy todir="out/extension">
+      <fileset dir="extension"/>
+    </copy>
   </target>
 
 
