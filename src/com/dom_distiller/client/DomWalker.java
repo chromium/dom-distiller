@@ -5,7 +5,6 @@
 package com.dom_distiller.client;
 
 import com.google.gwt.dom.client.Node;
-import com.google.gwt.dom.client.NodeList;
 
 /**
  * Used to walk the subtree of the DOM rooted at a particular Node. It provides a Visitor interface
@@ -36,13 +35,42 @@ class DomWalker {
     /**
      * Walk the subtree rooted at n.
      */
-    public void walk(Node n) {
-        if (!visitor.visit(n)) return;
+    public void walk(Node top) {
+        // Conceptually, this maintains a pointer to the currently "walked" node. When first seeing
+        // the node, it calls visit() on it. The next node to visit is then (1) the first child, (2)
+        // the next sibling, or (3) the next sibling of the first ancestor w/ a next sibling.
+        //
+        // Every time the walk "crosses" the "exit" of a node (i.e. when the pointer goes from
+        // somewhere in the node's subtree to somewhere outside of that subtree), exit() is called
+        // for that node (unless visit() for that node returned false).
+        if (!visitor.visit(top)) return;
+        Node n = top.getFirstChild();
+        if (n != null) {
+            while (n != top) {
+                // shouldExit is used to suppress the exit call for the current node when visit()
+                // returns false.
+                boolean shouldExit = false;
+                if (visitor.visit(n)) {
+                    Node c = n.getFirstChild();
+                    if (c != null) {
+                        n = c;
+                        continue;
+                    }
+                    shouldExit = true;
+                }
 
-        NodeList<Node> children = n.getChildNodes();
-        for (int i = 0; i < children.getLength(); ++i) {
-            walk(children.getItem(i));
+                while (n != top) {
+                    if (shouldExit) visitor.exit(n);
+                    Node s = n.getNextSibling();
+                    if (s != null) {
+                        n = s;
+                        break;
+                    }
+                    n = n.getParentNode();
+                    shouldExit = true;
+                }
+            }
         }
-        visitor.exit(n);
+        visitor.exit(top);
     }
 }

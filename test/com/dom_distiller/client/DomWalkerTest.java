@@ -55,6 +55,18 @@ public class DomWalkerTest extends DomDistillerTestCase {
         assertFalse(it.hasNext());
     }
 
+    public void testTopNodeHasNextSiblingAndParent() {
+        Node root = TestUtil.createDiv(0);
+        Node firstChild = TestUtil.createDiv(1);
+        Node secondChild = TestUtil.createDiv(2);
+        root.appendChild(firstChild);
+        root.appendChild(secondChild);
+
+        doTestForValues(firstChild, Arrays.asList(
+                new VisitData(1, true)
+                ));
+    }
+
     public void testDomWalker() {
         Node topNode = TestUtil.createDivTree().get(0);
         doTestForValues(topNode, Arrays.asList(
@@ -84,7 +96,6 @@ public class DomWalkerTest extends DomDistillerTestCase {
                 new VisitData(1, false),
                 new VisitData(8, false)
                 ));
-
 
         doTestForValues(topNode, Arrays.asList(
                 new VisitData(0, true),
