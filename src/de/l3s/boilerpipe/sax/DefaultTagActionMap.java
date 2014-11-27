@@ -1,3 +1,7 @@
+// Copyright 2014 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 /**
  * boilerpipe
  *
@@ -20,20 +24,18 @@ package de.l3s.boilerpipe.sax;
 import de.l3s.boilerpipe.labels.DefaultLabels;
 import de.l3s.boilerpipe.labels.LabelAction;
 
+import java.util.HashMap;
+
 
 /**
  * Default {@link TagAction}s. Seem to work well.
  *
  * @see TagActionMap
  */
-public class DefaultTagActionMap extends TagActionMap {
+public class DefaultTagActionMap {
+    public static final DefaultTagActionMap INSTANCE = new DefaultTagActionMap();
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
-
-    public static final TagActionMap INSTANCE = new DefaultTagActionMap();
+    private HashMap<String, TagAction> actions = new HashMap<String, TagAction>();
 
     protected DefaultTagActionMap() {
         setTagAction("STYLE", CommonTagActions.TA_IGNORABLE_ELEMENT);
@@ -48,13 +50,25 @@ public class DefaultTagActionMap extends TagActionMap {
         setTagAction("A", CommonTagActions.TA_ANCHOR_TEXT);
         setTagAction("BODY", CommonTagActions.TA_BODY);
 
-		setTagAction("LI", new CommonTagActions.BlockTagLabelAction(
-				new LabelAction(DefaultLabels.LI)));
-		setTagAction("H1", new CommonTagActions.BlockTagLabelAction(
-				new LabelAction(DefaultLabels.H1, DefaultLabels.HEADING)));
-		setTagAction("H2", new CommonTagActions.BlockTagLabelAction(
-				new LabelAction(DefaultLabels.H2, DefaultLabels.HEADING)));
-		setTagAction("H3", new CommonTagActions.BlockTagLabelAction(
-				new LabelAction(DefaultLabels.H3, DefaultLabels.HEADING)));
+        setTagAction("LI", new CommonTagActions.BlockTagLabelAction(
+            new LabelAction(DefaultLabels.LI)));
+        setTagAction("H1", new CommonTagActions.BlockTagLabelAction(
+            new LabelAction(DefaultLabels.H1, DefaultLabels.HEADING)));
+        setTagAction("H2", new CommonTagActions.BlockTagLabelAction(
+            new LabelAction(DefaultLabels.H2, DefaultLabels.HEADING)));
+        setTagAction("H3", new CommonTagActions.BlockTagLabelAction(
+            new LabelAction(DefaultLabels.H3, DefaultLabels.HEADING)));
+    }
+
+    public boolean containsKey(String tag) {
+        return actions.containsKey(tag.toUpperCase());
+    }
+
+    public TagAction get(String tag) {
+        return actions.get(tag.toUpperCase());
+    }
+
+    private void setTagAction(String tag, TagAction action) {
+        actions.put(tag.toUpperCase(), action);
     }
 }

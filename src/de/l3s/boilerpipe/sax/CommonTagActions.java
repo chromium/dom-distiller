@@ -224,7 +224,6 @@ public abstract class CommonTagActions {
 
         @Override
         public boolean start(final BoilerpipeHTMLContentHandler instance, final Element e) {
-
             if (e.hasAttribute("size")) {
                 String sizeAttr = e.getAttribute("size");
 
@@ -279,36 +278,6 @@ public abstract class CommonTagActions {
         }
     };
 
-    /**
-     * {@link CommonTagActions} for inline elements, which triggers some {@link LabelAction} on the generated
-     * {@link TextBlock}.
-     */
-    public static final class InlineTagLabelAction implements TagAction {
-
-        private final LabelAction action;
-
-        public InlineTagLabelAction(final LabelAction action) {
-            this.action = action;
-        }
-
-        @Override
-        public boolean start(BoilerpipeHTMLContentHandler instance, final Element e) {
-            instance.addWhitespaceIfNecessary();
-            instance.addLabelAction(action);
-            return false;
-        }
-
-        @Override
-        public boolean end(BoilerpipeHTMLContentHandler instance) {
-            instance.addWhitespaceIfNecessary();
-            return false;
-        }
-
-        @Override
-        public boolean changesTagLevel() {
-            return false;
-        }
-    }
 
     /**
      * {@link CommonTagActions} for block-level elements, which triggers some {@link LabelAction} on the generated

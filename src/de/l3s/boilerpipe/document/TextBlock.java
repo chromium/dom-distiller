@@ -30,6 +30,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Describes a block of text.
@@ -179,12 +180,28 @@ public class TextBlock implements Cloneable {
         return offsetBlocksEnd;
     }
 
+    // Do the formatting directly so that it is the same in prod/dev.
+    private String linkDensityDebugString() {
+        if (Math.abs(Math.round(linkDensity) - linkDensity) < 0.0001) {
+            return Long.toString(Math.round(linkDensity)) + ".0";
+        }
+        double rounded = Math.round(linkDensity * 1000000) / 1000000.0;
+        return Double.toString(rounded);
+    }
+
+    // The labels are in sorted order so that the order is the same in prod/dev.
+    private String labelsDebugString() {
+        if (labels == null) return null;
+        return new TreeSet<String>(labels).toString();
+    }
+
     @Override
     public String toString() {
-        return "[" + offsetBlocksStart + "-" + offsetBlocksEnd + ";tl="+tagLevel+"; nw="+numWords+";nwl="+numWrappedLines+";ld="+linkDensity+"]\t" +
+        return "[" + offsetBlocksStart + "-" + offsetBlocksEnd + ";tl="+tagLevel+"; nw="+numWords+";nwl="+numWrappedLines+";ld="+linkDensityDebugString()+"]\t" +
                 (isContent ? LogUtil.kGreen + "CONTENT" : LogUtil.kPurple + "boilerplate") + LogUtil.kReset +
-                "," + LogUtil.kDarkGray + labels + LogUtil.kReset + "\n" + getText();
+                "," + LogUtil.kDarkGray + labelsDebugString() + LogUtil.kReset + "\n" + getText();
     }
+
 
     /**
      * Adds an arbitrary String label to this {@link TextBlock}.

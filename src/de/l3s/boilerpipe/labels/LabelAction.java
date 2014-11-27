@@ -41,6 +41,10 @@ public class LabelAction {
     protected final void addLabelsTo(final TextBlock tb) {
         tb.addLabels(labels);
     }
+
+    public String[] getLabels() {
+        return labels;
+    }
     
     public String toString() {
     	return super.toString()+"{"+Arrays.asList(labels)+"}";
