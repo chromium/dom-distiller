@@ -1,5 +1,0 @@
-<module>
-  <inherits name='org.timepedia.exporter.Exporter'/>
-  <source path="test"/>
-  <set-property name="export" value="yes"/>
-</module>
