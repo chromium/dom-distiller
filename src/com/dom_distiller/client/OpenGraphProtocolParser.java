@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.dom_distiller.proto.DomDistillerProtos.TimingInfo;
 import com.google.gwt.core.client.JsArray;
 
 import com.google.gwt.dom.client.Element;
@@ -65,6 +66,8 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
         ARTICLE,
     }
 
+    private final TimingInfo mTimingInfo;
+
     /**
      * Called when parsing a stateful property, returns true if the property and its content should
      * be added to the property table.
@@ -114,8 +117,15 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
      *
      */
     public static OpenGraphProtocolParser parse(Element root) {
+        return parse(root, (TimingInfo) null);
+    }
+
+    public static OpenGraphProtocolParser parse(Element root, TimingInfo timingInfo) {
         try {
-            return new OpenGraphProtocolParser(root);
+            double startTime = DomUtil.getTime();
+            OpenGraphProtocolParser og = new OpenGraphProtocolParser(root, timingInfo);
+            LogUtil.addTimingInfo(startTime, timingInfo, "OpenGraphProtocolParser.parse");
+            return og;
         } catch (Exception e) {
             return null;
         }
@@ -221,15 +231,24 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
      * @throws Exception if the properties do not conform to the procotol i.e. not all required
      * properties exist.
      */
-    private OpenGraphProtocolParser(Element root) throws Exception {
+    private OpenGraphProtocolParser(Element root, TimingInfo timingInfo) throws Exception {
         mPropertyTable = new HashMap<String, String>();
         mPrefixes = new EnumMap<Prefix, String>(Prefix.class);
+        mTimingInfo = timingInfo;
 
+        double startTime = DomUtil.getTime();
         findPrefixes(root);
+        LogUtil.addTimingInfo(startTime, mTimingInfo, "OpenGraphProtocolParser.findPrefixes");
+
+        startTime = DomUtil.getTime();
         parseMetaTags(root);
+        LogUtil.addTimingInfo(startTime, mTimingInfo, "OpenGraphProtocolParser.parseMetaTags");
 
+        startTime = DomUtil.getTime();
         mImageParser.verify();
+        LogUtil.addTimingInfo(startTime, mTimingInfo, "OpenGraphProtocolParser.imageParser.verify");
 
+        startTime = DomUtil.getTime();
         String prefix = mPrefixes.get(Prefix.OG) + ":";
         if (getTitle().isEmpty())
             throw new Exception("Required \"" + prefix + "title\" property is missing.");
@@ -239,6 +258,7 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
             throw new Exception("Required \"" + prefix + "url\" property is missing.");
         if (getImages().length == 0)
             throw new Exception("Required \"" + prefix + "image\" property is missing.");
+        LogUtil.addTimingInfo(startTime, mTimingInfo, "OpenGraphProtocolParser.checkRequired");
     }
 
     private static final String sOgpNsPrefixRegex =

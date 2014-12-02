@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dom_distiller.proto.DomDistillerProtos;
+import com.dom_distiller.proto.DomDistillerProtos.TimingInfo;
 import com.google.gwt.dom.client.Element;
 
 /**
@@ -115,17 +116,33 @@ public class MarkupParser {
 
     private final List<Accessor> mAccessors;
 
+    private final TimingInfo mTimingInfo;
+
     /**
      * The object that loads the different parsers, and retrieves requested information from one or
      * more of the parsers.
      */
     public MarkupParser(Element root) {
+        this(root, (TimingInfo) null);
+    }
+
+    public MarkupParser(Element root, TimingInfo timingInfo) {
+        mTimingInfo = timingInfo;
         mAccessors = new ArrayList<Accessor>();
 
-        Accessor ogp = OpenGraphProtocolParser.parse(root);
+        double startTime = DomUtil.getTime();
+        Accessor ogp = OpenGraphProtocolParser.parse(root, mTimingInfo);
         if (ogp != null) mAccessors.add(ogp);
-        mAccessors.add(new SchemaOrgParserAccessor(root));
+        LogUtil.addTimingInfo(startTime, mTimingInfo, "OpenGraphProtocolParser");
+
+        startTime = DomUtil.getTime();
+        mAccessors.add(new SchemaOrgParserAccessor(root, mTimingInfo));
+        LogUtil.addTimingInfo(startTime, mTimingInfo, "SchemaOrgParserAccessor");
+
+        startTime = DomUtil.getTime();
+        // TODO(wychen): Use eager evaluation in IEReadingViewParser, but only for profiling.
         mAccessors.add(new IEReadingViewParser(root));
+        LogUtil.addTimingInfo(startTime, mTimingInfo, "IEReadingViewParser");
     }
 
     public String getTitle() {

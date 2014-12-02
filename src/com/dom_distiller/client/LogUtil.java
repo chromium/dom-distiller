@@ -4,6 +4,9 @@
 
 package com.dom_distiller.client;
 
+import com.dom_distiller.proto.DomDistillerProtos.TimingEntry;
+import com.dom_distiller.proto.DomDistillerProtos.TimingInfo;
+
 public class LogUtil {
 
     public static final int DEBUG_LEVEL_NONE = 0;
@@ -101,4 +104,11 @@ public class LogUtil {
         return true;
     }-*/;
 
+    public static void addTimingInfo(double startTime, TimingInfo timinginfo, String name) {
+        if (timinginfo != null) {
+            TimingEntry entry =  timinginfo.addOtherTimes();
+            entry.setName(name);
+            entry.setTime(DomUtil.getTime() - startTime);
+        }
+    }
 }

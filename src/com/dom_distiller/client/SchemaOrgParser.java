@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.dom_distiller.proto.DomDistillerProtos.TimingInfo;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
@@ -139,16 +140,21 @@ public class SchemaOrgParser {
         sTypeUrls.put("http://schema.org/NGO", Type.ORGANIZATION);
     }
 
+    private final TimingInfo mTimingInfo;
+
     /**
      * The object that extracts and verifies Schema.org markup tags from |root|.
      */
-    public SchemaOrgParser(Element root) {
+    public SchemaOrgParser(Element root, TimingInfo timingInfo) {
         // TODO(kuan): Parsing all tags is pretty expensive, should we do so only lazily?
         // If parse lazily, all get* methods will need to check for parsed state and, if necessary,
         // parse before returning the requested properties.
         // Note that the <html> element can also be the start of a Schema.org item, and hence needs
         // to be parsed.
+        mTimingInfo = timingInfo;
+        double startTime = DomUtil.getTime();
         parse(root, null);
+        LogUtil.addTimingInfo(startTime, mTimingInfo, "SchemaOrgParser.parse");
     }
 
     final List<ArticleItem> getArticleItems() {

@@ -7,6 +7,8 @@ package com.dom_distiller.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dom_distiller.proto.DomDistillerProtos.TimingInfo;
+
 import com.google.gwt.dom.client.Element;
 
 /**
@@ -21,7 +23,11 @@ public class SchemaOrgParserAccessor implements MarkupParser.Accessor {
      * interface.
      */
     public SchemaOrgParserAccessor(Element root) {
-        parser = new SchemaOrgParser(root);
+        this(root, (TimingInfo) null);
+    }
+
+    public SchemaOrgParserAccessor(Element root, TimingInfo timingInfo) {
+        parser = new SchemaOrgParser(root, timingInfo);
     }
 
     @Override

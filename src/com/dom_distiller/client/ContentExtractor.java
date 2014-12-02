@@ -49,7 +49,7 @@ public class ContentExtractor {
         imageUrls = new ArrayList<String>();
 
         double startTime = DomUtil.getTime();
-        parser = new MarkupParser(root);
+        parser = new MarkupParser(root, mTimingInfo);
         mTimingInfo.setMarkupParsingTime(DomUtil.getTime() - startTime);
         textDirection = "";
     }
