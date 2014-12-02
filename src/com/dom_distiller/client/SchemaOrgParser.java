@@ -121,6 +121,7 @@ public class SchemaOrgParser {
     }
 
     private final List<ThingItem> mItemScopes = new ArrayList<ThingItem>();
+    private final Map<Element, ThingItem> mItemElement = new HashMap<Element, ThingItem>();
     private String mAuthorFromRel = "";
     private static final Map<String, Type> sTypeUrls;
 
@@ -153,7 +154,7 @@ public class SchemaOrgParser {
         // to be parsed.
         mTimingInfo = timingInfo;
         double startTime = DomUtil.getTime();
-        parse(root, null);
+        parse(root);
         LogUtil.addTimingInfo(startTime, mTimingInfo, "SchemaOrgParser.parse");
     }
 
@@ -177,7 +178,96 @@ public class SchemaOrgParser {
 
     final String getAuthorFromRel() { return mAuthorFromRel; }
 
-    private void parse(Element e, ThingItem parentItem) {
+    // This function emulates root.querySelectorAll("[ITEMPROP],[ITEMSCOPE]")
+    private void getElementsWithItemAttribute(Element e, List<Element> allProp) {
+        if (e.hasAttribute("ITEMPROP") || e.hasAttribute("ITEMSCOPE")) {
+            allProp.add(e);
+        }
+        NodeList<Node> children = e.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            Node child = children.getItem(i);
+            if (child.getNodeType() != Node.ELEMENT_NODE)
+                continue;
+            getElementsWithItemAttribute(Element.as(child), allProp);
+        }
+    }
+
+    // This function emulates root.querySelectorAll("A[rel=author],LINK[rel=author]")
+    private void getAuthorElements(Element e, List<Element> allAuthors) {
+        String tagName = e.getTagName();
+        if ((tagName.equalsIgnoreCase("A") || tagName.equalsIgnoreCase("LINK")) &&
+                e.getAttribute("REL").equalsIgnoreCase(AUTHOR_REL)) {
+            allAuthors.add(e);
+        }
+        NodeList<Node> children = e.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            Node child = children.getItem(i);
+            if (child.getNodeType() != Node.ELEMENT_NODE)
+                continue;
+            getAuthorElements(Element.as(child), allAuthors);
+        }
+    }
+
+    private void parse(Element root) {
+        if (DomUtil.supportQuerySelectorAll(root)) {
+            NodeList<Element> allProp = DomUtil.querySelectorAll(root, "[ITEMPROP],[ITEMSCOPE]");
+
+            // Root node (html) is not included in the result of querySelectorAll, so need to
+            // handle it explicitly here.
+            parseElement(root, null);
+
+            for (int i = 0; i < allProp.getLength(); i++) {
+                Element e = allProp.getItem(i);
+                parseElement(e, getItemScopeParent(e));
+            }
+
+            // As per http://schema.org/author (or http://schema.org/Article and search for "author"
+            // property), if <a> or <link> tags specify rel="author", extract it.
+            allProp = DomUtil.querySelectorAll(root, "A[rel=author],LINK[rel=author]");
+            for (int i = 0; i < allProp.getLength(); i++) {
+                Element e = allProp.getItem(i);
+                if (mAuthorFromRel.isEmpty()) mAuthorFromRel = getAuthorFromRelAttribute(e);
+            }
+        } else {
+            // Since there's no way to construct NodeList, we cannot share the same code for
+            // both paths. However, the logic here is simple enough so that we can consider the
+            // path using querySelectorAll is somehow tested, except for the query string of
+            // querySelectorAll.
+            List<Element> allProp = new ArrayList<Element>();
+            getElementsWithItemAttribute(root, allProp);
+            for (Element e: allProp) {
+                parseElement(e, getItemScopeParent(e));
+            }
+
+            allProp = new ArrayList<Element>();
+            getAuthorElements(root, allProp);
+            for (Element e: allProp) {
+                if (mAuthorFromRel.isEmpty()) mAuthorFromRel = getAuthorFromRelAttribute(e);
+            }
+        }
+    }
+
+    // It is assumed the ItemScope parent of Element e is already parsed.
+    // For both getNodesWithItemAttribute() and querySelectorAll(), parent nodes are guaranteed
+    // to appear before child nodes, so this assumption is met.
+    private ThingItem getItemScopeParent(Element e) {
+        ThingItem parentItem = null;
+
+        Element parentElement = e;
+        while (parentElement != null) {
+            parentElement = parentElement.getParentElement();
+            if (parentElement == null) break;
+            if (isItemScope(parentElement)) {
+                if (mItemElement.containsKey(parentElement)) {
+                    parentItem = mItemElement.get(parentElement);
+                }
+                break;
+            }
+        }
+        return parentItem;
+    }
+
+    private void parseElement(Element e, ThingItem parentItem) {
         ThingItem newItem = null;
         boolean isItemScope = isItemScope(e);
         // A non-null |parentItem| means we're currently parsing the elements for a schema.org type.
@@ -194,6 +284,7 @@ public class SchemaOrgParser {
             if (newItem != null && newItem.isSupported() &&
                 (parentItem == null || parentItem.isSupported() || propertyNames.length == 0)) {
                 mItemScopes.add(newItem);
+                mItemElement.put(e, newItem);
             }
         }
 
@@ -212,18 +303,6 @@ public class SchemaOrgParser {
                    parentItem.putStringValue(propertyNames[i], getPropertyValue(e));
                 }
             }
-        }
-
-        // As per http://schema.org/author (or http://schema.org/Article and search for "author"
-        // property), if <a> or <link> tags specify rel="author", extract it.
-        if (mAuthorFromRel.isEmpty()) mAuthorFromRel = getAuthorFromRelAttribute(e);
-
-        // Now, parse each child element recursively.
-        NodeList<Node> children = e.getChildNodes();
-        for (int i = 0; i < children.getLength(); i++) {
-            Node child = children.getItem(i);
-            if (child.getNodeType() != Node.ELEMENT_NODE) continue;
-            parse(Element.as(child), newItem != null ? newItem : parentItem);
         }
     }
 
