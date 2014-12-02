@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.dom_distiller.client.DomUtil;
 import com.dom_distiller.proto.DomDistillerProtos.TimingInfo;
 import com.google.gwt.core.client.JsArray;
 
@@ -272,6 +273,12 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
     private static final Pattern sOgpNsNonPrefixValuePattern =
             Pattern.compile(sOgpNsNonPrefixValueRegex, Pattern.CASE_INSENSITIVE);
 
+    // The compile-time option(s) for parseMetaTags can be tuned according to the target data sets.
+    // According to current benchmark, doing prefix filtering is faster than not.
+
+    // Doing attribute prefix filtering is usually faster than not.
+    private static final boolean doPrefixFiltering = true;
+
     private void findPrefixes(Element root) {
         String prefixes = "";
 
@@ -343,7 +350,26 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
     }
 
     private void parseMetaTags(Element root) {
-        NodeList<Element> allMeta = root.getElementsByTagName("META");
+        NodeList<Element> allMeta = null;
+        if (DomUtil.supportQuerySelectorAll(root)) {
+            if (doPrefixFiltering) {
+                // Attribute selectors with prefix
+                // https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors
+                // TODO(wychen): Test the logic here in Chrome on Android.
+                String query = "";
+                for (Map.Entry<Prefix, String> entry : mPrefixes.entrySet()) {
+                    query += "meta[property^=\"" + entry.getValue() + "\"],";
+                }
+                query = query.substring(0, query.length() - 1);
+
+                allMeta = DomUtil.querySelectorAll(root, query);
+            } else {
+                allMeta = DomUtil.querySelectorAll(root, "meta[property]");
+            }
+        } else {
+            allMeta = root.getElementsByTagName("META");
+        }
+
         for (int i = 0; i < allMeta.getLength(); i++) {
             MetaElement meta = MetaElement.as(allMeta.getItem(i));
             String property = meta.getAttribute("property").toLowerCase();

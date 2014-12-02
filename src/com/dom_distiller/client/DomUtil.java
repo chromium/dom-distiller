@@ -164,4 +164,14 @@ public class DomUtil {
         }
         return null;
     }
+
+    // Returns whether querySelectorAll is available
+    public static native boolean supportQuerySelectorAll(Element root) /*-{
+        return (typeof(root.querySelectorAll) == 'function');
+    }-*/;
+
+    // GWT doesn't support querySelectorAll, so testing the caller could be harder.
+    public static native NodeList<Element> querySelectorAll(Node l, String selectors) /*-{
+        return l.querySelectorAll(selectors);
+    }-*/;
 }
