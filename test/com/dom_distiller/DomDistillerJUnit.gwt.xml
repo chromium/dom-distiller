@@ -9,4 +9,7 @@
 <module>
   <inherits name='DomDistiller'/>
   <inherits name='TestProto'/>
+
+  <define-linker name='xsi' class='com.google.gwt.core.linker.CrossSiteIframeLinker'/>
+  <add-linker name='xsi'/>
 </module>

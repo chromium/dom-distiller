@@ -8,12 +8,10 @@
   "http://google-web-toolkit.googlecode.com/svn/tags/2.5.1/distro-source/core/src/gwt-module.dtd">
 <module rename-to='domdistiller'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
+  <inherits name='com.google.gwt.core.Core'/>
   <inherits name='com.google.gwt.user.User'/>
   <inherits name='com.google.gwt.json.JSON'/>
   <inherits name='Proto'/>
-
-  <inherits name='org.timepedia.exporter.Exporter'/>
-  <set-property name='export' value='yes'/>
 
   <set-property name='gwt.logging.enabled' value='TRUE'/>
 
@@ -24,6 +22,9 @@
   <!-- Specify the paths for translatable code                    -->
   <source path='com/dom_distiller/client'/>
   <source path='de'/>
+
+  <!-- Use the SingleScriptLinker. -->
+  <add-linker name='sso'/>
 
   <!-- This provides simple implementations of java platform features used by boilerpipe but not
   available in a gwt project -->

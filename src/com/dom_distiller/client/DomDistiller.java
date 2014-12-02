@@ -8,16 +8,17 @@ import com.dom_distiller.proto.DomDistillerProtos;
 import com.dom_distiller.proto.DomDistillerProtos.DebugInfo;
 import com.dom_distiller.proto.DomDistillerProtos.TimingInfo;
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.core.client.js.JsExport;
+import com.google.gwt.core.client.js.JsNamespace;
 
-import org.timepedia.exporter.client.Export;
-import org.timepedia.exporter.client.Exportable;
-
-@Export()
-public class DomDistiller implements Exportable {
+@JsExport("DomDistiller")
+public class DomDistiller {
+    @JsExport
     public static DomDistillerProtos.DomDistillerResult apply() {
         return applyWithOptions(DomDistillerProtos.DomDistillerOptions.create());
     }
 
+    @JsExport
     public static DomDistillerProtos.DomDistillerResult applyWithOptions(
             DomDistillerProtos.DomDistillerOptions options) {
         double startTime = DomUtil.getTime();

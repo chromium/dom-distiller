@@ -6,13 +6,11 @@
 -->
 <project name="DomDistiller" default="build" basedir=".">
   <!-- Arguments to gwtc and devmode targets -->
-  <property name="gwt.args" value="-war war" />
+  <property name="gwt.args" value="-war war -XjsInteropMode JS" />
   <property name="gwt.custom.args" value="" />
 
   <!-- Configure path to GWT SDK -->
-  <property name="gwt.sdk" location="third_party/gwt-2.5.1" />
-
-  <property name="gwt_exporter.src" location="third_party/gwt_exporter/core/src/main/java/"/>
+  <property name="gwt.sdk" location="third_party/gwt-2.7.0" />
 
   <path id="project.class.path">
     <pathelement location="war/WEB-INF/classes"/>
@@ -27,7 +25,6 @@
 
   <path id="project.java.path">
     <pathelement location="src"/>
-    <pathelement location="${gwt_exporter.src}"/>
   </path>
 
   <path id="project.java.test.path">
@@ -44,7 +41,6 @@
 
   <union id="project.non.java.files">
     <fileset dir="src" excludes="**/*.java"/>
-    <fileset dir="${gwt_exporter.src}" excludes="**/*.java"/>
   </union>
 
   <target name="protoc.plugin.base"
@@ -100,8 +96,8 @@
         <path refid="project.java.path"/>
         <path refid="project.class.path"/>
         <path refid="protoc.java.output" />
-        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA.jar" />
-        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA-sources.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
       </classpath>
       <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
       <jvmarg value="-Xmx256M"/>
@@ -115,9 +111,9 @@
   <target name="extractjs" depends="gwtc" description="Extract standalone javascript from compiled javascript">
     <property name="compiled.js.dir" value="war/domdistiller" />
 
-    <exec executable="python">
+    <exec executable="python" failonerror="true">
       <arg value="create_standalone_js.py"/>
-      <arg line="-i ${compiled.js.dir}"/>
+      <arg line="-i ${compiled.js.dir}/domdistiller.nocache.js"/>
       <arg line="-o out/domdistiller.js"/>
     </exec>
   </target>
@@ -187,8 +183,8 @@
         <path refid="project.class.path"/>
         <path refid="project.java.test.path"/>
         <path refid="protoc.test.java.output" />
-        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA.jar" />
-        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA-sources.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
       </classpath>
       <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
       <jvmarg value="-Xmx256M"/>
@@ -210,15 +206,15 @@
         logfailedtests="yes"
         >
       <jvmarg line="-Xmx256m" />
-      <sysproperty key="gwt.args" value="-standardsMode -logLevel WARN" />
+      <sysproperty key="gwt.args" value="-logLevel WARN" />
       <sysproperty key="java.awt.headless" value="true" />
       <classpath>
         <path refid="project.class.path" />
         <path refid="project.java.path" />
         <path refid="project.java.test.path" />
         <path refid="protoc.test.java.output" />
-        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA.jar" />
-        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA-sources.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
         <pathelement location="third_party/junit/junit-4.11.jar" />
       </classpath>
       <batchtest todir="out/reports/htmlunit.dev" >
@@ -244,15 +240,15 @@
     <mkdir dir="out/reports/htmlunit.dev" />
     <junit fork="yes" printsummary="yes" haltonfailure="no" failureproperty="test.dev.failed">
       <jvmarg line="-Xmx256m" />
-      <sysproperty key="gwt.args" value="-standardsMode -logLevel WARN" />
+      <sysproperty key="gwt.args" value="-logLevel WARN" />
       <sysproperty key="java.awt.headless" value="true" />
       <classpath>
         <path refid="project.class.path" />
         <path refid="project.java.path" />
         <path refid="project.java.test.path" />
         <path refid="protoc.test.java.output" />
-        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA.jar" />
-        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA-sources.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
         <pathelement location="third_party/junit/junit-4.11.jar" />
       </classpath>
       <batchtest todir="out/reports/htmlunit.dev" >
@@ -278,15 +274,15 @@
         logfailedtests="yes"
         >
       <jvmarg line="-Xmx256m" />
-      <sysproperty key="gwt.args" value="-prod -standardsMode -logLevel WARN -out out/www-test" />
+      <sysproperty key="gwt.args" value="-prod -logLevel WARN" />
       <sysproperty key="java.awt.headless" value="true" />
       <classpath>
         <path refid="project.class.path" />
         <path refid="project.java.path" />
         <path refid="project.java.test.path" />
         <path refid="protoc.test.java.output" />
-        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA.jar" />
-        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA-sources.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
         <pathelement location="third_party/junit/junit-4.11.jar" />
       </classpath>
       <batchtest todir="out/reports/htmlunit.prod" >
@@ -312,15 +308,15 @@
     <mkdir dir="out/reports/htmlunit.prod" />
     <junit fork="yes" printsummary="yes" haltonfailure="no" failureproperty="test.prod.failed">
       <jvmarg line="-Xmx256m" />
-      <sysproperty key="gwt.args" value="-prod -standardsMode -logLevel WARN -out out/www-test" />
+      <sysproperty key="gwt.args" value="-prod -logLevel WARN" />
       <sysproperty key="java.awt.headless" value="true" />
       <classpath>
         <path refid="project.class.path" />
         <path refid="project.java.path" />
         <path refid="project.java.test.path" />
         <path refid="protoc.test.java.output" />
-        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA.jar" />
-        <pathelement location="third_party/gwt-2.5.1/validation-api-1.0.0.GA-sources.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
         <pathelement location="third_party/junit/junit-4.11.jar" />
       </classpath>
       <batchtest todir="out/reports/htmlunit.prod" >

@@ -4,11 +4,14 @@
 
 """Converts gwt-compiled javascript to standalone javascript
 
-gwt-compiled javascript is in the form of an html file that is expected to be
-loaded into its own iframe (with some extra work done in the embedding page).
-This reads such a compiled file and converts it to standalone javascript that
-can be loaded in the main frame of a page.
+gwt-compiled javascript is in the form of an js file that is expected to be
+loaded into its own script tag. This reads such a compiled file and converts it
+to standalone javascript that can be loaded as Chrome does.
 """
+
+# TODO(cjhopman): The proper way to do this is to write a gwt Linker
+# (gwt.core.ext.Linker) and use that for compilation. See
+# http://crbug.com/437113
 
 import glob
 import optparse
@@ -18,36 +21,37 @@ import sys
 
 def ExtractJavascript(content):
   """ Extracts javascript from within <script> tags in content. """
-  scriptre = re.compile('<script>(<!--)?(?P<inner>.*?)(-->)?</script>',
-                        re.MULTILINE | re.DOTALL)
-  result = ''
-  for match in scriptre.finditer(content):
-    result += match.group('inner')
-  return result
-
-def FindInputPath(indir):
-  """ Finds the path to a file of the form
-  in/dir/DC2C3039DDCBB4AD9B63A9D3E25A0BDF.cache.html
-
-  There should only be one such file in indir.
-  """
-  files = glob.glob(os.path.join(indir, '*.cache.html'))
-  if len(files) != 1:
-    print 'Unable to find input path: ', files
-    return None
-  return files[0]
+  lines = content.split('\n');
+  # The generated javascript looks something like:
+  #
+  # function domdistiller() {
+  #   ...
+  # }
+  # domdistiller();<useful code here>
+  # <more useful code>
+  # <last useful code>;if (domdistiller) domdistiller.onScriptLoad(gwtOnLoad);
+  #
+  # And so we extract the useful parts and append the correct gwtOnLoad call.
+  marker = 'domdistiller();'
+  for i, l in enumerate(lines):
+    if l.startswith(marker):
+      return '\n'.join(
+        [l[len(marker):]] +
+        lines[i + 1:-1] +
+        [lines[-1].replace(
+          'if (domdistiller) domdistiller.onScriptLoad(gwtOnLoad);',
+          'gwtOnLoad(undefined, \'domdistiller\', \'\', 0);')
+        ])
+  raise Exception('Failed to find marker line')
 
 def main(argv):
   parser = optparse.OptionParser()
-  parser.add_option('-i', '--indir')
+  parser.add_option('-i', '--infile')
   parser.add_option('-o', '--outfile')
   options, _ = parser.parse_args(argv)
 
-  if options.indir:
-    inpath = FindInputPath(options.indir)
-    if not inpath:
-      return 1
-    infile = open(inpath, 'r')
+  if options.infile:
+    infile = open(options.infile, 'r')
   else:
     print 'Reading input from stdin'
     infile = sys.stdin
@@ -62,7 +66,6 @@ def main(argv):
   # case for the standalone js.
   compiledJs = compiledJs.replace('var $wnd = parent', 'var $wnd = window')
   outfile.write(ExtractJavascript(compiledJs))
-  outfile.write('gwtOnLoad(undefined,"domdistiller","",0);\n')
 
   return 0
 
