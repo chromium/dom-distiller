@@ -7,7 +7,7 @@ package com.dom_distiller.client;
 import de.l3s.boilerpipe.document.TextDocument;
 
 public class TextDocumentConstructionTest extends DomDistillerTestCase {
-    private static boolean DEBUG = true;
+    private static boolean DEBUG = false;
 
     public void testTextDocumentConstruction() throws Exception {
         mBody.setInnerHTML(html);
@@ -262,7 +262,7 @@ public class TextDocumentConstructionTest extends DomDistillerTestCase {
         "Index\n" +
         "[7-7;tl=5; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Help\n" +
-        "[8-8;tl=5; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30mnull\u001B[0m\n" +
+        "[8-8;tl=4; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30mnull\u001B[0m\n" +
         "GWT 2.5.1\n" +
         "[9-9;tl=5; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Prev\n" +
@@ -396,7 +396,7 @@ public class TextDocumentConstructionTest extends DomDistillerTestCase {
         "Constant Field Values\n" +
         "[74-74;tl=6; nw=13;nwl=1;ld=0.230769]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "The Constant Field Values page lists the static final fields and their values.\n" +
-        "[75-75;tl=4; nw=12;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30mnull\u001B[0m\n" +
+        "[75-75;tl=3; nw=12;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30mnull\u001B[0m\n" +
         "This help file applies to API documentation generated using the standard doclet.\n" +
         "[76-76;tl=6; nw=1;nwl=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Overview\n" +
@@ -414,7 +414,7 @@ public class TextDocumentConstructionTest extends DomDistillerTestCase {
         "Index\n" +
         "[83-83;tl=5; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Help\n" +
-        "[84-84;tl=5; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30mnull\u001B[0m\n" +
+        "[84-84;tl=4; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30mnull\u001B[0m\n" +
         "GWT 2.5.1\n" +
         "[85-85;tl=5; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Prev\n" +
