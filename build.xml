@@ -6,7 +6,7 @@
 -->
 <project name="DomDistiller" default="build" basedir=".">
   <!-- Arguments to gwtc and devmode targets -->
-  <property name="gwt.args" value="-war war -XjsInteropMode JS" />
+  <property name="gwt.args" value="-war war -XjsInteropMode JS -XclosureCompiler" />
   <property name="gwt.custom.args" value="" />
 
   <!-- Configure path to GWT SDK -->
@@ -79,7 +79,7 @@
     <mkdir dir="war/WEB-INF/classes"/>
     <javac includes="**" encoding="utf-8"
         destdir="war/WEB-INF/classes"
-        source="1.5" target="1.5" nowarn="true"
+        source="1.7" target="1.7" nowarn="true"
         debug="true" debuglevel="lines,vars,source">
       <src refid="project.java.path"/>
       <src refid="protoc.java.output" />
@@ -167,7 +167,7 @@
 
   <target name="javac.tests" depends="javac, protoc.tests" description="Compiles test code">
     <javac includes="**" encoding="utf-8"
-      source="1.5" target="1.5" nowarn="true"
+      source="1.7" target="1.7" nowarn="true"
       destdir="war/WEB-INF/classes"
       debug="true" debuglevel="lines,vars,source">
       <src refid="project.java.test.path" />
