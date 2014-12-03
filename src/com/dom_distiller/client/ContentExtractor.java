@@ -91,18 +91,6 @@ public class ContentExtractor {
 
         now = DomUtil.getTime();
         List<Node> contentNodes = processTextBlocks(document);
-        // Get URLs of the extracted images.
-        for (Node n : contentNodes) {
-            if (n.getNodeType() == Node.ELEMENT_NODE) {
-                Element e = Element.as(n);
-                if ("IMG".equals(e.getTagName())) {
-                    String src = e.getAttribute("src");
-                    if (!src.isEmpty()) {
-                        imageUrls.add(src);
-                    }
-                }
-            }
-        }
 
         mTimingInfo.setArticleProcessingTime(DomUtil.getTime() - now);
 
@@ -234,6 +222,17 @@ public class ContentExtractor {
         // the live page.  This breaks all relative links (in anchors,
         // images, etc.), so make them absolute in the distilled content.
         makeAllLinksAbsolute(clonedSubtree);
+
+        // Get URLs of the extracted images.
+        if (clonedSubtree.getNodeType() == Node.ELEMENT_NODE) {
+            NodeList<Element> allImages = Element.as(clonedSubtree).getElementsByTagName("IMG");
+            for (int i = 0; i < allImages.getLength(); i++) {
+                String imageUrl = allImages.getItem(i).getAttribute("src");
+                if (!imageUrl.isEmpty()) {
+                    imageUrls.add(imageUrl);
+                }
+            }
+        }
 
         if (textOnly) {
             return getTextFromTree(clonedSubtree);
