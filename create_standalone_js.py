@@ -19,7 +19,7 @@ import os
 import re
 import sys
 
-def ExtractJavascript(content):
+def ExtractJavascript(content, module):
   """ Extracts javascript from within <script> tags in content. """
   lines = content.split('\n');
   # The generated javascript looks something like:
@@ -32,15 +32,15 @@ def ExtractJavascript(content):
   # <last useful code>;if (domdistiller) domdistiller.onScriptLoad(gwtOnLoad);
   #
   # And so we extract the useful parts and append the correct gwtOnLoad call.
-  marker = 'domdistiller();'
+  marker = module + '();'
   for i, l in enumerate(lines):
     if l.startswith(marker):
       return '\n'.join(
         [l[len(marker):]] +
         lines[i + 1:-1] +
         [lines[-1].replace(
-          'if (domdistiller) domdistiller.onScriptLoad(gwtOnLoad);',
-          'gwtOnLoad(undefined, \'domdistiller\', \'\', 0);')
+          'if ({0}) {0}.onScriptLoad(gwtOnLoad);'.format(module),
+          'gwtOnLoad(undefined, "{0}", "", 0);'.format(module))
         ])
   raise Exception('Failed to find marker line')
 
@@ -48,6 +48,7 @@ def main(argv):
   parser = optparse.OptionParser()
   parser.add_option('-i', '--infile')
   parser.add_option('-o', '--outfile')
+  parser.add_option('--module', help='Name of generated javascript module.')
   options, _ = parser.parse_args(argv)
 
   if options.infile:
@@ -65,7 +66,7 @@ def main(argv):
   # The compiled js expects to be running in its own iframe. This won't be the
   # case for the standalone js.
   compiledJs = compiledJs.replace('var $wnd = parent', 'var $wnd = window')
-  outfile.write(ExtractJavascript(compiledJs))
+  outfile.write(ExtractJavascript(compiledJs, options.module))
 
   return 0
 

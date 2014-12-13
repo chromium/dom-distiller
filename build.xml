@@ -6,7 +6,9 @@
 -->
 <project name="DomDistiller" default="build" basedir=".">
   <!-- Arguments to gwtc and devmode targets -->
-  <property name="gwt.args" value="-war war -XjsInteropMode JS -XclosureCompiler" />
+  <property name="gwt.args" value="-XclosureCompiler" />
+  <property name="gwt.test.args" value="-XnoclosureCompiler -optimize 0 -style DETAILED"/>
+  <property name="gwt.shared.args" value="-war war -XjsInteropMode JS -gen out/gen" />
   <property name="gwt.custom.args" value="" />
 
   <!-- Configure path to GWT SDK -->
@@ -21,6 +23,7 @@
 
   <target name="setup">
     <mkdir dir="out"/>
+    <mkdir dir="out/gen"/>
   </target>
 
   <path id="project.java.path">
@@ -29,6 +32,12 @@
 
   <path id="project.java.test.path">
     <pathelement location="test" />
+    <pathelement location="war/WEB-INF/test/classes"/>
+  </path>
+
+  <path id="project.java.jstest.path">
+    <pathelement location="jstest" />
+    <pathelement location="war/WEB-INF/jstest/classes"/>
   </path>
 
   <path id="protoc.java.output">
@@ -102,6 +111,7 @@
       <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
       <jvmarg value="-Xmx256M"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+      <arg line="${gwt.shared.args}"/>
       <arg line="${gwt.args}"/>
       <arg line="${gwt.custom.args}"/>
       <arg value="DomDistiller"/>
@@ -109,28 +119,12 @@
   </target>
 
   <target name="extractjs" depends="gwtc" description="Extract standalone javascript from compiled javascript">
-    <property name="compiled.js.dir" value="war/domdistiller" />
-
     <exec executable="python" failonerror="true">
       <arg value="create_standalone_js.py"/>
-      <arg line="-i ${compiled.js.dir}/domdistiller.nocache.js"/>
+      <arg line="--module domdistiller"/>
+      <arg line="-i war/domdistiller/domdistiller.nocache.js"/>
       <arg line="-o out/domdistiller.js"/>
     </exec>
-  </target>
-
-  <target name="devmode" depends="javac" description="Run development mode">
-    <java failonerror="true" fork="true" classname="com.google.gwt.dev.DevMode">
-      <classpath>
-        <path refid="project.java.path"/>
-        <path refid="project.class.path"/>
-      </classpath>
-      <jvmarg value="-Xmx256M"/>
-      <arg value="-startupUrl"/>
-      <arg value="DomDistiller.html"/>
-      <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
-      <arg line="${gwt.args}"/>
-      <arg value="com.dom_distiller.DomDistiller"/>
-    </java>
   </target>
 
   <target name="package" depends="extractjs, protoc.json"
@@ -166,9 +160,10 @@
   </target>
 
   <target name="javac.tests" depends="javac, protoc.tests" description="Compiles test code">
+    <mkdir dir="war/WEB-INF/test/classes"/>
     <javac includes="**" encoding="utf-8"
       source="1.7" target="1.7" nowarn="true"
-      destdir="war/WEB-INF/classes"
+      destdir="war/WEB-INF/test/classes"
       debug="true" debuglevel="lines,vars,source">
       <src refid="project.java.test.path" />
       <src refid="protoc.test.java.output" />
@@ -177,23 +172,48 @@
     </javac>
   </target>
 
-  <target name="gwtc.tests" depends="javac.tests" description="GWT compile to JavaScript (production mode)">
+  <target name="javac.jstests" depends="javac, protoc.tests" description="Compiles test code">
+    <mkdir dir="war/WEB-INF/jstest/classes"/>
+    <javac includes="**" encoding="utf-8"
+      source="1.7" target="1.7" nowarn="true"
+      destdir="war/WEB-INF/jstest/classes"
+      debug="true" debuglevel="lines,vars,source">
+      <src refid="project.java.jstest.path" />
+      <src refid="protoc.test.java.output" />
+      <classpath refid="project.class.path"/>
+    </javac>
+  </target>
+
+  <target name="gwtc.jstests" depends="javac.jstests" description="GWT compile to JavaScript (production mode)">
     <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
       <classpath>
         <path refid="project.class.path"/>
-        <path refid="project.java.test.path"/>
-        <path refid="protoc.test.java.output" />
+        <path refid="project.java.path"/>
+        <path refid="project.java.jstest.path" />
+        <path refid="protoc.java.output" />
+        <pathelement location="tools" />
         <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
         <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
       </classpath>
       <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
       <jvmarg value="-Xmx256M"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
-      <arg line="${gwt.args}"/>
+      <arg line="${gwt.shared.args}"/>
+      <arg line="${gwt.test.args}"/>
       <arg line="${gwt.custom.args}"/>
-      <arg value="com.dom_distiller.DomDistiller"/>
+      <arg value="com.dom_distiller.DomDistillerJsTest"/>
     </java>
   </target>
+
+  <target name="extractjs.jstests" depends="gwtc.jstests" description="Extract standalone javascript from compiled javascript">
+    <exec executable="python" failonerror="true">
+      <arg value="create_standalone_js.py"/>
+      <arg line="--module domdistillerjstest"/>
+      <arg line="-i war/domdistillerjstest/domdistillerjstest.nocache.js"/>
+      <arg line="-o out/domdistillerjstest.js"/>
+    </exec>
+  </target>
+
 
   <target name="test.dev" depends="javac.tests" description="Run development mode tests">
     <mkdir dir="out/reports/htmlunit.dev" />
@@ -330,10 +350,12 @@
     </junit>
     <fail message="Test failure detected (test.prod)." if="test.prod.failed" />
   </target>
-  <target name="test" description="Run development and production mode tests">
-    <antcall target="test.dev" />
-    <antcall target="test.prod" />
+
+  <target name="test"
+    depends="package, extractjs.jstests, test.dev,test.prod"
+    description="Run development and production mode tests">
   </target>
+
   <target name="singletest" description="Run an individual test in development and production mode">
     <antcall target="singletest.dev" />
     <antcall target="singletest.prod" />

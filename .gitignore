@@ -3,6 +3,7 @@ DomDistiller.war
 /out/
 /war/WEB-INF/
 /war/domdistiller
+/war/domdistillerjstest
 /war/*.JUnit/
 .*.swp
 *.pyc
