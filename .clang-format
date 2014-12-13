@@ -1,0 +1,9 @@
+# Defines the DomDistiller style for automatic reformatting.
+# http://clang.llvm.org/docs/ClangFormatStyleOptions.html
+# To use `git cl format`, several things are expected to be in the buildtools/
+# directory. You can create a symlink to the relevant directories in a normal
+# Chromium checkout to make git cl format work.
+BasedOnStyle: Chromium
+
+Language: Java
+IndentWidth: 4
