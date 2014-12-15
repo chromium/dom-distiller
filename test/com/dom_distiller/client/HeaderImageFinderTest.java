@@ -12,9 +12,11 @@ import java.util.List;
 public class HeaderImageFinderTest extends DomDistillerTestCase {
 
     public void testScoreWithNullNodes() {
-        assertEquals(0, HeaderImageFinder.scoreNonContentImage(null, null));
-        assertEquals(0, HeaderImageFinder.scoreNonContentImage(TestUtil.createImage(), null));
-        assertEquals(0, HeaderImageFinder.scoreNonContentImage(null, TestUtil.createDiv(0)));
+        HeaderImageFinder finder = new HeaderImageFinder(null);
+        HeaderImageFinder finder2 = new HeaderImageFinder(TestUtil.createDiv(0));
+        assertEquals(0, finder.scoreNonContentImage(null));
+        assertEquals(0, finder.scoreNonContentImage(TestUtil.createImage()));
+        assertEquals(0, finder2.scoreNonContentImage(null));
     }
 
     public void testNonZeroImageScore() {
@@ -28,7 +30,8 @@ public class HeaderImageFinderTest extends DomDistillerTestCase {
         root.appendChild(image);
         root.appendChild(contentText);
 
-        int score = HeaderImageFinder.scoreNonContentImage(image,root);
+        HeaderImageFinder finder = new HeaderImageFinder(root);
+        int score = finder.scoreNonContentImage(image);
 
         assertEquals(true, score>0);
     }

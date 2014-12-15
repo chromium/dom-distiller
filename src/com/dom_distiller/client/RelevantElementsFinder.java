@@ -47,6 +47,7 @@ public class RelevantElementsFinder {
     private final OrderedNodeMatcher nodeMatcher;
     private final List<Node> contentAndElements;
 
+    private final HeaderImageFinder finder;
     private final Node firstContentNode;
     private final List<ImageInfo> headerImageScores;
 
@@ -62,6 +63,7 @@ public class RelevantElementsFinder {
         } else {
             firstContentNode = null;
         }
+        finder = new HeaderImageFinder(firstContentNode);
         headerImageScores = new ArrayList<ImageInfo>();
     }
 
@@ -120,7 +122,7 @@ public class RelevantElementsFinder {
                     if (!inContent || !sRelevantTags.contains(e.getTagName())) {
                         // if this node is an image, reconsider retaining it
                         if ("IMG".equals(e.getTagName())) {
-                            int score = HeaderImageFinder.scoreNonContentImage(e, firstContentNode);
+                            int score = finder.scoreNonContentImage(e);
                             if (score > HeaderImageFinder.MINIMUM_ACCEPTED_SCORE) {
                                 headerImageScores.add(new ImageInfo(e, score));
                                 contentAndElements.add(n);

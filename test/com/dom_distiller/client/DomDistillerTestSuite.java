@@ -26,6 +26,7 @@ public class DomDistillerTestSuite extends GWTTestSuite {
         suite.addTestSuite(HeaderImageFinderTest.class);
         suite.addTestSuite(HeadingFusionTest.class);
         suite.addTestSuite(IEReadingViewParserTest.class);
+        suite.addTestSuite(ImageHeuristicsTest.class);
         suite.addTestSuite(MarkupParserProtoTest.class);
         suite.addTestSuite(MarkupParserTest.class);
         suite.addTestSuite(NodeDirectionalityTest.class);
