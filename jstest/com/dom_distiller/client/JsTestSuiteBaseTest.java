@@ -66,4 +66,11 @@ public class JsTestSuiteBaseTest extends JsTestCase {
 
         suite.run(new NullLogger());
     }
+
+    public void testStackTraceString() {
+        assertTrue("com.dom_distiller.client.ClassName.functionName(FileName.java:123)".equals(
+                JsTestSuiteBase.stackFrameString(new StackTraceElement(null,
+                        "com_dom_1distiller_client_ClassName_functionName__Ljava_lang_String_2V",
+                        "FileName.java", 123))));
+    }
 }

@@ -115,14 +115,32 @@ public class JsTestSuiteBase {
                 logger.log(TestLogger.RESULTS,
                         testEntry.getKey() + ": " + (res.success ? "SUCCESS" : "FAILURE"));
                 if (!res.success) {
-                    logger.log(TestLogger.RESULTS, getExceptionString(res.failure));
+                    logExceptionString(logger, res.failure);
                 }
             }
         }
         return results;
     }
 
-    private static String getExceptionString(Exception e) {
-        return e.toString();
+    private static void logExceptionString(TestLogger logger, Exception e) {
+        StackTraceElement[] stack = e.getStackTrace();
+        // The first four stack frames are gwt internal exception creation functions that just make
+        // it harder to see the real error. Skip them.
+        int start = DEBUG ? 0 : 4;
+        int end = stack.length;
+        logger.log(TestLogger.RESULTS, e.getMessage());
+        for (int i = start; i < end; i++) {
+            StackTraceElement ste = stack[i];
+            if (DEBUG) logger.log(TestLogger.WARNING, ste.toString());
+            logger.log(TestLogger.RESULTS, "at " + stackFrameString(ste));
+        }
+    }
+
+    public static String stackFrameString(StackTraceElement ste) {
+        String mangledName = ste.getMethodName();
+        mangledName = mangledName.split("__")[0];
+        String demangledName =
+                mangledName.replaceAll("_1", "~~").replaceAll("_", ".").replaceAll("~~", "_");
+        return demangledName + "(" + ste.getFileName() + ":" + ste.getLineNumber() + ")";
     }
 }

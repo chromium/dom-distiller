@@ -5,29 +5,29 @@
 package com.dom_distiller.client;
 
 /**
+ * A set of assertion methods for tests.
  */
 public class Assert {
-    public void assertTrue(boolean condition) {
+    public static void assertTrue(boolean condition) {
         if (!condition) fail(format(null, true, condition));
     }
 
-    public void assertTrue(String message, boolean condition) {
+    public static void assertTrue(String message, boolean condition) {
         if (!condition) fail(format(message, true, condition));
     }
 
-    private void fail(String message) {
+    private static void fail(String message) {
         throw new AssertionFailedException(message);
     }
 
-    private String format(String message, Object expected, Object actual) {
+    private static String format(String message, Object expected, Object actual) {
         return "Expected=" + expected + " Actual=" + actual +
             (message == null ? "" : ": " + message);
     }
 
-    private class AssertionFailedException extends RuntimeException {
+    private static class AssertionFailedException extends RuntimeException {
         AssertionFailedException(String message) {
             super(message);
         }
     }
-
 }
