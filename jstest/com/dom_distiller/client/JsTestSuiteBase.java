@@ -20,22 +20,41 @@ public class JsTestSuiteBase {
     }
 
     public class TestResult {
-        boolean success;
-        Exception failure;
+        private Exception failure;
+
+        public boolean success() {
+            return failure == null;
+        }
+
+        public Exception getException() {
+            return failure;
+        }
+
+        public void setException(Exception e) {
+            failure = e;
+        }
     }
 
     public class TestCaseResults {
-        String testCaseName;
-        TreeMap<String, TestResult> results;
-        Exception testCaseFailure;
+        private final String testCaseName;
+        private TreeMap<String, TestResult> results;
+        private Exception testCaseFailure;
 
         TestCaseResults(String testCase) {
             testCaseName = testCase;
             results = new TreeMap<String, TestResult>();
         }
 
+        public void setCaseFailure(Exception e) {
+            testCaseFailure = e;
+        }
+
         public void setResult(String testName, TestResult result) {
             results.put(testName, result);
+        }
+
+        public Map<String, TestResult> getResults() {
+            return results;
         }
     }
 
@@ -65,14 +84,13 @@ public class JsTestSuiteBase {
                     TestResult result = new TestResult();
                     try {
                         test.getValue().run(testCase);
-                        result.success = true;
                     } catch (Exception e) {
-                        result.failure = e;
+                        result.setException(e);
                     }
                     results.setResult(test.getKey(), result);
                 }
             } catch (Exception e) {
-                results.testCaseFailure = e;
+                results.setCaseFailure(e);
             }
             return results;
         }
@@ -110,12 +128,12 @@ public class JsTestSuiteBase {
         for (Map.Entry<String, TestCaseResults> resultsEntry : results.entrySet()) {
             logger.log(TestLogger.RESULTS, "Results for " + resultsEntry.getKey());
             TestCaseResults caseResults = resultsEntry.getValue();
-            for (Map.Entry<String, TestResult> testEntry : caseResults.results.entrySet()) {
+            for (Map.Entry<String, TestResult> testEntry : caseResults.getResults().entrySet()) {
                 TestResult res = testEntry.getValue();
                 logger.log(TestLogger.RESULTS,
-                        testEntry.getKey() + ": " + (res.success ? "SUCCESS" : "FAILURE"));
-                if (!res.success) {
-                    logExceptionString(logger, res.failure);
+                        testEntry.getKey() + ": " + (res.success() ? "SUCCESS" : "FAILURE"));
+                if (!res.success()) {
+                    logExceptionString(logger, res.getException());
                 }
             }
         }

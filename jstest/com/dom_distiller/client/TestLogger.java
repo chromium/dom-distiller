@@ -13,7 +13,16 @@ public class TestLogger {
 
     private int logLevel = WARNING;
 
+    private StringBuilder logBuffer = new StringBuilder();
+
     public void log(int logLevel, String message) {
-        if (logLevel <= this.logLevel) LogUtil.logToConsole(message);
+        if (logLevel <= this.logLevel) {
+            logBuffer.append(message + "\n");
+            LogUtil.logToConsole(message);
+        }
+    }
+
+    public String getLog() {
+        return logBuffer.toString();
     }
 }

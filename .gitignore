@@ -1,4 +1,5 @@
 DomDistiller.war
+/buildtools
 /gwt-unitCache/
 /out/
 /war/WEB-INF/
