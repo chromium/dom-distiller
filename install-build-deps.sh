@@ -12,6 +12,8 @@
     exit 1
   fi
 
+  apt-get install python-setuptools
+
   user=$SUDO_USER
   bit=$(getconf LONG_BIT)
   domdistiller=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
