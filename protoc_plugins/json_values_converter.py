@@ -105,7 +105,7 @@ class CppConverterWriter(writer.CodeWriter):
 
   def FieldWriteToValue(self, field):
     if field.IsRepeated():
-      self.output('{{')
+      self.Output('{{')
     else:
       self.Output('if (message.has_{field_name}()) {{\n', field_name=field.name)
 
