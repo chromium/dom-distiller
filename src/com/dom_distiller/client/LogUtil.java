@@ -37,6 +37,10 @@ public class LogUtil {
      * then to regular system console.
      */
     public static void logToConsole(String str) {
+        if (str == null) {
+            str = "";
+        }
+
         // Try to log to javascript console, which is only available when
         // running in production mode in browser; otherwise, log to regular
         // system console.
