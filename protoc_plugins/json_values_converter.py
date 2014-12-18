@@ -105,9 +105,17 @@ class CppConverterWriter(writer.CodeWriter):
 
   def FieldWriteToValue(self, field):
     if field.IsRepeated():
-      self.RepeatedMemberFieldWriteToValue(field)
+      self.output('{{')
     else:
-      self.OptionalMemberFieldWriteToValue(field)
+      self.Output('if (message.has_{field_name}()) {{\n', field_name=field.name)
+
+    with self.AddIndent():
+      if field.IsRepeated():
+        self.RepeatedMemberFieldWriteToValue(field)
+      else:
+        self.OptionalMemberFieldWriteToValue(field)
+
+    self.Output('}}')
 
   def RepeatedMemberFieldWriteToValue(self, field):
     prologue = (
@@ -135,23 +143,19 @@ class CppConverterWriter(writer.CodeWriter):
         )
 
   def OptionalMemberFieldWriteToValue(self, field):
-    prologue = (
-        'if (message.has_{field_name}()) {{\n'
-        )
-
     if field.IsClassType():
-      middle = (
+      body = (
           'scoped_ptr<base::Value> inner_message_value = \n'
           '    {inner_class_converter}::WriteToValue(message.{field_name}());\n'
           'dict->Set("{field_number}", inner_message_value.release());\n'
           )
     else:
-      middle = (
+      body = (
           'dict->Set{value_type}("{field_number}", message.{field_name}());\n'
           )
 
     self.Output(
-        prologue + Indented(middle) + '\n}}',
+        Indented(body),
         field_number=field.JavascriptIndex(),
         field_name=field.name,
         value_type=field.CppValueType() if not field.IsClassType() else None,
