@@ -66,7 +66,7 @@ public class JsTestEntryGenerator extends Generator {
                     sourceWriter.println(".addTest(");
                     sourceWriter.println("        new JsTestSuiteBase.TestCaseRunner() {");
                     sourceWriter.println("            @Override");
-                    sourceWriter.println("            public void run(JsTestCase testCase) throws Exception {");
+                    sourceWriter.println("            public void run(JsTestCase testCase) throws Throwable {");
                     sourceWriter.println("                ((" + className + ")testCase)." + methodName + "();");
                     sourceWriter.println("            }");
                     sourceWriter.println("        }, \"" + methodName + "\")");

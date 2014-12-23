@@ -64,7 +64,7 @@ public class JsTestSuiteBaseTest extends JsTestCase {
             .addTest(null, "testOther2")
             .addTest(null, "testOther3");
 
-        suite.run(new NullLogger());
+        suite.run(new NullLogger(), null);
     }
 
     public void testStackTraceString() {
@@ -72,5 +72,24 @@ public class JsTestSuiteBaseTest extends JsTestCase {
                 JsTestSuiteBase.stackFrameString(new StackTraceElement(null,
                         "com_dom_1distiller_client_ClassName_functionName__Ljava_lang_String_2V",
                         "FileName.java", 123))));
+    }
+
+    public void testJsTestSuiteFilter() {
+        JsTestSuiteBase suite = new JsTestSuiteBase();
+        suite.addTestCase(null, "TestClass")
+            .addTest(null, "test1")
+            .addTest(null, "test2");
+        Map<String, JsTestSuiteBase.TestCaseResults> results = suite.run(
+                new NullLogger(), ".*TestClass.*");
+        assertFalse(results.get("TestClass").getResults().get("test1").skipped());
+        assertFalse(results.get("TestClass").getResults().get("test2").skipped());
+
+        results = suite.run(new NullLogger(), ".*NotTestClass.*");
+        assertTrue(results.get("TestClass").getResults().get("test1").skipped());
+        assertTrue(results.get("TestClass").getResults().get("test2").skipped());
+
+        results = suite.run(new NullLogger(), ".*TestClass.test1");
+        assertFalse(results.get("TestClass").getResults().get("test1").skipped());
+        assertTrue(results.get("TestClass").getResults().get("test2").skipped());
     }
 }

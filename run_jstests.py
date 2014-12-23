@@ -14,6 +14,7 @@ In addition, ChromeDriver assumes that Chrome is available at /usr/bin/google-ch
 
 import os
 import sys
+import time
 
 try:
   from selenium import webdriver
@@ -22,6 +23,8 @@ except:
   print 'Couldn\'t import webdriver. Please run `sudo ./install-build-deps.sh`.'
   sys.exit(1)
 
+start = time.time()
+
 test_runner = "return com.dom_distiller.client.JsTestEntry.run()";
 test_html = os.path.abspath(os.path.join(os.path.dirname(__file__), "war", "test.html"))
 
@@ -29,6 +32,8 @@ driver = webdriver.Chrome()
 driver.get("file://" + test_html)
 result = driver.execute_script(test_runner)
 driver.quit()
-
+end = time.time()
 print result['log']
+print 'Tests run: %d, Failures: %d, Skipped: %d, Time elapsed: %0.3f sec' % (result['numTests'],
+    result['failed'], result['skipped'], end - start)
 sys.exit(0 if result['success'] else 1)

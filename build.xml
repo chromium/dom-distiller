@@ -9,7 +9,7 @@
   <!-- Arguments to gwtc and devmode targets -->
   <property name="gwt.args" value="-XclosureCompiler" />
   <property name="gwt.test.args" value="-XnoclosureCompiler -optimize 0 -style DETAILED"/>
-  <property name="gwt.shared.args" value="-war war -XjsInteropMode JS -gen out/gen" />
+  <property name="gwt.shared.args" value="-failOnError -war war -XjsInteropMode JS -gen out/gen" />
   <property name="gwt.custom.args" value="" />
 
   <!-- Configure path to GWT SDK -->
@@ -359,7 +359,7 @@
   </target>
 
   <target name="test"
-    depends="package, jstests, test.dev, test.prod"
+    depends="jstests, test.dev, test.prod, package"
     description="Run development and production mode tests">
   </target>
 

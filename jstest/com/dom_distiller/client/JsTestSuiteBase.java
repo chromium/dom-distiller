@@ -4,15 +4,18 @@
 
 package com.dom_distiller.client;
 
+import com.google.gwt.regexp.shared.RegExp;
+import com.google.gwt.user.client.Window;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
 public class JsTestSuiteBase {
-    private static final boolean DEBUG = false;
+    private boolean debug = false;
 
     public interface TestCaseRunner {
-        public void run(JsTestCase testCase) throws Exception;
+        public void run(JsTestCase testCase) throws Throwable;
     }
 
     public interface TestCaseFactory {
@@ -20,18 +23,27 @@ public class JsTestSuiteBase {
     }
 
     public class TestResult {
-        private Exception failure;
+        private Throwable failure;
+        private boolean isSkipped;
 
         public boolean success() {
-            return failure == null;
+            return failure == null && !isSkipped;
         }
 
-        public Exception getException() {
+        public boolean skipped() {
+            return isSkipped;
+        }
+
+        public Throwable getException() {
             return failure;
         }
 
-        public void setException(Exception e) {
+        public void setException(Throwable e) {
             failure = e;
+        }
+
+        public void setSkipped() {
+            isSkipped = true;
         }
     }
 
@@ -74,18 +86,25 @@ public class JsTestSuiteBase {
             return this;
         }
 
-        public TestCaseResults run(TestLogger logger) {
-            if (DEBUG) logger.log(TestLogger.WARNING, "Starting " + testCaseName);
+        public TestCaseResults run(TestLogger logger, TestFilter filter) {
+            if (debug) logger.log(TestLogger.WARNING, "Starting " + testCaseName);
             TestCaseResults results = new TestCaseResults(testCaseName);
             try {
-                JsTestCase testCase = factory.build();
                 for (Map.Entry<String, TestCaseRunner> test : tests.entrySet()) {
-                    if (DEBUG) logger.log(TestLogger.WARNING, "Running " + test.getKey());
                     TestResult result = new TestResult();
-                    try {
-                        test.getValue().run(testCase);
-                    } catch (Exception e) {
-                        result.setException(e);
+                    if (!filter.test(testCaseName, test.getKey())) {
+                        if (debug) logger.log(TestLogger.WARNING, "Skipping " + test.getKey());
+                        result.setSkipped();
+                    } else {
+                        if (debug) logger.log(TestLogger.WARNING, "Running " + test.getKey());
+                        try {
+                            JsTestCase testCase = factory.build();
+                            testCase.setUp();
+                            test.getValue().run(testCase);
+                            testCase.tearDown();
+                        } catch (Throwable e) {
+                            result.setException(e);
+                        }
                     }
                     results.setResult(test.getKey(), result);
                 }
@@ -100,10 +119,23 @@ public class JsTestSuiteBase {
         }
     }
 
+    private class TestFilter {
+        RegExp regexp;
+        TestFilter(String filter) {
+            if (filter != null) regexp = RegExp.compile(filter);
+        }
+
+        public boolean test(String className, String methodName) {
+            if (regexp == null) return true;
+            return regexp.test(className + "." + methodName);
+        }
+    }
+
     private TreeMap<String, TestCase> testCases;
 
     public JsTestSuiteBase() {
         testCases = new TreeMap<String, TestCase>();
+        debug = "1".equals(Window.Location.getParameter("debug"));
     }
 
     public TestCase addTestCase(TestCaseFactory factory, String name) {
@@ -120,19 +152,23 @@ public class JsTestSuiteBase {
         return names;
     }
 
-    public Map<String, TestCaseResults> run(TestLogger logger) {
+    public Map<String, TestCaseResults> run(TestLogger logger, String filterString) {
         TreeMap<String, TestCaseResults> results = new TreeMap<String, TestCaseResults>();
+        TestFilter filter = new TestFilter(filterString);
         for (Map.Entry<String, TestCase> caseEntries : testCases.entrySet()) {
-            results.put(caseEntries.getKey(), caseEntries.getValue().run(logger));
+            results.put(caseEntries.getKey(), caseEntries.getValue().run(logger, filter));
         }
         for (Map.Entry<String, TestCaseResults> resultsEntry : results.entrySet()) {
             logger.log(TestLogger.RESULTS, "Results for " + resultsEntry.getKey());
             TestCaseResults caseResults = resultsEntry.getValue();
             for (Map.Entry<String, TestResult> testEntry : caseResults.getResults().entrySet()) {
                 TestResult res = testEntry.getValue();
-                logger.log(TestLogger.RESULTS,
-                        testEntry.getKey() + ": " + (res.success() ? "SUCCESS" : "FAILURE"));
-                if (!res.success()) {
+                if (res.skipped()) {
+                    logger.log(TestLogger.RESULTS, "    " + testEntry.getKey() + ": SKIPPED");
+                } else if (res.success()) {
+                    logger.log(TestLogger.RESULTS, "    " + testEntry.getKey() + ": PASSED");
+                } else {
+                    logger.log(TestLogger.RESULTS, "    " + testEntry.getKey() + ": FAILED");
                     logExceptionString(logger, res.getException());
                 }
             }
@@ -140,16 +176,16 @@ public class JsTestSuiteBase {
         return results;
     }
 
-    private static void logExceptionString(TestLogger logger, Exception e) {
+    private void logExceptionString(TestLogger logger, Throwable e) {
         StackTraceElement[] stack = e.getStackTrace();
         // The first four stack frames are gwt internal exception creation functions that just make
         // it harder to see the real error. Skip them.
-        int start = DEBUG ? 0 : 4;
+        int start = debug ? 0 : 4;
         int end = stack.length;
         logger.log(TestLogger.RESULTS, e.getMessage());
         for (int i = start; i < end; i++) {
             StackTraceElement ste = stack[i];
-            if (DEBUG) logger.log(TestLogger.WARNING, ste.toString());
+            if (debug) logger.log(TestLogger.WARNING, ste.toString());
             logger.log(TestLogger.RESULTS, "at " + stackFrameString(ste));
         }
     }

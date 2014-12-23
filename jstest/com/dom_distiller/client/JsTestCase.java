@@ -8,4 +8,6 @@ package com.dom_distiller.client;
  * Base test case for all JS tests.
  */
 public class JsTestCase extends Assert {
+    public void setUp() throws Exception {}
+    public void tearDown() throws Exception {}
 }
