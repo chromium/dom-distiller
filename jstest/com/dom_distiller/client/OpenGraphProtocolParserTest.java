@@ -20,7 +20,7 @@ public class OpenGraphProtocolParserTest extends DomDistillerJsTestCase {
         createMeta("og:site_name", expectedSiteName);
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
-        assertTrue(parser != null);
+        assertNotNull(parser);
         assertEquals(expectedTitle, parser.getTitle());
         assertEquals("", parser.getType());
         assertEquals(expectedUrl, parser.getUrl());
@@ -43,7 +43,7 @@ public class OpenGraphProtocolParserTest extends DomDistillerJsTestCase {
         // Set an image structured property but not the root property.
         createMeta("og:image:url", "http://test/image.jpeg");
 
-        assertEquals(null, OpenGraphProtocolParser.parse(mRoot));
+        assertNull(OpenGraphProtocolParser.parse(mRoot));
     }
 
     public void testOneImage() {
@@ -64,7 +64,7 @@ public class OpenGraphProtocolParserTest extends DomDistillerJsTestCase {
         createMeta("og:image:height", "400");
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
-        assertTrue(parser != null);
+        assertNotNull(parser);
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(1, images.length);
         MarkupParser.Image image = images[0];
@@ -103,7 +103,7 @@ public class OpenGraphProtocolParserTest extends DomDistillerJsTestCase {
         createMeta("og:image:height", "900");
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
-        assertTrue(parser != null);
+        assertNotNull(parser);
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(2, images.length);
         MarkupParser.Image image = images[0];
@@ -143,7 +143,7 @@ public class OpenGraphProtocolParserTest extends DomDistillerJsTestCase {
         createMeta("og:image:height", "400");
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
-        assertTrue(parser != null);
+        assertNotNull(parser);
         MarkupParser.Image[] images = parser.getImages();
         assertEquals(2, images.length);
         MarkupParser.Image image = images[0];
@@ -168,9 +168,9 @@ public class OpenGraphProtocolParserTest extends DomDistillerJsTestCase {
         createDefaultImage();
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
-        assertTrue(parser != null);
+        assertNotNull(parser);
         assertEquals("", parser.getAuthor());
-        assertEquals(null, parser.getArticle());
+        assertNull(parser.getArticle());
     }
 
     public void testProfile() {
@@ -185,7 +185,7 @@ public class OpenGraphProtocolParserTest extends DomDistillerJsTestCase {
         createMeta("profile:last_name", "Doe");
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
-        assertTrue(parser != null);
+        assertNotNull(parser);
         assertEquals("Jane Doe", parser.getAuthor());
     }
 
@@ -211,7 +211,7 @@ public class OpenGraphProtocolParserTest extends DomDistillerJsTestCase {
         createMeta("article:author", expectedAuthor2);
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
-        assertTrue(parser != null);
+        assertNotNull(parser);
         MarkupParser.Article article = parser.getArticle();
         assertEquals(expectedPublishedTime, article.publishedTime);
         assertEquals(expectedModifiedTime, article.modifiedTime);
@@ -254,7 +254,7 @@ public class OpenGraphProtocolParserTest extends DomDistillerJsTestCase {
         createMeta("tstpf:last_name", "Doe");
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
-        assertTrue(parser != null);
+        assertNotNull(parser);
         assertEquals(expectedTitle, parser.getTitle());
         assertEquals("", parser.getType());
         assertEquals(expectedUrl, parser.getUrl());
@@ -297,7 +297,7 @@ public class OpenGraphProtocolParserTest extends DomDistillerJsTestCase {
         createMeta("tsta:author", expectedAuthor2);
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
-        assertTrue(parser != null);
+        assertNotNull(parser);
         assertEquals("Article", parser.getType());
         MarkupParser.Article article = parser.getArticle();
         assertEquals(expectedPublishedTime, article.publishedTime);
@@ -324,7 +324,7 @@ public class OpenGraphProtocolParserTest extends DomDistillerJsTestCase {
         createMeta("og:description", "this description should be ignored");
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
-        assertTrue(parser != null);
+        assertNotNull(parser);
         assertEquals("", parser.getDescription());
     }
 
@@ -360,7 +360,7 @@ public class OpenGraphProtocolParserTest extends DomDistillerJsTestCase {
         createMeta("tstpf:last_name", "Doe");
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
-        assertTrue(parser != null);
+        assertNotNull(parser);
         assertEquals(expectedTitle, parser.getTitle());
         assertEquals("", parser.getType());
         assertEquals(expectedUrl, parser.getUrl());
@@ -403,7 +403,7 @@ public class OpenGraphProtocolParserTest extends DomDistillerJsTestCase {
         createMeta("tsta:author", expectedAuthor2);
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
-        assertTrue(parser != null);
+        assertNotNull(parser);
         assertEquals("Article", parser.getType());
         MarkupParser.Article article = parser.getArticle();
         assertEquals(expectedPublishedTime, article.publishedTime);
@@ -430,7 +430,7 @@ public class OpenGraphProtocolParserTest extends DomDistillerJsTestCase {
         createMeta("og:description", "this description should be ignored");
 
         OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
-        assertTrue(parser != null);
+        assertNotNull(parser);
         assertEquals("", parser.getDescription());
     }
 
