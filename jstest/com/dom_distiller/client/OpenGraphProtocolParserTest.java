@@ -5,7 +5,7 @@
 package com.dom_distiller.client;
 
 
-public class OpenGraphProtocolParserTest extends DomDistillerTestCase {
+public class OpenGraphProtocolParserTest extends DomDistillerJsTestCase {
     public void testRequiredPropertiesAndDescriptionAndSiteName() {
         String expectedTitle = "Testing required OpenGraph Proptocol properties and optional Description of the document.";
         createMeta("og:title", expectedTitle);
