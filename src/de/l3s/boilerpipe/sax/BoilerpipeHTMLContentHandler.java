@@ -59,8 +59,6 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     StringBuilder tokenBuffer = new StringBuilder();
     StringBuilder textBuffer = new StringBuilder();
 
-    int inBody = 0;
-    int inIgnorableElement = 0;
     int tagLevel = 0;
     int blockTagLevel = -1;
 
@@ -159,6 +157,11 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     }
 
     @Override
+    public void skipElement(Element e) {
+        flush = true;
+    }
+
+    @Override
     public void startElement(Element element) {
         labelStack.push();
         String tagName = element.getTagName().toUpperCase();
@@ -245,10 +248,6 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
             flush = false;
         }
 
-        if (inIgnorableElement != 0) {
-            return;
-        }
-
         char c;
         boolean startWhitespace = false;
         boolean endWhitespace = false;
@@ -331,11 +330,6 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     }
 
     public void flushBlock() {
-        if (inBody == 0) {
-            clearTextBuffers();
-            return;
-        }
-
         final int length = tokenBuffer.length();
         switch (length) {
         case 0:

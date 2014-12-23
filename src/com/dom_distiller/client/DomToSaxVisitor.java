@@ -20,6 +20,11 @@ public class DomToSaxVisitor implements DomWalker.Visitor {
     }
 
     @Override
+    public void skip(Element e) {
+        handler.skipElement(e);
+    }
+
+    @Override
     public boolean visit(Node n) {
         switch (n.getNodeType()) {
             case Node.TEXT_NODE:

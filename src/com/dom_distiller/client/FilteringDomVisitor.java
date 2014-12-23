@@ -21,17 +21,6 @@ public class FilteringDomVisitor implements DomWalker.Visitor {
     private final Set<Node> hiddenElements;
     private final Set<Node> dataTables;
 
-    /**
-     * Tags that have special handling (i.e. they're restored based on context, after text
-     * processing.)
-     */
-    private static final Set<String> sTagsProcessedAsABlock = new HashSet<String>();
-
-    static {
-        sTagsProcessedAsABlock.add("FIGURE");
-        sTagsProcessedAsABlock.add("VIDEO");
-    }
-
     FilteringDomVisitor(DomWalker.Visitor v) {
         domVisitor = v;
         hiddenElements = new HashSet<Node>();
@@ -47,6 +36,11 @@ public class FilteringDomVisitor implements DomWalker.Visitor {
     }
 
     @Override
+    public void skip(Element e) {
+        domVisitor.skip(e);
+    }
+
+    @Override
     public boolean visit(Node n) {
         if (n.getNodeType() == Node.ELEMENT_NODE) {
             Element e = Element.as(n);
@@ -59,24 +53,46 @@ public class FilteringDomVisitor implements DomWalker.Visitor {
                 return false;
             }
 
-            // Skip data tables, keep track of them to be extracted by RelevantElementsFinder later.
-            if (e.hasTagName("TABLE")) {
-                TableClassifier.Type type = TableClassifier.table(TableElement.as(e));
-                logTableInfo(e, type);
-                if (type == TableClassifier.Type.DATA) {
-                    dataTables.add(e);
-                    return false;
-                }
-            }
+            switch (e.getTagName()) {
+                // Skip data tables, keep track of them to be extracted by RelevantElementsFinder
+                // later.
+                case "TABLE":
+                    TableClassifier.Type type = TableClassifier.table(TableElement.as(e));
+                    logTableInfo(e, type);
+                    if (type == TableClassifier.Type.DATA) {
+                        dataTables.add(e);
+                        return false;
+                    }
+                    break;
 
-            // Some components are revisited later in context as they break text-flow of a document.
-            // e.g. <video> can contain text if format is unsupported.
-            if (sTagsProcessedAsABlock.contains(e.getTagName())) {
-                if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_VISIBILITY_INFO)) {
-                    LogUtil.logToConsole("SKIP " + e.getTagName() + " from processing. " +
-                            "It may be restored later.");
-                }
-                return false;
+                // Some components are revisited later in context as they break text-flow of a
+                // document.  e.g. <video> can contain text if format is unsupported.
+                case "FIGURE":
+                case "VIDEO":
+                    if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_VISIBILITY_INFO)) {
+                        LogUtil.logToConsole("SKIP " + e.getTagName() + " from processing. " +
+                                "It may be restored later.");
+                    }
+                    // TODO(cjhopman): These should probably call domVisitor.skip();
+                    return false;
+
+
+                // These element types are all skipped (but may affect document construction).
+                case "OPTION":
+                case "OBJECT":
+                case "EMBED":
+                case "APPLET":
+                    skip(e);
+                    return false;
+
+                // These types are skipped and don't affect document construction.
+                case "HEAD":
+                case "STYLE":
+                case "SCRIPT":
+                case "LINK":
+                case "NOSCRIPT":
+                    return false;
+
             }
         }
         return domVisitor.visit(n);

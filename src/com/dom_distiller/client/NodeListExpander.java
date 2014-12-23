@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 
@@ -46,6 +47,10 @@ public class NodeListExpander {
             nodeMatcher = new OrderedNodeMatcher(nodes);
             currentPath = new ArrayList<Node>();
             subtreePath = new ArrayList<NodeTree>();
+        }
+
+        @Override
+        public void skip(Element e) {
         }
 
         @Override

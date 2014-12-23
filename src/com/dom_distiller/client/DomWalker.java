@@ -4,6 +4,7 @@
 
 package com.dom_distiller.client;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 
 /**
@@ -26,6 +27,11 @@ class DomWalker {
          * Called when exiting a node. I.e. after visiting all of its children.
          */
         public void exit(Node n);
+
+        /**
+         * Called when skipping an element. A normal walk doesn't skip any elements.
+         */
+        public void skip(Element e);
     }
 
     public DomWalker(Visitor v) {

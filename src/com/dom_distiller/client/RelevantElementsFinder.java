@@ -99,6 +99,10 @@ public class RelevantElementsFinder {
         }
 
         @Override
+        public void skip(Element e) {
+        }
+
+        @Override
         public boolean visit(Node n) {
             if (nodeMatcher.isFinished() && !inContent) {
                 return false;
@@ -140,7 +144,8 @@ public class RelevantElementsFinder {
         }
 
         @Override
-        public void exit(Node n) {}
+        public void exit(Node n) {
+        }
 
         private boolean isNonWhitespaceTextNode(Node n) {
             return n.getNodeType() == Node.TEXT_NODE &&
@@ -225,7 +230,12 @@ public class RelevantElementsFinder {
         }
 
         @Override
-        public void exit(Node n) {}
+        public void skip(Element e) {
+        }
+
+        @Override
+        public void exit(Node n) {
+        }
     }  // ElementVisitor
 
     /**

@@ -39,55 +39,6 @@ public abstract class CommonTagActions {
     private CommonTagActions() {
     }
 
-    public static final class Chained implements TagAction {
-
-        private final TagAction t1;
-        private final TagAction t2;
-
-        public Chained(final TagAction t1, final TagAction t2) {
-            this.t1 = t1;
-            this.t2 = t2;
-        }
-
-        @Override
-        public boolean start(BoilerpipeHTMLContentHandler instance, Element e) {
-            return t1.start(instance, e) | t2.start(instance, e);
-        }
-
-        @Override
-        public boolean end(BoilerpipeHTMLContentHandler instance) {
-            return t1.end(instance) | t2.end(instance);
-        }
-
-        @Override
-        public boolean changesTagLevel() {
-            return t1.changesTagLevel() || t2.changesTagLevel();
-        }
-    }
-
-    /**
-     * Marks this tag as "ignorable", i.e. all its inner content is silently skipped.
-     */
-    public static final TagAction TA_IGNORABLE_ELEMENT = new TagAction() {
-
-        @Override
-        public boolean start(final BoilerpipeHTMLContentHandler instance, final Element e) {
-            instance.inIgnorableElement++;
-            return true;
-        }
-
-        @Override
-        public boolean end(final BoilerpipeHTMLContentHandler instance) {
-            instance.inIgnorableElement--;
-            return true;
-        }
-
-        @Override
-        public boolean changesTagLevel() {
-            return true;
-        }
-    };
-
     /**
      * Marks this tag as "anchor" (this should usually only be set for the <code>&lt;A&gt;</code> tag).
      * Anchor tags may not be nested.
@@ -98,7 +49,7 @@ public abstract class CommonTagActions {
         @Override
         public boolean start(BoilerpipeHTMLContentHandler instance, final Element e) {
             lastAnchorHadHref = false;
-            if (instance.inIgnorableElement == 0  && e.hasAttribute("href")) {
+            if (e.hasAttribute("href")) {
                 instance.addWhitespaceIfNecessary();
                 instance.tokenBuffer
                     .append(BoilerpipeHTMLContentHandler.ANCHOR_TEXT_START);
@@ -111,7 +62,7 @@ public abstract class CommonTagActions {
 
         @Override
         public boolean end(BoilerpipeHTMLContentHandler instance) {
-            if (instance.inIgnorableElement == 0 && lastAnchorHadHref) {
+            if (lastAnchorHadHref) {
                 instance.addWhitespaceIfNecessary();
                 instance.tokenBuffer
                         .append(BoilerpipeHTMLContentHandler.ANCHOR_TEXT_END);
@@ -127,29 +78,6 @@ public abstract class CommonTagActions {
         }
     };
 
-    /**
-     * Marks this tag the body element (this should usually only be set for the <code>&lt;BODY&gt;</code> tag).
-     */
-    public static final TagAction TA_BODY = new TagAction() {
-        @Override
-        public boolean start(final BoilerpipeHTMLContentHandler instance, final Element e) {
-            instance.flushBlock();
-            instance.inBody++;
-            return false;
-        }
-
-        @Override
-        public boolean end(final BoilerpipeHTMLContentHandler instance) {
-            instance.flushBlock();
-            instance.inBody--;
-            return false;
-        }
-
-        @Override
-        public boolean changesTagLevel() {
-            return true;
-        }
-    };
 
     /**
      * Marks this tag a simple "inline" element, which neither generates whitespace, nor a new block.

@@ -33,6 +33,9 @@ class SimpleContentHandler implements ContentHandler {
     public void startDocument() {}
 
     @Override
+    public void skipElement(Element element) {}
+
+    @Override
     public void startElement(Element element) {
         documentStringBuilder.append("<");
         documentStringBuilder.append(element.getTagName());

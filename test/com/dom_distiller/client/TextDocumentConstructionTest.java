@@ -29,15 +29,6 @@ public class TextDocumentConstructionTest extends DomDistillerTestCase {
 
     // This is the <body> of gwt's doc/javadoc/help-doc.html
     private String html =
-        "<script type=\"text/javascript\"><!--" +
-        "    if (location.href.indexOf('is-external=true') == -1) {" +
-        "        parent.document.title=\"API Help (Google Web Toolkit Javadoc)\";" +
-        "    }" +
-        "//-->" +
-        "</script>" +
-        "<noscript>" +
-        "<div>JavaScript is disabled on your browser.</div>" +
-        "</noscript>" +
         "<!-- ========= START OF TOP NAVBAR ======= -->" +
         "<div class=\"topNav\"><a name=\"navbar_top\">" +
         "<!--   -->" +
@@ -69,16 +60,6 @@ public class TextDocumentConstructionTest extends DomDistillerTestCase {
         "<li><a href=\"allclasses-noframe.html\">All Classes</a></li>" +
         "</ul>" +
         "<div>" +
-        "<script type=\"text/javascript\"><!--" +
-        "  allClassesLink = document.getElementById(\"allclasses_navbar_top\");" +
-        "  if(window==top) {" +
-        "    allClassesLink.style.display = \"block\";" +
-        "  }" +
-        "  else {" +
-        "    allClassesLink.style.display = \"none\";" +
-        "  }" +
-        "  //-->" +
-        "</script>" +
         "</div>" +
         "<a name=\"skip-navbar_top\">" +
         "<!--   -->" +
@@ -224,16 +205,6 @@ public class TextDocumentConstructionTest extends DomDistillerTestCase {
         "<li><a href=\"allclasses-noframe.html\">All Classes</a></li>" +
         "</ul>" +
         "<div>" +
-        "<script type=\"text/javascript\"><!--" +
-        "  allClassesLink = document.getElementById(\"allclasses_navbar_bottom\");" +
-        "  if(window==top) {" +
-        "    allClassesLink.style.display = \"block\";" +
-        "  }" +
-        "  else {" +
-        "    allClassesLink.style.display = \"none\";" +
-        "  }" +
-        "  //-->" +
-        "</script>" +
         "</div>" +
         "<a name=\"skip-navbar_bottom\">" +
         "<!--   -->" +

@@ -114,4 +114,15 @@ public class FilteringDomVisitorTest extends DomDistillerTestCase {
                       "</table>";
         runTest(html, html);
     }
+
+    public void testIgnorableElementsNonDataTable() throws Throwable {
+        runTest("<style></style>", "");
+        runTest("<link></link>", "");
+        runTest("<script></script>", "");
+        runTest("<noscript></noscript>", "");
+        runTest("<applet></applet>", "");
+        runTest("<object></object>", "");
+        runTest("<option></option>", "");
+        runTest("<embed></embed>", "");
+    }
 }

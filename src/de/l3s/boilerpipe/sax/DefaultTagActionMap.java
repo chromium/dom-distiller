@@ -38,17 +38,7 @@ public class DefaultTagActionMap {
     private HashMap<String, TagAction> actions = new HashMap<String, TagAction>();
 
     protected DefaultTagActionMap() {
-        setTagAction("STYLE", CommonTagActions.TA_IGNORABLE_ELEMENT);
-        setTagAction("SCRIPT", CommonTagActions.TA_IGNORABLE_ELEMENT);
-        setTagAction("OPTION", CommonTagActions.TA_IGNORABLE_ELEMENT);
-        setTagAction("OBJECT", CommonTagActions.TA_IGNORABLE_ELEMENT);
-        setTagAction("EMBED", CommonTagActions.TA_IGNORABLE_ELEMENT);
-        setTagAction("APPLET", CommonTagActions.TA_IGNORABLE_ELEMENT);
-        setTagAction("LINK", CommonTagActions.TA_IGNORABLE_ELEMENT);
-        setTagAction("NOSCRIPT", CommonTagActions.TA_IGNORABLE_ELEMENT);
-
         setTagAction("A", CommonTagActions.TA_ANCHOR_TEXT);
-        setTagAction("BODY", CommonTagActions.TA_BODY);
 
         setTagAction("LI", new CommonTagActions.BlockTagLabelAction(
             new LabelAction(DefaultLabels.LI)));

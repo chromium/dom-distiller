@@ -35,6 +35,9 @@ public class DomWalkerTest extends DomDistillerTestCase {
         final Iterator<VisitData> it = data.iterator();
         new DomWalker(new DomWalker.Visitor() {
             @Override
+            public void skip(Element e) {}
+
+            @Override
             public boolean visit(Node n) {
                 assertEquals(Node.ELEMENT_NODE, n.getNodeType());
                 assertTrue(it.hasNext());
