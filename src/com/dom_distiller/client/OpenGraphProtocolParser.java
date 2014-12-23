@@ -355,7 +355,6 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
             if (doPrefixFiltering) {
                 // Attribute selectors with prefix
                 // https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors
-                // TODO(wychen): Test the logic here in Chrome on Android.
                 String query = "";
                 for (Map.Entry<Prefix, String> entry : mPrefixes.entrySet()) {
                     query += "meta[property^=\"" + entry.getValue() + "\"],";
