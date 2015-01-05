@@ -44,7 +44,6 @@ public class JsTestEntry implements EntryPoint {
             Map<String, JsTestSuiteBase.TestCaseResults> results, TestLogger logger) {
         int numTests = 0, failed = 0, skipped = 0;
         TestSuiteResults response = createResults();
-        response.setSuccess(true);
         for (Map.Entry<String, JsTestSuiteBase.TestCaseResults> testCaseEntry :
                 results.entrySet()) {
             for (Map.Entry<String, JsTestSuiteBase.TestResult> testEntry :
@@ -58,6 +57,7 @@ public class JsTestEntry implements EntryPoint {
             }
         }
 
+        response.setSuccess(failed == 0);
         response.setNumTests(numTests);
         response.setFailed(failed);
         response.setSkipped(skipped);
