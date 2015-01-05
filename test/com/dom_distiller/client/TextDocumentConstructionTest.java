@@ -217,184 +217,184 @@ public class TextDocumentConstructionTest extends DomDistillerTestCase {
     //   | sed -e 's/"/\\"/g' -e 's/\(\[[01][m;]\)/\\u001B\1/g' -e 's/\(.*\)/        "\1\\n" +/'
     //   > /tmp/expected
     private String expectedDebugString =
-        "[0-0;tl=6; nw=1;nwl=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[0-0;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Overview\n" +
-        "[1-1;tl=5; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[1-1;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Package\n" +
-        "[2-2;tl=5; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[2-2;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Class\n" +
-        "[3-3;tl=5; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[3-3;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Use\n" +
-        "[4-4;tl=6; nw=1;nwl=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[4-4;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Tree\n" +
-        "[5-5;tl=6; nw=1;nwl=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[5-5;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Deprecated\n" +
-        "[6-6;tl=6; nw=1;nwl=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[6-6;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Index\n" +
-        "[7-7;tl=5; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[7-7;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Help\n" +
-        "[8-8;tl=4; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30mnull\u001B[0m\n" +
+        "[8-8;tl=4; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30mnull\u001B[0m\n" +
         "GWT 2.5.1\n" +
-        "[9-9;tl=5; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[9-9;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Prev\n" +
-        "[10-10;tl=5; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[10-10;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Next\n" +
-        "[11-11;tl=6; nw=1;nwl=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[11-11;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Frames\n" +
-        "[12-12;tl=6; nw=2;nwl=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[12-12;tl=6; nw=2;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "No Frames\n" +
-        "[13-13;tl=6; nw=2;nwl=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[13-13;tl=6; nw=2;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "All Classes\n" +
-        "[14-14;tl=4; nw=6;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H1, de.l3s.boilerpipe/HEADING]\u001B[0m\n" +
+        "[14-14;tl=4; nw=6;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H1, de.l3s.boilerpipe/HEADING]\u001B[0m\n" +
         "How This API Document Is Organized\n" +
-        "[15-15;tl=4; nw=19;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30mnull\u001B[0m\n" +
+        "[15-15;tl=4; nw=19;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30mnull\u001B[0m\n" +
         "This API (Application Programming Interface) document has pages corresponding to the items in the navigation bar, described as follows.\n" +
-        "[16-16;tl=6; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[16-16;tl=6; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Overview\n" +
-        "[17-17;tl=6; nw=36;nwl=2;ld=0.027778]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[17-17;tl=6; nw=36;ld=0.027778]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "The Overview page is the front page of this API document and provides a list of all packages with a summary for each.  This page can also contain an overall description of the set of packages.\n" +
-        "[18-18;tl=6; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[18-18;tl=6; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Package\n" +
-        "[19-19;tl=6; nw=25;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[19-19;tl=6; nw=25;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Each package has a page that contains a list of its classes and interfaces, with a summary for each. This page can contain six categories:\n" +
-        "[20-20;tl=7; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[20-20;tl=7; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Interfaces (italic)\n" +
-        "[21-21;tl=7; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[21-21;tl=7; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Classes\n" +
-        "[22-22;tl=7; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[22-22;tl=7; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Enums\n" +
-        "[23-23;tl=7; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[23-23;tl=7; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Exceptions\n" +
-        "[24-24;tl=7; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[24-24;tl=7; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Errors\n" +
-        "[25-25;tl=7; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[25-25;tl=7; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Annotation Types\n" +
-        "[26-26;tl=6; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[26-26;tl=6; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Class/Interface\n" +
-        "[27-27;tl=6; nw=31;nwl=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[27-27;tl=6; nw=31;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Each class, interface, nested class and nested interface has its own separate page. Each of these pages has three sections consisting of a class/interface description, summary tables, and detailed member descriptions:\n" +
-        "[28-28;tl=7; nw=3;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[28-28;tl=7; nw=3;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Class inheritance diagram\n" +
-        "[29-29;tl=7; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[29-29;tl=7; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Direct Subclasses\n" +
-        "[30-30;tl=7; nw=3;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[30-30;tl=7; nw=3;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "All Known Subinterfaces\n" +
-        "[31-31;tl=7; nw=4;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[31-31;tl=7; nw=4;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "All Known Implementing Classes\n" +
-        "[32-32;tl=7; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[32-32;tl=7; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Class/interface declaration\n" +
-        "[33-33;tl=7; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[33-33;tl=7; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Class/interface description\n" +
-        "[34-34;tl=7; nw=3;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[34-34;tl=7; nw=3;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Nested Class Summary\n" +
-        "[35-35;tl=7; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[35-35;tl=7; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Field Summary\n" +
-        "[36-36;tl=7; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[36-36;tl=7; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Constructor Summary\n" +
-        "[37-37;tl=7; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[37-37;tl=7; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Method Summary\n" +
-        "[38-38;tl=7; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[38-38;tl=7; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Field Detail\n" +
-        "[39-39;tl=7; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[39-39;tl=7; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Constructor Detail\n" +
-        "[40-40;tl=7; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[40-40;tl=7; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Method Detail\n" +
-        "[41-41;tl=6; nw=42;nwl=3;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[41-41;tl=6; nw=42;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Each summary entry contains the first sentence from the detailed description for that item. The summary entries are alphabetical, while the detailed descriptions are in the order they appear in the source code. This preserves the logical groupings established by the programmer.\n" +
-        "[42-42;tl=6; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[42-42;tl=6; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Annotation Type\n" +
-        "[43-43;tl=6; nw=12;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[43-43;tl=6; nw=12;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Each annotation type has its own separate page with the following sections:\n" +
-        "[44-44;tl=7; nw=3;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[44-44;tl=7; nw=3;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Annotation Type declaration\n" +
-        "[45-45;tl=7; nw=3;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[45-45;tl=7; nw=3;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Annotation Type description\n" +
-        "[46-46;tl=7; nw=3;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[46-46;tl=7; nw=3;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Required Element Summary\n" +
-        "[47-47;tl=7; nw=3;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[47-47;tl=7; nw=3;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Optional Element Summary\n" +
-        "[48-48;tl=7; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[48-48;tl=7; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Element Detail\n" +
-        "[49-49;tl=6; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[49-49;tl=6; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Enum\n" +
-        "[50-50;tl=6; nw=11;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[50-50;tl=6; nw=11;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Each enum has its own separate page with the following sections:\n" +
-        "[51-51;tl=7; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[51-51;tl=7; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Enum declaration\n" +
-        "[52-52;tl=7; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[52-52;tl=7; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Enum description\n" +
-        "[53-53;tl=7; nw=3;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[53-53;tl=7; nw=3;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Enum Constant Summary\n" +
-        "[54-54;tl=7; nw=3;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[54-54;tl=7; nw=3;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Enum Constant Detail\n" +
-        "[55-55;tl=6; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[55-55;tl=6; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Use\n" +
-        "[56-56;tl=6; nw=84;nwl=6;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[56-56;tl=6; nw=84;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Each documented package, class and interface has its own Use page.  This page describes what packages, classes, methods, constructors and fields use any part of the given class or package. Given a class or interface A, its Use page includes subclasses of A, fields declared as A, methods that return A, and methods and constructors with parameters of type A.  You can access this page by first going to the package, class or interface, then clicking on the \"Use\" link in the navigation bar.\n" +
-        "[57-57;tl=6; nw=3;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[57-57;tl=6; nw=3;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Tree (Class Hierarchy)\n" +
-        "[58-58;tl=6; nw=45;nwl=3;ld=0.044444]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[58-58;tl=6; nw=45;ld=0.044444]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "There is a Class Hierarchy page for all packages, plus a hierarchy for each package. Each hierarchy page contains a list of classes and a list of interfaces. The classes are organized by inheritance structure starting with java.lang.Object. The interfaces do not inherit from java.lang.Object.\n" +
-        "[59-59;tl=7; nw=14;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[59-59;tl=7; nw=14;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "When viewing the Overview page, clicking on \"Tree\" displays the hierarchy for all packages.\n" +
-        "[60-60;tl=7; nw=18;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[60-60;tl=7; nw=18;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "When viewing a particular package, class or interface page, clicking \"Tree\" displays the hierarchy for only that package.\n" +
-        "[61-61;tl=6; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[61-61;tl=6; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Deprecated API\n" +
-        "[62-62;tl=6; nw=40;nwl=3;ld=0.05]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[62-62;tl=6; nw=40;ld=0.05]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "The Deprecated API page lists all of the API that have been deprecated. A deprecated API is not recommended for use, generally due to improvements, and a replacement API is usually given. Deprecated APIs may be removed in future implementations.\n" +
-        "[63-63;tl=6; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[63-63;tl=6; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Index\n" +
-        "[64-64;tl=6; nw=14;nwl=1;ld=0.071429]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[64-64;tl=6; nw=14;ld=0.071429]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "The Index contains an alphabetic list of all classes, interfaces, constructors, methods, and fields.\n" +
-        "[65-65;tl=6; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[65-65;tl=6; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Prev/Next\n" +
-        "[66-66;tl=6; nw=15;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[66-66;tl=6; nw=15;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "These links take you to the next or previous class, interface, package, or related page.\n" +
-        "[67-67;tl=6; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[67-67;tl=6; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Frames/No Frames\n" +
-        "[68-68;tl=6; nw=16;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[68-68;tl=6; nw=16;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "These links show and hide the HTML frames.  All pages are available with or without frames.\n" +
-        "[69-69;tl=6; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[69-69;tl=6; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "All Classes\n" +
-        "[70-70;tl=6; nw=13;nwl=1;ld=0.153846]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[70-70;tl=6; nw=13;ld=0.153846]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "The All Classes link shows all classes and interfaces except non-static nested types.\n" +
-        "[71-71;tl=6; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[71-71;tl=6; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Serialized Form\n" +
-        "[72-72;tl=6; nw=61;nwl=4;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[72-72;tl=6; nw=61;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Each serializable or externalizable class has a description of its serialization fields and methods. This information is of interest to re-implementors, not to developers using the API. While there is no link in the navigation bar, you can get to this information by going to any serialized class and clicking \"Serialized Form\" in the \"See also\" section of the class description.\n" +
-        "[73-73;tl=6; nw=3;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[73-73;tl=6; nw=3;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Constant Field Values\n" +
-        "[74-74;tl=6; nw=13;nwl=1;ld=0.230769]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[74-74;tl=6; nw=13;ld=0.230769]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "The Constant Field Values page lists the static final fields and their values.\n" +
-        "[75-75;tl=3; nw=12;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30mnull\u001B[0m\n" +
+        "[75-75;tl=3; nw=12;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30mnull\u001B[0m\n" +
         "This help file applies to API documentation generated using the standard doclet.\n" +
-        "[76-76;tl=6; nw=1;nwl=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[76-76;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Overview\n" +
-        "[77-77;tl=5; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[77-77;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Package\n" +
-        "[78-78;tl=5; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[78-78;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Class\n" +
-        "[79-79;tl=5; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[79-79;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Use\n" +
-        "[80-80;tl=6; nw=1;nwl=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[80-80;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Tree\n" +
-        "[81-81;tl=6; nw=1;nwl=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[81-81;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Deprecated\n" +
-        "[82-82;tl=6; nw=1;nwl=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[82-82;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Index\n" +
-        "[83-83;tl=5; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[83-83;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Help\n" +
-        "[84-84;tl=4; nw=2;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30mnull\u001B[0m\n" +
+        "[84-84;tl=4; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30mnull\u001B[0m\n" +
         "GWT 2.5.1\n" +
-        "[85-85;tl=5; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[85-85;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Prev\n" +
-        "[86-86;tl=5; nw=1;nwl=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[86-86;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Next\n" +
-        "[87-87;tl=6; nw=1;nwl=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[87-87;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Frames\n" +
-        "[88-88;tl=6; nw=2;nwl=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[88-88;tl=6; nw=2;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "No Frames\n" +
-        "[89-89;tl=6; nw=2;nwl=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
+        "[89-89;tl=6; nw=2;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "All Classes\n";
 }

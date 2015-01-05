@@ -50,38 +50,32 @@ public class TextBlock implements Cloneable {
 
     int numWords;
     int numWordsInAnchorText;
-    int numWordsInWrappedLines;
-    int numWrappedLines;
-    float textDensity;
     float linkDensity;
 
     List<Node> nonWhitespaceTextElements;
     List<Node> allTextElements;
 
     private int numFullTextWords = 0;
-	private int tagLevel;
+    private int tagLevel;
 
     public static final List<Node> EMPTY_NODE_LIST = new LinkedList<Node>();
     public static final TextBlock EMPTY_START = new TextBlock("", EMPTY_NODE_LIST, EMPTY_NODE_LIST,
-            0, 0, 0, 0, -1);
+            0, 0, -1);
     public static final TextBlock EMPTY_END = new TextBlock("", EMPTY_NODE_LIST, EMPTY_NODE_LIST,
-            0, 0, 0, 0, Integer.MAX_VALUE);
+            0, 0, Integer.MAX_VALUE);
 
     public TextBlock(final String text) {
-        this(text, EMPTY_NODE_LIST, EMPTY_NODE_LIST, 0,0,0,0,0);
+        this(text, EMPTY_NODE_LIST, EMPTY_NODE_LIST, 0, 0, 0);
     }
 
     public TextBlock(final String text, final List<Node> containedTextElements,
             List<Node> allTextElements, final int numWords, final int numWordsInAnchorText,
-            final int numWordsInWrappedLines, final int numWrappedLines,
             final int offsetBlocks) {
         this.text = text;
         this.nonWhitespaceTextElements = new LinkedList<Node>(containedTextElements);
         this.allTextElements = new LinkedList<Node>(allTextElements);
         this.numWords = numWords;
         this.numWordsInAnchorText = numWordsInAnchorText;
-        this.numWordsInWrappedLines = numWordsInWrappedLines;
-        this.numWrappedLines = numWrappedLines;
         this.offsetBlocksStart = offsetBlocks;
         this.offsetBlocksEnd = offsetBlocks;
         initDensities();
@@ -112,10 +106,6 @@ public class TextBlock implements Cloneable {
         return numWordsInAnchorText;
     }
 
-    public float getTextDensity() {
-        return textDensity;
-    }
-
     public float getLinkDensity() {
         return linkDensity;
     }
@@ -131,11 +121,8 @@ public class TextBlock implements Cloneable {
         numWords += other.numWords;
         numWordsInAnchorText += other.numWordsInAnchorText;
 
-        numWordsInWrappedLines += other.numWordsInWrappedLines;
-        numWrappedLines += other.numWrappedLines;
-
         offsetBlocksStart = Math
-                .min(offsetBlocksStart, other.offsetBlocksStart);
+            .min(offsetBlocksStart, other.offsetBlocksStart);
         offsetBlocksEnd = Math.max(offsetBlocksEnd, other.offsetBlocksEnd);
 
         initDensities();
@@ -165,11 +152,6 @@ public class TextBlock implements Cloneable {
     }
 
     private void initDensities() {
-        if (numWordsInWrappedLines == 0) {
-            numWordsInWrappedLines = numWords;
-            numWrappedLines = 1;
-        }
-        textDensity = numWordsInWrappedLines / (float) numWrappedLines;
         linkDensity = numWords == 0 ? 0 : numWordsInAnchorText / (float) numWords;
     }
 
@@ -197,9 +179,9 @@ public class TextBlock implements Cloneable {
 
     @Override
     public String toString() {
-        return "[" + offsetBlocksStart + "-" + offsetBlocksEnd + ";tl="+tagLevel+"; nw="+numWords+";nwl="+numWrappedLines+";ld="+linkDensityDebugString()+"]\t" +
-                (isContent ? LogUtil.kGreen + "CONTENT" : LogUtil.kPurple + "boilerplate") + LogUtil.kReset +
-                "," + LogUtil.kDarkGray + labelsDebugString() + LogUtil.kReset + "\n" + getText();
+        return "[" + offsetBlocksStart + "-" + offsetBlocksEnd + ";tl="+tagLevel+"; nw="+numWords+";ld="+linkDensityDebugString()+"]\t" +
+            (isContent ? LogUtil.kGreen + "CONTENT" : LogUtil.kPurple + "boilerplate") + LogUtil.kReset +
+            "," + LogUtil.kDarkGray + labelsDebugString() + LogUtil.kReset + "\n" + getText();
     }
 
 
@@ -227,7 +209,7 @@ public class TextBlock implements Cloneable {
     }
 
     public boolean removeLabel(final String label) {
-    	return labels != null && labels.remove(label);
+        return labels != null && labels.remove(label);
     }
 
     /**
@@ -313,11 +295,11 @@ public class TextBlock implements Cloneable {
         return null;
     }
 
-	public int getTagLevel() {
-		return tagLevel;
-	}
+    public int getTagLevel() {
+        return tagLevel;
+    }
 
-	public void setTagLevel(int tagLevel) {
-		this.tagLevel = tagLevel;
-	}
+    public void setTagLevel(int tagLevel) {
+        this.tagLevel = tagLevel;
+    }
 }

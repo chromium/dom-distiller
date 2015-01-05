@@ -25,7 +25,7 @@ class TestTextDocumentBuilder {
         TextBlock block = new TextBlock(
                 text,
                 TextBlock.EMPTY_NODE_LIST, TextBlock.EMPTY_NODE_LIST,
-                numWords, numWords, numWords, 0,
+                numWords, numWords,
                 textBlockIndex++);
         block.setIsContent(false);
         for (String label : labels) {

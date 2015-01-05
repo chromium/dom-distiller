@@ -19,7 +19,6 @@ package de.l3s.boilerpipe.extractors;
 
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextDocument;
-import de.l3s.boilerpipe.filters.heuristics.SimpleBlockFusionProcessor;
 import de.l3s.boilerpipe.filters.simple.MarkEverythingContentFilter;
 import de.l3s.boilerpipe.filters.simple.MinWordsFilter;
 
@@ -40,8 +39,7 @@ public final class KeepEverythingWithMinKWordsExtractor {
 
     public boolean process(TextDocument doc)
             throws BoilerpipeProcessingException {
-        return SimpleBlockFusionProcessor.INSTANCE.process(doc)
-                | MarkEverythingContentFilter.INSTANCE.process(doc)
+        return MarkEverythingContentFilter.INSTANCE.process(doc)
                 | filter.process(doc);
     }
 

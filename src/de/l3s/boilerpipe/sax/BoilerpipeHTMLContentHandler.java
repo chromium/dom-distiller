@@ -262,9 +262,6 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 
         int numWords = 0;
         int numLinkedWords = 0;
-        int numWrappedLines = 0;
-        int currentLineLength = -1; // don't count the first space
-        final int maxLineLength = 80;
         int numTokens = 0;
         int numWordsCurrentLine = 0;
 
@@ -276,16 +273,8 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
             } else if (isWord(token)) {
                 numTokens++;
                 numWords++;
-                numWordsCurrentLine++;
                 if (inAnchorText) {
                     numLinkedWords++;
-                }
-                final int tokenLength = token.length();
-                currentLineLength += tokenLength + 1;
-                if (currentLineLength > maxLineLength) {
-                    numWrappedLines++;
-                    currentLineLength = tokenLength;
-                    numWordsCurrentLine = 1;
                 }
             } else {
                 numTokens++;
@@ -295,17 +284,10 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
             clearTextBuffers();
             return;
         }
-        int numWordsInWrappedLines;
-        if (numWrappedLines == 0) {
-            numWordsInWrappedLines = numWords;
-            numWrappedLines = 1;
-        } else {
-            numWordsInWrappedLines = numWords - numWordsCurrentLine;
-        }
 
         TextBlock tb = new TextBlock(StringUtil.javaTrim(textBuffer.toString()),
                 nonWhitespaceTextElements, allTextElements, numWords, numLinkedWords,
-                numWordsInWrappedLines, numWrappedLines, offsetBlocks);
+                offsetBlocks);
 
         offsetBlocks++;
 
