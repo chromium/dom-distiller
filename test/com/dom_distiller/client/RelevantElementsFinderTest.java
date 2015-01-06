@@ -129,6 +129,33 @@ public class RelevantElementsFinderTest extends DomDistillerTestCase {
         assertEquals(contentText, contentAndImages.get(1));
     }
 
+    public void testMultipleHeaderImagesEqualScore() {
+        // Only the earliest, high-scoring image should be selected.
+        Node root = TestUtil.createDiv(0);
+        Element goodImage = TestUtil.createImage();
+        goodImage.getStyle().setProperty("width", "600px");
+        goodImage.getStyle().setProperty("height", "350px");
+        goodImage.getStyle().setProperty("display", "block");
+        root.appendChild(goodImage);
+
+        Element lateImage = TestUtil.createImage();
+        lateImage.getStyle().setProperty("width", "600px");
+        lateImage.getStyle().setProperty("height", "350px");
+        lateImage.getStyle().setProperty("display", "block");
+        root.appendChild(lateImage);
+
+        Node contentText = TestUtil.createText("content");
+        root.appendChild(contentText);
+
+        List<Node> contentNodes = Arrays.<Node>asList(contentText);
+        List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,
+                mEmptySet, mEmptySet, root);
+
+        assertEquals(2, contentAndImages.size());
+        assertEquals(goodImage, contentAndImages.get(0));
+        assertEquals(contentText, contentAndImages.get(1));
+    }
+
     public void testImageAfterContent() {
         Node root = TestUtil.createDiv(0);
         Node contentText = TestUtil.createText("content");

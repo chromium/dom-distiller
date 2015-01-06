@@ -36,6 +36,8 @@ public class RelevantElementsFinder {
                     finder.contentAndElements.remove(topImage.imageNode);
                 }
                 topImage = info;
+            } else {
+                finder.contentAndElements.remove(info.imageNode);
             }
         }
 
