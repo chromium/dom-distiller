@@ -10,4 +10,8 @@ package com.dom_distiller.client;
 public class JsTestCase extends Assert {
     public void setUp() throws Exception {}
     public void tearDown() throws Exception {}
+
+    protected void disableAssertConsoleTrace() {
+        setDumpTraceOnFailure(false);
+    }
 }

@@ -25,4 +25,11 @@ public class TestLogger {
     public String getLog() {
         return logBuffer.toString();
     }
+
+    public static class NullLogger extends TestLogger {
+        @Override
+        public void log(int logLevel, String message) {
+        }
+    }
+
 }

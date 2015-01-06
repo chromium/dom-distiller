@@ -8,7 +8,14 @@
   <property environment="env"/>
   <!-- Arguments to gwtc and devmode targets -->
   <property name="gwt.args" value="-XclosureCompiler -XnoclassMetadata -XnocheckCasts -style OBF" />
-  <property name="gwt.test.args" value="-XnoclosureCompiler -optimize 0 -style DETAILED"/>
+  <property
+    name="gwt.test.args"
+    value="
+    -XnoclosureCompiler -optimize 0 -draftCompile
+    -style DETAILED
+    -saveSource -saveSourceOutput out/debug
+    -XmethodNameDisplayMode ABBREVIATED
+    "/>
   <property name="gwt.shared.args" value="-failOnError -war war -XjsInteropMode JS -gen out/gen" />
   <property name="gwt.custom.args" value="" />
 
@@ -25,6 +32,7 @@
   <target name="setup">
     <mkdir dir="out"/>
     <mkdir dir="out/gen"/>
+    <mkdir dir="out/debug"/>
   </target>
 
   <path id="project.java.path">
@@ -48,10 +56,6 @@
   <path id="protoc.test.java.output">
     <pathelement location="out/test/proto" />
   </path>
-
-  <union id="project.non.java.files">
-    <fileset dir="src" excludes="**/*.java"/>
-  </union>
 
   <target name="protoc.plugin.base"
       description="Generates proto stuff needed for the gwt_overlay plugin">
@@ -95,9 +99,6 @@
       <src refid="protoc.java.output" />
       <classpath refid="project.class.path"/>
     </javac>
-    <copy todir="war/WEB-INF/classes">
-      <resources refid="project.non.java.files" />
-    </copy>
   </target>
 
   <target name="gwtc" depends="javac" description="GWT compile to JavaScript (production mode)">
@@ -123,9 +124,9 @@
     <exec executable="python" failonerror="true">
       <arg value="create_standalone_js.py"/>
       <arg line="--module domdistiller"/>
-      <arg line="-i war/domdistiller/domdistiller.nocache.js"/>
-      <arg line="-o out/domdistiller.js"/>
+      <arg value="--auto"/>
     </exec>
+
   </target>
 
   <target name="package" depends="extractjs, protoc.json"
@@ -160,7 +161,7 @@
     </apply>
   </target>
 
-  <target name="javac.tests" depends="javac, protoc.tests" description="Compiles test code">
+  <target name="javac.tests" depends="setup, javac, protoc.tests" description="Compiles test code">
     <mkdir dir="war/WEB-INF/test/classes"/>
     <javac includes="**" encoding="utf-8"
       source="1.7" target="1.7" nowarn="true"
@@ -210,8 +211,8 @@
     <exec executable="python" failonerror="true">
       <arg value="create_standalone_js.py"/>
       <arg line="--module domdistillerjstest"/>
-      <arg line="-i war/domdistillerjstest/domdistillerjstest.nocache.js"/>
-      <arg line="-o out/domdistillerjstest.js"/>
+      <arg value="--auto"/>
+      <arg value="--sourcemaps"/>
     </exec>
   </target>
 

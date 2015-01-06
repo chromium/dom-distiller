@@ -33,11 +33,29 @@ public class JsTestEntry implements EntryPoint {
     @JsExport
     public static TestSuiteResults run() {
         String filter = Window.Location.getParameter("filter");
+        return run(filter);
+    }
+
+    @JsExport
+    public static TestSuiteResults run(String filter) {
         JsTestSuiteBuilder builder = GWT.<JsTestSuiteBuilder>create(JsTestSuiteBuilder.class);
         TestLogger logger = new TestLogger();
         Map<String, JsTestSuiteBase.TestCaseResults> results = builder.build().run(logger, filter);
-
         return createTestSuiteResults(results, logger);
+    }
+
+    @JsExport
+    public static void printTestNames() {
+        JsTestSuiteBuilder builder = GWT.<JsTestSuiteBuilder>create(JsTestSuiteBuilder.class);
+        Map<String, JsTestSuiteBase.TestCaseResults> results = builder.build().run(
+                new TestLogger.NullLogger(), "$^");
+        for (Map.Entry<String, JsTestSuiteBase.TestCaseResults> testCaseEntry :
+                results.entrySet()) {
+            for (Map.Entry<String, JsTestSuiteBase.TestResult> testEntry :
+                    testCaseEntry.getValue().getResults().entrySet()) {
+                LogUtil.logToConsole(testCaseEntry.getKey() + "." + testEntry.getKey());
+            }
+        }
     }
 
     private static TestSuiteResults createTestSuiteResults(

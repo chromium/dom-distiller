@@ -20,6 +20,15 @@ public class AssertTest extends JsTestCase {
         }
     }
 
+    @Override
+    public void setUp() {
+        disableAssertConsoleTrace();
+    }
+
+    @Override
+    public void tearDown() {
+    }
+
     private static void check(boolean expectSuccess, Checker checker) {
         if (checker.test(false) != expectSuccess) {
             throw new CheckFailedException();

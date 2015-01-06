@@ -17,6 +17,7 @@ import glob
 import optparse
 import os
 import re
+import shutil
 import sys
 
 def ExtractJavascript(content, module):
@@ -49,16 +50,26 @@ def main(argv):
   parser.add_option('-i', '--infile')
   parser.add_option('-o', '--outfile')
   parser.add_option('--module', help='Name of generated javascript module.')
+  parser.add_option('--auto', action='store_true',
+      help='Calculate input/output paths based on module name.')
+  parser.add_option('--sourcemaps', action='store_true',
+      help='Also copy sourcemaps.')
   options, _ = parser.parse_args(argv)
 
-  if options.infile:
-    infile = open(options.infile, 'r')
+  inpath = options.infile
+  outpath = options.outfile
+  if options.auto:
+    inpath = 'war/{0}/{0}.nocache.js'.format(options.module)
+    outpath = 'out/{0}.js'.format(options.module)
+
+  if inpath:
+    infile = open(inpath, 'r')
   else:
     print 'Reading input from stdin'
     infile = sys.stdin
 
-  if options.outfile:
-    outfile = open(options.outfile, 'w')
+  if outpath:
+    outfile = open(outpath, 'w')
   else:
     outfile = sys.stdout
 
@@ -67,6 +78,15 @@ def main(argv):
   # case for the standalone js.
   compiledJs = compiledJs.replace('var $wnd = parent', 'var $wnd = window')
   outfile.write(ExtractJavascript(compiledJs, options.module))
+  if options.sourcemaps:
+    sourcemap = 'debug/{0}/src/{0}.sourcemap'.format(options.module)
+    outfile.write('\n')
+    outfile.write('//@ sourceMappingURL=%s' % sourcemap)
+
+    insourcemap = glob.glob(
+        'war/WEB-INF/deploy/%s/symbolMaps/*sourceMap*' % options.module)[0]
+    outsourcemap = 'out/%s' % sourcemap
+    shutil.copy(insourcemap, outsourcemap)
 
   return 0
 

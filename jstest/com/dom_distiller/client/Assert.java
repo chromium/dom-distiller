@@ -143,9 +143,21 @@ public class Assert {
             (message == null ? "" : ": " + message);
     }
 
+    private static boolean dumpTraceOnFailure = false;
+
     private static class AssertionFailedException extends RuntimeException {
         AssertionFailedException(String message) {
             super(message);
+            if (dumpTraceOnFailure) consoleTrace();
         }
     }
+
+    public static void setDumpTraceOnFailure(boolean v) {
+        dumpTraceOnFailure = v;
+    }
+
+    // The console trace will contain clickable links to source files (w/ line number offset).
+    public static native void consoleTrace() /*-{
+        console.trace();
+    }-*/;
 }

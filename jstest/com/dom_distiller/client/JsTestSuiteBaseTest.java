@@ -22,12 +22,6 @@ public class JsTestSuiteBaseTest extends JsTestCase {
         public void testNothing() {}
     }
 
-    public static class NullLogger extends TestLogger {
-        @Override
-        public void log(int logLevel, String message) {
-        }
-    }
-
     public void testJsTestSuiteSetup() {
         JsTestSuiteBase suite = new JsTestSuiteBase();
         suite.addTestCase(null, "TestClass")
@@ -64,7 +58,7 @@ public class JsTestSuiteBaseTest extends JsTestCase {
             .addTest(null, "testOther2")
             .addTest(null, "testOther3");
 
-        suite.run(new NullLogger(), null);
+        suite.run(new TestLogger.NullLogger(), null);
     }
 
     public void testStackTraceString() {
@@ -80,15 +74,15 @@ public class JsTestSuiteBaseTest extends JsTestCase {
             .addTest(null, "test1")
             .addTest(null, "test2");
         Map<String, JsTestSuiteBase.TestCaseResults> results = suite.run(
-                new NullLogger(), ".*TestClass.*");
+                new TestLogger.NullLogger(), ".*TestClass.*");
         assertFalse(results.get("TestClass").getResults().get("test1").skipped());
         assertFalse(results.get("TestClass").getResults().get("test2").skipped());
 
-        results = suite.run(new NullLogger(), ".*NotTestClass.*");
+        results = suite.run(new TestLogger.NullLogger(), ".*NotTestClass.*");
         assertTrue(results.get("TestClass").getResults().get("test1").skipped());
         assertTrue(results.get("TestClass").getResults().get("test2").skipped());
 
-        results = suite.run(new NullLogger(), ".*TestClass.test1");
+        results = suite.run(new TestLogger.NullLogger(), ".*TestClass.test1");
         assertFalse(results.get("TestClass").getResults().get("test1").skipped());
         assertTrue(results.get("TestClass").getResults().get("test2").skipped());
     }

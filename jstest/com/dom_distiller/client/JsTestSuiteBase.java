@@ -91,6 +91,7 @@ public class JsTestSuiteBase {
             TestCaseResults results = new TestCaseResults(testCaseName);
             try {
                 for (Map.Entry<String, TestCaseRunner> test : tests.entrySet()) {
+                    Assert.setDumpTraceOnFailure(true);
                     TestResult result = new TestResult();
                     if (!filter.test(testCaseName, test.getKey())) {
                         if (debug) logger.log(TestLogger.WARNING, "Skipping " + test.getKey());
@@ -100,8 +101,11 @@ public class JsTestSuiteBase {
                         try {
                             JsTestCase testCase = factory.build();
                             testCase.setUp();
-                            test.getValue().run(testCase);
-                            testCase.tearDown();
+                            try {
+                                test.getValue().run(testCase);
+                            } finally {
+                                testCase.tearDown();
+                            }
                         } catch (Throwable e) {
                             result.setException(e);
                         }
