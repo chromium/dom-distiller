@@ -54,8 +54,9 @@ public class UnicodeTokenizer {
      * @param text The text
      * @return The tokens
      */
-    public static String[] tokenize(final CharSequence text) {
-        String res = replaceWordBoundariesWithMarkers(text);
+    public static String[] tokenize(String text) {
+        String res = StringUtil.findAndReplace(text, "\\s", " ");
+        res = replaceWordBoundariesWithMarkers(res);
         res = replaceNonWordBoundaries(res);
         res = replaceMarkersWithSpace(res);
         res = StringUtil.javaTrim(res);

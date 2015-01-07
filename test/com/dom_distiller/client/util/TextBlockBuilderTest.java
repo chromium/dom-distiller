@@ -5,11 +5,15 @@
 package com.dom_distiller.client.util;
 
 import com.dom_distiller.client.DomDistillerTestCase;
+import com.dom_distiller.client.TestTextDocumentBuilder;
 
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
 
 import de.l3s.boilerpipe.document.TextBlock;
+import de.l3s.boilerpipe.document.TextDocument;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,11 +39,11 @@ public class TextBlockBuilderTest extends DomDistillerTestCase {
         assertEquals(0, block.getOffsetBlocksEnd());
 
         addText(builder, "More", 0);
-        addText(builder, "than", 0);
-        addText(builder, "two", 0);
-        addText(builder, "words.", 0);
+        addText(builder, " than", 0);
+        addText(builder, " two", 0);
+        addText(builder, " words.", 0);
         block = builder.build(1);
-        assertEquals(2, block.getNumWords());
+        assertEquals(4, block.getNumWords());
         assertEquals(0, block.getNumWordsInAnchorText());
         assertEquals("More than two words.", block.getText());
         assertEquals(4, block.getAllTextElements().size());
@@ -56,7 +60,7 @@ public class TextBlockBuilderTest extends DomDistillerTestCase {
         addText(builder, "one", 0);
         builder.enterAnchor();
         addText(builder, "two", 0);
-        addText(builder, "three", 0);
+        addText(builder, " three", 0);
         builder.exitAnchor();
         TextBlock block = builder.build(0);
         assertEquals(3, block.getNumWords());
@@ -96,4 +100,60 @@ public class TextBlockBuilderTest extends DomDistillerTestCase {
         addText(builder, "Deal expires:7d:04h:23m", 0);
         assertEquals(2, builder.build(0).getNumWords());
     }
+
+    public void testWhitespaceAroundAnchor() {
+        TextBlockBuilder builder = new TextBlockBuilder();
+        addText(builder, "The ", 0);
+        builder.enterAnchor();
+        addText(builder, "Overview", 0);
+        builder.exitAnchor();
+        addText(builder, " is", 0);
+        TextBlock tb = builder.build(0);
+        assertEquals("The Overview  is", tb.getText());
+
+    }
+
+    public void testRegression0() {
+        TextBlockBuilder builder = new TextBlockBuilder();
+        String html = "<blockquote><p>“There are plenty of instances where provocation comes into" +
+            " consideration, instigation comes into consideration, and I will be on the record" +
+            " right here on national television and say that I am sick and tired of men" +
+            " constantly being vilified and accused of things and we stop there,”" +
+            " <a href=\"http://deadspin.com/i-do-not-believe-women-provoke-violence-says-stephen" +
+            "-a-1611060016\" target=\"_blank\">Smith said.</a>  “I’m saying, “Can we go a step" +
+            " further?” Since we want to dig all deeper into Chad Johnson, can we dig in deep" +
+            " to her?”</p></blockquote>";
+        Element div = Document.get().createDivElement();
+        div.setInnerHTML(html);
+        TextDocument document = TestTextDocumentBuilder.fromPage(div);
+        List<TextBlock> textBlocks = document.getTextBlocks();
+        assertEquals(1, textBlocks.size());
+        TextBlock tb = textBlocks.get(0);
+        assertEquals(75, tb.getNumWords());
+        assertTrue(0.1 > tb.getLinkDensity());
+    }
+
+    public void testRegression1() {
+        TextBlockBuilder builder = new TextBlockBuilder();
+        String html =
+            "<p>\n" +
+            "<a href=\"example\" target=\"_top\"><u>More news</u></a> | \n" +
+            "<a href=\"example\" target=\"_top\"><u>Search</u></a> | \n" +
+            "<a href=\"example\" target=\"_top\"><u>Features</u></a> | \n" +
+            "<a href=\"example\" target=\"_top\"><u>Blogs</u></a> | \n" +
+            "<a href=\"example\" target=\"_top\"><u>Horse Health</u></a> | \n" +
+            "<a href=\"example\" target=\"_top\"><u>Ask the Experts</u></a> | \n" +
+            "<a href=\"example\" target=\"_top\"><u>Horse Breeding</u></a> | \n" +
+            "<a href=\"example\" target=\"_top\"><u>Forms</u></a> | \n" +
+            "<a href=\"example\" target=\"_top\"><u>Home</u></a> </p>\n";
+        Element div = Document.get().createDivElement();
+        div.setInnerHTML(html);
+        TextDocument document = TestTextDocumentBuilder.fromPage(div);
+        List<TextBlock> textBlocks = document.getTextBlocks();
+        assertEquals(1, textBlocks.size());
+        TextBlock tb = textBlocks.get(0);
+        assertEquals(14, tb.getNumWords());
+        assertEquals(1.0, tb.getLinkDensity(), 0.01);
+    }
+
 }

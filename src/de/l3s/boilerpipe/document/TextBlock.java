@@ -78,6 +78,7 @@ public class TextBlock implements Cloneable {
         this.numWordsInAnchorText = numWordsInAnchorText;
         this.offsetBlocksStart = offsetBlocks;
         this.offsetBlocksEnd = offsetBlocks;
+        this.labels = new HashSet<String>();
         initDensities();
     }
 
@@ -140,13 +141,7 @@ public class TextBlock implements Cloneable {
 
         numFullTextWords += other.numFullTextWords;
 
-        if (other.labels != null) {
-            if (labels == null) {
-                labels = new HashSet<String>(other.labels);
-            } else {
-                labels.addAll(other.labels);
-            }
-        }
+        labels.addAll(other.labels);
 
         tagLevel = Math.min(tagLevel, other.tagLevel);
     }
@@ -173,7 +168,6 @@ public class TextBlock implements Cloneable {
 
     // The labels are in sorted order so that the order is the same in prod/dev.
     private String labelsDebugString() {
-        if (labels == null) return null;
         return new TreeSet<String>(labels).toString();
     }
 
@@ -192,9 +186,6 @@ public class TextBlock implements Cloneable {
      * @see DefaultLabels
      */
     public void addLabel(final String label) {
-        if (labels == null) {
-            labels = new HashSet<String>(2);
-        }
         labels.add(label);
     }
 
@@ -205,11 +196,11 @@ public class TextBlock implements Cloneable {
      * @return <code>true</code> if this block is marked by the given label.
      */
     public boolean hasLabel(final String label) {
-        return labels != null && labels.contains(label);
+        return labels.contains(label);
     }
 
     public boolean removeLabel(final String label) {
-        return labels != null && labels.remove(label);
+        return labels.remove(label);
     }
 
     /**
@@ -236,11 +227,7 @@ public class TextBlock implements Cloneable {
         if(l == null) {
             return;
         }
-        if(this.labels == null) {
-            this.labels = new HashSet<String>(l);
-        } else {
-            this.labels.addAll(l);
-        }
+        this.labels.addAll(l);
     }
 
     /**
@@ -252,9 +239,6 @@ public class TextBlock implements Cloneable {
     public void addLabels(final String... l) {
         if(l == null) {
             return;
-        }
-        if(this.labels == null) {
-            this.labels = new HashSet<String>();
         }
         for(final String label : l) {
             this.labels.add(label);

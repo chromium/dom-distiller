@@ -177,7 +177,7 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         endBodyAndDocument();
         List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
         assertEquals(1, textBlocks.size());
-        assertEquals(TEXT1 + " " + TEXT2 + " " + TEXT3, textBlocks.get(0).getText());
+        assertEquals(TEXT1 + "\n\n" + TEXT2 + "\n\n" + TEXT3, textBlocks.get(0).getText());
         assertEquals(3, textBlocks.get(0).getNonWhitespaceTextElements().size());
         assertEquals(
                 "\n" +
@@ -230,7 +230,7 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
                 "TEXT1\n",
                 joinTextNodes(textBlocks.get(0).getAllTextElements()));
 
-        assertEquals(TEXT2 + " " + TEXT3, textBlocks.get(1).getText());
+        assertEquals(TEXT2 + "\n" + TEXT3, textBlocks.get(1).getText());
         assertEquals(2, textBlocks.get(1).getNonWhitespaceTextElements().size());
         assertEquals(
                 "\n" +
@@ -239,7 +239,7 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
                 joinTextNodes(textBlocks.get(1).getAllTextElements()));
     }
 
-    public void testNonWordCharcterMergedWithNextInlineTextBlock() {
+    public void testNonWordCharacterMergedWithNextInlineTextBlock() {
         //
         // <div>
         //   -
@@ -268,7 +268,7 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
 
         List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
         assertEquals(2, textBlocks.size());
-        assertEquals("- " + TEXT1, textBlocks.get(0).getText());
+        assertEquals("-\n" + TEXT1, textBlocks.get(0).getText());
         assertEquals(2, textBlocks.get(0).getNonWhitespaceTextElements().size());
         assertEquals(
                 "\n" +
@@ -282,7 +282,7 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
                     joinTextNodes(textBlocks.get(1).getAllTextElements()));
     }
 
-    public void testNonWordCharcterNotMergedWithNextBlockLevelTextBlock() {
+    public void testNonWordCharacterNotMergedWithNextBlockLevelTextBlock() {
         //
         // <div>
         //   -

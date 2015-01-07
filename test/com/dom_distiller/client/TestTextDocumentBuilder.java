@@ -12,10 +12,10 @@ import de.l3s.boilerpipe.sax.BoilerpipeHTMLContentHandler;
 
 import java.util.LinkedList;
 
-class TestTextDocumentBuilder {
-    LinkedList<TextBlock> textBlocks;
-    int textBlockIndex;
-    TestTextDocumentBuilder() {
+public class TestTextDocumentBuilder {
+    private LinkedList<TextBlock> textBlocks;
+    private int textBlockIndex;
+    public TestTextDocumentBuilder() {
         textBlocks = new LinkedList<TextBlock>();
         textBlockIndex = 0;
     }
@@ -35,21 +35,21 @@ class TestTextDocumentBuilder {
         return block;
     }
 
-    TestTextDocumentBuilder addContentBlock(String text, String... labels) {
+    public TestTextDocumentBuilder addContentBlock(String text, String... labels) {
         addBlock(text, labels).setIsContent(true);
         return this;
     }
 
-    TestTextDocumentBuilder addNonContentBlock(String text, String... labels) {
+    public TestTextDocumentBuilder addNonContentBlock(String text, String... labels) {
         addBlock(text, labels).setIsContent(false);
         return this;
     }
 
-    TextDocument build() {
+    public TextDocument build() {
         return new TextDocument(textBlocks);
     }
 
-    static TextDocument fromPage(Element docElement) {
+    public static TextDocument fromPage(Element docElement) {
         BoilerpipeHTMLContentHandler htmlParser = new BoilerpipeHTMLContentHandler();
         htmlParser.startDocument();
         DomToSaxVisitor domToSaxVisitor = new DomToSaxVisitor(htmlParser);

@@ -24,7 +24,8 @@ public class TextBlockBuilder {
     private final StringBuilder tokenBuffer = new StringBuilder();
     private final StringBuilder textBuffer = new StringBuilder();
 
-    private boolean sbLastWasWhitespace = false;
+    private boolean lastWasWhitespace = false;
+    private boolean inAnchor = false;
     private int blockTagLevel = -1;
 
     private final List<Node> nonWhitespaceTextElements = new LinkedList<Node>();
@@ -33,86 +34,24 @@ public class TextBlockBuilder {
     public void textNode(Text textNode, int tagLevel) {
         String text = textNode.getData();
 
-        char[] ch = text.toCharArray();
-        int start = 0;
-        int length = text.length();
-
-        char c;
-        boolean startWhitespace = false;
-        boolean endWhitespace = false;
-        if (length == 0) {
+        if (text.isEmpty()) {
             return;
         }
 
-        // Convert all whitespaces to spaces.
-        final int end = start + length;
-        for (int i = start; i < end; i++) {
-            if (StringUtil.isWhitespace(ch[i])) {
-                ch[i] = ' ';
-            }
-        }
-        // Left-trim the string.
-        while (start < end) {
-            c = ch[start];
-            if (c == ' ') {
-                startWhitespace = true;
-                start++;
-                length--;
-            } else {
-                break;
-            }
-        }
-        // Right-trim the string.
-        while (length > 0) {
-            c = ch[start + length - 1];
-            if (c == ' ') {
-                endWhitespace = true;
-                length--;
-            } else {
-                break;
-            }
-        }
-        // Add a space if needed.
-        if (length == 0) {
-            if (startWhitespace || endWhitespace) {
-                if (!sbLastWasWhitespace) {
-                    textBuffer.append(' ');
-                    tokenBuffer.append(' ');
-                }
-                sbLastWasWhitespace = true;
-            } else {
-                // This appears to be unreachable since the string is 0-length
-                // to start, we trimmed and it's 0-length now.
-                // TODO(yfriedman): Consider ripping out this whole function
-                // and simplifying with the parent div's innerText.
-                sbLastWasWhitespace = false;
-            }
-            allTextElements.add(textNode);
-            return;
-        }
+        textBuffer.append(text);
+        tokenBuffer.append(text);
+        allTextElements.add(textNode);
 
-        if (startWhitespace) {
-            if (!sbLastWasWhitespace) {
-                textBuffer.append(' ');
-                tokenBuffer.append(' ');
-            }
+        lastWasWhitespace = StringUtil.isWhitespace(text.charAt(text.length() - 1));
+        if (StringUtil.isStringAllWhitespace(text)) {
+            return;
         }
 
         if (blockTagLevel == -1) {
             blockTagLevel = tagLevel;
         }
 
-        textBuffer.append(ch, start, length);
-        tokenBuffer.append(ch, start, length);
-        if (endWhitespace) {
-            textBuffer.append(' ');
-            tokenBuffer.append(' ');
-        }
-
-        sbLastWasWhitespace = endWhitespace;
-
         nonWhitespaceTextElements.add(textNode);
-        allTextElements.add(textNode);
     }
 
     public void reset() {
@@ -121,21 +60,19 @@ public class TextBlockBuilder {
         nonWhitespaceTextElements.clear();
         allTextElements.clear();
         blockTagLevel = -1;
+        if (inAnchor) {
+            tokenBuffer.append(ANCHOR_TEXT_START);
+            tokenBuffer.append(' ');
+        }
     }
 
     public TextBlock build(int offsetBlocks) {
-        final int length = tokenBuffer.length();
-        switch (length) {
-            case 0:
-                reset();
-                return null;
-            case 1:
-                if (sbLastWasWhitespace) {
-                    reset();
-                    return null;
-                }
+        if (allTextElements.isEmpty() || nonWhitespaceTextElements.isEmpty() ||
+                StringUtil.isStringAllWhitespace(tokenBuffer.toString())) {
+            reset();
+            return null;
         }
-        final String[] tokens = UnicodeTokenizer.tokenize(tokenBuffer);
+        final String[] tokens = UnicodeTokenizer.tokenize(tokenBuffer.toString());
 
         int numWords = 0;
         int numLinkedWords = 0;
@@ -169,18 +106,14 @@ public class TextBlockBuilder {
 
         reset();
 
-        if (inAnchorText) {
-            enterAnchor();
-        }
-
         return tb;
     }
 
     private void addWhitespaceIfNecessary() {
-        if (!sbLastWasWhitespace) {
+        if (!lastWasWhitespace) {
             tokenBuffer.append(' ');
             textBuffer.append(' ');
-            sbLastWasWhitespace = true;
+            lastWasWhitespace = true;
         }
     }
 
@@ -188,13 +121,15 @@ public class TextBlockBuilder {
         addWhitespaceIfNecessary();
         tokenBuffer.append(ANCHOR_TEXT_START);
         tokenBuffer.append(' ');
-        sbLastWasWhitespace = true;
+        lastWasWhitespace = true;
+        inAnchor = true;
     }
 
     public void exitAnchor() {
         addWhitespaceIfNecessary();
         tokenBuffer.append(ANCHOR_TEXT_END);
         tokenBuffer.append(' ');
+        inAnchor = false;
     }
 
     private static boolean isWord(final String token) {

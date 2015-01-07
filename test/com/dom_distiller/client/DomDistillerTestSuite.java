@@ -6,6 +6,8 @@ package com.dom_distiller.client;
 
 import com.google.gwt.junit.tools.GWTTestSuite;
 
+import com.dom_distiller.client.util.TextBlockBuilderTest;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -39,8 +41,8 @@ public class DomDistillerTestSuite extends GWTTestSuite {
         suite.addTestSuite(SimilarSiblingContentExpansionTest.class);
         suite.addTestSuite(TableClassifierTest.class);
         suite.addTestSuite(TestUtilTest.class);
+        suite.addTestSuite(TextBlockBuilderTest.class);
         suite.addTestSuite(TextDocumentStatisticsTest.class);
-        suite.addTestSuite(TextDocumentConstructionTest.class);
         suite.addTestSuite(UnicodeTokenizerTest.class);
         return suite;
     }
