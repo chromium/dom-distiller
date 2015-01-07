@@ -75,4 +75,13 @@ public class StringUtil {
         Matcher matcher = pattern.matcher(input);
         return matcher.replaceAll(replace);
     }
+
+    public static native boolean containsWordCharacter(String s) /*-{
+        return /[\w\u00C0-\u1FFF\u2C00-\uD7FF]/.test(s);
+    }-*/;
+
+    public static native int countWords(String s) /*-{
+        var m = s.match(/(\S*[\w\u00C0-\u1FFF\u2C00-\uD7FF]\S*)/g);
+        return m ? m.length : 0;
+    }-*/;
 }

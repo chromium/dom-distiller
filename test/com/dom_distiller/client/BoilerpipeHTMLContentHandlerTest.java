@@ -177,7 +177,8 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         endBodyAndDocument();
         List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
         assertEquals(1, textBlocks.size());
-        assertEquals(TEXT1 + "\n\n" + TEXT2 + "\n\n" + TEXT3, textBlocks.get(0).getText());
+        assertEquals("\n" + TEXT1 + "\n\n" + TEXT2 + "\n\n" + TEXT3 + "\n",
+                textBlocks.get(0).getText());
         assertEquals(3, textBlocks.get(0).getNonWhitespaceTextElements().size());
         assertEquals(
                 "\n" +
@@ -187,56 +188,6 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
                 "\n" +
                 "TEXT3\n",
                 joinTextNodes(textBlocks.get(0).getAllTextElements()));
-    }
-
-    public void testDiscardsWhitespaceBetweenTextBlocks() {
-        //
-        // <div>
-        //   TEXT1
-        // </div>
-        //
-        // <div>
-        //   TEXT2
-        //   TEXT3</div>
-        //
-        Element firstDiv = Document.get().createDivElement();
-        addText("\n"); // ignored
-        startElement(firstDiv);
-        addText("\n");
-        addText(TEXT1);
-        addText("\n");
-        endElement(firstDiv);
-
-        addText("\n \n"); // ignored
-
-        Element secondDiv = Document.get().createDivElement();
-        startElement(secondDiv);
-        addText("\n");
-        addText(TEXT2);
-        addText("\n");
-        addText(TEXT3);
-        endElement(secondDiv);
-
-        addText("\n"); // ignored
-        addText("\n"); // ignored
-        endBodyAndDocument();
-
-        List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
-        assertEquals(2, textBlocks.size());
-        assertEquals(TEXT1, textBlocks.get(0).getText());
-        assertEquals(1, textBlocks.get(0).getNonWhitespaceTextElements().size());
-        assertEquals(
-                "\n" +
-                "TEXT1\n",
-                joinTextNodes(textBlocks.get(0).getAllTextElements()));
-
-        assertEquals(TEXT2 + "\n" + TEXT3, textBlocks.get(1).getText());
-        assertEquals(2, textBlocks.get(1).getNonWhitespaceTextElements().size());
-        assertEquals(
-                "\n" +
-                "TEXT2\n" +
-                "TEXT3",
-                joinTextNodes(textBlocks.get(1).getAllTextElements()));
     }
 
     public void testNonWordCharacterMergedWithNextInlineTextBlock() {
@@ -268,7 +219,7 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
 
         List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
         assertEquals(2, textBlocks.size());
-        assertEquals("-\n" + TEXT1, textBlocks.get(0).getText());
+        assertEquals("\n-\n" + TEXT1 + "\n", textBlocks.get(0).getText());
         assertEquals(2, textBlocks.get(0).getNonWhitespaceTextElements().size());
         assertEquals(
                 "\n" +
@@ -311,11 +262,10 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
 
         List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
         assertEquals(3, textBlocks.size());
-        assertEquals("-", textBlocks.get(0).getText());
+        assertEquals("\n-\n", textBlocks.get(0).getText());
         assertEquals(1, textBlocks.get(0).getNonWhitespaceTextElements().size());
         assertEquals(
-                "\n" +
-                "-\n",
+                "\n-\n",
                 joinTextNodes(textBlocks.get(0).getAllTextElements()));
 
         assertEquals(TEXT1, textBlocks.get(1).getText());
@@ -324,7 +274,7 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
                 "TEXT1",
                 joinTextNodes(textBlocks.get(1).getAllTextElements()));
 
-        assertEquals(TEXT2, textBlocks.get(2).getText());
+        assertEquals("\n" + TEXT2 + "\n", textBlocks.get(2).getText());
         assertEquals(1, textBlocks.get(2).getNonWhitespaceTextElements().size());
         assertEquals(
                 "\n" +
@@ -365,7 +315,7 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
 
         List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
         assertEquals(1, textBlocks.size());
-        assertEquals(TEXT1, textBlocks.get(0).getText());
+        assertEquals(TEXT1 + "\n", textBlocks.get(0).getText());
         assertEquals(1, textBlocks.get(0).getNonWhitespaceTextElements().size());
         assertEquals(
                 "TEXT1\n",

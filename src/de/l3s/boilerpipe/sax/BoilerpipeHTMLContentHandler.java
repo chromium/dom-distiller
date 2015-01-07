@@ -32,7 +32,6 @@ import com.google.gwt.dom.client.Text;
 
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
-import de.l3s.boilerpipe.util.UnicodeTokenizer;
 
 import java.util.ArrayList;
 import java.util.HashMap;

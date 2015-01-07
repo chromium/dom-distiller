@@ -21,6 +21,8 @@
  */
 package de.l3s.boilerpipe.filters.heuristics;
 
+import com.dom_distiller.client.StringUtil;
+
 import de.l3s.boilerpipe.BoilerpipeFilter;
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
@@ -115,7 +117,7 @@ public final class DocumentTitleMatchClassifier implements BoilerpipeFilter {
             if (p.contains(".com")) {
                 continue;
             }
-            final int numWords = p.split("[\b ]+").length;
+            final int numWords = StringUtil.countWords(p);
             if (numWords >=minWords) {
                 potentialTitles.add(p);
             }
@@ -134,7 +136,7 @@ public final class DocumentTitleMatchClassifier implements BoilerpipeFilter {
             if (p.contains(".com")) {
                 continue;
             }
-            final int numWords = p.split("[\b ]+").length;
+            final int numWords = StringUtil.countWords(p);
             if (numWords > longestNumWords || p.length() > longestPart.length()) {
                 longestNumWords = numWords;
                 longestPart = p;

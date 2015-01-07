@@ -43,7 +43,6 @@ public class DomDistillerTestSuite extends GWTTestSuite {
         suite.addTestSuite(TestUtilTest.class);
         suite.addTestSuite(TextBlockBuilderTest.class);
         suite.addTestSuite(TextDocumentStatisticsTest.class);
-        suite.addTestSuite(UnicodeTokenizerTest.class);
         return suite;
     }
 }

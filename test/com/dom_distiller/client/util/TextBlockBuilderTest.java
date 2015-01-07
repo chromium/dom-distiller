@@ -65,14 +65,14 @@ public class TextBlockBuilderTest extends DomDistillerTestCase {
         TextBlock block = builder.build(0);
         assertEquals(3, block.getNumWords());
         assertEquals(2, block.getNumWordsInAnchorText());
-        assertEquals("one two three", block.getText());
+        assertEquals("one two three ", block.getText());
 
         builder.enterAnchor();
         addText(builder, "one", 0);
         block = builder.build(0);
         assertEquals(1, block.getNumWords());
         assertEquals(1, block.getNumWordsInAnchorText());
-        assertEquals("one", block.getText());
+        assertEquals(" one", block.getText());
 
         // Should still be in the previous anchor.
         addText(builder, "one", 0);
@@ -109,7 +109,7 @@ public class TextBlockBuilderTest extends DomDistillerTestCase {
         builder.exitAnchor();
         addText(builder, " is", 0);
         TextBlock tb = builder.build(0);
-        assertEquals("The Overview  is", tb.getText());
+        assertEquals("The  Overview  is", tb.getText());
 
     }
 
@@ -129,7 +129,7 @@ public class TextBlockBuilderTest extends DomDistillerTestCase {
         List<TextBlock> textBlocks = document.getTextBlocks();
         assertEquals(1, textBlocks.size());
         TextBlock tb = textBlocks.get(0);
-        assertEquals(75, tb.getNumWords());
+        assertEquals(74, tb.getNumWords());
         assertTrue(0.1 > tb.getLinkDensity());
     }
 

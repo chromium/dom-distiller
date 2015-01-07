@@ -51,14 +51,14 @@ public class DocumentTitleGetter {
         if (StringUtil.match(currTitle, " [\\|\\-] ")) {  // Title has '|' and/or '-'.
             // Get part before last '|' or '-'.
             currTitle = StringUtil.findAndReplace(origTitle, "(.*)[\\|\\-] .*", "$1");
-            if (StringUtil.splitLength(currTitle, "\\s+") < 3) {  // Part has < 3 words.
+            if (StringUtil.countWords(currTitle) < 3) {  // Part has < 3 words.
                 // Get part after first '|' or '-'.
                 currTitle = StringUtil.findAndReplace(origTitle, "[^\\|\\-]*[\\|\\-](.*)", "$1");
             }
         } else if (currTitle.indexOf(": ") != -1) {  // Title has ':'.
             // Get part after last ':'.
             currTitle = StringUtil.findAndReplace(origTitle, ".*:(.*)", "$1");
-            if (StringUtil.splitLength(currTitle, "\\s+") < 3) {  // Part has < 3 words.
+            if (StringUtil.countWords(currTitle) < 3) {  // Part has < 3 words.
               // Get part after first ':'.
               currTitle = StringUtil.findAndReplace(origTitle, "[^:]*[:](.*)", "$1");
             }
@@ -73,7 +73,7 @@ public class DocumentTitleGetter {
 
         currTitle = StringUtil.jsTrim(currTitle);
 
-        if (StringUtil.splitLength(currTitle, "\\s+") <= 4) currTitle = origTitle;
+        if (StringUtil.countWords(currTitle) <= 4) currTitle = origTitle;
 
         return currTitle;
     }

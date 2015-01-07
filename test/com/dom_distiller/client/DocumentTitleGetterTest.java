@@ -84,8 +84,8 @@ public class DocumentTitleGetterTest extends DomDistillerTestCase {
 
     public void test2DashesShortParts() {
         String title = DocumentTitleGetter.getDocumentTitle(
-                "before dash - after dash0 - after dash1", null);
-        assertEquals("before dash - after dash0", title);
+                "before dash - between dash0 and dash1 - after dash1", null);
+        assertEquals("before dash - between dash0 and dash1", title);
     }
 
     public void test2DashesShortAndLongParts() {
