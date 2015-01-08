@@ -6,13 +6,13 @@ package de.l3s.boilerpipe.sax;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
-import de.l3s.boilerpipe.labels.DefaultLabels;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.regexp.shared.RegExp;
 
 import com.dom_distiller.client.DomUtil;
 
-import java.util.regex.Pattern;
+import de.l3s.boilerpipe.labels.DefaultLabels;
 
 public class ElementAction {
     public boolean changesTagLevel = false;
@@ -20,7 +20,7 @@ public class ElementAction {
     public boolean isAnchor = false;
     public JsArrayString labels = JavaScriptObject.createArray().<JsArrayString>cast();
 
-    private static final Pattern PAT_COMMENT = Pattern.compile("\\bcomments?\\b");
+    private static final RegExp REG_COMMENT = RegExp.compile("\\bcomments?\\b");
 
     public static ElementAction getForElement(Element element) {
         Style style = DomUtil.getComputedStyle(element);
@@ -54,10 +54,10 @@ public class ElementAction {
         }
 
         String tagName = element.getTagName();
-        if (!tagName.equals("BODY")) {
+        if (!"BODY".equals(tagName)) {
             String className = element.getAttribute("class");
             String id = element.getAttribute("id");
-            if (PAT_COMMENT.matcher(className).find() || PAT_COMMENT.matcher(id).find()) {
+            if (REG_COMMENT.test(className) || REG_COMMENT.test(id)) {
                action.labels.push(DefaultLabels.STRICTLY_NOT_CONTENT);
             }
 

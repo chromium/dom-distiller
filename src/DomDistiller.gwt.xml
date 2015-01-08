@@ -25,9 +25,4 @@
 
   <!-- Use the SingleScriptLinker. -->
   <add-linker name='sso'/>
-
-  <!-- This provides simple implementations of java platform features used by boilerpipe but not
-  available in a gwt project -->
-  <super-source path='fake_java_platform'/>
-
 </module>

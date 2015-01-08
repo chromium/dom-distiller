@@ -101,6 +101,23 @@ public class DocumentTitleMatchClassifierTest extends DomDistillerTestCase {
         assertFalse(contentBlock.hasLabel(DefaultLabels.TITLE));
     }
 
+    public void testTitleWithExtraCharacters() throws Exception {
+        String text = "title:?! :?!text";
+
+        DocumentTitleMatchClassifier classifier =
+                new DocumentTitleMatchClassifier(newList("title text"));
+
+        TextBlock titleBlock = new TextBlock(text);
+        TextBlock secondTitleBlock = new TextBlock(text);
+
+        TextDocument document =
+                new TextDocument(Arrays.asList(new TextBlock[] {titleBlock, secondTitleBlock}));
+        classifier.process(document);
+
+        assertTrue(titleBlock.hasLabel(DefaultLabels.TITLE));
+        assertTrue(secondTitleBlock.hasLabel(DefaultLabels.TITLE));
+    }
+
     private static List<String> newList(String... text) {
         List<String> result = new LinkedList<String>();
         for (String t: text) {

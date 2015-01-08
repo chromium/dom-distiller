@@ -35,7 +35,6 @@ public class DomDistillerTestSuite extends GWTTestSuite {
         suite.addTestSuite(NodeListExpanderTest.class);
         suite.addTestSuite(OrderedNodeMatcherTest.class);
         suite.addTestSuite(PagingLinksFinderTest.class);
-        suite.addTestSuite(RegExpTest.class);
         suite.addTestSuite(RelevantElementsFinderTest.class);
         suite.addTestSuite(SchemaOrgParserAccessorTest.class);
         suite.addTestSuite(SimilarSiblingContentExpansionTest.class);

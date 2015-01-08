@@ -23,6 +23,8 @@ package de.l3s.boilerpipe.filters.heuristics;
 
 import com.dom_distiller.client.StringUtil;
 
+import com.google.gwt.regexp.shared.RegExp;
+
 import de.l3s.boilerpipe.BoilerpipeFilter;
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
@@ -32,7 +34,6 @@ import de.l3s.boilerpipe.labels.DefaultLabels;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 /**
  * Marks {@link TextBlock}s which contain parts of the HTML
@@ -149,7 +150,7 @@ public final class DocumentTitleMatchClassifier implements BoilerpipeFilter {
         }
     }
 
-    private static final Pattern PAT_REMOVE_CHARACTERS = Pattern.compile("[\\?\\!\\.\\-\\:]+");
+    private static final RegExp REG_REMOVE_CHARACTERS = RegExp.compile("[\\?\\!\\.\\-\\:]+", "g");
 
     @Override
     public boolean process(TextDocument doc) throws BoilerpipeProcessingException {
@@ -171,7 +172,7 @@ public final class DocumentTitleMatchClassifier implements BoilerpipeFilter {
                 changes = true;
             }
 
-            text = PAT_REMOVE_CHARACTERS.matcher(text).replaceAll("").trim();
+            text = REG_REMOVE_CHARACTERS.replace(text, "").trim();
             if (potentialTitles.contains(text)) {
                 tb.addLabel(DefaultLabels.TITLE);
                 changes = true;

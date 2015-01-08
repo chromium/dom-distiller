@@ -4,8 +4,7 @@
 
 package com.dom_distiller.client;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.google.gwt.regexp.shared.RegExp;
 
 public class StringUtil {
     // For the whitespace-related functions below, Java's and Javascript's versions of '\s' and '\S'
@@ -65,15 +64,11 @@ public class StringUtil {
     }
 
     public static boolean match(String input, String regex) {
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(input);
-        return matcher.find();
+        return RegExp.compile(regex, "i").test(input);
     }
 
     public static String findAndReplace(String input, String regex, String replace) {
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(input);
-        return matcher.replaceAll(replace);
+        return RegExp.compile(regex, "gi").replace(input, replace);
     }
 
     public static native boolean containsWordCharacter(String s) /*-{

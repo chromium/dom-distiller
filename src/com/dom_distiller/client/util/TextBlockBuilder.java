@@ -14,7 +14,6 @@ import de.l3s.boilerpipe.document.TextDocument;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class TextBlockBuilder {
     private final StringBuilder textBuffer = new StringBuilder();

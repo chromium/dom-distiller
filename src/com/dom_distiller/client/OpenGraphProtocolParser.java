@@ -9,12 +9,12 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.dom_distiller.client.DomUtil;
 import com.dom_distiller.proto.DomDistillerProtos.TimingInfo;
 import com.google.gwt.core.client.JsArray;
+import com.google.gwt.regexp.shared.RegExp;
+import com.google.gwt.regexp.shared.MatchResult;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.MetaElement;
@@ -264,14 +264,13 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
 
     private static final String sOgpNsPrefixRegex =
             "((\\w+):\\s+(http:\\/\\/ogp.me\\/ns(\\/\\w+)*#))\\s*";
-    private static final Pattern sOgpNsPrefixPattern =
-            Pattern.compile(sOgpNsPrefixRegex, Pattern.CASE_INSENSITIVE);
-    private static final Pattern sOgpNsNonPrefixNamePattern =
-            Pattern.compile("^xmlns:(\\w+)", Pattern.CASE_INSENSITIVE);
+    private static final RegExp sOgpNsPrefixRegExp = RegExp.compile(sOgpNsPrefixRegex, "gi");
+
+    private static final RegExp sOgpNsNonPrefixNameRegExp = RegExp.compile("^xmlns:(\\w+)", "i");
     private static final String sOgpNsNonPrefixValueRegex =
             "^http:\\/\\/ogp.me\\/ns(\\/\\w+)*#";
-    private static final Pattern sOgpNsNonPrefixValuePattern =
-            Pattern.compile(sOgpNsNonPrefixValueRegex, Pattern.CASE_INSENSITIVE);
+    private static final RegExp sOgpNsNonPrefixValueRegExp =
+            RegExp.compile(sOgpNsNonPrefixValueRegex, "i");
 
     // The compile-time option(s) for parseMetaTags can be tuned according to the target data sets.
     // According to current benchmark, doing prefix filtering is faster than not.
@@ -293,11 +292,14 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
         }
 
         // If there's "prefix" attribute, its value is something like
-       // "og: http://ogp.me/ns# profile: http://og.me/ns/profile# article: http://ogp.me/ns/article#".
+        // "og: http://ogp.me/ns# profile: http://og.me/ns/profile# article:
+        // http://ogp.me/ns/article#".
         if (!prefixes.isEmpty()) {
-            Matcher matcher = sOgpNsPrefixPattern.matcher(prefixes);
-            while (matcher.find()) {  // There could be multiple prefixes.
-                setPrefixForObjectType(matcher.group(2), matcher.group(4));
+            sOgpNsPrefixRegExp.setLastIndex(0);
+            while (true) {
+                MatchResult match = sOgpNsPrefixRegExp.exec(prefixes);
+                if (match == null) break;
+                setPrefixForObjectType(match.getGroup(2), match.getGroup(4));
             }
         } else {
             // Still no "prefix" attribute, see if HTMl tag has "xmlns" attributes e.g.:
@@ -309,14 +311,14 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
                 final Node node = attributes.get(i);
                 // Look for attribute name that starts with "xmlns:".
                 String attributeName = node.getNodeName().toLowerCase();
-                Matcher nameMatcher = sOgpNsNonPrefixNamePattern.matcher(attributeName);
-                if (!nameMatcher.find()) continue;
+                MatchResult nameMatch = sOgpNsNonPrefixNameRegExp.exec(attributeName);
+                if (nameMatch == null) continue;
 
                 // Extract OGP namespace URI from attribute value, if available.
                 String attributeValue = node.getNodeValue();
-                Matcher valueMatcher = sOgpNsNonPrefixValuePattern.matcher(attributeValue);
-                if (valueMatcher.find()) {
-                    setPrefixForObjectType(nameMatcher.group(1), valueMatcher.group(1));
+                MatchResult valueMatch = sOgpNsNonPrefixValueRegExp.exec(attributeValue);
+                if (valueMatch != null) {
+                    setPrefixForObjectType(nameMatch.getGroup(1), valueMatch.getGroup(1));
                 }
             }
         }

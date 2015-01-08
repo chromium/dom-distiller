@@ -37,4 +37,9 @@ public class StringUtilTest extends JsTestCase {
         assertFalse(StringUtil.isStringAllWhitespace("\u00a0\u0460"));
         assertFalse(StringUtil.isStringAllWhitespace("\n\t_ "));
     }
+
+    public void testFindAndReplace() {
+        assertEquals("", StringUtil.findAndReplace("sdf", ".", ""));
+        assertEquals("abc", StringUtil.findAndReplace(" a\tb  c ", "\\s", ""));
+    }
 }

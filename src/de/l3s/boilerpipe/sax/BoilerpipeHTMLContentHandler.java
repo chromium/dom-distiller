@@ -39,7 +39,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-import java.util.regex.Pattern;
 
 /**
  * A simple SAX {@link ContentHandler}, used by {@link com.dom_distiller.client.ContentExtractor}.
