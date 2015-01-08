@@ -44,6 +44,11 @@ public class JsTestEntryGenerator extends Generator {
         composer.addImplementedInterface("com.dom_distiller.client.JsTestSuiteBuilder");
         PrintWriter printWriter = context.tryCreate(logger, packageName, outputClassname);
         if (printWriter != null) {
+            for (TestCase ts : testCases) {
+                String className = ts.classType.getName();
+                String qualifiedClassName = ts.classType.getPackage().getName() + "." + className;
+                composer.addImport(qualifiedClassName);
+            }
             SourceWriter sourceWriter = composer.createSourceWriter(context, printWriter);
             sourceWriter.println("JsTestBuilderImpl () {");
             sourceWriter.println("}");
