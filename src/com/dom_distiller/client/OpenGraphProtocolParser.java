@@ -452,14 +452,8 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
                 if (imageIn[2] != null) imageOut.secureUrl = imageIn[2];
                 if (imageIn[3] != null) imageOut.type = imageIn[3];
                 // Caption is not supoprted, so ignore it.
-                try {
-                    if (imageIn[4] != null) imageOut.width = Integer.parseInt(imageIn[4], 10);
-                } catch (NumberFormatException e) {
-                }
-                try {
-                    if (imageIn[5] != null) imageOut.height = Integer.parseInt(imageIn[5], 10);
-                } catch (NumberFormatException e) {
-                }
+                if (imageIn[4] != null) imageOut.width = JavaScript.parseInt(imageIn[4], 10);
+                if (imageIn[5] != null) imageOut.height = JavaScript.parseInt(imageIn[5], 10);
             }
             return imagesOut;
         }

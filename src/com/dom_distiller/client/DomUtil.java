@@ -72,11 +72,7 @@ public class DomUtil {
 
     public static boolean isVisible(Element e) {
         Style style = getComputedStyle(e);
-        float opacity = 1.0F;
-        try {
-            opacity = Float.parseFloat(style.getOpacity());
-        } catch (NumberFormatException exception) {
-        }
+        double opacity = JavaScript.parseFloat(style.getOpacity());
         return !(style.getDisplay().equals("none") ||
                 style.getVisibility().equals("hidden") ||
                 opacity == 0.0F);

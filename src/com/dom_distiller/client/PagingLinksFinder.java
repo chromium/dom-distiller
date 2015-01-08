@@ -268,11 +268,7 @@ public class PagingLinksFinder {
             // their text can still get scored, and sorted properly by score.
             // TODO(kuan): it might be wrong to assume that it knows about other pages in the
             // document and that it starts on the first page.
-            int linkTextAsNumber = 0;
-            try {
-                linkTextAsNumber = Integer.parseInt(linkText, 10);
-            } catch (NumberFormatException e) {
-            }
+            int linkTextAsNumber = JavaScript.parseInt(linkText, 10);
             if (linkTextAsNumber > 0) {
                 // Punish 1 since we're either already there, or it's probably before what we
                 // want anyway.

@@ -32,8 +32,58 @@ public final class JavaScript {
     }-*/;
 
     private static native boolean jsniSupportsContains(Node l) /*-{
-        return l.contains !== undefined;
+        return typeof l.contains == "function";
     }-*/;
+
+    public static double parseFloat(String s) {
+        if (jsniSupportsParseFloat()) {
+            return jsniParseFloat(s);
+        }
+        return javaParseFloat(s);
+    }
+
+    private static native boolean jsniSupportsParseFloat() /*-{
+        return typeof parseFloat == "function";
+    }-*/;
+
+    private static native double jsniParseFloat(String s) /*-{
+        return parseFloat(s);
+    }-*/;
+
+    private static double javaParseFloat(String s) {
+        try {
+            return Double.parseDouble(s);
+        } catch (NumberFormatException e) {
+            return Double.NaN;
+        }
+    }
+
+    public static int parseInt(String s) {
+        return parseInt(s, 10);
+    }
+
+    public static int parseInt(String s, int radix) {
+        if (jsniSupportsParseInt()) {
+            return jsniParseInt(s, radix);
+        }
+        return javaParseInt(s, radix);
+    }
+
+    private static native boolean jsniSupportsParseInt() /*-{
+        return typeof parseInt == "function";
+    }-*/;
+
+    private static native int jsniParseInt(String s, int radix) /*-{
+        return parseInt(s, radix) | 0;
+    }-*/;
+
+    private static int javaParseInt(String s, int radix) {
+        try {
+            return Integer.parseInt(s, radix);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
 
     private JavaScript() {
     }

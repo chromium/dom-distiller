@@ -43,7 +43,7 @@ public class DomWalkerTest extends DomDistillerTestCase {
                 assertTrue(it.hasNext());
                 VisitData vd = it.next();
                 Element e = Element.as(n);
-                int id = Integer.parseInt(e.getId());
+                int id = JavaScript.parseInt(e.getId());
                 assertEquals(vd.expectedId, id);
 
                 if (vd.shouldVisit) path.push(n);

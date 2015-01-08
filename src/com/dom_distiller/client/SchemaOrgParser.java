@@ -359,14 +359,8 @@ public class SchemaOrgParser {
             if (image.url.isEmpty()) image.url = getStringProperty(URL_PROP);
             image.type = getStringProperty(ENCODING_FORMAT_PROP);
             image.caption = getStringProperty(CAPTION_PROP);
-            try {
-                image.width = Integer.parseInt(getStringProperty(WIDTH_PROP), 10);
-            } catch (Exception e) {
-            }
-            try {
-                image.height = Integer.parseInt(getStringProperty(HEIGHT_PROP), 10);
-            } catch (Exception e) {
-            }
+            image.width = JavaScript.parseInt(getStringProperty(WIDTH_PROP), 10);
+            image.height = JavaScript.parseInt(getStringProperty(HEIGHT_PROP), 10);
             return image;
         }
     }
