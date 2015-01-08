@@ -27,7 +27,7 @@ import com.google.gwt.dom.client.Node;
 import de.l3s.boilerpipe.labels.DefaultLabels;
 
 import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -41,44 +41,58 @@ import java.util.TreeSet;
  * @author Christian Kohlschütter
  */
 public class TextBlock implements Cloneable {
-    boolean isContent = false;
-    private CharSequence text;
-    Set<String> labels = null;
+    private boolean isContent = false;
 
-    int offsetBlocksStart;
-    int offsetBlocksEnd;
+    private StringBuilder text;
+    private Set<String> labels;
 
-    int numWords;
-    int numWordsInAnchorText;
-    float linkDensity;
+    private int numWords;
+    private int numWordsInAnchorText;
+    private float linkDensity;
 
-    List<Node> nonWhitespaceTextElements;
-    List<Node> allTextElements;
+    private List<Node> allTextNodes;
+    private int firstNonWhitespaceNode;
+    private int lastNonWhitespaceNode;
+    private ArrayList<Integer> nodeRanges;
 
-    private int numFullTextWords = 0;
+    private int offsetBlocksStart;
+    private int offsetBlocksEnd;
+
     private int tagLevel;
 
-    public static final List<Node> EMPTY_NODE_LIST = new LinkedList<Node>();
-    public static final TextBlock EMPTY_START = new TextBlock("", EMPTY_NODE_LIST, EMPTY_NODE_LIST,
-            0, 0, -1);
-    public static final TextBlock EMPTY_END = new TextBlock("", EMPTY_NODE_LIST, EMPTY_NODE_LIST,
-            0, 0, Integer.MAX_VALUE);
-
-    public TextBlock(final String text) {
-        this(text, EMPTY_NODE_LIST, EMPTY_NODE_LIST, 0, 0, 0);
+    public static final TextBlock EMPTY_START;
+    public static final TextBlock EMPTY_END;
+    static {
+        EMPTY_START = new TextBlock("");
+        EMPTY_END = new TextBlock("");
+        EMPTY_START.offsetBlocksStart = EMPTY_START.offsetBlocksEnd = -1;
+        EMPTY_END.offsetBlocksStart = EMPTY_END.offsetBlocksEnd = Integer.MAX_VALUE;
     }
 
-    public TextBlock(final String text, final List<Node> containedTextElements,
-            List<Node> allTextElements, final int numWords, final int numWordsInAnchorText,
-            final int offsetBlocks) {
-        this.text = text;
-        this.nonWhitespaceTextElements = new LinkedList<Node>(containedTextElements);
-        this.allTextElements = new LinkedList<Node>(allTextElements);
+    public TextBlock(final String text) {
+        this(text, null, 0, 0, 0, 0, 0, 0, 0);
+    }
+
+    public TextBlock(final String text, final List<Node> allTextNodes, int firstWordNode,
+            int lastWordNode, int firstNode, int lastNode, final int numWords,
+            final int numWordsInAnchorText, final int offsetBlocks) {
+        this.text = new StringBuilder(text);
+
+        labels = new HashSet<>();
+
         this.numWords = numWords;
         this.numWordsInAnchorText = numWordsInAnchorText;
+
+        this.allTextNodes = allTextNodes;
+        firstNonWhitespaceNode = firstWordNode;
+        lastNonWhitespaceNode = lastWordNode;
+
+        nodeRanges = new ArrayList<>();
+        nodeRanges.add(firstNode);
+        nodeRanges.add(lastNode);
+
         this.offsetBlocksStart = offsetBlocks;
         this.offsetBlocksEnd = offsetBlocks;
-        this.labels = new HashSet<String>();
         initDensities();
     }
 
@@ -112,34 +126,21 @@ public class TextBlock implements Cloneable {
     }
 
     public void mergeNext(final TextBlock other) {
-        if (!(text instanceof StringBuilder)) {
-            text = new StringBuilder(text);
-        }
-        StringBuilder sb = (StringBuilder) text;
-        sb.append('\n');
-        sb.append(other.text);
+        text.append('\n');
+        text.append(other.text);
 
         numWords += other.numWords;
         numWordsInAnchorText += other.numWordsInAnchorText;
 
-        offsetBlocksStart = Math
-            .min(offsetBlocksStart, other.offsetBlocksStart);
-        offsetBlocksEnd = Math.max(offsetBlocksEnd, other.offsetBlocksEnd);
+        offsetBlocksEnd = other.offsetBlocksEnd;
 
         initDensities();
 
         this.isContent |= other.isContent;
 
-        if (nonWhitespaceTextElements == null) {
-            nonWhitespaceTextElements = new LinkedList<Node>();
-        }
-        nonWhitespaceTextElements.addAll(other.nonWhitespaceTextElements);
-        if (allTextElements == null) {
-            allTextElements = new LinkedList<Node>();
-        }
-        allTextElements.addAll(other.allTextElements);
+        nodeRanges.addAll(other.nodeRanges);
 
-        numFullTextWords += other.numFullTextWords;
+        lastNonWhitespaceNode = other.lastNonWhitespaceNode;
 
         labels.addAll(other.labels);
 
@@ -246,37 +247,28 @@ public class TextBlock implements Cloneable {
     }
 
     /**
-     * @return a list of the non whitespace Text nodes, or <code>null</code>.
-     */
-    public List<Node> getNonWhitespaceTextElements() {
-        return nonWhitespaceTextElements;
-    }
-
-    /**
      * @return a list of all Text nodes (including whitespace-only ones), or <code>null</code>.
      */
-    public List<Node> getAllTextElements() {
-        return allTextElements;
+    public List<Node> getAllTextNodes() {
+        List<Node> res = new ArrayList<Node>();
+        for (int i = 0; i < nodeRanges.size(); i += 2) {
+            res.addAll(allTextNodes.subList(nodeRanges.get(i), nodeRanges.get(i + 1)));
+        }
+        return res;
     }
 
     /**
      * @return the first non-whitespace Text node, or <code>null</code>.
      */
-    public Node getFirstNonWhitespaceTextElement() {
-        if (nonWhitespaceTextElements.size() > 0) {
-            return nonWhitespaceTextElements.get(0);
-        }
-        return null;
+    public Node getFirstNonWhitespaceTextNode() {
+        return allTextNodes.get(firstNonWhitespaceNode);
     }
 
     /**
      * @return the first non-whitespace Text node, or <code>null</code>.
      */
-    public Node getLastNonWhitespaceTextElement() {
-        if (nonWhitespaceTextElements.size() > 0) {
-            return nonWhitespaceTextElements.get(nonWhitespaceTextElements.size() - 1);
-        }
-        return null;
+    public Node getLastNonWhitespaceTextNode() {
+        return allTextNodes.get(lastNonWhitespaceNode);
     }
 
     public int getTagLevel() {

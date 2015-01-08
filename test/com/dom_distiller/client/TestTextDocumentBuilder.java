@@ -22,11 +22,8 @@ public class TestTextDocumentBuilder {
 
     private TextBlock addBlock(String text, String... labels) {
         int numWords = text.split(" ").length;
-        TextBlock block = new TextBlock(
-                text,
-                TextBlock.EMPTY_NODE_LIST, TextBlock.EMPTY_NODE_LIST,
-                numWords, numWords,
-                textBlockIndex++);
+        TextBlock block =
+                new TextBlock(text, null, 0, 0, 0, 0, numWords, numWords, textBlockIndex++);
         block.setIsContent(false);
         for (String label : labels) {
             block.addLabel(label);

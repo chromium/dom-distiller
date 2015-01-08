@@ -185,11 +185,11 @@ public final class SimilarSiblingContentExpansion implements BoilerpipeFilter {
     private static List<Node> findCanonicalReps(List<TextBlock> textBlocks, Node docNode) {
         ArrayList<Node> reps = new ArrayList<Node>(textBlocks.size());
         for (int i = 0; i < textBlocks.size(); ++i) {
-            Node nextNode = i + 1 == textBlocks.size() ?
-                    docNode : textBlocks.get(i + 1).getFirstNonWhitespaceTextElement();
-            Node prevNode = i == 0 ?
-                    docNode : textBlocks.get(i - 1).getLastNonWhitespaceTextElement();
-            Node currNode = textBlocks.get(i).getFirstNonWhitespaceTextElement();
+            Node nextNode = i + 1 == textBlocks.size()
+                    ? docNode
+                    : textBlocks.get(i + 1).getFirstNonWhitespaceTextNode();
+            Node prevNode = i == 0 ? docNode : textBlocks.get(i - 1).getLastNonWhitespaceTextNode();
+            Node currNode = textBlocks.get(i).getFirstNonWhitespaceTextNode();
 
             // Find the highest ancestor of currNode that is not also an ancestor of one of prevNode
             // or nextNode;

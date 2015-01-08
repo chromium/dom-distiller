@@ -12,7 +12,7 @@ import com.google.gwt.dom.client.Text;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TextBlockBuilder {
@@ -23,8 +23,10 @@ public class TextBlockBuilder {
     private int blockTagLevel = -1;
     private boolean inAnchor = false;
 
-    private final List<Node> nonWhitespaceTextElements = new LinkedList<Node>();
-    private final List<Node> allTextElements = new LinkedList<Node>();
+    private final List<Node> allTextNodes = new ArrayList<Node>();
+    private int firstNode = 0;
+    private int firstNonWhitespaceNode = -1;
+    private int lastNonWhitespaceNode = 0;
 
     public void textNode(Text textNode, int tagLevel) {
         String text = textNode.getData();
@@ -34,7 +36,7 @@ public class TextBlockBuilder {
         }
 
         textBuffer.append(text);
-        allTextElements.add(textNode);
+        allTextNodes.add(textNode);
 
         if (StringUtil.isStringAllWhitespace(text)) {
             return;
@@ -46,36 +48,36 @@ public class TextBlockBuilder {
             numAnchorWords += thisWords;
         }
 
+        lastNonWhitespaceNode = allTextNodes.size() - 1;
+        if (firstNonWhitespaceNode < firstNode) {
+            firstNonWhitespaceNode = lastNonWhitespaceNode;
+        }
+
         if (blockTagLevel == -1) {
             blockTagLevel = tagLevel;
         }
-
-        nonWhitespaceTextElements.add(textNode);
     }
 
     public void reset() {
         textBuffer.setLength(0);
         numWords = 0;
         numAnchorWords = 0;
-        nonWhitespaceTextElements.clear();
-        allTextElements.clear();
+        firstNode = allTextNodes.size();
         blockTagLevel = -1;
     }
 
     public TextBlock build(int offsetBlocks) {
-        String text = textBuffer.toString();
-        if (text.length() == 0) {
+        if (firstNode == allTextNodes.size()) {
             return null;
         }
 
-        if (nonWhitespaceTextElements.size() == 0) {
+        if (firstNonWhitespaceNode < firstNode) {
             reset();
             return null;
         }
 
-        TextBlock tb = new TextBlock(text,
-                nonWhitespaceTextElements, allTextElements,
-                numWords, numAnchorWords,
+        TextBlock tb = new TextBlock(textBuffer.toString(), allTextNodes, firstNonWhitespaceNode,
+                lastNonWhitespaceNode, firstNode, allTextNodes.size(), numWords, numAnchorWords,
                 offsetBlocks);
         tb.setTagLevel(blockTagLevel);
         reset();

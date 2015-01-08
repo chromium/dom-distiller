@@ -280,7 +280,7 @@ public class ContentExtractor {
                 continue;
             }
             if (!tb.hasLabel(DefaultLabels.TITLE)) {
-                contentTextNodes.addAll(tb.getAllTextElements());
+                contentTextNodes.addAll(tb.getAllTextNodes());
             }
         }
         return contentTextNodes;

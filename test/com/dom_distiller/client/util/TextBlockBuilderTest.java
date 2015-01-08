@@ -33,7 +33,7 @@ public class TextBlockBuilderTest extends DomDistillerTestCase {
         assertEquals(2, block.getNumWords());
         assertEquals(0, block.getNumWordsInAnchorText());
         assertEquals("Two words.", block.getText());
-        assertEquals(1, block.getAllTextElements().size());
+        assertEquals(1, block.getAllTextNodes().size());
         assertEquals(0, block.getLabels().size());
         assertEquals(0, block.getOffsetBlocksStart());
         assertEquals(0, block.getOffsetBlocksEnd());
@@ -46,7 +46,7 @@ public class TextBlockBuilderTest extends DomDistillerTestCase {
         assertEquals(4, block.getNumWords());
         assertEquals(0, block.getNumWordsInAnchorText());
         assertEquals("More than two words.", block.getText());
-        assertEquals(4, block.getAllTextElements().size());
+        assertEquals(4, block.getAllTextNodes().size());
         assertEquals(1, block.getOffsetBlocksStart());
         assertEquals(1, block.getOffsetBlocksEnd());
 
@@ -110,7 +110,28 @@ public class TextBlockBuilderTest extends DomDistillerTestCase {
         addText(builder, " is", 0);
         TextBlock tb = builder.build(0);
         assertEquals("The  Overview  is", tb.getText());
+    }
 
+    public void testWhitespaceNodes() {
+        TextBlockBuilder builder = new TextBlockBuilder();
+
+        addText(builder, "one", 0);
+        TextBlock tb = builder.build(0);
+        assertEquals(tb.getFirstNonWhitespaceTextNode(), tb.getLastNonWhitespaceTextNode());
+
+        addText(builder, " ", 0);
+        addText(builder, "one", 0);
+        addText(builder, " ", 0);
+        tb = builder.build(0);
+        assertEquals(tb.getFirstNonWhitespaceTextNode(), tb.getLastNonWhitespaceTextNode());
+        assertEquals(3, tb.getAllTextNodes().size());
+        assertFalse(tb.getAllTextNodes().get(0).equals(tb.getFirstNonWhitespaceTextNode()));
+        assertFalse(tb.getAllTextNodes().get(2).equals(tb.getFirstNonWhitespaceTextNode()));
+
+        addText(builder, "one", 0);
+        addText(builder, "two", 0);
+        tb = builder.build(0);
+        assertFalse(tb.getFirstNonWhitespaceTextNode().equals(tb.getLastNonWhitespaceTextNode()));
     }
 
     public void testRegression0() {

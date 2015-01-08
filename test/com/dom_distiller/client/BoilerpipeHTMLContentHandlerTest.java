@@ -179,15 +179,13 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         assertEquals(1, textBlocks.size());
         assertEquals("\n" + TEXT1 + "\n\n" + TEXT2 + "\n\n" + TEXT3 + "\n",
                 textBlocks.get(0).getText());
-        assertEquals(3, textBlocks.get(0).getNonWhitespaceTextElements().size());
-        assertEquals(
-                "\n" +
-                "TEXT1\n" +
-                "\n" +
-                "TEXT2\n" +
-                "\n" +
-                "TEXT3\n",
-                joinTextNodes(textBlocks.get(0).getAllTextElements()));
+        assertEquals("\n"
+                        + "TEXT1\n"
+                        + "\n"
+                        + "TEXT2\n"
+                        + "\n"
+                        + "TEXT3\n",
+                joinTextNodes(textBlocks.get(0).getAllTextNodes()));
     }
 
     public void testNonWordCharacterMergedWithNextInlineTextBlock() {
@@ -220,17 +218,13 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
         assertEquals(2, textBlocks.size());
         assertEquals("\n-\n" + TEXT1 + "\n", textBlocks.get(0).getText());
-        assertEquals(2, textBlocks.get(0).getNonWhitespaceTextElements().size());
-        assertEquals(
-                "\n" +
-                "-\n" +
-                "TEXT1\n",
-                joinTextNodes(textBlocks.get(0).getAllTextElements()));
+        assertEquals("\n"
+                        + "-\n"
+                        + "TEXT1\n",
+                joinTextNodes(textBlocks.get(0).getAllTextNodes()));
 
         assertEquals(TEXT2, textBlocks.get(1).getText());
-        assertEquals(1, textBlocks.get(1).getNonWhitespaceTextElements().size());
-        assertEquals("TEXT2",
-                    joinTextNodes(textBlocks.get(1).getAllTextElements()));
+        assertEquals("TEXT2", joinTextNodes(textBlocks.get(1).getAllTextNodes()));
     }
 
     public void testNonWordCharacterNotMergedWithNextBlockLevelTextBlock() {
@@ -263,23 +257,15 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
         assertEquals(3, textBlocks.size());
         assertEquals("\n-\n", textBlocks.get(0).getText());
-        assertEquals(1, textBlocks.get(0).getNonWhitespaceTextElements().size());
-        assertEquals(
-                "\n-\n",
-                joinTextNodes(textBlocks.get(0).getAllTextElements()));
+        assertEquals("\n-\n", joinTextNodes(textBlocks.get(0).getAllTextNodes()));
 
         assertEquals(TEXT1, textBlocks.get(1).getText());
-        assertEquals(1, textBlocks.get(1).getNonWhitespaceTextElements().size());
-        assertEquals(
-                "TEXT1",
-                joinTextNodes(textBlocks.get(1).getAllTextElements()));
+        assertEquals("TEXT1", joinTextNodes(textBlocks.get(1).getAllTextNodes()));
 
         assertEquals("\n" + TEXT2 + "\n", textBlocks.get(2).getText());
-        assertEquals(1, textBlocks.get(2).getNonWhitespaceTextElements().size());
-        assertEquals(
-                "\n" +
-                "TEXT2\n",
-                joinTextNodes(textBlocks.get(2).getAllTextElements()));
+        assertEquals("\n"
+                        + "TEXT2\n",
+                joinTextNodes(textBlocks.get(2).getAllTextNodes()));
     }
 
     // Simulates many social-bar/leading-link type UIs where lists are used for laying out images.
@@ -316,10 +302,7 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
         assertEquals(1, textBlocks.size());
         assertEquals(TEXT1 + "\n", textBlocks.get(0).getText());
-        assertEquals(1, textBlocks.get(0).getNonWhitespaceTextElements().size());
-        assertEquals(
-                "TEXT1\n",
-                joinTextNodes(textBlocks.get(0).getAllTextElements()));
+        assertEquals("TEXT1\n", joinTextNodes(textBlocks.get(0).getAllTextNodes()));
     }
 
     private static String joinTextNodes(List<Node> elements) {
