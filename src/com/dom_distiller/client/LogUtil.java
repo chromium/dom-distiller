@@ -8,14 +8,41 @@ import com.dom_distiller.proto.DomDistillerProtos.TimingEntry;
 import com.dom_distiller.proto.DomDistillerProtos.TimingInfo;
 
 public class LogUtil {
-
+    // All static fields in this class should be primitives or Strings. Otherwise, a costly (because
+    // it is called many, many times) static initializer method will be created.
     public static final int DEBUG_LEVEL_NONE = 0;
     public static final int DEBUG_LEVEL_BOILER_PIPE_PHASES = 1;
     public static final int DEBUG_LEVEL_VISIBILITY_INFO = 2;
     public static final int DEBUG_LEVEL_PAGING_INFO = 3;
     public static final int DEBUG_LEVEL_TIMING_INFO = 4;
 
-    private static final StringBuilder LOG_BUILDER = new StringBuilder();
+    public static final String kBlack = "\033[0;30m";
+    public static final String kWhite = "\033[1;37m";
+
+    public static final String kDarkGray = "\033[1;30m";
+    public static final String kLightGray = "\033[0;37m";
+
+    public static final String kBlue = "\033[0;34m";
+    public static final String kLightBlue = "\033[1;34m";
+
+    public static final String kGreen = "\033[0;32m";
+    public static final String kLightGreen = "\033[1;32m";
+
+    public static final String kCyan = "\033[0;36m";
+    public static final String kLightCyan = "\033[1;36m";
+
+    public static final String kRed = "\033[0;31m";
+    public static final String kLightRed = "\033[1;31m";
+
+    public static final String kPurple = "\033[0;35m";
+    public static final String kLightPurple = "\033[1;35m";
+
+    public static final String kBrown = "\033[0;33m";
+    public static final String kYellow = "\033[1;33m";
+
+    public static final String kReset = "\033[0m";
+
+    private static String sLogBuilder = "";
 
     /**
      * Debug level requested by the client for logging to include while distilling.
@@ -50,7 +77,7 @@ public class LogUtil {
         if (!jsLogToConsole(str))
             System.out.println(str);
 
-        LOG_BUILDER.append(str).append("\n");
+        sLogBuilder += str + "\n";
     }
 
     static int getDebugLevel() {
@@ -62,37 +89,10 @@ public class LogUtil {
     }
 
     static String getAndClearLog() {
-        String log = LOG_BUILDER.toString();
-        // Clears the log, but re-uses the StringBuilder to reduce amount of copying for next use.
-        LOG_BUILDER.setLength(0);
+        String log = sLogBuilder;
+        sLogBuilder = "";
         return log;
     }
-
-    public static final String kBlack = "\033[0;30m";
-    public static final String kWhite = "\033[1;37m";
-
-    public static final String kDarkGray = "\033[1;30m";
-    public static final String kLightGray = "\033[0;37m";
-
-    public static final String kBlue = "\033[0;34m";
-    public static final String kLightBlue = "\033[1;34m";
-
-    public static final String kGreen = "\033[0;32m";
-    public static final String kLightGreen = "\033[1;32m";
-
-    public static final String kCyan = "\033[0;36m";
-    public static final String kLightCyan = "\033[1;36m";
-
-    public static final String kRed = "\033[0;31m";
-    public static final String kLightRed = "\033[1;31m";
-
-    public static final String kPurple = "\033[0;35m";
-    public static final String kLightPurple = "\033[1;35m";
-
-    public static final String kBrown = "\033[0;33m";
-    public static final String kYellow = "\033[1;33m";
-
-    public static final String kReset = "\033[0m";
 
     /**
      * Log a string to the javascript console, if it exists, i.e. if it's defined correctly.
