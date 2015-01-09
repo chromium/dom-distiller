@@ -21,11 +21,15 @@
  */
 package de.l3s.boilerpipe.filters.english;
 
+import com.dom_distiller.client.StringUtil;
+
 import de.l3s.boilerpipe.BoilerpipeFilter;
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.labels.DefaultLabels;
+
+import com.google.gwt.regexp.shared.RegExp;
 
 /**
  * Finds blocks which are potentially indicating the end of an article text and
@@ -44,83 +48,48 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
         return INSTANCE;
     }
 
-    // public static long timeSpent = 0;
+    public static final RegExp REG_TERMINATING = RegExp.compile("("
+                    + "^(comments|© reuters|please rate this|post a comment|"
+                    + "\\d+\\s+(comments|users responded in)"
+                    + ")"
+                    + "|what you think..."
+                    + "|add your comment"
+                    + "|add comment"
+                    + "|reader views"
+                    + "|have your say"
+                    + "|reader comments"
+                    + "|rätta artikeln"
+                    + "^thanks for your comments - this feedback is now closed$"
+                    + ")",
+            "i");
+
+    public static boolean isTerminatingText(String longText) {
+        return REG_TERMINATING.test(longText);
+    }
+
+    public static boolean isTerminating(TextBlock tb) {
+        if (tb.getNumWords() > 14) return false;
+        String text = StringUtil.jsTrim(tb.getText());
+        if (text.length() >= 8) {
+            return isTerminatingText(text);
+        } else if (tb.getLinkDensity() == 1.0) {
+            return text.equals("Comment");
+        }
+        return false;
+    }
 
     @Override
     public boolean process(TextDocument doc)
             throws BoilerpipeProcessingException {
         boolean changes = false;
 
-        // long t = System.currentTimeMillis();
-
         for (TextBlock tb : doc.getTextBlocks()) {
-            final int numWords = tb.getNumWords();
-            if (numWords < 15) {
-                final String text = tb.getText().trim();
-                final int len = text.length();
-                if (len >= 8) {
-                    final String textLC = text.toLowerCase();
-                    if (textLC.startsWith("comments")
-                            || startsWithNumber(textLC, len, " comments",
-                                    " users responded in")
-                            || textLC.startsWith("© reuters")
-                            || textLC.startsWith("please rate this")
-                            || textLC.startsWith("post a comment")
-                            || textLC.contains("what you think...")
-                            || textLC.contains("add your comment")
-                            || textLC.contains("add comment")
-                            || textLC.contains("reader views")
-                            || textLC.contains("have your say")
-                            || textLC.contains("reader comments")
-                            || textLC.contains("rätta artikeln")
-                            || textLC
-                                    .equals("thanks for your comments - this feedback is now closed")) {
-                        tb.addLabel(DefaultLabels.STRICTLY_NOT_CONTENT);
-                        changes = true;
-                    }
-                } else if(tb.getLinkDensity() == 1.0) {
-                    if(text.equals("Comment")) {
-                        tb.addLabel(DefaultLabels.STRICTLY_NOT_CONTENT);
-                    }
-                }
+            if (isTerminating(tb)) {
+                tb.addLabel(DefaultLabels.STRICTLY_NOT_CONTENT);
+                changes = true;
             }
         }
-
-        // timeSpent += System.currentTimeMillis() - t;
 
         return changes;
     }
-
-    /**
-     * Checks whether the given text t starts with a sequence of digits,
-     * followed by one of the given strings.
-     *
-     * @param t
-     *            The text to examine
-     * @param len
-     *            The length of the text to examine
-     * @param str
-     *            Any strings that may follow the digits.
-     * @return true if at least one combination matches
-     */
-    private static boolean startsWithNumber(final String t, final int len,
-            final String... str) {
-        int j = 0;
-        while (j < len && isDigit(t.charAt(j))) {
-            j++;
-        }
-        if (j != 0) {
-            for (String s : str) {
-                if (t.startsWith(s, j)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private static boolean isDigit(final char c) {
-        return c >= '0' && c <= '9';
-    }
-
 }
