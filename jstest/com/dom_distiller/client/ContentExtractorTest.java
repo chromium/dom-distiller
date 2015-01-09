@@ -8,7 +8,7 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 
-public class ContentExtractorTest extends DomDistillerTestCase {
+public class ContentExtractorTest extends DomDistillerJsTestCase {
     private static final String CONTENT_TEXT = "Lorem Ipsum Lorem Ipsum Lorem Ipsum.";
     private static final String TITLE_TEXT = "I am the document title";
 

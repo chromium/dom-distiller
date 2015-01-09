@@ -7,7 +7,7 @@ package com.dom_distiller.client;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Element;
 
-public class SchemaOrgParserAccessorTest extends DomDistillerTestCase {
+public class SchemaOrgParserAccessorTest extends DomDistillerJsTestCase {
 
     public void testImageWithEmbeddedPublisher() {
         String expectedUrl = "http://test_image_with_embedded_item.html";

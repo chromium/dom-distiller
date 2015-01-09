@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DocumentTitleMatchClassifierTest extends DomDistillerTestCase {
+public class DocumentTitleMatchClassifierTest extends DomDistillerJsTestCase {
     private static final String CONTENT_TEXT = "Lorem Ipsum Lorem Ipsum Lorem Ipsum.";
     private static final String TITLE_TEXT = "I am the document title";
 

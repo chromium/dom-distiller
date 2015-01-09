@@ -8,13 +8,14 @@ import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.Text;
 
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.sax.BoilerpipeHTMLContentHandler;
 
 import java.util.List;
 
-public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
+public class BoilerpipeHTMLContentHandlerTest extends DomDistillerJsTestCase {
 
     private static final String TEXT1 = "Some really long text which should be content.";
     private static final String TEXT2 = "Another really long text thing which should be content.";
@@ -29,6 +30,48 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         startElement(mBody);
     }
 
+    private Element createSpanElement() {
+        Element e = Document.get().createSpanElement();
+        mBody.appendChild(e);
+        return e;
+    }
+
+    private Element createDivElement() {
+        Element e = Document.get().createDivElement();
+        mBody.appendChild(e);
+        return e;
+    }
+
+    private Element createElement(String tagName) {
+        Element e = Document.get().createElement(tagName);
+        mBody.appendChild(e);
+        return e;
+    }
+
+    private Element createULElement() {
+        Element e = Document.get().createULElement();
+        mBody.appendChild(e);
+        return e;
+    }
+
+    private Element createLIElement() {
+        Element e = Document.get().createLIElement();
+        mBody.appendChild(e);
+        return e;
+    }
+
+    private AnchorElement createAnchorElement() {
+        AnchorElement e = Document.get().createAnchorElement();
+        mBody.appendChild(e);
+        return e;
+    }
+
+    private Text createTextNode(String data) {
+        Text e = Document.get().createTextNode(data);
+        mBody.appendChild(e);
+        return e;
+    }
+
     public void testSpansAsInline() {
         // <span>
         //   TEXT1
@@ -37,10 +80,10 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         //   </span>
         //   TEXT3
         // </span>
-        Element outerSpan = Document.get().createSpanElement();
+        Element outerSpan = createSpanElement();
         startElement(outerSpan);
         addText(TEXT1);
-        Element innerSpan = Document.get().createSpanElement();
+        Element innerSpan = createSpanElement();
         startElement(innerSpan);
         addText(TEXT2);
         endElement(innerSpan);
@@ -60,10 +103,11 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         //   </div>
         //   TEXT3
         // </span>
-        Element span = Document.get().createSpanElement();
+        Element span = createSpanElement();
+
         startElement(span);
         addText(TEXT1);
-        Element div = Document.get().createDivElement();
+        Element div = createDivElement();
         div.setAttribute("style", "display: inline;");
         startElement(div);
         addText(TEXT2);
@@ -84,10 +128,10 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         //   </div>
         //   TEXT3
         // </div>
-        Element div = Document.get().createDivElement();
+        Element div = createDivElement();
         startElement(div);
         addText(TEXT1);
-        Element span = Document.get().createDivElement();
+        Element span = createDivElement();
         startElement(span);
         addText(TEXT2);
         endElement(span);
@@ -107,10 +151,10 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         //   </span>
         //   TEXT3
         // </div>
-        Element div = Document.get().createDivElement();
+        Element div = createDivElement();
         startElement(div);
         addText(TEXT1);
-        Element span = Document.get().createSpanElement();
+        Element span = createSpanElement();
         span.setAttribute("style", "display: block;");
         startElement(span);
         addText(TEXT2);
@@ -131,10 +175,10 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         //   </h1>
         //   TEXT3
         // </div>
-        Element div = Document.get().createDivElement();
+        Element div = createDivElement();
         startElement(div);
         addText(TEXT1);
-        Element h1 = Document.get().createElement("h1");
+        Element h1 = createElement("h1");
         startElement(h1);
         addText(TEXT2);
         endElement(h1);
@@ -157,13 +201,13 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         //   TEXT3
         // </div>
         //
-        Element outerDiv = Document.get().createDivElement();
+        Element outerDiv = createDivElement();
         addText("\n"); // ignored
         startElement(outerDiv);
         addText("\n");
         addText(TEXT1);
         addText("\n");
-        Element innerSpan = Document.get().createSpanElement();
+        Element innerSpan = createSpanElement();
         startElement(innerSpan);
         addText("\n");
         addText(TEXT2);
@@ -195,18 +239,18 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         //   <span>TEXT1</span>
         //   <div>TEXT2</div>
         // </div>
-        Element firstDiv = Document.get().createDivElement();
+        Element firstDiv = createDivElement();
         addText("\n"); // ignored
         startElement(firstDiv);
         addText("\n");
         addText("-");
         addText("\n");
-        Element innerSpan = Document.get().createSpanElement();
+        Element innerSpan = createSpanElement();
         startElement(innerSpan);
         addText(TEXT1);
         endElement(innerSpan);
         addText("\n");
-        Element innerDiv = Document.get().createDivElement();
+        Element innerDiv = createDivElement();
         startElement(innerDiv);
         addText(TEXT2);
         endElement(innerDiv);
@@ -234,18 +278,18 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         //   <div>TEXT1</div>
         //   <span>TEXT2</span>
         // </div>
-        Element firstDiv = Document.get().createDivElement();
+        Element firstDiv = createDivElement();
         addText("\n"); // ignored
         startElement(firstDiv);
         addText("\n");
         addText("-");
         addText("\n");
-        Element innerDiv = Document.get().createDivElement();
+        Element innerDiv = createDivElement();
         startElement(innerDiv);
         addText(TEXT1);
         endElement(innerDiv);
         addText("\n");
-        Element innerSpan = Document.get().createSpanElement();
+        Element innerSpan = createSpanElement();
         startElement(innerSpan);
         addText(TEXT2);
         endElement(innerSpan);
@@ -276,13 +320,13 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
         //   <li>TEXT1
         //   </li>
         // </ul>
-        Element ul = Document.get().createULElement();
+        Element ul = createULElement();
         startElement(ul);
         addText("\n");
 
-        Element li = Document.get().createLIElement();
+        Element li = createLIElement();
         startElement(li);
-        AnchorElement anchor = Document.get().createAnchorElement();
+        AnchorElement anchor = createAnchorElement();
         anchor.setHref("foo.html");
         startElement(anchor);
         addText(" ");
@@ -323,7 +367,7 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerTestCase {
     }
 
     private void addText(String text) {
-        mHandler.textNode(Document.get().createTextNode(text));
+        mHandler.textNode(createTextNode(text));
     }
 
     private void endElement(Element e) {

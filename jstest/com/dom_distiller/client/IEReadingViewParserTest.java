@@ -8,7 +8,7 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
 
-public class IEReadingViewParserTest extends DomDistillerTestCase {
+public class IEReadingViewParserTest extends DomDistillerJsTestCase {
 
     public void testTitle() {
         String expectedTitle = "Testing title";
@@ -179,7 +179,7 @@ public class IEReadingViewParserTest extends DomDistillerTestCase {
     public void testUncaptionedDominantImage() {
         Element root = TestUtil.createDiv(0);
         ImageElement img = TestUtil.createImage();
-        String expectedUrl = "http://dominant_without_caption.jpeg";
+        String expectedUrl = "http://example.com/dominant_without_caption.jpeg";
         img.setSrc(expectedUrl);
         img.setWidth(600);
         img.setHeight(400);
@@ -200,7 +200,7 @@ public class IEReadingViewParserTest extends DomDistillerTestCase {
     public void testUncaptionedDominantImageWithInvalidSize() {
         Element root = TestUtil.createDiv(0);
         ImageElement img = TestUtil.createImage();
-        String expectedUrl = "http://dominant_without_caption.jpeg";
+        String expectedUrl = "http://example.com/dominant_without_caption.jpeg";
         img.setSrc(expectedUrl);
         img.setWidth(100);
         img.setHeight(100);
@@ -217,7 +217,7 @@ public class IEReadingViewParserTest extends DomDistillerTestCase {
         String expectedCaption = "Captioned Dominant Image with Smallest AR";
         Element figure = createFigureWithCaption(expectedCaption);
         ImageElement img = TestUtil.createImage();
-        String expectedUrl = "http://captioned_smallest_dominant.jpeg";
+        String expectedUrl = "http://example.com/captioned_smallest_dominant.jpeg";
         img.setSrc(expectedUrl);
         img.setWidth(400);
         img.setHeight(307);
@@ -242,7 +242,7 @@ public class IEReadingViewParserTest extends DomDistillerTestCase {
         String expectedCaption = "Captioned Dominant Image with Biggest AR";
         Element figure = createFigureWithCaption(expectedCaption);
         ImageElement img = TestUtil.createImage();
-        String expectedUrl = "http://captioned_biggest_dominant.jpeg";
+        String expectedUrl = "http://example.com/captioned_biggest_dominant.jpeg";
         img.setSrc(expectedUrl);
         img.setWidth(400);
         img.setHeight(134);
@@ -267,7 +267,7 @@ public class IEReadingViewParserTest extends DomDistillerTestCase {
         String expectedCaption = "Captioned Dominant Image with Invalid Size";
         Element figure = createFigureWithCaption(expectedCaption);
         ImageElement img = TestUtil.createImage();
-        String expectedUrl = "http://captioned_dominant_with_wrong_dimensions.jpeg";
+        String expectedUrl = "http://example.com/captioned_dominant_with_wrong_dimensions.jpeg";
         img.setSrc(expectedUrl);
         img.setWidth(100);
         img.setHeight(100);
@@ -291,7 +291,7 @@ public class IEReadingViewParserTest extends DomDistillerTestCase {
         Element root = TestUtil.createDiv(0);
         Element figure = createDefaultDominantFigure();
         ImageElement img = TestUtil.createImage();
-        String expectedUrl = "http://inline_without_caption.jpeg";
+        String expectedUrl = "http://example.com/inline_without_caption.jpeg";
         img.setSrc(expectedUrl);
         img.setWidth(400);
         img.setHeight(307);
@@ -315,7 +315,7 @@ public class IEReadingViewParserTest extends DomDistillerTestCase {
         Element root = TestUtil.createDiv(0);
         Element figure = createDefaultDominantFigure();
         ImageElement img = TestUtil.createImage();
-        String expectedUrl = "http://inline_without_caption.jpeg";
+        String expectedUrl = "http://example.com/inline_without_caption.jpeg";
         img.setSrc(expectedUrl);
         img.setWidth(400);
         img.setHeight(134);
@@ -341,7 +341,7 @@ public class IEReadingViewParserTest extends DomDistillerTestCase {
         String expectedCaption = "Captioned Inline Image with Smallest AR";
         Element figure = createFigureWithCaption(expectedCaption);
         ImageElement img = TestUtil.createImage();
-        String expectedUrl = "http://captioned_smallest_inline.jpeg";
+        String expectedUrl = "http://example.com/captioned_smallest_inline.jpeg";
         img.setSrc(expectedUrl);
         img.setWidth(400);
         img.setHeight(400);
@@ -391,7 +391,7 @@ public class IEReadingViewParserTest extends DomDistillerTestCase {
     private Element createDefaultDominantFigure() {
         Element figure = createFigureWithCaption("Default Dominant Image");
         ImageElement image = TestUtil.createImage();
-        image.setSrc("http://dominant.jpeg");
+        image.setSrc("http://example.com/dominant.jpeg");
         image.setWidth(600);
         image.setHeight(400);
 

@@ -6,7 +6,7 @@ package com.dom_distiller.client;
 
 import com.google.gwt.dom.client.Element;
 
-public class DocumentTitleGetterTest extends DomDistillerTestCase {
+public class DocumentTitleGetterTest extends DomDistillerJsTestCase {
     public void testNonStringWithoutRoot() {
         Element img = TestUtil.createImage();
         img.setAttribute("name", "title"); // cause document.title to return the img element.
@@ -45,16 +45,6 @@ public class DocumentTitleGetterTest extends DomDistillerTestCase {
         root.appendChild(titleElem2);
         String title = DocumentTitleGetter.getDocumentTitle(img, root);
         assertEquals(titleString, title);
-    }
-
-    public void testNonStringWithHTMLTitledRoot() {
-        Element root = TestUtil.createDiv(0);
-        Element img = TestUtil.createImage();
-        Element titleElem = TestUtil.createTitle(
-                "<a href=\"http://htmledtitle.com\">testing non-string <br>document.title</a> with a <b>HTML</b>-titled <br>root");
-        root.appendChild(titleElem);
-        String title = DocumentTitleGetter.getDocumentTitle(img, root);
-        assertEquals("testing non-string document.title with a HTML-titled root", title);
     }
 
     public void test1Dash2ShortParts() {
@@ -155,7 +145,7 @@ public class DocumentTitleGetterTest extends DomDistillerTestCase {
         root.appendChild(h1);
 
         String title = DocumentTitleGetter.getDocumentTitle("short title", root);
-        assertEquals("long heading with 5 words", title);
+        assertEquals("long heading with \n5 words", title);
     }
 
     public void testH1WithLongHTMLWithNbsp() {

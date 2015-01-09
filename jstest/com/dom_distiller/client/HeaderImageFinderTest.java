@@ -9,7 +9,7 @@ import com.google.gwt.dom.client.Node;
 
 import java.util.List;
 
-public class HeaderImageFinderTest extends DomDistillerTestCase {
+public class HeaderImageFinderTest extends DomDistillerJsTestCase {
 
     public void testScoreWithNullNodes() {
         HeaderImageFinder finder = new HeaderImageFinder(null);

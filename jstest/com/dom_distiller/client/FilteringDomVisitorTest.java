@@ -7,9 +7,10 @@ package com.dom_distiller.client;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 
-public class FilteringDomVisitorTest extends DomDistillerTestCase {
+public class FilteringDomVisitorTest extends DomDistillerJsTestCase {
     private void runTest(String innerHtml, String expectedHtml) throws Throwable {
         Element container = Document.get().createDivElement();
+        mBody.appendChild(container);
         container.setInnerHTML(innerHtml);
         SimpleContentHandler contentHandler = new SimpleContentHandler();
         DomWalker.Visitor domVisitor = new DomToSaxVisitor(contentHandler);

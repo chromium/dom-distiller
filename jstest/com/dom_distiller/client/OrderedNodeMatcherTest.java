@@ -9,7 +9,7 @@ import com.google.gwt.dom.client.Node;
 import java.util.Arrays;
 import java.util.List;
 
-public class OrderedNodeMatcherTest extends DomDistillerTestCase {
+public class OrderedNodeMatcherTest extends DomDistillerJsTestCase {
     public void testOrderedNodeMatcher() {
         List<Node> matchNodes = Arrays.<Node>asList(
                 TestUtil.createDiv(0),

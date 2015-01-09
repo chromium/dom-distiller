@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-public class DomWalkerTest extends DomDistillerTestCase {
+public class DomWalkerTest extends DomDistillerJsTestCase {
     private static class VisitData {
         final int expectedId;
         final boolean shouldVisit;

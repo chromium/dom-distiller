@@ -4,7 +4,9 @@
 
 package com.dom_distiller.client;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
 
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
@@ -50,7 +52,16 @@ public class TestTextDocumentBuilder {
         BoilerpipeHTMLContentHandler htmlParser = new BoilerpipeHTMLContentHandler();
         htmlParser.startDocument();
         DomToSaxVisitor domToSaxVisitor = new DomToSaxVisitor(htmlParser);
-        new DomWalker(domToSaxVisitor).walk(docElement);
+
+        Node body = Document.get().getBody();
+        if (!JavaScript.contains(body, docElement) && body.equals(docElement)) {
+            body.appendChild(docElement);
+            new DomWalker(domToSaxVisitor).walk(docElement);
+            body.removeChild(docElement);
+        } else {
+            new DomWalker(domToSaxVisitor).walk(docElement);
+        }
+
         htmlParser.endDocument();
         return htmlParser.toTextDocument();
     }

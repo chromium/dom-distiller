@@ -15,11 +15,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class RelevantElementsFinderTest extends DomDistillerTestCase {
+public class RelevantElementsFinderTest extends DomDistillerJsTestCase {
     private static final Set<Node> mEmptySet = Collections.emptySet();
 
     public void testNoImage() {
         Node root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
         Node contentText = TestUtil.createText("content");
         root.appendChild(contentText);
 
@@ -33,6 +34,7 @@ public class RelevantElementsFinderTest extends DomDistillerTestCase {
 
     public void testHeaderImageBeforeContent() {
         Node root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
         Element image = TestUtil.createImage();
         image.getStyle().setProperty("width", "600px");
         image.getStyle().setProperty("height", "350px");
@@ -53,6 +55,7 @@ public class RelevantElementsFinderTest extends DomDistillerTestCase {
 
     public void testNoHeaderImage() {
         Node root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
         Element image = TestUtil.createImage();
         // This image is likely an ad or logo (by size/ratio).
         image.getStyle().setProperty("width", "200px");
@@ -80,6 +83,7 @@ public class RelevantElementsFinderTest extends DomDistillerTestCase {
 
     public void testSmallHeaderImageInFigureBeforeContent() {
         Node root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
         Element image = TestUtil.createImage();
         Element fig = Document.get().createElement("figure");
         image.getStyle().setProperty("width", "300px");
@@ -103,6 +107,7 @@ public class RelevantElementsFinderTest extends DomDistillerTestCase {
     public void testMultipleHeaderImageCandidates() {
         // This test should only select the better of the two candidates.
         Node root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
         Element fig = Document.get().createElement("figure");
         Element image = TestUtil.createImage();
         image.getStyle().setProperty("width", "600px");
@@ -132,6 +137,7 @@ public class RelevantElementsFinderTest extends DomDistillerTestCase {
     public void testMultipleHeaderImagesEqualScore() {
         // Only the earliest, high-scoring image should be selected.
         Node root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
         Element goodImage = TestUtil.createImage();
         goodImage.getStyle().setProperty("width", "600px");
         goodImage.getStyle().setProperty("height", "350px");
@@ -158,6 +164,7 @@ public class RelevantElementsFinderTest extends DomDistillerTestCase {
 
     public void testImageAfterContent() {
         Node root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
         Node contentText = TestUtil.createText("content");
         Node image = TestUtil.createImage();
         root.appendChild(contentText);
@@ -174,6 +181,7 @@ public class RelevantElementsFinderTest extends DomDistillerTestCase {
 
     public void testInvisibleImageAfterContentIsHidden() {
         Node root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
         Node contentText = TestUtil.createText("content");
         Node image = TestUtil.createImage();
         Element.as(image).getStyle().setDisplay(Display.NONE);
@@ -191,6 +199,7 @@ public class RelevantElementsFinderTest extends DomDistillerTestCase {
 
     public void testImageAfterContentInInvisibleParentIsHidden() {
         Node root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
         Node contentText = TestUtil.createText("content");
         Node parent = TestUtil.createDiv(1);
         Element.as(parent).getStyle().setDisplay(Display.NONE);
@@ -210,6 +219,7 @@ public class RelevantElementsFinderTest extends DomDistillerTestCase {
 
     public void testImageAfterNonContent() {
         Node root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
         Node contentText = TestUtil.createText("content");
         Node nonContentText = TestUtil.createText("not content");
         Node image = TestUtil.createImage();
@@ -227,6 +237,7 @@ public class RelevantElementsFinderTest extends DomDistillerTestCase {
 
     public void testImageWithDifferentParent() {
         Node root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
         Node leftChild = TestUtil.createDiv(1);
         Node rightChild = TestUtil.createDiv(2);
         Node contentText = TestUtil.createText("content");
@@ -247,6 +258,7 @@ public class RelevantElementsFinderTest extends DomDistillerTestCase {
 
     public void testDataTable() {
         Node root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
         Node contentText = TestUtil.createText("content");
         root.appendChild(contentText);
 
@@ -303,6 +315,7 @@ public class RelevantElementsFinderTest extends DomDistillerTestCase {
 
     public void testInvisibleTDInDataTable() {
         Node root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
         Node contentText = TestUtil.createText("content");
         root.appendChild(contentText);
 
@@ -347,6 +360,7 @@ public class RelevantElementsFinderTest extends DomDistillerTestCase {
 
     public void testNonDataTable() {
         Element root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
         Node contentText = TestUtil.createText("content");
         root.appendChild(contentText);
 
@@ -389,6 +403,7 @@ public class RelevantElementsFinderTest extends DomDistillerTestCase {
 
     public void testNonDataTableWithNestedDataTable() {
         Node root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
         Node contentText = TestUtil.createText("content");
         root.appendChild(contentText);
 
@@ -425,6 +440,7 @@ public class RelevantElementsFinderTest extends DomDistillerTestCase {
 
     public void testDataTableWithNestedNonDataTable() {
         Node root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
         Node contentText = TestUtil.createText("content");
         root.appendChild(contentText);
 

@@ -5,7 +5,7 @@
 package com.dom_distiller.client;
 
 
-public class MarkupParserTest extends DomDistillerTestCase {
+public class MarkupParserTest extends DomDistillerJsTestCase {
 
     public void testNullOpenGraphProtocolParser() {
         // To have a null OpenGraphProtocolParser, don't create its required

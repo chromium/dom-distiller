@@ -7,7 +7,7 @@ package com.dom_distiller.client;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 
-public class DomToSaxVisitorTest extends DomDistillerTestCase {
+public class DomToSaxVisitorTest extends DomDistillerJsTestCase {
     private void runDomVisitorTest(String innerHtml) throws Throwable {
         Element container = Document.get().createDivElement();
         container.setInnerHTML(innerHtml);

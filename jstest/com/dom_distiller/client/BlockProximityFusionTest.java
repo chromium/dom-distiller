@@ -12,7 +12,7 @@ import de.l3s.boilerpipe.labels.DefaultLabels;
 
 import java.util.LinkedList;
 
-public class BlockProximityFusionTest extends DomDistillerTestCase {
+public class BlockProximityFusionTest extends DomDistillerJsTestCase {
     private static final String LONG_TEXT =
             "Lorem Ipsum Lorem Ipsum Lorem Ipsum. " +
             "Lorem Ipsum Lorem Ipsum Lorem Ipsum. " +

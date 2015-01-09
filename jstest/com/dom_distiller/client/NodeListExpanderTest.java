@@ -10,7 +10,7 @@ import com.google.gwt.dom.client.Node;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NodeListExpanderTest extends DomDistillerTestCase {
+public class NodeListExpanderTest extends DomDistillerJsTestCase {
     public void testNodeListExpander() {
         List<Element> divs = TestUtil.createDivTree();
         List<Node> leafNodes = new ArrayList<Node>();

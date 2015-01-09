@@ -15,33 +15,7 @@ public class DomDistillerTestSuite extends GWTTestSuite {
 
     public static Test suite() {
         TestSuite suite = new TestSuite("All GWTTestCase tests");
-        suite.addTestSuite(BlockProximityFusionTest.class);
-        suite.addTestSuite(BoilerpipeHTMLContentHandlerTest.class);
-        suite.addTestSuite(ContentExtractorTest.class);
-        suite.addTestSuite(DocumentTitleGetterTest.class);
-        suite.addTestSuite(DocumentTitleMatchClassifierTest.class);
-        suite.addTestSuite(DomToSaxVisitorTest.class);
-        suite.addTestSuite(DomUtilTest.class);
-        suite.addTestSuite(DomWalkerTest.class);
-        suite.addTestSuite(FilteringDomVisitorTest.class);
-        suite.addTestSuite(GwtOverlayProtoTest.class);
-        suite.addTestSuite(HeaderImageFinderTest.class);
-        suite.addTestSuite(HeadingFusionTest.class);
-        suite.addTestSuite(IEReadingViewParserTest.class);
-        suite.addTestSuite(ImageHeuristicsTest.class);
-        suite.addTestSuite(MarkupParserProtoTest.class);
-        suite.addTestSuite(MarkupParserTest.class);
-        suite.addTestSuite(NodeDirectionalityTest.class);
-        suite.addTestSuite(NodeListExpanderTest.class);
-        suite.addTestSuite(OrderedNodeMatcherTest.class);
         suite.addTestSuite(PagingLinksFinderTest.class);
-        suite.addTestSuite(RelevantElementsFinderTest.class);
-        suite.addTestSuite(SchemaOrgParserAccessorTest.class);
-        suite.addTestSuite(SimilarSiblingContentExpansionTest.class);
-        suite.addTestSuite(TableClassifierTest.class);
-        suite.addTestSuite(TestUtilTest.class);
-        suite.addTestSuite(TextBlockBuilderTest.class);
-        suite.addTestSuite(TextDocumentStatisticsTest.class);
         return suite;
     }
 }

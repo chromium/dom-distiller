@@ -16,7 +16,7 @@ import com.google.gwt.user.client.DOM;
 
 import java.util.List;
 
-public class ImageHeuristicsTest extends DomDistillerTestCase {
+public class ImageHeuristicsTest extends DomDistillerJsTestCase {
 
     public void testAreaScorer() {
         Element goodImage = TestUtil.createImage();
@@ -28,6 +28,9 @@ public class ImageHeuristicsTest extends DomDistillerTestCase {
         badImage.getStyle().setProperty("width", "100px");
         badImage.getStyle().setProperty("height", "100px");
         badImage.getStyle().setProperty("display", "block");
+
+        mBody.appendChild(goodImage);
+        mBody.appendChild(badImage);
 
         ImageScorer scorer = new AreaScorer(50, 75000, 200000);
 
@@ -47,6 +50,9 @@ public class ImageHeuristicsTest extends DomDistillerTestCase {
         badImage.getStyle().setProperty("height", "700px");
         badImage.getStyle().setProperty("display", "block");
 
+        mBody.appendChild(goodImage);
+        mBody.appendChild(badImage);
+
         ImageScorer scorer = new DimensionsRatioScorer(50);
 
         assertEquals(true, scorer.getImageScore(goodImage) > 0);
@@ -63,6 +69,8 @@ public class ImageHeuristicsTest extends DomDistillerTestCase {
         image.getStyle().setProperty("display", "block");
         content.appendChild(image);
         root.appendChild(content);
+
+        mBody.appendChild(root);
 
         // Build long chain of divs to separate image from content.
         Node currentDiv = TestUtil.createDiv(3);
@@ -89,6 +97,8 @@ public class ImageHeuristicsTest extends DomDistillerTestCase {
         goodImage.getStyle().setProperty("display", "block");
         fig.appendChild(goodImage);
         root.appendChild(fig);
+
+        mBody.appendChild(root);
 
         Element badImage = TestUtil.createImage();
         badImage.getStyle().setProperty("width", "100px");

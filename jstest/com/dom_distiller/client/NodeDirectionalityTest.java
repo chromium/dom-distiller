@@ -7,18 +7,20 @@ package com.dom_distiller.client;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 
-public class NodeDirectionalityTest extends DomDistillerTestCase {
+public class NodeDirectionalityTest extends DomDistillerJsTestCase {
 
     private static final String CONTENT_TEXT = "Lorem Ipsum Lorem Ipsum Lorem Ipsum.";
     private static final String TITLE_TEXT = "I am the document title";
 
     public void testDirAttributeLtrAddedToTree() {
         Element div = TestUtil.createDiv(0);
+        div.appendChild(TestUtil.createSpan(CONTENT_TEXT));
+        div.appendChild(TestUtil.createSpan(CONTENT_TEXT));
         mBody.appendChild(div);
 
         NodeTree tree = new NodeTree(div);
-        tree.addChild(TestUtil.createSpan(CONTENT_TEXT));
-        tree.addChild(TestUtil.createSpan(CONTENT_TEXT));
+        tree.addChild(div.getChild(0));
+        tree.addChild(div.getChild(1));
 
         Node cloned = tree.cloneSubtreeRetainDirection();
 

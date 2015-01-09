@@ -9,7 +9,7 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 
-public class DomUtilTest extends DomDistillerTestCase {
+public class DomUtilTest extends DomDistillerJsTestCase {
     public void testGetAttributes() {
         Element e = Document.get().createDivElement();
         e.setInnerHTML("<div style=\"width:50px; height:100px\" id=\"f\" class=\"sdf\"></div>");

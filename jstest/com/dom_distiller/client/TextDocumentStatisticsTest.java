@@ -10,7 +10,7 @@ import de.l3s.boilerpipe.document.TextDocumentStatistics;
 /**
  * Tests for {@link TextDocumentStatistics}.
  */
-public class TextDocumentStatisticsTest  extends DomDistillerTestCase {
+public class TextDocumentStatisticsTest  extends DomDistillerJsTestCase {
     private static final String THREE_WORDS = "I love statistics";
     public void testOnlyContent() {
         TextDocument document = new TestTextDocumentBuilder()

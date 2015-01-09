@@ -12,7 +12,7 @@ import de.l3s.boilerpipe.labels.DefaultLabels;
 
 import java.util.LinkedList;
 
-public class HeadingFusionTest extends DomDistillerTestCase {
+public class HeadingFusionTest extends DomDistillerJsTestCase {
     private static final String HEADING_TEXT =
             "Heading";
     private static final String LONG_TEXT =

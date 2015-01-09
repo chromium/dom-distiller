@@ -8,7 +8,7 @@ import com.google.gwt.dom.client.Element;
 
 import java.util.List;
 
-public class TestUtilTest extends DomDistillerTestCase {
+public class TestUtilTest extends DomDistillerJsTestCase {
     public void testCreateDivTree() {
         List<Element> divs = TestUtil.createDivTree();
         assertEquals(

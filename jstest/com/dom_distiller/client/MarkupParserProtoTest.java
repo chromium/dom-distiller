@@ -10,7 +10,7 @@ import com.google.gwt.json.client.JSONObject;
 
 import java.util.Arrays;
 
-public class MarkupParserProtoTest extends DomDistillerTestCase {
+public class MarkupParserProtoTest extends DomDistillerJsTestCase {
     public void testCompleteInfoWithMultipleImages() {
         // Create the required properties for OpenGraphProtocol except for "image".
         createDefaultOGTitle();

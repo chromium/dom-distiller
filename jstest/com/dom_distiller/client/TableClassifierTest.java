@@ -9,9 +9,10 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.TableElement;
 
-public class TableClassifierTest extends DomDistillerTestCase {
+public class TableClassifierTest extends DomDistillerJsTestCase {
     public void testInputElement() {
         Element input = Document.get().createTextInputElement();
+        mBody.appendChild(input);
         TableElement table = createDefaultTableWithTH();
         input.appendChild(table);
         assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
@@ -20,6 +21,7 @@ public class TableClassifierTest extends DomDistillerTestCase {
 
     public void testContentEditableAttribute() {
         Element div = TestUtil.createDiv(0);
+        mBody.appendChild(div);
         div.setAttribute("contenteditable", "true");
         TableElement table = createDefaultTableWithTH();
         div.appendChild(table);
@@ -473,6 +475,7 @@ public class TableClassifierTest extends DomDistillerTestCase {
     private TableElement createTable(String html) {
         TableElement table = Document.get().createTableElement();
         table.setInnerHTML(html);
+        mBody.appendChild(table);
         return table;
     }
 
@@ -495,6 +498,7 @@ public class TableClassifierTest extends DomDistillerTestCase {
         assertEquals(TableClassifier.Type.DATA, TableClassifier.table(table));
         assertEquals(TableClassifier.Reason.CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
                      TableClassifier.sReason);
+        mBody.appendChild(table);
         return table;
     }
 
@@ -512,6 +516,7 @@ public class TableClassifierTest extends DomDistillerTestCase {
         TableElement table = createTable(tableStr);
         assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
         assertEquals(TableClassifier.Reason.LESS_EQ_10_CELLS, TableClassifier.sReason);
+        mBody.appendChild(table);
         return table;
     }
 
@@ -539,6 +544,7 @@ public class TableClassifierTest extends DomDistillerTestCase {
         TableElement table = createTable(tableStr);
         assertEquals(TableClassifier.Type.DATA, TableClassifier.table(table));
         assertEquals(TableClassifier.Reason.DEFAULT, TableClassifier.sReason);
+        mBody.appendChild(table);
         return table;
     }
 

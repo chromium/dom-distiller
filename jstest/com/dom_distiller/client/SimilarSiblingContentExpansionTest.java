@@ -12,7 +12,7 @@ import de.l3s.boilerpipe.labels.DefaultLabels;
 
 import java.util.LinkedList;
 
-public class SimilarSiblingContentExpansionTest extends DomDistillerTestCase {
+public class SimilarSiblingContentExpansionTest extends DomDistillerJsTestCase {
 
     public void testSimpleExpansion() {
         mBody.setInnerHTML(

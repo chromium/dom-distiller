@@ -6,7 +6,7 @@ package com.dom_distiller.client;
 
 import de.l3s.boilerpipe.document.TextDocument;
 
-public class TextDocumentConstructionTest extends DomDistillerTestCase {
+public class TextDocumentConstructionTest extends DomDistillerJsTestCase {
     private static boolean DEBUG = false;
 
     public void testTextDocumentConstruction() throws Exception {
@@ -218,7 +218,7 @@ public class TextDocumentConstructionTest extends DomDistillerTestCase {
     //   > /tmp/expected
     private String expectedDebugString =
         "[0-0;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "Overview\n" +
+        "   Overview \n" +
         "[1-1;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Package\n" +
         "[2-2;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
@@ -226,11 +226,11 @@ public class TextDocumentConstructionTest extends DomDistillerTestCase {
         "[3-3;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Use\n" +
         "[4-4;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "Tree\n" +
+        " Tree \n" +
         "[5-5;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "Deprecated\n" +
+        " Deprecated \n" +
         "[6-6;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "Index\n" +
+        " Index \n" +
         "[7-7;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Help\n" +
         "[8-8;tl=4; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[]\u001B[0m\n" +
@@ -240,11 +240,11 @@ public class TextDocumentConstructionTest extends DomDistillerTestCase {
         "[10-10;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Next\n" +
         "[11-11;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "Frames\n" +
+        " Frames \n" +
         "[12-12;tl=6; nw=2;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "No Frames\n" +
+        " No Frames \n" +
         "[13-13;tl=6; nw=2;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "All Classes\n" +
+        " All Classes \n" +
         "[14-14;tl=4; nw=6;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H1, de.l3s.boilerpipe/HEADING]\u001B[0m\n" +
         "How This API Document Is Organized\n" +
         "[15-15;tl=4; nw=19;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[]\u001B[0m\n" +
@@ -252,7 +252,7 @@ public class TextDocumentConstructionTest extends DomDistillerTestCase {
         "[16-16;tl=6; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Overview\n" +
         "[17-17;tl=6; nw=36;ld=0.027778]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "The Overview  page is the front page of this API document and provides a list of all packages with a summary for each.  This page can also contain an overall description of the set of packages.\n" +
+        "The  Overview  page is the front page of this API document and provides a list of all packages with a summary for each.  This page can also contain an overall description of the set of packages.\n" +
         "[18-18;tl=6; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Package\n" +
         "[19-19;tl=6; nw=25;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
@@ -334,7 +334,7 @@ public class TextDocumentConstructionTest extends DomDistillerTestCase {
         "[57-57;tl=6; nw=3;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Tree (Class Hierarchy)\n" +
         "[58-58;tl=6; nw=45;ld=0.044444]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "There is a Class Hierarchy  page for all packages, plus a hierarchy for each package. Each hierarchy page contains a list of classes and a list of interfaces. The classes are organized by inheritance structure starting with java.lang.Object. The interfaces do not inherit from java.lang.Object.\n" +
+        "There is a  Class Hierarchy  page for all packages, plus a hierarchy for each package. Each hierarchy page contains a list of classes and a list of interfaces. The classes are organized by inheritance structure starting with java.lang.Object. The interfaces do not inherit from java.lang.Object.\n" +
         "[59-59;tl=7; nw=14;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "When viewing the Overview page, clicking on \"Tree\" displays the hierarchy for all packages.\n" +
         "[60-60;tl=7; nw=18;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
@@ -342,11 +342,11 @@ public class TextDocumentConstructionTest extends DomDistillerTestCase {
         "[61-61;tl=6; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Deprecated API\n" +
         "[62-62;tl=6; nw=40;ld=0.05]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "The Deprecated API  page lists all of the API that have been deprecated. A deprecated API is not recommended for use, generally due to improvements, and a replacement API is usually given. Deprecated APIs may be removed in future implementations.\n" +
+        "The  Deprecated API  page lists all of the API that have been deprecated. A deprecated API is not recommended for use, generally due to improvements, and a replacement API is usually given. Deprecated APIs may be removed in future implementations.\n" +
         "[63-63;tl=6; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Index\n" +
         "[64-64;tl=6; nw=14;ld=0.071429]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "The Index  contains an alphabetic list of all classes, interfaces, constructors, methods, and fields.\n" +
+        "The  Index  contains an alphabetic list of all classes, interfaces, constructors, methods, and fields.\n" +
         "[65-65;tl=6; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Prev/Next\n" +
         "[66-66;tl=6; nw=15;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
@@ -358,7 +358,7 @@ public class TextDocumentConstructionTest extends DomDistillerTestCase {
         "[69-69;tl=6; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "All Classes\n" +
         "[70-70;tl=6; nw=13;ld=0.153846]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "The All Classes  link shows all classes and interfaces except non-static nested types.\n" +
+        "The  All Classes  link shows all classes and interfaces except non-static nested types.\n" +
         "[71-71;tl=6; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Serialized Form\n" +
         "[72-72;tl=6; nw=61;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
@@ -366,11 +366,11 @@ public class TextDocumentConstructionTest extends DomDistillerTestCase {
         "[73-73;tl=6; nw=3;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/H2, de.l3s.boilerpipe/HEADING, de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Constant Field Values\n" +
         "[74-74;tl=6; nw=13;ld=0.230769]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "The Constant Field Values  page lists the static final fields and their values.\n" +
+        "The  Constant Field Values  page lists the static final fields and their values.\n" +
         "[75-75;tl=3; nw=12;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[]\u001B[0m\n" +
         "This help file applies to API documentation generated using the standard doclet.\n" +
         "[76-76;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "Overview\n" +
+        "   Overview \n" +
         "[77-77;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Package\n" +
         "[78-78;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
@@ -378,11 +378,11 @@ public class TextDocumentConstructionTest extends DomDistillerTestCase {
         "[79-79;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Use\n" +
         "[80-80;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "Tree\n" +
+        " Tree \n" +
         "[81-81;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "Deprecated\n" +
+        " Deprecated \n" +
         "[82-82;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "Index\n" +
+        " Index \n" +
         "[83-83;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Help\n" +
         "[84-84;tl=4; nw=2;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[]\u001B[0m\n" +
@@ -392,9 +392,9 @@ public class TextDocumentConstructionTest extends DomDistillerTestCase {
         "[86-86;tl=5; nw=1;ld=0.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
         "Next\n" +
         "[87-87;tl=6; nw=1;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "Frames\n" +
+        " Frames \n" +
         "[88-88;tl=6; nw=2;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "No Frames\n" +
+        " No Frames \n" +
         "[89-89;tl=6; nw=2;ld=1.0]	\u001B[0;35mboilerplate\u001B[0m,\u001B[1;30m[de.l3s.boilerpipe/LI]\u001B[0m\n" +
-        "All Classes\n";
+        " All Classes \n";
 }

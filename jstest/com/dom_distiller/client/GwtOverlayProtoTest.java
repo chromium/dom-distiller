@@ -13,7 +13,7 @@ import java.util.Arrays;
 /**
  * Tests of protoc generated gwt overlay types.
  */
-public class GwtOverlayProtoTest extends DomDistillerTestCase {
+public class GwtOverlayProtoTest extends DomDistillerJsTestCase {
     public void testSimpleMessage() {
         TestProtos.SimpleMessage message = TestProtos.SimpleMessage.create();
         assertNotNull(message);
