@@ -17,9 +17,9 @@ public class TerminatingBlocksFinderTest extends DomDistillerJsTestCase {
             "9 comments foo", "1346213423 users responded in", "1346213423 users responded in foo",
 
             // Contains cases.
-            "foo what you think bar", "what you think", "foo what you think", "add your comment",
-            "foo add your comment", "add comment bar", "reader views bar", "have your say bar",
-            "foo reader comments", "foo rätta artikeln",
+            "foo what you think... bar", "what you think...", "foo what you think...",
+            "add your comment", "foo add your comment", "add comment bar", "reader views bar",
+            "have your say bar", "foo reader comments", "foo rätta artikeln",
 
             // Equals cases.
             "thanks for your comments - this feedback is now closed",
@@ -31,11 +31,11 @@ public class TerminatingBlocksFinderTest extends DomDistillerJsTestCase {
 
     private String[] negativeExamples = {
             // Startswith cases.
-            " comments foo", "xd© reuters", "please rate this", "post a comment",
+            "lcomments foo", "xd© reuters", "not please rate this", "xx post a comment",
             "users responded in", "123users responded in foo",
 
             // Contains cases.
-            "what you think", "add your comment", "ad comment", "readerviews",
+            "what you think..", "addyour comment", "ad comment", "readerviews",
 
             // Equals cases.
             "thanks for your comments - this feedback is now closed foo",

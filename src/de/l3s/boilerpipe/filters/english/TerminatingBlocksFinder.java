@@ -52,14 +52,14 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
                     + "^(comments|© reuters|please rate this|post a comment|"
                     + "\\d+\\s+(comments|users responded in)"
                     + ")"
-                    + "|what you think..."
+                    + "|what you think\\.\\.\\."
                     + "|add your comment"
                     + "|add comment"
                     + "|reader views"
                     + "|have your say"
                     + "|reader comments"
                     + "|rätta artikeln"
-                    + "^thanks for your comments - this feedback is now closed$"
+                    + "|^thanks for your comments - this feedback is now closed$"
                     + ")",
             "i");
 
