@@ -155,7 +155,7 @@ class CppConverterWriter(writer.CodeWriter):
           )
 
     self.Output(
-        Indented(body),
+        body,
         field_number=field.JavascriptIndex(),
         field_name=field.name,
         value_type=field.CppValueType() if not field.IsClassType() else None,
