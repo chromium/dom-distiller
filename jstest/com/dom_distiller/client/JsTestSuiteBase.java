@@ -4,6 +4,7 @@
 
 package com.dom_distiller.client;
 
+import com.google.gwt.core.client.JavaScriptException;
 import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.user.client.Window;
 
@@ -182,9 +183,12 @@ public class JsTestSuiteBase {
 
     private void logExceptionString(TestLogger logger, Throwable e) {
         StackTraceElement[] stack = e.getStackTrace();
-        // The first four stack frames are gwt internal exception creation functions that just make
-        // it harder to see the real error. Skip them.
-        int start = debug ? 0 : 4;
+        // The first stack frames are gwt internal exception creation functions that just make it
+        // harder to see the real error. Skip them.
+        int start = e instanceof JavaScriptException ? 1 : 4;
+        if (debug) {
+           start = 0;
+        }
         int end = stack.length;
         logger.log(TestLogger.RESULTS, e.getMessage());
         for (int i = start; i < end; i++) {
