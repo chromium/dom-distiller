@@ -91,7 +91,7 @@ public class ElementActionTest extends DomDistillerTestCase {
         assertTrue(hasLabel(getForHtml("<div id=\"comments\"></div>"),
                     DefaultLabels.STRICTLY_NOT_CONTENT));
 
-        assertFalse(hasLabel(getForHtml("<div class=\"user-comments\"></div>"),
+        assertTrue(hasLabel(getForHtml("<div class=\"user-comments\"></div>"),
                     DefaultLabels.STRICTLY_NOT_CONTENT));
     }
 
