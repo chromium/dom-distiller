@@ -10,9 +10,10 @@ import com.google.gwt.dom.client.Element;
 import de.l3s.boilerpipe.sax.ElementAction;
 import de.l3s.boilerpipe.labels.DefaultLabels;
 
-public class ElementActionTest extends DomDistillerTestCase {
+public class ElementActionTest extends DomDistillerJsTestCase {
     private ElementAction getForHtml(String html) {
         Element container = Document.get().createDivElement();
+        mBody.appendChild(container);
         container.setInnerHTML(html);
         assertEquals(1, container.getChildCount());
         Element e = container.getFirstChildElement();

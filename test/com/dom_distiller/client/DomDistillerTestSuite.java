@@ -16,8 +16,6 @@ public class DomDistillerTestSuite extends GWTTestSuite {
     public static Test suite() {
         TestSuite suite = new TestSuite("All GWTTestCase tests");
         suite.addTestSuite(PagingLinksFinderTest.class);
-        suite.addTestSuite(ElementActionTest.class);
-        suite.addTestSuite(TextBlockBuilderTest.class);
         return suite;
     }
 }

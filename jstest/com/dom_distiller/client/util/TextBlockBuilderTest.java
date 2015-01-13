@@ -4,7 +4,7 @@
 
 package com.dom_distiller.client.util;
 
-import com.dom_distiller.client.DomDistillerTestCase;
+import com.dom_distiller.client.DomDistillerJsTestCase;
 import com.dom_distiller.client.TestTextDocumentBuilder;
 
 import com.google.gwt.dom.client.Document;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class TextBlockBuilderTest extends DomDistillerTestCase {
+public class TextBlockBuilderTest extends DomDistillerJsTestCase {
     private static void addText(TextBlockBuilder builder, String text, int tagLevel) {
         builder.textNode(Document.get().createTextNode(text), tagLevel);
     }
@@ -145,6 +145,7 @@ public class TextBlockBuilderTest extends DomDistillerTestCase {
             " further?” Since we want to dig all deeper into Chad Johnson, can we dig in deep" +
             " to her?”</p></blockquote>";
         Element div = Document.get().createDivElement();
+        mBody.appendChild(div);
         div.setInnerHTML(html);
         TextDocument document = TestTextDocumentBuilder.fromPage(div);
         List<TextBlock> textBlocks = document.getTextBlocks();
@@ -168,6 +169,7 @@ public class TextBlockBuilderTest extends DomDistillerTestCase {
             "<a href=\"example\" target=\"_top\"><u>Forms</u></a> | \n" +
             "<a href=\"example\" target=\"_top\"><u>Home</u></a> </p>\n";
         Element div = Document.get().createDivElement();
+        mBody.appendChild(div);
         div.setInnerHTML(html);
         TextDocument document = TestTextDocumentBuilder.fromPage(div);
         List<TextBlock> textBlocks = document.getTextBlocks();
