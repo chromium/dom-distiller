@@ -33,7 +33,7 @@ driver.get("file://" + test_html)
 result = driver.execute_script(test_runner)
 driver.quit()
 end = time.time()
-print result['log']
+print result['log'].encode('utf-8')
 print 'Tests run: %d, Failures: %d, Skipped: %d, Time elapsed: %0.3f sec' % (result['numTests'],
     result['failed'], result['skipped'], end - start)
 sys.exit(0 if result['success'] else 1)
