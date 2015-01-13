@@ -16,7 +16,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.Document;
 
-import java.util.ListIterator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -114,50 +113,86 @@ public final class SimilarSiblingContentExpansion implements BoilerpipeFilter {
         Node docNode = Document.get().getDocumentElement();
         canonicalReps = findCanonicalReps(textBlocks, docNode);
 
+        // After processing a block, it will be added to either the list of good or the list of bad
+        // blocks. The good list contains blocks that are content, and bad contains non-content.
+        // The range [goodBegin, goodEnd) is a set of blocks that could be potential siblings (and
+        // similar for bad).
+        int[] good = new int[textBlocks.size()];
+        int goodBegin = 0, goodEnd = 0;
+        int[] bad = new int[textBlocks.size()];
+        int badBegin = 0, badEnd = 0;
+
         boolean changes = false;
         for (int i = 0; i < textBlocks.size(); i++) {
-            for (int j = i + 1; j < Math.min(textBlocks.size(), i + maxBlockDistance + 1); j++) {
-                if (!allowCrossTitles && textBlocks.get(j).hasLabel(DefaultLabels.TITLE)) break;
-                if (!allowCrossHeadings && textBlocks.get(j).hasLabel(DefaultLabels.HEADING)) break;
-                if (shouldExpandForward(i, j)) {
-                    changes = true;
-                    textBlocks.get(j).setIsContent(true);
+            if ((!allowCrossTitles && textBlocks.get(i).hasLabel(DefaultLabels.TITLE)) ||
+                    (!allowCrossHeadings && textBlocks.get(i).hasLabel(DefaultLabels.HEADING))) {
+                // Clear the sets of potential siblings (since expansion is not allowed to cross
+                // this block).
+                goodBegin = goodEnd;
+                badBegin = badEnd;
+                continue;
+            }
+
+            if (allowExpandFrom(i)) {
+                good[goodEnd++] = i;
+                // Check the potential bad siblings and set any matches to content.
+                for (int j = badBegin; j < badEnd; j++) {
+                    int b = bad[j];
+                    if (i - b > maxBlockDistance) {
+                        if (j == badBegin) {
+                            // "i - bad[badBegin] > maxBlockDistance" for all the following blocks.
+                            badBegin++;
+                        }
+                        continue;
+                    }
+                    if (isSimilarIndex(i, b)) {
+                        changes = true;
+                        textBlocks.get(b).setIsContent(true);
+                        // Remove bad[j] from the "bad" potential set. There is no need to add it to
+                        // the good set since any further sibling of it will also be a sibling of
+                        // the current block which has already been added to the list.
+                        bad[j] = bad[badBegin++];
+                    }
                 }
-                if (shouldExpandBackward(i, j)) {
-                    changes = true;
-                    textBlocks.get(i).setIsContent(true);
+            } else if (allowExpandTo(i)) {
+                int j;
+                // Check the potential good siblings. If there's a match, this block becomes
+                // content.
+                for (j = goodBegin; j < goodEnd; j++) {
+                    int g = good[j];
+                    if (i - g > maxBlockDistance) {
+                        if (j == goodBegin) {
+                            // "i - good[goodBegin] > maxBlockDistance" for all the following
+                            // blocks.
+                            goodBegin++;
+                        }
+                        continue;
+                    }
+                    if (isSimilarIndex(i, g)) {
+                        changes = true;
+                        textBlocks.get(i).setIsContent(true);
+                        // Remove good[j] from the potential set. This can be done because any
+                        // sibling of it will also be a sibling of the current block, and the
+                        // current block will be added to the potential set below.
+                        good[j] = good[goodBegin++];
+                        break;
+                    }
+                }
+                if (j == goodEnd) {
+                    bad[badEnd++] = i;
+                } else {
+                    good[goodEnd++] = i;
                 }
             }
         }
+
         return changes;
-    }
-
-    private boolean shouldExpandForward(int left, int right) {
-        return allowExpandBetween(left, right)
-                && allowExpandFrom(left)
-                && allowExpandTo(right);
-    }
-
-    private boolean shouldExpandBackward(int left, int right) {
-        return allowExpandBetween(left, right)
-                && allowExpandFrom(right)
-                && allowExpandTo(left);
-    }
-
-    private boolean allowExpandBetween(int left, int right) {
-        return validIndex(left) && validIndex(right)
-                && (Math.abs(left - right) <= maxBlockDistance)
-                && isSimilarIndex(left, right);
     }
 
     private boolean allowExpandFrom(int i) {
         return textBlocks.get(i).isContent()
                 && !textBlocks.get(i).hasLabel(DefaultLabels.STRICTLY_NOT_CONTENT)
                 && !textBlocks.get(i).hasLabel(DefaultLabels.TITLE);
-    }
-
-    private boolean validIndex(int i) {
-        return 0 <= i && i < textBlocks.size();
     }
 
     private boolean allowExpandTo(int i) {
@@ -169,9 +204,7 @@ public final class SimilarSiblingContentExpansion implements BoilerpipeFilter {
 
     private boolean isSimilarIndex(int i, int j) {
         Node leftNode = canonicalReps.get(i), rightNode = canonicalReps.get(j);
-
         if (!allowMixedTags && !areSameTag(leftNode, rightNode)) return false;
-
         return leftNode.getParentNode().equals(rightNode.getParentNode());
     }
 
@@ -183,7 +216,7 @@ public final class SimilarSiblingContentExpansion implements BoilerpipeFilter {
      * next TextBlock's first text element.
      */
     private static List<Node> findCanonicalReps(List<TextBlock> textBlocks, Node docNode) {
-        ArrayList<Node> reps = new ArrayList<Node>(textBlocks.size());
+        List<Node> reps = new ArrayList<Node>();
         for (int i = 0; i < textBlocks.size(); ++i) {
             Node nextNode = i + 1 == textBlocks.size()
                     ? docNode
