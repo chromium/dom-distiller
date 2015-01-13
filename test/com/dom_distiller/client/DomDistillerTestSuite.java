@@ -6,8 +6,6 @@ package com.dom_distiller.client;
 
 import com.google.gwt.junit.tools.GWTTestSuite;
 
-import com.dom_distiller.client.util.TextBlockBuilderTest;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
