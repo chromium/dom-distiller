@@ -33,11 +33,11 @@ public class JsTestEntry implements EntryPoint {
     @JsExport
     public static TestSuiteResults run() {
         String filter = Window.Location.getParameter("filter");
-        return run(filter);
+        return runWithFilter(filter);
     }
 
     @JsExport
-    public static TestSuiteResults run(String filter) {
+    public static TestSuiteResults runWithFilter(String filter) {
         JsTestSuiteBuilder builder = GWT.<JsTestSuiteBuilder>create(JsTestSuiteBuilder.class);
         TestLogger logger = new TestLogger();
         Map<String, JsTestSuiteBase.TestCaseResults> results = builder.build().run(logger, filter);

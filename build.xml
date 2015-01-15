@@ -22,6 +22,8 @@
   <!-- Configure path to GWT SDK -->
   <property name="gwt.sdk" location="third_party/gwt-2.7.0" />
 
+  <property name="test.filter" location="" />
+
   <path id="project.class.path">
     <pathelement location="war/WEB-INF/classes"/>
     <pathelement location="${gwt.sdk}/gwt-user.jar"/>
@@ -216,10 +218,11 @@
     </exec>
   </target>
 
-  <target name="jstests" depends="extractjs.jstests" description="Generates test proto code">
+  <target name="jstests" depends="extractjs.jstests" description="Runs jstests">
     <exec executable="xvfb-run" failonerror="true">
       <env key="PATH" path="${env.PATH}:${basedir}/buildtools"/>
       <arg value="./run_jstests.py"/>
+      <arg line="--filter ${test.filter}"/>
     </exec>
   </target>
 
@@ -248,40 +251,6 @@
       <batchtest todir="out/reports/htmlunit.dev" >
         <fileset dir="test" >
           <include name="**/DomDistillerTestSuite.java" />
-        </fileset>
-      </batchtest>
-      <formatter type="brief" usefile="false" />
-      <formatter type="plain" />
-      <formatter type="xml" />
-    </junit>
-    <fail message="Test failure detected (test.dev)." if="test.dev.failed" />
-  </target>
-
-  <target name="singletest.dev" depends="javac.tests" description="Run development mode tests">
-    <fail message="You must specify a value for test.filter with -Dtest.filter=">
-      <condition>
-        <not>
-          <isset property="test.filter"/>
-        </not>
-      </condition>
-    </fail>
-    <mkdir dir="out/reports/htmlunit.dev" />
-    <junit fork="yes" printsummary="yes" haltonfailure="no" failureproperty="test.dev.failed">
-      <jvmarg line="-Xmx256m" />
-      <sysproperty key="gwt.args" value="-logLevel WARN" />
-      <sysproperty key="java.awt.headless" value="true" />
-      <classpath>
-        <path refid="project.class.path" />
-        <path refid="project.java.path" />
-        <path refid="project.java.test.path" />
-        <path refid="protoc.test.java.output" />
-        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
-        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
-        <pathelement location="third_party/junit/junit-4.11.jar" />
-      </classpath>
-      <batchtest todir="out/reports/htmlunit.dev" >
-        <fileset dir="test" >
-          <include name="**/${test.filter}Test.java" />
         </fileset>
       </batchtest>
       <formatter type="brief" usefile="false" />
@@ -325,48 +294,9 @@
     <fail message="Test failure detected (test.prod)." if="test.prod.failed" />
   </target>
 
-  <target name="singletest.prod" depends="javac.tests" description="Run production mode tests">
-    <fail message="You must specify a value for test.filter with -Dtest.filter=">
-      <condition>
-        <not>
-          <isset property="test.filter"/>
-        </not>
-      </condition>
-    </fail>
-    <mkdir dir="out/reports/htmlunit.prod" />
-    <junit fork="yes" printsummary="yes" haltonfailure="no" failureproperty="test.prod.failed">
-      <jvmarg line="-Xmx256m" />
-      <sysproperty key="gwt.args" value="-prod -logLevel WARN" />
-      <sysproperty key="java.awt.headless" value="true" />
-      <classpath>
-        <path refid="project.class.path" />
-        <path refid="project.java.path" />
-        <path refid="project.java.test.path" />
-        <path refid="protoc.test.java.output" />
-        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
-        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
-        <pathelement location="third_party/junit/junit-4.11.jar" />
-      </classpath>
-      <batchtest todir="out/reports/htmlunit.prod" >
-        <fileset dir="test" >
-          <include name="**/${test.filter}Test.java" />
-        </fileset>
-      </batchtest>
-      <formatter type="brief" usefile="false" />
-      <formatter type="plain" />
-      <formatter type="xml" />
-    </junit>
-    <fail message="Test failure detected (test.prod)." if="test.prod.failed" />
-  </target>
-
   <target name="test"
     depends="jstests, test.dev, test.prod, package"
     description="Run development and production mode tests">
-  </target>
-
-  <target name="singletest" description="Run an individual test in development and production mode">
-    <antcall target="singletest.dev" />
-    <antcall target="singletest.prod" />
   </target>
 
   <target name="build" depends="gwtc" description="Build this project" />

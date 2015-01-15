@@ -12,9 +12,11 @@ installed.
 In addition, ChromeDriver assumes that Chrome is available at /usr/bin/google-chrome.
 """
 
+import argparse
 import os
 import sys
 import time
+import urllib
 
 try:
   from selenium import webdriver
@@ -23,17 +25,32 @@ except:
   print 'Couldn\'t import webdriver. Please run `sudo ./install-build-deps.sh`.'
   sys.exit(1)
 
-start = time.time()
+def main(argv):
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--filter', help='Only tests that match this pattern will be run.')
+  options = parser.parse_args(argv)
 
-test_runner = "return com.dom_distiller.client.JsTestEntry.run()";
-test_html = os.path.abspath(os.path.join(os.path.dirname(__file__), "war", "test.html"))
+  params = {}
+  if options.filter:
+    params['filter'] = options.filter
 
-driver = webdriver.Chrome()
-driver.get("file://" + test_html)
-result = driver.execute_script(test_runner)
-driver.quit()
-end = time.time()
-print result['log'].encode('utf-8')
-print 'Tests run: %d, Failures: %d, Skipped: %d, Time elapsed: %0.3f sec' % (result['numTests'],
-    result['failed'], result['skipped'], end - start)
-sys.exit(0 if result['success'] else 1)
+  start = time.time()
+  test_runner = "return com.dom_distiller.client.JsTestEntry.run()";
+  test_html = os.path.abspath(os.path.join(os.path.dirname(__file__), "war", "test.html"))
+  test_html += "?" + urllib.urlencode(params)
+
+  driver = webdriver.Chrome()
+  driver.get("file://" + test_html)
+  result = driver.execute_script(test_runner)
+  driver.quit()
+
+  end = time.time()
+  print result['log'].encode('utf-8')
+  print 'Tests run: %d, Failures: %d, Skipped: %d, Time elapsed: %0.3f sec' % (result['numTests'],
+      result['failed'], result['skipped'], end - start)
+  return 0 if result['success'] else 1
+
+if __name__ == '__main__':
+  sys.exit(main(sys.argv[1:]))
+
+
