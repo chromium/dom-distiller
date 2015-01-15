@@ -24,6 +24,8 @@
     }
   },
 
+  "devtools_page": "devtools.html",
+
   "permissions": [
     "tabs",
     "activeTab"

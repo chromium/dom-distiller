@@ -5,5 +5,5 @@
 var options = {};
 console.profile("Extraction");
 var res = com.dom_distiller.client.DomDistiller.applyWithOptions(options);
-console.profileEnd();
-
+console.profileEnd("Extraction");
+console.log(res)
