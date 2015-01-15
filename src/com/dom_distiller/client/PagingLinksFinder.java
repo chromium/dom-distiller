@@ -96,10 +96,11 @@ public class PagingLinksFinder {
             mLinkDebugInfo.clear();
         }
 
-        String baseUrl = findBaseUrl(original_domain);
+        String baseUrl = mockDomainForFile(findBaseUrl(), original_domain);
         // Remove trailing '/' from window location href, because it'll be used to compare with
         // other href's whose trailing '/' are also removed.
         String wndLocationHref = StringUtil.findAndReplace(Window.Location.getHref(), "\\/$", "");
+        wndLocationHref = mockDomainForFile(wndLocationHref, original_domain);
         NodeList<Element> allLinks = root.getElementsByTagName("A");
         Map<String, PagingLinkObj> possiblePages = new HashMap<String, PagingLinkObj>();
 
@@ -127,6 +128,7 @@ public class PagingLinksFinder {
             // Note that AnchorElement.getHref() returns the absolute URI, so there's no need to
             // worry about relative links.
             String linkHref = REG_HREF_CLEANER.replace(link.getHref(), "");
+            linkHref = mockDomainForFile(linkHref, original_domain);
 
             // Ignore page link that is empty, not http/https, or same as current window location.
             // If the page link is same as the base URL:
@@ -317,11 +319,26 @@ public class PagingLinksFinder {
         return pagingHref;
     }
 
+    public static String mockDomainForFile(String url, String original_domain) {
+        if (original_domain.isEmpty()) {
+            return url;
+        }
+        String[] urlSlashes = StringUtil.split(url, "\\/+");
+        if (!urlSlashes[0].equals("file:")) {
+            return url;
+        }
+        String replaced = "http://" + original_domain;
+        for (int i = 2; i< urlSlashes.length; i++) {
+            replaced += "/" + urlSlashes[i];
+        }
+        return replaced;
+    }
+
     private static String getLocationHost(String original_domain) {
         return original_domain.isEmpty() ? Window.Location.getHost() : original_domain;
     }
 
-    private static String findBaseUrl(String original_domain) {
+    private static String findBaseUrl() {
         // This extracts relevant parts from the window location's path based on various heuristics
         // to determine the path of the base URL of the document.  This path is then appended to the
         // window location protocol and host to form the base URL of the document.  This base URL is
@@ -383,7 +400,7 @@ public class PagingLinksFinder {
             cleanedSegments.add(segment);
         }  // for all urlSlashes
 
-        return Window.Location.getProtocol() + "//" + getLocationHost(original_domain) + "/" +
+        return Window.Location.getProtocol() + "//" + getLocationHost("") + "/" +
                 reverseJoin(cleanedSegments, "/");
     }
 

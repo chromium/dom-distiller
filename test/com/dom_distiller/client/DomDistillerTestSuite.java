@@ -13,7 +13,6 @@ public class DomDistillerTestSuite extends GWTTestSuite {
 
     public static Test suite() {
         TestSuite suite = new TestSuite("All GWTTestCase tests");
-        suite.addTestSuite(PagingLinksFinderTest.class);
         return suite;
     }
 }
