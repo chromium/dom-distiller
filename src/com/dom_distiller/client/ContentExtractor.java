@@ -14,7 +14,6 @@ import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.VideoElement;
 
-import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.document.TextDocumentStatistics;
@@ -184,15 +183,8 @@ public class ContentExtractor {
      *         page.
      */
     private List<Node> processTextBlocks(TextDocument document) {
-        try {
-            ArticleExtractor.INSTANCE.process(document);
-        } catch (BoilerpipeProcessingException e) {
-            LogUtil.logToConsole("DomDistiller Processing failed: " + e);
-            return new LinkedList<Node>();
-        }
-
+        ArticleExtractor.INSTANCE.process(document);
         List<Node> contentNodes = getContentNodesForTextDocument(document);
-
         List<Node> contentAndRelevantElements = RelevantElementsFinder.findAndAddElements(
                 contentNodes, document.getHiddenElements(),
                 document.getDataTables(), Document.get().getDocumentElement());

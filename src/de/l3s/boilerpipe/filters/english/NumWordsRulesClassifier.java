@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.ListIterator;
 
 import de.l3s.boilerpipe.BoilerpipeFilter;
-import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 
@@ -43,8 +42,7 @@ public class NumWordsRulesClassifier implements BoilerpipeFilter {
         return INSTANCE;
     }
 
-    public boolean process(TextDocument doc)
-            throws BoilerpipeProcessingException {
+    public boolean process(TextDocument doc) {
         List<TextBlock> textBlocks = doc.getTextBlocks();
 
         if (textBlocks.isEmpty()) return false;

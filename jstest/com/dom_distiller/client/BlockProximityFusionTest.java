@@ -4,7 +4,6 @@
 
 package com.dom_distiller.client;
 
-import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.filters.heuristics.BlockProximityFusion;
@@ -26,12 +25,12 @@ public class BlockProximityFusionTest extends DomDistillerJsTestCase {
     // ***** Tests for special-handling of leading text *****
 
     // Both kinds of BlockProximityFusion should merge two content blocks.
-    public void testMergeShortLeadingContent() throws BoilerpipeProcessingException {
+    public void testMergeShortLeadingContent() {
         doTestMergeShortLeadingContent(BlockProximityFusion.PRE_FILTERING);
         doTestMergeShortLeadingContent(BlockProximityFusion.POST_FILTERING);
     }
 
-    private void doTestMergeShortLeadingContent(BlockProximityFusion classifier) throws BoilerpipeProcessingException {
+    private void doTestMergeShortLeadingContent(BlockProximityFusion classifier) {
         TextDocument document = new TestTextDocumentBuilder()
                 .addContentBlock(SHORT_TEXT)
                 .addContentBlock(LONG_TEXT)
@@ -47,12 +46,12 @@ public class BlockProximityFusionTest extends DomDistillerJsTestCase {
     }
 
     // Both kinds of BlockProximityFusion should not merge an LI non-content followed by content.
-    public void testDoesNotMergeShortLeadingLiNonContent() throws BoilerpipeProcessingException {
+    public void testDoesNotMergeShortLeadingLiNonContent() {
         doTestDoesNotMergeShortLeadingLiNonContent(BlockProximityFusion.PRE_FILTERING);
         doTestDoesNotMergeShortLeadingLiNonContent(BlockProximityFusion.POST_FILTERING);
     }
 
-    private void doTestDoesNotMergeShortLeadingLiNonContent(BlockProximityFusion classifier) throws BoilerpipeProcessingException {
+    private void doTestDoesNotMergeShortLeadingLiNonContent(BlockProximityFusion classifier) {
         TextDocument document = new TestTextDocumentBuilder()
                 .addNonContentBlock(SHORT_TEXT, DefaultLabels.LI)
                 .addContentBlock(LONG_TEXT)
@@ -68,12 +67,12 @@ public class BlockProximityFusionTest extends DomDistillerJsTestCase {
     }
 
     // Both kinds of BlockProximityFusion should not merge a non-content followed by content.
-    public void testDoesNotMergeShortLeadingNonContent() throws BoilerpipeProcessingException {
+    public void testDoesNotMergeShortLeadingNonContent() {
         doTestDoesNotMergeShortLeadingNonContent(BlockProximityFusion.PRE_FILTERING);
         doTestDoesNotMergeShortLeadingNonContent(BlockProximityFusion.POST_FILTERING);
     }
 
-    public void doTestDoesNotMergeShortLeadingNonContent(BlockProximityFusion classifier) throws BoilerpipeProcessingException {
+    public void doTestDoesNotMergeShortLeadingNonContent(BlockProximityFusion classifier) {
         TextDocument document = new TestTextDocumentBuilder()
                 .addNonContentBlock(SHORT_TEXT)
                 .addContentBlock(LONG_TEXT)
@@ -88,12 +87,12 @@ public class BlockProximityFusionTest extends DomDistillerJsTestCase {
     // ***** Larger-document tests *****
 
     // Both kinds of BlockProximityFusion should merge a document full of content.
-    public void testMergeLotsOfContent() throws BoilerpipeProcessingException {
+    public void testMergeLotsOfContent() {
         doTestMergeLotsOfContent(BlockProximityFusion.PRE_FILTERING);
         doTestMergeLotsOfContent(BlockProximityFusion.POST_FILTERING);
     }
 
-    private void doTestMergeLotsOfContent(BlockProximityFusion classifier) throws BoilerpipeProcessingException {
+    private void doTestMergeLotsOfContent(BlockProximityFusion classifier) {
         TextDocument document = new TestTextDocumentBuilder()
                 .addContentBlock(LONG_LEADING_TEXT)
                 .addContentBlock(LONG_LEADING_TEXT)
@@ -115,12 +114,12 @@ public class BlockProximityFusionTest extends DomDistillerJsTestCase {
     }
 
     // If only merging content blocks, non-content in the body of any kind is not merged.
-    public void testSkipsNonContentInBody() throws BoilerpipeProcessingException {
+    public void testSkipsNonContentInBody() {
         doTestSkipsNonContentInBody(BlockProximityFusion.PRE_FILTERING);
         doTestSkipsNonContentInBody(BlockProximityFusion.POST_FILTERING);
     }
 
-    public void doTestSkipsNonContentInBody(BlockProximityFusion classifier) throws BoilerpipeProcessingException {
+    public void doTestSkipsNonContentInBody(BlockProximityFusion classifier) {
         TextDocument document = new TestTextDocumentBuilder()
                 .addContentBlock(LONG_LEADING_TEXT)
                 .addContentBlock(LONG_LEADING_TEXT)
@@ -136,7 +135,7 @@ public class BlockProximityFusionTest extends DomDistillerJsTestCase {
     }
 
     // If "content" flag is ignored, a single non-content LI in the body is not merged.
-    public void testPreFilteringSkipsNonContentListInBody() throws BoilerpipeProcessingException {
+    public void testPreFilteringSkipsNonContentListInBody() {
         BlockProximityFusion classifier = BlockProximityFusion.PRE_FILTERING;
 
         TextDocument document = new TestTextDocumentBuilder()

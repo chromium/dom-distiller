@@ -24,7 +24,6 @@ package de.l3s.boilerpipe.filters.english;
 import com.dom_distiller.client.StringUtil;
 
 import de.l3s.boilerpipe.BoilerpipeFilter;
-import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.labels.DefaultLabels;
@@ -79,8 +78,7 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
     }
 
     @Override
-    public boolean process(TextDocument doc)
-            throws BoilerpipeProcessingException {
+    public boolean process(TextDocument doc) {
         boolean changes = false;
 
         for (TextBlock tb : doc.getTextBlocks()) {

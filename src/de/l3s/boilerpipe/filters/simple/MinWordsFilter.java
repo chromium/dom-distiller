@@ -18,7 +18,6 @@
 package de.l3s.boilerpipe.filters.simple;
 
 import de.l3s.boilerpipe.BoilerpipeFilter;
-import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 
@@ -34,9 +33,7 @@ public final class MinWordsFilter implements BoilerpipeFilter {
         this.minWords = minWords;
     }
 
-    public boolean process(final TextDocument doc)
-            throws BoilerpipeProcessingException {
-
+    public boolean process(final TextDocument doc) {
         boolean changes = false;
 
         for (TextBlock tb : doc.getTextBlocks()) {

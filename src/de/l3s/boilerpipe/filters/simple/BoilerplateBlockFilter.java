@@ -21,7 +21,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import de.l3s.boilerpipe.BoilerpipeFilter;
-import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.labels.DefaultLabels;
@@ -50,9 +49,8 @@ public final class BoilerplateBlockFilter implements BoilerpipeFilter {
 		this.labelToKeep = labelToKeep;
 	}
 
-	public boolean process(TextDocument doc)
-			throws BoilerpipeProcessingException {
-		List<TextBlock> textBlocks = doc.getTextBlocks();
+        public boolean process(TextDocument doc) {
+                List<TextBlock> textBlocks = doc.getTextBlocks();
 		boolean hasChanges = false;
 
 		for (Iterator<TextBlock> it = textBlocks.iterator(); it.hasNext();) {

@@ -24,7 +24,6 @@ package de.l3s.boilerpipe.filters.heuristics;
 import com.google.gwt.dom.client.Element;
 
 import de.l3s.boilerpipe.BoilerpipeFilter;
-import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.labels.DefaultLabels;
@@ -54,8 +53,7 @@ public final class KeepLargestBlockFilter implements BoilerpipeFilter {
     }
 
     @Override
-    public boolean process(final TextDocument doc)
-            throws BoilerpipeProcessingException {
+    public boolean process(final TextDocument doc) {
         List<TextBlock> textBlocks = doc.getTextBlocks();
         if (textBlocks.size() < 2) {
             return false;

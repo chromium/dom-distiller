@@ -4,7 +4,6 @@
 
 package com.dom_distiller.client;
 
-import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.filters.heuristics.DocumentTitleMatchClassifier;
@@ -18,7 +17,7 @@ public class DocumentTitleMatchClassifierTest extends DomDistillerJsTestCase {
     private static final String CONTENT_TEXT = "Lorem Ipsum Lorem Ipsum Lorem Ipsum.";
     private static final String TITLE_TEXT = "I am the document title";
 
-    public void testLabelsTitle() throws BoilerpipeProcessingException {
+    public void testLabelsTitle() {
         DocumentTitleMatchClassifier classifier =
                 new DocumentTitleMatchClassifier(newList(TITLE_TEXT));
 
@@ -33,7 +32,7 @@ public class DocumentTitleMatchClassifierTest extends DomDistillerJsTestCase {
     }
 
     // Mimics leading and trailing breadcrumbs containing the title.
-    public void testLabelsMultipeTitle() throws BoilerpipeProcessingException {
+    public void testLabelsMultipeTitle() {
         DocumentTitleMatchClassifier classifier =
                 new DocumentTitleMatchClassifier(newList(TITLE_TEXT));
 
@@ -54,7 +53,7 @@ public class DocumentTitleMatchClassifierTest extends DomDistillerJsTestCase {
         assertTrue(trailingTitleBlockAsLi.hasLabel(DefaultLabels.TITLE));
     }
 
-    public void testDoesNotLabelTitleInContent() throws BoilerpipeProcessingException {
+    public void testDoesNotLabelTitleInContent() {
         DocumentTitleMatchClassifier classifier =
                 new DocumentTitleMatchClassifier(newList(TITLE_TEXT));
 
@@ -68,7 +67,7 @@ public class DocumentTitleMatchClassifierTest extends DomDistillerJsTestCase {
     }
 
     // Non-exhaustive test for the type of partial-matches that Boilerpipe performs.
-    public void testLabelsPartialTitleMatch() throws BoilerpipeProcessingException {
+    public void testLabelsPartialTitleMatch() {
         DocumentTitleMatchClassifier classifier = new DocumentTitleMatchClassifier(
                 newList("BreakingNews » " + TITLE_TEXT));
 
@@ -82,7 +81,7 @@ public class DocumentTitleMatchClassifierTest extends DomDistillerJsTestCase {
         assertFalse(contentBlock.hasLabel(DefaultLabels.TITLE));
     }
 
-    public void testMatchesMultipleTitles() throws BoilerpipeProcessingException {
+    public void testMatchesMultipleTitles() {
         String secondTitleText = "I am another document title";
 
         DocumentTitleMatchClassifier classifier = new DocumentTitleMatchClassifier(

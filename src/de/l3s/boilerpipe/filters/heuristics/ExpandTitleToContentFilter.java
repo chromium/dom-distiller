@@ -18,7 +18,6 @@
 package de.l3s.boilerpipe.filters.heuristics;
 
 import de.l3s.boilerpipe.BoilerpipeFilter;
-import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.labels.DefaultLabels;
@@ -41,8 +40,7 @@ public final class ExpandTitleToContentFilter implements BoilerpipeFilter {
         return INSTANCE;
     }
 
-    public boolean process(TextDocument doc)
-            throws BoilerpipeProcessingException {
+    public boolean process(TextDocument doc) {
         int i = 0;
         int title = -1;
         int contentStart = -1;

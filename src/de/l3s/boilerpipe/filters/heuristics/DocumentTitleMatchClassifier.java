@@ -26,7 +26,6 @@ import com.dom_distiller.client.StringUtil;
 import com.google.gwt.regexp.shared.RegExp;
 
 import de.l3s.boilerpipe.BoilerpipeFilter;
-import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.labels.DefaultLabels;
@@ -153,7 +152,7 @@ public final class DocumentTitleMatchClassifier implements BoilerpipeFilter {
     private static final RegExp REG_REMOVE_CHARACTERS = RegExp.compile("[\\?\\!\\.\\-\\:]+", "g");
 
     @Override
-    public boolean process(TextDocument doc) throws BoilerpipeProcessingException {
+    public boolean process(TextDocument doc) {
         if (potentialTitles == null) {
             return false;
         }

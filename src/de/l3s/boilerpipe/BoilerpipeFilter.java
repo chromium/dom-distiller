@@ -33,8 +33,6 @@ public interface BoilerpipeFilter {
      *            The {@link TextDocument} that is to be processed.
      * @return <code>true</code> if changes have been made to the
      *         {@link TextDocument}.
-     * @throws BoilerpipeProcessingException
      */
-    boolean process(final TextDocument doc)
-            throws BoilerpipeProcessingException;
+    boolean process(final TextDocument doc);
 }

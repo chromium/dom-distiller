@@ -18,7 +18,6 @@
 package de.l3s.boilerpipe.filters.heuristics;
 
 import de.l3s.boilerpipe.BoilerpipeFilter;
-import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.labels.DefaultLabels;
@@ -34,10 +33,8 @@ public final class ListAtEndFilter implements BoilerpipeFilter {
 	private ListAtEndFilter() {
 	}
 
-	public boolean process(final TextDocument doc)
-			throws BoilerpipeProcessingException {
-
-		boolean changes = false;
+        public boolean process(final TextDocument doc) {
+                boolean changes = false;
 
 		int tagLevel = Integer.MAX_VALUE;
 		for (TextBlock tb : doc.getTextBlocks()) {

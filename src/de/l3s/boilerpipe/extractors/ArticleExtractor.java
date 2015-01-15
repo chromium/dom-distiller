@@ -21,7 +21,6 @@
  */
 package de.l3s.boilerpipe.extractors;
 
-import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.filters.debug.PrintDebugFilter;
 import de.l3s.boilerpipe.filters.english.NumWordsRulesClassifier;
@@ -53,8 +52,7 @@ public final class ArticleExtractor {
         return INSTANCE;
     }
 
-    public boolean process(TextDocument doc)
-            throws BoilerpipeProcessingException {
+    public boolean process(TextDocument doc) {
         boolean changed;
 
         PrintDebugFilter.INSTANCE.process(doc, true, "Start");
