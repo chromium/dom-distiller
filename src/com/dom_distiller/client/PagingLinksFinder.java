@@ -16,6 +16,7 @@ import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
+import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.user.client.Window;
 
 import java.util.ArrayList;
@@ -40,15 +41,29 @@ import java.util.Map;
  */
 public class PagingLinksFinder {
     // Match for next page: next, continue, >, >>, » but not >|, »| as those usually mean last.
-    private static final String NEXT_LINK_REGEX = "(next|weiter|continue|>([^\\|]|$)|»([^\\|]|$))";
-    private static final String PREV_LINK_REGEX = "(prev|early|old|new|<|«)";
-    private static final String POSITIVE_REGEX = "article|body|content|entry|hentry|main|page|pagination|post|text|blog|story";
-    private static final String NEGATIVE_REGEX = "combx|comment|com-|contact|foot|footer|footnote|masthead|media|meta|outbrain|promo|related|scroll|shoutbox|sidebar|sponsor|shopping|tags|tool|widget";
-    private static final String EXTRANEOUS_REGEX =
-            "print|archive|comment|discuss|e[\\-]?mail|share|reply|all|login|sign|single";
+    private static final RegExp REG_NEXT_LINK =
+            RegExp.compile("(next|weiter|continue|>([^\\|]|$)|»([^\\|]|$))", "i");
+    private static final RegExp REG_PREV_LINK = RegExp.compile("(prev|early|old|new|<|«)", "i");
+    private static final RegExp REG_POSITIVE = RegExp.compile(
+            "article|body|content|entry|hentry|main|page|pagination|post|text|blog|story", "i");
+    private static final RegExp REG_NEGATIVE = RegExp.compile(
+            "combx|comment|com-|contact|foot|footer|footnote|masthead|media|meta"
+                    + "|outbrain|promo|related|scroll|shoutbox|sidebar|sponsor|shopping|tags"
+                    + "|tool|widget",
+            "i");
+    private static final RegExp REG_EXTRANEOUS = RegExp.compile(
+            "print|archive|comment|discuss|e[\\-]?mail|share|reply|all|login|sign|single", "i");
+    private static final RegExp REG_PAGINATION = RegExp.compile("pag(e|ing|inat)", "i");
+    private static final RegExp REG_LINK_PAGINATION =
+            RegExp.compile("p(a|g|ag)?(e|ing|ination)?(=|\\/)[0-9]{1,2}", "i");
+    private static final RegExp REG_FIRST_LAST = RegExp.compile("(first|last)", "i");
+    private static final RegExp REG_IS_HTTP_HTTPS = RegExp.compile("^https?://", "i");
     // Examples that match PAGE_NUMBER_REGEX are: "_p3", "-pg3", "p3", "_1", "-12-2".
     // Examples that don't match PAGE_NUMBER_REGEX are: "_p3 ", "p", "p123".
-    private static final String PAGE_NUMBER_REGEX = "((_|-)?p[a-z]*|(_|-))[0-9]{1,2}$";
+    private static final RegExp REG_PAGE_NUMBER =
+            RegExp.compile("((_|-)?p[a-z]*|(_|-))[0-9]{1,2}$", "gi");
+
+    private static final RegExp REG_HREF_CLEANER = RegExp.compile("/?(#.*)?$");
 
     public static DomDistillerProtos.PaginationInfo getPaginationInfo(String original_domain) {
         DomDistillerProtos.PaginationInfo info = DomDistillerProtos.PaginationInfo.create();
@@ -111,19 +126,18 @@ public class PagingLinksFinder {
             // Remove url anchor and then trailing '/' from link's href.
             // Note that AnchorElement.getHref() returns the absolute URI, so there's no need to
             // worry about relative links.
-            String linkHref = StringUtil.findAndReplace(
-                StringUtil.findAndReplace(link.getHref(), "#.*$", ""), "\\/$", "");
+            String linkHref = REG_HREF_CLEANER.replace(link.getHref(), "");
 
             // Ignore page link that is empty, not http/https, or same as current window location.
             // If the page link is same as the base URL:
             // - next page link: ignore it, since we would already have seen it.
             // - previous page link: don't ignore it, since some sites will simply have the same
             //                       base URL for the first page.
-            if (linkHref.isEmpty() || !StringUtil.match(linkHref, "^https?://") ||
-                    linkHref.equalsIgnoreCase(wndLocationHref) ||
-                    (pageLink == PageLink.NEXT && linkHref.equalsIgnoreCase(baseUrl))) {
-                appendDbgStrForLink(link,
-                        "ignored: empty or same as current or base url" + baseUrl);
+            if (linkHref.isEmpty() || !REG_IS_HTTP_HTTPS.test(linkHref)
+                    || linkHref.equalsIgnoreCase(wndLocationHref)
+                    || (pageLink == PageLink.NEXT && linkHref.equalsIgnoreCase(baseUrl))) {
+                appendDbgStrForLink(
+                        link, "ignored: empty or same as current or base url " + baseUrl);
                 continue;
             }
 
@@ -140,7 +154,7 @@ public class PagingLinksFinder {
             String linkText = DomUtil.getInnerText(link);
 
             // If the linkText looks like it's not the next or previous page, skip it.
-            if (StringUtil.match(linkText, EXTRANEOUS_REGEX) || linkText.length() > 25) {
+            if (REG_EXTRANEOUS.test(linkText) || linkText.length() > 25) {
                 appendDbgStrForLink(link, "ignored: one of extra");
                 continue;
             }
@@ -185,38 +199,35 @@ public class PagingLinksFinder {
             // existence of various paging-related words.
             String linkData = linkText + " " + link.getClassName() + " " + link.getId();
             appendDbgStrForLink(link, "txt+class+id=" + linkData);
-            if (StringUtil.match(linkData,
-                    pageLink == PageLink.NEXT ? NEXT_LINK_REGEX : PREV_LINK_REGEX)) {
+            if (pageLink == PageLink.NEXT ? REG_NEXT_LINK.test(linkData)
+                                          : REG_PREV_LINK.test(linkData)) {
                 linkObj.mScore += 50;
                 appendDbgStrForLink(link, "score=" + linkObj.mScore + ": has " +
                         (pageLink == PageLink.NEXT ? "next" : "prev" + " regex"));
             }
-            if (StringUtil.match(linkData, "pag(e|ing|inat)")) {
+            if (REG_PAGINATION.test(linkData)) {
                 linkObj.mScore += 25;
                 appendDbgStrForLink(link, "score=" + linkObj.mScore + ": has pag* word");
             }
-            if (StringUtil.match(linkData, "(first|last)")) {
+            if (REG_FIRST_LAST.test(linkData)) {
                 // -65 is enough to negate any bonuses gotten from a > or » in the text.
                 // If we already matched on "next", last is probably fine.
                 // If we didn't, then it's bad.  Penalize.
                 // Same for "prev".
-                if ((pageLink == PageLink.NEXT &&
-                        !StringUtil.match(linkObj.mLinkText, NEXT_LINK_REGEX)) ||
-                    (pageLink == PageLink.PREV &&
-                        !StringUtil.match(linkObj.mLinkText, PREV_LINK_REGEX))) {
+                if ((pageLink == PageLink.NEXT && !REG_NEXT_LINK.test(linkObj.mLinkText))
+                        || (pageLink == PageLink.PREV && !REG_PREV_LINK.test(linkObj.mLinkText))) {
                     linkObj.mScore -= 65;
                     appendDbgStrForLink(link, "score=" + linkObj.mScore +
                             ": has first|last but no " +
                             (pageLink == PageLink.NEXT ? "next" : "prev") + " regex");
                 }
             }
-            if (StringUtil.match(linkData, NEGATIVE_REGEX) ||
-                    StringUtil.match(linkData, EXTRANEOUS_REGEX)) {
+            if (REG_NEGATIVE.test(linkData) || REG_EXTRANEOUS.test(linkData)) {
                 linkObj.mScore -= 50;
                 appendDbgStrForLink(link, "score=" + linkObj.mScore + ": has neg or extra regex");
             }
-            if (StringUtil.match(linkData,
-                    pageLink == PageLink.NEXT ? PREV_LINK_REGEX : NEXT_LINK_REGEX)) {
+            if (pageLink == PageLink.NEXT ? REG_PREV_LINK.test(linkData)
+                                          : REG_NEXT_LINK.test(linkData)) {
                 linkObj.mScore -= 200;
                 appendDbgStrForLink(link, "score=" + linkObj.mScore + ": has opp of " +
                         (pageLink == PageLink.NEXT ? "next" : "prev") + " regex");
@@ -227,7 +238,7 @@ public class PagingLinksFinder {
             Element parent = link.getParentElement();
             while (parent != null && (positiveMatch == false || negativeMatch == false)) {
                 String parentClassAndId = parent.getClassName() + " " + parent.getId();
-                if (!positiveMatch && StringUtil.match(parentClassAndId, "pag(e|ing|inat)")) {
+                if (!positiveMatch && REG_PAGINATION.test(parentClassAndId)) {
                     linkObj.mScore += 25;
                     positiveMatch = true;
                     appendDbgStrForLink(link,"score=" + linkObj.mScore +
@@ -236,10 +247,10 @@ public class PagingLinksFinder {
                 // TODO(kuan): to get 1st page for prev page link, this can't be applied; however,
                 // the non-application might be the cause of recursive prev page being returned,
                 // i.e. for page 1, it may incorrectly return page 3 for prev page link.
-                if (!negativeMatch && StringUtil.match(parentClassAndId, NEGATIVE_REGEX)) {
+                if (!negativeMatch && REG_NEGATIVE.test(parentClassAndId)) {
                     // If this is just something like "footer", give it a negative.
                     // If it's something like "body-and-footer", leave it be.
-                    if (!StringUtil.match(parentClassAndId, POSITIVE_REGEX)) {
+                    if (!REG_POSITIVE.test(parentClassAndId)) {
                         linkObj.mScore -= 25;
                         negativeMatch = true;
                         appendDbgStrForLink(link, "score=" + linkObj.mScore + ": negParent - " +
@@ -251,14 +262,13 @@ public class PagingLinksFinder {
 
             // If the URL looks like it has paging in it, add to the score.
             // Things like /page/2/, /pagenum/2, ?p=3, ?page=11, ?pagination=34.
-            if (StringUtil.match(linkHref, "p(a|g|ag)?(e|ing|ination)?(=|\\/)[0-9]{1,2}") ||
-                    StringUtil.match(linkHref, "(page|paging)")) {
+            if (REG_LINK_PAGINATION.test(linkHref) || REG_PAGINATION.test(linkHref)) {
                 linkObj.mScore += 25;
                 appendDbgStrForLink(link, "score=" + linkObj.mScore + ": has paging info");
             }
 
             // If the URL contains negative values, give a slight decrease.
-            if (StringUtil.match(linkHref, EXTRANEOUS_REGEX)) {
+            if (REG_EXTRANEOUS.test(linkHref)) {
                 linkObj.mScore -= 15;
                 appendDbgStrForLink(link, "score=" + linkObj.mScore + ": has extra regex");
             }
@@ -286,10 +296,7 @@ public class PagingLinksFinder {
         // this page is the next link.
         PagingLinkObj topPage = null;
         if (!possiblePages.isEmpty()) {
-            Collection<PagingLinkObj> possiblePageObjs = possiblePages.values();
-            Iterator<PagingLinkObj> iter = possiblePageObjs.iterator();
-            while (iter.hasNext()) {
-                PagingLinkObj pageObj = iter.next();
+            for (PagingLinkObj pageObj : possiblePages.values()) {
                 if (pageObj.mScore >= 50 && (topPage == null || topPage.mScore < pageObj.mScore)) {
                     topPage = pageObj;
                 }
@@ -352,7 +359,9 @@ public class PagingLinksFinder {
             segment = StringUtil.findAndReplace(segment, ",00", "");
 
             // If the first or second segment has anything looking like a page number, remove it.
-            if (i < 2) segment = StringUtil.findAndReplace(segment, PAGE_NUMBER_REGEX, "");
+            if (i < 2) {
+                segment = REG_PAGE_NUMBER.replace(segment, "");
+            }
 
             // Ignore an empty segment.
             if (segment.isEmpty()) continue;
