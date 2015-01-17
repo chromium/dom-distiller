@@ -6,7 +6,7 @@ syntax = "proto2";
 
 package dom_distiller.proto;
 option optimize_for = LITE_RUNTIME;
-option java_package = "com.dom_distiller.proto";
+option java_package = "org.chromium.distiller.proto";
 option java_outer_classname = "DomDistillerProtos";
 
 message DistilledContent {

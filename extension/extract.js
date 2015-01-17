@@ -4,6 +4,6 @@
 
 var options = {};
 console.profile("Extraction");
-var res = com.dom_distiller.client.DomDistiller.applyWithOptions(options);
+var res = org.chromium.distiller.DomDistiller.applyWithOptions(options);
 console.profileEnd("Extraction");
 console.log(res)

@@ -38,7 +38,7 @@
   </target>
 
   <path id="project.java.path">
-    <pathelement location="src"/>
+    <pathelement location="java"/>
   </path>
 
   <path id="project.java.test.path">
@@ -47,7 +47,7 @@
   </path>
 
   <path id="project.java.jstest.path">
-    <pathelement location="jstest" />
+    <pathelement location="javatests" />
     <pathelement location="war/WEB-INF/jstest/classes"/>
   </path>
 
@@ -205,7 +205,7 @@
       <arg line="${gwt.shared.args}"/>
       <arg line="${gwt.test.args}"/>
       <arg line="${gwt.custom.args}"/>
-      <arg value="com.dom_distiller.DomDistillerJsTest"/>
+      <arg value="DomDistillerJsTest"/>
     </java>
   </target>
 

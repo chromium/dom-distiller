@@ -35,7 +35,7 @@ def main(argv):
     params['filter'] = options.filter
 
   start = time.time()
-  test_runner = "return com.dom_distiller.client.JsTestEntry.run()";
+  test_runner = "return org.chromium.distiller.JsTestEntry.run()";
   test_html = os.path.abspath(os.path.join(os.path.dirname(__file__), "war", "test.html"))
   test_html += "?" + urllib.urlencode(params)
 
@@ -52,5 +52,4 @@ def main(argv):
 
 if __name__ == '__main__':
   sys.exit(main(sys.argv[1:]))
-
 
