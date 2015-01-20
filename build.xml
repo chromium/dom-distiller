@@ -22,7 +22,7 @@
   <!-- Configure path to GWT SDK -->
   <property name="gwt.sdk" location="third_party/gwt-2.7.0" />
 
-  <property name="test.filter" location="" />
+  <property name="test.filter" value=".*" />
 
   <path id="project.class.path">
     <pathelement location="war/WEB-INF/classes"/>
