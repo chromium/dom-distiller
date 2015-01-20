@@ -29,9 +29,9 @@ import org.chromium.distiller.labels.DefaultLabels;
 /**
  * Marks all {@link TextBlock}s "content" which are between the headline and the part that
  * has already been marked content, if they are marked {@link DefaultLabels#MIGHT_BE_CONTENT}.
- * 
+ *
  * This filter is quite specific to the news domain.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public final class ExpandTitleToContentFilter implements BoilerpipeFilter {
@@ -56,7 +56,7 @@ public final class ExpandTitleToContentFilter implements BoilerpipeFilter {
             if (contentStart == -1 && tb.isContent()) {
                 contentStart = i;
             }
-            
+
             i++;
         }
 

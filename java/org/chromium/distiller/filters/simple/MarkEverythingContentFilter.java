@@ -27,7 +27,7 @@ import org.chromium.distiller.document.TextDocument;
 
 /**
  * Marks all blocks as content.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public final class MarkEverythingContentFilter implements BoilerpipeFilter {

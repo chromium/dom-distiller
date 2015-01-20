@@ -59,7 +59,7 @@ public class RelevantElementsFinder {
         this.hiddenElements = hiddenElements;
         this.dataTables = dataTables;
         contentAndElements = new ArrayList<Node>();
- 
+
         if (contentNodes != null && contentNodes.size() > 0) {
             firstContentNode = contentNodes.get(0);
         } else {

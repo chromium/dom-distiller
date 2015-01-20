@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * Removes {@link TextBlock}s which have explicitly been marked as
  * "not content".
- * 
+ *
  * @author Christian Kohlschütter
  */
 public final class BoilerplateBlockFilter implements BoilerpipeFilter {

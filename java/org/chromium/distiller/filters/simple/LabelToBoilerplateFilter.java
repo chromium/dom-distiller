@@ -28,7 +28,7 @@ import org.chromium.distiller.labels.DefaultLabels;
 
 /**
  * Marks all blocks that contain a given label as "boilerplate".
- * 
+ *
  * @author Christian Kohlschütter
  */
 public final class LabelToBoilerplateFilter implements BoilerpipeFilter {

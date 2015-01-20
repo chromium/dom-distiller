@@ -27,7 +27,7 @@ import org.chromium.distiller.document.TextDocument;
 
 /**
  * Marks all blocks as boilerplate.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public final class MarkEverythingBoilerplateFilter implements BoilerpipeFilter {

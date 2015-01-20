@@ -30,9 +30,9 @@ import org.chromium.distiller.labels.DefaultLabels;
  * Marks all blocks as content that:
  * <ol>
  * <li>are on the same tag-level as very likely main content (usually the level of the largest block)</li>
- * <li>have a significant number of words, currently: at least 100</li>  
+ * <li>have a significant number of words, currently: at least 100</li>
  * </ol>
- * 
+ *
  * @author Christian Kohlschütter
  */
 public final class LargeBlockSameTagLevelToContentFilter implements BoilerpipeFilter {
@@ -50,11 +50,11 @@ public final class LargeBlockSameTagLevelToContentFilter implements BoilerpipeFi
         		break;
         	}
         }
-        
+
         if(tagLevel == -1) {
         	return false;
         }
-        
+
         for (TextBlock tb : doc.getTextBlocks()) {
             if (!tb.isContent()) {
             	

@@ -33,7 +33,7 @@ import java.util.ListIterator;
  * been determined using the C4.8 machine learning algorithm, as described in
  * the paper "Boilerplate Detection using Shallow Text Features" (WSDM 2010),
  * particularly using number of words per block and link density per block.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public class NumWordsRulesClassifier implements BoilerpipeFilter {

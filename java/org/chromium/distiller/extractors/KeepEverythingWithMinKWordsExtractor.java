@@ -29,7 +29,7 @@ import org.chromium.distiller.filters.simple.MinWordsFilter;
  * A full-text extractor which extracts the largest text component of a page.
  * For news articles, it may perform better than the {@link DefaultExtractor},
  * but usually worse than {@link ArticleExtractor}.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public final class KeepEverythingWithMinKWordsExtractor {

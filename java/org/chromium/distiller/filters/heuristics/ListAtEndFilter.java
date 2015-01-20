@@ -28,7 +28,7 @@ import org.chromium.distiller.labels.DefaultLabels;
 
 /**
  * Marks nested list-item blocks after the end of the main content.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public final class ListAtEndFilter implements BoilerpipeFilter {

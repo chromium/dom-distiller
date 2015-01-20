@@ -26,7 +26,7 @@ import org.chromium.distiller.filters.simple.MarkEverythingContentFilter;
 
 /**
  * Marks everything as content.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public final class KeepEverythingExtractor {

@@ -27,7 +27,7 @@ import org.chromium.distiller.document.TextDocument;
 
 /**
  * Keeps only those content blocks which contain at least <em>k</em> words.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public final class MinWordsFilter implements BoilerpipeFilter {
