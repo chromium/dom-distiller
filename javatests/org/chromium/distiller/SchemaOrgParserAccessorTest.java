@@ -10,7 +10,7 @@ import com.google.gwt.dom.client.Element;
 public class SchemaOrgParserAccessorTest extends DomDistillerJsTestCase {
 
     public void testImageWithEmbeddedPublisher() {
-        String expectedUrl = "http://test_image_with_embedded_item.html";
+        String expectedUrl = "http://dummy/test_image_with_embedded_item.html";
         String expectedFormat = "jpeg";
         String expectedCaption = "A test for IMAGE with embedded publisher";
         String htmlStr =
@@ -66,11 +66,11 @@ public class SchemaOrgParserAccessorTest extends DomDistillerJsTestCase {
     }
 
     public void test2Images() {
-        String expectedUrl1 = "http://test_1st image.html";
+        String expectedUrl1 = "http://dummy/test_1st image.html";
         String expectedPublisher1 = "Whatever 1st Image Incorporated";
         String expectedFormat1 = "jpeg";
         String expectedCaption1 = "A test for 1st IMAGE";
-        String expectedUrl2 = "http://test_2nd image.html";
+        String expectedUrl2 = "http://dummy/test_2nd image.html";
         String expectedFormat2 = "gif";
         String expectedCaption2 = "A test for 2nd IMAGE";
         String htmlStr =
@@ -160,8 +160,8 @@ public class SchemaOrgParserAccessorTest extends DomDistillerJsTestCase {
     public void testArticleWithEmbeddedAuthorAndPublisher() {
         String expectedTitle = "Testcase for ARTICLE";
         String expectedDescription = "Testing ARTICLE with embedded author and publisher";
-        String expectedUrl = "http://test_article_with_embedded_items.html";
-        String expectedImage = "http://test_article_with_embedded_items.jpeg";
+        String expectedUrl = "http://dummy/test_article_with_embedded_items.html";
+        String expectedImage = "http://dummy/test_article_with_embedded_items.jpeg";
         String expectedAuthor = "Whoever authored";
         String expectedPublisher = "Whatever Article Incorporated";
         String expectedDatePublished = "April 15, 2014";
@@ -229,11 +229,11 @@ public class SchemaOrgParserAccessorTest extends DomDistillerJsTestCase {
     public void testArticleWithEmbeddedAndTopLevelImages() {
         String expectedTitle = "Testcase for ARTICLE with Embedded and Top-Level IMAGEs";
         String expectedDescription = "Testing ARTICLE with embedded and top-level images";
-        String expectedUrl = "http://test_article_with_embedded_and_toplevel_images.html";
-        String expectedImage1 = "http://test_toplevel image.html";
+        String expectedUrl = "http://dummy/test_article_with_embedded_and_toplevel_images.html";
+        String expectedImage1 = "http://dummy/test_toplevel image.html";
         String expectedFormat1 = "gif";
         String expectedCaption1 = "A test for top-level IMAGE";
-        String expectedImage2 = "http://test_article_with_embedded_and_toplevel_images.html";
+        String expectedImage2 = "http://dummy/test_article_with_embedded_and_toplevel_images.html";
         String expectedFormat2 = "jpeg";
         String expectedCaption2 = "A test for emedded IMAGE in ARTICLE";
         String htmlStr =
@@ -242,7 +242,7 @@ public class SchemaOrgParserAccessorTest extends DomDistillerJsTestCase {
                 "</span>" +
                 "<span itemprop=\"description\">Testing top-level IMAGE" +
                 "</span>" +
-                "<a itemprop=\"url\" href=\"http://to_be_ignored_url.html\">test results" +
+                "<a itemprop=\"url\" href=\"http://dummy/to_be_ignored_url.html\">test results" +
                 "</a>" +
                 "<a itemprop=\"contentUrl\" href=\"" + expectedImage1 + "\">top-level image" +
                 "</a>" +
@@ -261,7 +261,7 @@ public class SchemaOrgParserAccessorTest extends DomDistillerJsTestCase {
                 "</span>" +
                 "<a itemprop=\"url\" href=\"" + expectedUrl + "\">test results" +
                 "</a>" +
-                "<img itemprop=\"image\" src=\"http://should_be_ignored_image.jpeg\">" +
+                "<img itemprop=\"image\" src=\"http://dummy/should_be_ignored_image.jpeg\">" +
                 "<div id=\"3\" itemscope itemtype=\"http://schema.org/ImageObject\"" +
                     " itemprop=\"associatedMedia\">" +
                     "<a itemprop=\"url\" href=\"" + expectedImage2 + "\">associated image" +
@@ -396,8 +396,8 @@ public class SchemaOrgParserAccessorTest extends DomDistillerJsTestCase {
     public void testUnsupportedWithNestedSupported() {
         String expectedTitle = "Testcase for ARTICLE nested in Unsupported Type";
         String expectedDescription = "Testing ARTICLE that is nested within unsupported type";
-        String expectedUrl = "http://test_article_with_embedded_items.html";
-        String expectedImage = "http://test_article_with_embedded_items.jpeg";
+        String expectedUrl = "http://dummy/test_article_with_embedded_items.html";
+        String expectedImage = "http://dummy/test_article_with_embedded_items.jpeg";
         String expectedAuthor = "Whoever authored";
         String expectedPublisher = "Whatever Article Incorporated";
         String expectedDatePublished = "April 15, 2014";
@@ -528,7 +528,7 @@ public class SchemaOrgParserAccessorTest extends DomDistillerJsTestCase {
         // Test that rel="author" attribute in an anchor element is used in the absence of "author"
         // or "creator" properties.
         String expectedAuthor = "Chromium Authors";
-        AnchorElement link = TestUtil.createAnchor("http://rel_author.html", expectedAuthor);
+        AnchorElement link = TestUtil.createAnchor("http://dummy/rel_author.html", expectedAuthor);
         link.setRel("author");
         mBody.appendChild(link);
 
