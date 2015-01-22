@@ -28,11 +28,15 @@ except:
 def main(argv):
   parser = argparse.ArgumentParser()
   parser.add_argument('--filter', help='Only tests that match this pattern will be run.')
+  parser.add_argument('--debug_level', help='Verbosity level of debug messages.')
   options = parser.parse_args(argv)
 
   params = {}
   if options.filter:
     params['filter'] = options.filter
+
+  if options.debug_level:
+    params['debug_level'] = int(options.debug_level)
 
   start = time.time()
   test_runner = "return org.chromium.distiller.JsTestEntry.run()";

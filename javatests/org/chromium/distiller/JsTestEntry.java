@@ -33,6 +33,8 @@ public class JsTestEntry implements EntryPoint {
     @JsExport
     public static TestSuiteResults run() {
         String filter = Window.Location.getParameter("filter");
+        int debugLevel = JavaScript.parseInt(Window.Location.getParameter("debug_level"));
+        LogUtil.setDebugLevel(debugLevel);
         return runWithFilter(filter);
     }
 
@@ -79,7 +81,8 @@ public class JsTestEntry implements EntryPoint {
         response.setNumTests(numTests);
         response.setFailed(failed);
         response.setSkipped(skipped);
-        response.setLog(logger.getLog());
+        // Make the test log contain all LogUtil logs instead of just TestLogger.
+        response.setLog(LogUtil.getAndClearLog());
         return response;
     }
 }
