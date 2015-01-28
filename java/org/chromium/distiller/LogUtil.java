@@ -9,8 +9,8 @@ import org.chromium.distiller.proto.DomDistillerProtos.TimingEntry;
 import org.chromium.distiller.proto.DomDistillerProtos.TimingInfo;
 
 public class LogUtil {
-    // All static fields in this class should be primitives or Strings. Otherwise, a costly (because
-    // it is called many, many times) static initializer method will be created.
+    // All statically initialized fields in this class should be primitives or Strings. Otherwise, a
+    // costly (because it is called many, many times) static initializer method will be created.
     public static final int DEBUG_LEVEL_NONE = 0;
     public static final int DEBUG_LEVEL_BOILER_PIPE_PHASES = 1;
     public static final int DEBUG_LEVEL_VISIBILITY_INFO = 2;
@@ -61,23 +61,17 @@ public class LogUtil {
     }
 
     /**
-     * Log a string to console, first to javascript console, and if it fails,
-     * then to regular system console.
+     * Log a string to console.
      */
     public static void logToConsole(String str) {
         if (str == null) {
             str = "";
         }
 
-        // Try to log to javascript console, which is only available when
-        // running in production mode in browser; otherwise, log to regular
-        // system console.
         if (str.contains("[0;") || str.contains("[1;"))
             str += kReset;
 
-        if (!jsLogToConsole(str))
-            System.out.println(str);
-
+        jsLogToConsole(str);
         sLogBuilder += str + "\n";
     }
 
@@ -97,16 +91,13 @@ public class LogUtil {
 
     /**
      * Log a string to the javascript console, if it exists, i.e. if it's defined correctly.
-     * Returns true if logging was successful.
-     * The check is necessary to prevent crash/hang when running "ant test.dev" or "ant test.prod".
      */
-    private static native boolean jsLogToConsole(String str) /*-{
+    private static native void jsLogToConsole(String str) /*-{
         if ($wnd.console == null ||
                 (typeof($wnd.console.log) != 'function' && typeof($wnd.console.log) != 'object')) {
-            return false;
+            return;
         }
         $wnd.console.log(str);
-        return true;
     }-*/;
 
     public static void addTimingInfo(double startTime, TimingInfo timinginfo, String name) {

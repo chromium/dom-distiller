@@ -24,7 +24,7 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         assertEquals("sdf", jsAttrs.get(2).getNodeValue());
     }
 
-    public void testJavaGetFirstElementWithClassName() {
+    public void testGetFirstElementWithClassName() {
         Element rootDiv = TestUtil.createDiv(0);
 
         Element div1 = TestUtil.createDiv(1);
@@ -40,13 +40,13 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         div3.addClassName("foobar foo");
         rootDiv.appendChild(div3);
 
-        assertEquals(div1, DomUtil.javaGetFirstElementWithClassName(rootDiv, "abcd"));
-        assertEquals(div2, DomUtil.javaGetFirstElementWithClassName(rootDiv, "test"));
-        assertEquals(div2, DomUtil.javaGetFirstElementWithClassName(rootDiv, "xyz"));
-        assertEquals(null, DomUtil.javaGetFirstElementWithClassName(rootDiv, "bc"));
-        assertEquals(null, DomUtil.javaGetFirstElementWithClassName(rootDiv, "t xy"));
-        assertEquals(null, DomUtil.javaGetFirstElementWithClassName(rootDiv, "tes"));
-        assertEquals(div3, DomUtil.javaGetFirstElementWithClassName(rootDiv, "foo"));
+        assertEquals(div1, DomUtil.getFirstElementWithClassName(rootDiv, "abcd"));
+        assertEquals(div2, DomUtil.getFirstElementWithClassName(rootDiv, "test"));
+        assertEquals(div2, DomUtil.getFirstElementWithClassName(rootDiv, "xyz"));
+        assertEquals(null, DomUtil.getFirstElementWithClassName(rootDiv, "bc"));
+        assertEquals(null, DomUtil.getFirstElementWithClassName(rootDiv, "t xy"));
+        assertEquals(null, DomUtil.getFirstElementWithClassName(rootDiv, "tes"));
+        assertEquals(div3, DomUtil.getFirstElementWithClassName(rootDiv, "foo"));
     }
 
     public void testNearestCommonAncestor() {

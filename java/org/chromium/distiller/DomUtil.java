@@ -26,40 +26,14 @@ public class DomUtil {
     }-*/;
 
     // Returns the first element with |className| in the tree rooted at |root|, null if none is
-    // found.  |className| is expected to be in lower case, for the java versions.
-    // If javascript querySelector() is defined, use it - GWT's test modes don't seem to support it.
-    // Otherwise, if javascript getElementsByClassName() is defined, use it - it may not be
-    // supported in earlier browsers.
-    // Otherwise, use java versions of getElementsByTagName() and getClassName().
+    // found.
     public static native Element getFirstElementWithClassName(Element root, String className) /*-{
-        if (typeof(root.querySelector) == 'function')
-            return root.querySelector("." + className);
-
-        if (typeof(root.getElementsByClassName) == 'function') {
-            var matches = root.getElementsByClassName(className);
-            return matches.length == 0 ? null : matches[0];
-        }
-
-        return @org.chromium.distiller.DomUtil::javaGetFirstElementWithClassName(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(root, className);
+        return root.querySelector("." + className);
     }-*/;
 
-    // Returns the first element with |className| in the tree rooted at |root|, null if none is
-    // found.  |className| is expected to be in lower case.
-    public static Element javaGetFirstElementWithClassName(Element root, String className) {
-        NodeList<Element> allElems = root.getElementsByTagName("*");
-        for (int i = 0; i < allElems.getLength(); i++) {
-            Element elem = allElems.getItem(i);
-            if (hasClassName(elem, className)) return elem;
-        }
-        return null;
-    }
-
-    public static boolean hasClassName(Element elem, String className) {
-        String classAttr = elem.getClassName().toLowerCase();
-        // Make sure |className| is not the substring of another name in |classAttr|, so check
-        // for whitespaces before and after.
-        return (" " + classAttr + " ").contains(" " + className + " ");
-    }
+    public static native boolean hasClassName(Element elem, String className) /*-{
+        return elem.classList.contains(className);
+    }-*/;
 
     /**
       * @Return The CSS style of an element after applying the active stylesheets and resolving any
@@ -82,22 +56,14 @@ public class DomUtil {
      * We want to use jsni for direct access to javascript's innerText.  This avoids GWT's
      * implementation of Element::getInnerText(), which is intentionally different to mimic an old
      * IE behaviour, which returns text within <script> tags.
-     * However, in GWT, javascript innerText always returns null, so we fall back to the GWT
-     * implementation in that case to cater to GWT tests.
      */
-    public static String getInnerText(Node node) {
-        String text = javascriptInnerText(node);
-        if (text != null) return text;
-        return node.getNodeType() == Node.ELEMENT_NODE ? Element.as(node).getInnerText() : "";
-    }
-
-    private static native String javascriptInnerText(Node node) /*-{
+    public static native String getInnerText(Node node) /*-{
         return node.innerText;
     }-*/;
 
     public static native double getTime() /*-{
         // window.performance is unavailable in Gwt's dev environment.
-        return window.performance ? window.performance.now() : 0;
+        return window.performance.now();
     }-*/;
 
     /**
@@ -143,22 +109,9 @@ public class DomUtil {
      * @return The nearest common ancestor node of n1 and n2.
      */
     public static Node getNearestCommonAncestor(final Node n1, final Node n2) {
-        List<Node> n1Parents = getParentNodes(n1);
-        List<Node> n2Parents = getParentNodes(n2);
-        int i = n1Parents.size()-1;
-        int j = n2Parents.size()-1;
-        // This boolean helps in the case where one of the nodes is the root or the common
-        // ancestor we are looking for.
-        boolean lastMatch = false;
-        while (i >= 0 && j >= 0 && n1Parents.get(i).equals(n2Parents.get(j))) {
-            lastMatch = true;
-            i--;
-            j--;
-        }
-        if (lastMatch) {
-            return n1Parents.get(i+1);
-        }
-        return null;
+        Node parent = n1;
+        while (parent != null && !JavaScript.contains(parent, n2)) parent = parent.getParentNode();
+        return parent;
     }
 
     // Returns whether querySelectorAll is available

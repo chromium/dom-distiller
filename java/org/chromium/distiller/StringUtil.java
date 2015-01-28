@@ -21,43 +21,14 @@ public class StringUtil {
         return !/\S/.test(s);
     }-*/;
 
-    // String.trim() is not defined in GWT, so use String.replace(RegEx) for GWT tests.
-    // '\s' in RegEx for String.replace() doesn't include &nbsp (\u00a0), even though Regex.test()
-    // does, so specifically add the unicode to the RegEx.
     public static native String jsTrim(String s) /*-{
-        if (s.trim) return s.trim();
-        return s.replace(/^[\s,\u00a0]+|[\s,\u00a0]+$/g, '');
-    }-*/;
-
-    // The version of gwt that we use implements trim improperly (it uses a javascript regex with \s
-    // where java's trim explicitly matches \u0000-\u0020). This version is from GWT's trunk.
-    public static native String javaTrim(String s) /*-{
-        if (s.length == 0 || (s[0] > '\u0020' && s[s.length - 1] > '\u0020')) {
-            return s;
-        }
-        return s.replace(/^[\u0000-\u0020]*|[\u0000-\u0020]*$/g, '');
+        return s.trim();
     }-*/;
 
     public static String[] split(String input, String regex) {
-        // Either use String.split(), which is rumored to be very slow
-        // (see http://turbomanage.wordpress.com/2011/07/12/gwt-performance-tip-watch-out-for-string-split/),
+        // TODO(cjhopman): investigate using native String.split()
         return input.split(regex);
-
-/*
-        // OR RegEx.split() via Pattern.split(),
-        // TODO(kuan): add test for Pattern.split() if using this.
-        Pattern pattern = Pattern.compile(regex);
-        return pattern.split(input);
-*/
     }
-
-    // OR JSNI to call native Javascript regexp (as suggested by the website above).
-    // Currently, "ant test.prod" which is closest to the "real world scenario" but still not very
-    // accurate, has RegEx.split as the slowest, while GWT String.split and JSNI String.split as
-    // almost the same.
-    //private static final native int splitLength(String input, String regex) /*-{
-        //return input.split(/regex/);
-    //}-*/;
 
     public static int splitLength(String input, String regex) {
         return StringUtil.split(input, regex).length;
