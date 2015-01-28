@@ -21,13 +21,14 @@
  */
 package org.chromium.distiller.document;
 
+import org.chromium.distiller.webdocument.WebElement;
+import org.chromium.distiller.webdocument.WebText;
 import org.chromium.distiller.LogUtil;
 import org.chromium.distiller.labels.DefaultLabels;
 
 import com.google.gwt.dom.client.Node;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -35,64 +36,43 @@ import java.util.TreeSet;
 /**
  * Describes a block of text.
  *
- * A block can be an "atomic" text element (i.e., a sequence of text that is not
+ * A block can be an "atomic" text node (i.e., a sequence of text that is not
  * interrupted by any HTML markup) or a compound of such atomic elements.
  *
  * @author Christian Kohlschütter
  */
 public class TextBlock implements Cloneable {
-    private boolean isContent = false;
+    private final List<WebElement> webElements;
+    private List<Integer> textIndexes;
 
-    private StringBuilder text;
+    private boolean isContent;
+
+    private String text;
     private Set<String> labels;
 
     private int numWords;
     private int numWordsInAnchorText;
     private float linkDensity;
 
-    private List<Node> allTextNodes;
-    private int firstNonWhitespaceNode;
-    private int lastNonWhitespaceNode;
-    private ArrayList<Integer> nodeRanges;
-
-    private int offsetBlocksStart;
-    private int offsetBlocksEnd;
-
     private int tagLevel;
 
-    public static final TextBlock EMPTY_START;
-    public static final TextBlock EMPTY_END;
-    static {
-        EMPTY_START = new TextBlock("");
-        EMPTY_END = new TextBlock("");
-        EMPTY_START.offsetBlocksStart = EMPTY_START.offsetBlocksEnd = -1;
-        EMPTY_END.offsetBlocksStart = EMPTY_END.offsetBlocksEnd = Integer.MAX_VALUE;
-    }
+    public TextBlock(List<WebElement> elements, int index) {
+        webElements = elements;
+        textIndexes = new ArrayList<Integer>();
+        textIndexes.add(index);
 
-    public TextBlock(final String text) {
-        this(text, null, 0, 0, 0, 0, 0, 0, 0);
-    }
+        WebText wt = (WebText) webElements.get(index);
 
-    public TextBlock(final String text, final List<Node> allTextNodes, int firstWordNode,
-            int lastWordNode, int firstNode, int lastNode, final int numWords,
-            final int numWordsInAnchorText, final int offsetBlocks) {
-        this.text = new StringBuilder(text);
+        // The labels are just used for text processing done on the TextDocument. So, the WebText
+        // doesn't actually have any need for them. Instead of having to copy the set, this just
+        // takes ownership of it from the underlying WebText.
+        labels = wt.takeLabels();
 
-        labels = new HashSet<>();
+        numWords = wt.getNumWords();
+        numWordsInAnchorText = wt.getNumLinkedWords();
+        tagLevel = wt.getTagLevel();
+        text = wt.getText();
 
-        this.numWords = numWords;
-        this.numWordsInAnchorText = numWordsInAnchorText;
-
-        this.allTextNodes = allTextNodes;
-        firstNonWhitespaceNode = firstWordNode;
-        lastNonWhitespaceNode = lastWordNode;
-
-        nodeRanges = new ArrayList<>();
-        nodeRanges.add(firstNode);
-        nodeRanges.add(lastNode);
-
-        this.offsetBlocksStart = offsetBlocks;
-        this.offsetBlocksEnd = offsetBlocks;
         initDensities();
     }
 
@@ -100,17 +80,21 @@ public class TextBlock implements Cloneable {
         return isContent;
     }
 
+    /**
+     * Sets isContent.
+     *
+     * @return true if the isContent value changed.
+     */
     public boolean setIsContent(boolean isContent) {
-        if (isContent != this.isContent) {
-            this.isContent = isContent;
-            return true;
-        } else {
+        if (isContent == this.isContent) {
             return false;
         }
+        this.isContent = isContent;
+        return true;
     }
 
     public String getText() {
-        return text.toString();
+        return text;
     }
 
     public int getNumWords() {
@@ -126,82 +110,75 @@ public class TextBlock implements Cloneable {
     }
 
     public void mergeNext(final TextBlock other) {
-        text.append('\n');
-        text.append(other.text);
+        text += '\n';
+        text += other.text;
 
         numWords += other.numWords;
         numWordsInAnchorText += other.numWordsInAnchorText;
-
-        offsetBlocksEnd = other.offsetBlocksEnd;
-
         initDensities();
 
-        this.isContent |= other.isContent;
+        isContent |= other.isContent;
 
-        nodeRanges.addAll(other.nodeRanges);
-
-        lastNonWhitespaceNode = other.lastNonWhitespaceNode;
+        textIndexes.addAll(other.textIndexes);
 
         labels.addAll(other.labels);
-
         tagLevel = Math.min(tagLevel, other.tagLevel);
     }
 
-    private void initDensities() {
-        linkDensity = numWords == 0 ? 0 : numWordsInAnchorText / (float) numWords;
-    }
-
     public int getOffsetBlocksStart() {
-        return offsetBlocksStart;
+        return getFirstText().getOffsetBlock();
     }
+
     public int getOffsetBlocksEnd() {
-        return offsetBlocksEnd;
+        return getLastText().getOffsetBlock();
     }
 
-    // Do the formatting directly so that it is the same in prod/dev.
-    private String linkDensityDebugString() {
-        if (Math.abs(Math.round(linkDensity) - linkDensity) < 0.0001) {
-            return Long.toString(Math.round(linkDensity)) + ".0";
-        }
-        double rounded = Math.round(linkDensity * 1000000) / 1000000.0;
-        return Double.toString(rounded);
-    }
-
-    // The labels are in sorted order so that the order is the same in prod/dev.
     private String labelsDebugString() {
         return new TreeSet<String>(labels).toString();
     }
 
     @Override
     public String toString() {
-        return "[" + offsetBlocksStart + "-" + offsetBlocksEnd + ";tl="+tagLevel+"; nw="+numWords+";ld="+linkDensityDebugString()+"]\t" +
-            (isContent ? LogUtil.kGreen + "CONTENT" : LogUtil.kPurple + "boilerplate") + LogUtil.kReset +
-            "," + LogUtil.kDarkGray + labelsDebugString() + LogUtil.kReset + "\n" + getText();
+        String s = "[";
+        s += getOffsetBlocksStart() + "-" + getOffsetBlocksEnd() + ";";
+        s += "tl=" + tagLevel + ";";
+        s += "nw=" + numWords + ";";
+        s += "ld=" + linkDensity + ";";
+        s += "]\t";
+        s += (isContent ? LogUtil.kGreen + "CONTENT" : LogUtil.kPurple + "boilerplate")
+                + LogUtil.kReset + ",";
+        s += LogUtil.kDarkGray + labelsDebugString() + LogUtil.kReset;
+        s += "\n" + getText();
+        return s;
     }
 
+    public String debugString() {
+        return toString();
+    }
 
     /**
-     * Adds an arbitrary String label to this {@link TextBlock}.
-     *
-     * @param label The label
-     * @see DefaultLabels
+     * Adds an label to this {@link TextBlock}.
      */
     public void addLabel(final String label) {
         labels.add(label);
     }
 
     /**
-     * Checks whether this TextBlock has the given label.
-     *
-     * @param label The label
-     * @return <code>true</code> if this block is marked by the given label.
+     * Returns whether this TextBlock has the given label.
      */
     public boolean hasLabel(final String label) {
         return labels.contains(label);
     }
 
+    /**
+     * Removes a label if this TextBlock has the label.
+     *
+     * @return True if a label was removed.
+     */
     public boolean removeLabel(final String label) {
-        return labels.remove(label);
+        if (!labels.contains(label)) return false;
+        labels.remove(label);
+        return true;
     }
 
     /**
@@ -209,10 +186,11 @@ public class TextBlock implements Cloneable {
      * exist.
      *
      * NOTE: The returned instance is the one used directly in TextBlock. You have full access
-     * to the data structure. However it is recommended to use the label-specific methods in {@link TextBlock}
+     * to the data structure. However it is recommended to use the label-specific methods in {@link
+     *TextBlock}
      * whenever possible.
      *
-     * @return Returns the set of labels, or <code>null</code> if no labels was added yet.
+     * @return Returns the set of labels.
      */
     public Set<String> getLabels() {
         return labels;
@@ -220,55 +198,27 @@ public class TextBlock implements Cloneable {
 
     /**
      * Adds a set of labels to this {@link TextBlock}.
-     * <code>null</code>-references are silently ignored.
-     *
-     * @param l The labels to be added.
-     */
-    public void addLabels(final Set<String> l) {
-        if(l == null) {
-            return;
-        }
-        this.labels.addAll(l);
-    }
-
-    /**
-     * Adds a set of labels to this {@link TextBlock}.
-     * <code>null</code>-references are silently ignored.
      *
      * @param l The labels to be added.
      */
     public void addLabels(final String... l) {
-        if(l == null) {
-            return;
-        }
-        for(final String label : l) {
-            this.labels.add(label);
+        for (String label : l) {
+            labels.add(label);
         }
     }
 
     /**
-     * @return a list of all Text nodes (including whitespace-only ones), or <code>null</code>.
-     */
-    public List<Node> getAllTextNodes() {
-        List<Node> res = new ArrayList<Node>();
-        for (int i = 0; i < nodeRanges.size(); i += 2) {
-            res.addAll(allTextNodes.subList(nodeRanges.get(i), nodeRanges.get(i + 1)));
-        }
-        return res;
-    }
-
-    /**
-     * @return the first non-whitespace Text node, or <code>null</code>.
+     * @return the first non-whitespace Text node.
      */
     public Node getFirstNonWhitespaceTextNode() {
-        return allTextNodes.get(firstNonWhitespaceNode);
+        return getFirstText().getFirstNonWhitespaceTextNode();
     }
 
     /**
-     * @return the first non-whitespace Text node, or <code>null</code>.
+     * @return the first non-whitespace Text node.
      */
     public Node getLastNonWhitespaceTextNode() {
-        return allTextNodes.get(lastNonWhitespaceNode);
+        return getLastText().getLastNonWhitespaceTextNode();
     }
 
     public int getTagLevel() {
@@ -277,5 +227,28 @@ public class TextBlock implements Cloneable {
 
     public void setTagLevel(int tagLevel) {
         this.tagLevel = tagLevel;
+    }
+
+    public void applyToModel() {
+        if (!isContent) return;
+        for (Integer i : textIndexes) {
+            WebText wt = (WebText) webElements.get(i);
+            wt.setIsContent(true);
+            if (hasLabel(DefaultLabels.TITLE)) {
+                wt.addLabel(DefaultLabels.TITLE);
+            }
+        }
+    }
+
+    private void initDensities() {
+        linkDensity = numWords == 0 ? 0 : numWordsInAnchorText / (float) numWords;
+    }
+
+    private WebText getFirstText() {
+        return (WebText) webElements.get(textIndexes.get(0));
+    }
+
+    private WebText getLastText() {
+        return (WebText) webElements.get(textIndexes.get(textIndexes.size() - 1));
     }
 }

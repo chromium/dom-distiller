@@ -17,12 +17,14 @@ public class DocumentTitleMatchClassifierTest extends DomDistillerJsTestCase {
     private static final String CONTENT_TEXT = "Lorem Ipsum Lorem Ipsum Lorem Ipsum.";
     private static final String TITLE_TEXT = "I am the document title";
 
+    private TestTextBlockBuilder builder = new TestTextBlockBuilder();
+
     public void testLabelsTitle() {
         DocumentTitleMatchClassifier classifier =
                 new DocumentTitleMatchClassifier(newList(TITLE_TEXT));
 
-        TextBlock titleBlock = new TextBlock(TITLE_TEXT);
-        TextBlock contentBlock = new TextBlock(CONTENT_TEXT);
+        TextBlock titleBlock = builder.createForText(TITLE_TEXT);
+        TextBlock contentBlock = builder.createForText(CONTENT_TEXT);
         TextDocument document = new TextDocument(
                 Arrays.asList(new TextBlock[]{titleBlock, contentBlock}));
         classifier.process(document);
@@ -36,11 +38,11 @@ public class DocumentTitleMatchClassifierTest extends DomDistillerJsTestCase {
         DocumentTitleMatchClassifier classifier =
                 new DocumentTitleMatchClassifier(newList(TITLE_TEXT));
 
-        TextBlock titleBlockAsLi = new TextBlock(TITLE_TEXT);
+        TextBlock titleBlockAsLi = builder.createForText(TITLE_TEXT);
         titleBlockAsLi.addLabel(DefaultLabels.LI);
-        TextBlock titleBlock = new TextBlock(TITLE_TEXT);
-        TextBlock contentBlock = new TextBlock(CONTENT_TEXT);
-        TextBlock trailingTitleBlockAsLi = new TextBlock(TITLE_TEXT);
+        TextBlock titleBlock = builder.createForText(TITLE_TEXT);
+        TextBlock contentBlock = builder.createForText(CONTENT_TEXT);
+        TextBlock trailingTitleBlockAsLi = builder.createForText(TITLE_TEXT);
         trailingTitleBlockAsLi.addLabel(DefaultLabels.LI);
 
         TextDocument document = new TextDocument(Arrays.asList(new TextBlock[]{
@@ -57,7 +59,7 @@ public class DocumentTitleMatchClassifierTest extends DomDistillerJsTestCase {
         DocumentTitleMatchClassifier classifier =
                 new DocumentTitleMatchClassifier(newList(TITLE_TEXT));
 
-        TextBlock titleAndContentBlock = new TextBlock(TITLE_TEXT + " " + CONTENT_TEXT);
+        TextBlock titleAndContentBlock = builder.createForText(TITLE_TEXT + " " + CONTENT_TEXT);
 
         TextDocument document = new TextDocument(
                 Arrays.asList(new TextBlock[]{titleAndContentBlock}));
@@ -71,8 +73,8 @@ public class DocumentTitleMatchClassifierTest extends DomDistillerJsTestCase {
         DocumentTitleMatchClassifier classifier = new DocumentTitleMatchClassifier(
                 newList("BreakingNews » " + TITLE_TEXT));
 
-        TextBlock titleBlock = new TextBlock(TITLE_TEXT);
-        TextBlock contentBlock = new TextBlock(CONTENT_TEXT);
+        TextBlock titleBlock = builder.createForText(TITLE_TEXT);
+        TextBlock contentBlock = builder.createForText(CONTENT_TEXT);
         TextDocument document = new TextDocument(
                 Arrays.asList(new TextBlock[]{titleBlock, contentBlock}));
         classifier.process(document);
@@ -87,9 +89,9 @@ public class DocumentTitleMatchClassifierTest extends DomDistillerJsTestCase {
         DocumentTitleMatchClassifier classifier = new DocumentTitleMatchClassifier(
                 newList(TITLE_TEXT, secondTitleText));
 
-        TextBlock titleBlock = new TextBlock(TITLE_TEXT);
-        TextBlock secondTitleBlock = new TextBlock(secondTitleText);
-        TextBlock contentBlock = new TextBlock(CONTENT_TEXT);
+        TextBlock titleBlock = builder.createForText(TITLE_TEXT);
+        TextBlock secondTitleBlock = builder.createForText(secondTitleText);
+        TextBlock contentBlock = builder.createForText(CONTENT_TEXT);
 
         TextDocument document = new TextDocument(
                 Arrays.asList(new TextBlock[]{titleBlock, secondTitleBlock, contentBlock}));
@@ -106,8 +108,8 @@ public class DocumentTitleMatchClassifierTest extends DomDistillerJsTestCase {
         DocumentTitleMatchClassifier classifier =
                 new DocumentTitleMatchClassifier(newList("title text"));
 
-        TextBlock titleBlock = new TextBlock(text);
-        TextBlock secondTitleBlock = new TextBlock(text);
+        TextBlock titleBlock = builder.createForText(text);
+        TextBlock secondTitleBlock = builder.createForText(text);
 
         TextDocument document =
                 new TextDocument(Arrays.asList(new TextBlock[] {titleBlock, secondTitleBlock}));

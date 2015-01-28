@@ -5,6 +5,7 @@
 package org.chromium.distiller;
 
 import org.chromium.distiller.document.TextDocument;
+import org.chromium.distiller.document.TextDocumentTestUtil;
 import org.chromium.distiller.filters.heuristics.HeadingFusion;
 import org.chromium.distiller.labels.DefaultLabels;
 
@@ -29,9 +30,9 @@ public class HeadingFusionTest extends DomDistillerJsTestCase {
         assertFalse(document.getTextBlocks().get(0).hasLabel(DefaultLabels.HEADING));
         assertFalse(
                 document.getTextBlocks().get(0).hasLabel(DefaultLabels.BOILERPLATE_HEADING_FUSED));
-        assertTrue(document.getContent().contains(HEADING_TEXT));
-        assertTrue(document.getContent().contains(LONG_TEXT));
-        assertTrue(document.getContent().contains(SHORT_TEXT));
+        assertTrue(TextDocumentTestUtil.getContent(document).contains(HEADING_TEXT));
+        assertTrue(TextDocumentTestUtil.getContent(document).contains(LONG_TEXT));
+        assertTrue(TextDocumentTestUtil.getContent(document).contains(SHORT_TEXT));
     }
 
     public void testBoilerplateHeadingFused() throws Exception {
@@ -47,9 +48,9 @@ public class HeadingFusionTest extends DomDistillerJsTestCase {
         assertFalse(document.getTextBlocks().get(0).hasLabel(DefaultLabels.HEADING));
         assertTrue(
                 document.getTextBlocks().get(0).hasLabel(DefaultLabels.BOILERPLATE_HEADING_FUSED));
-        assertTrue(document.getContent().contains(HEADING_TEXT));
-        assertTrue(document.getContent().contains(LONG_TEXT));
-        assertTrue(document.getContent().contains(SHORT_TEXT));
+        assertTrue(TextDocumentTestUtil.getContent(document).contains(HEADING_TEXT));
+        assertTrue(TextDocumentTestUtil.getContent(document).contains(LONG_TEXT));
+        assertTrue(TextDocumentTestUtil.getContent(document).contains(SHORT_TEXT));
     }
 
     public void testHeadingBeforeBoilerplate() throws Exception {

@@ -13,6 +13,7 @@ import org.chromium.distiller.proto.DomDistillerProtos.StatisticsInfo;
 import org.chromium.distiller.proto.DomDistillerProtos.TimingEntry;
 import org.chromium.distiller.proto.DomDistillerProtos.TimingInfo;
 import org.chromium.distiller.sax.BoilerpipeHTMLContentHandler;
+import org.chromium.distiller.webdocument.WebDocument;
 
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
@@ -24,21 +25,22 @@ import com.google.gwt.dom.client.VideoElement;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class ContentExtractor {
     private final Element documentElement;
-
     private final List<String> candidateTitles;
-
     private final TimingInfo mTimingInfo;
-
     private final StatisticsInfo mStatisticsInfo;
-
     private final MarkupParser parser;
-
+    private final List<String> imageUrls;
     private String textDirection;
 
-    private final List<String> imageUrls;
+    private class WebDocumentInfo {
+        WebDocument document;
+        Set<Node> hiddenElements;
+        Set<Node> dataTables;
+    }
 
     public ContentExtractor(Element root) {
         documentElement = root;
@@ -85,11 +87,15 @@ public class ContentExtractor {
 
     public String extractContent(boolean textOnly) {
         double now = DomUtil.getTime();
-        TextDocument document = createTextBlocksFromPage();
+        WebDocumentInfo documentInfo = createWebDocumentInfoFromPage();
         mTimingInfo.setDocumentConstructionTime(DomUtil.getTime() - now);
 
         now = DomUtil.getTime();
-        List<Node> contentNodes = processTextBlocks(document);
+        processDocument(documentInfo.document);
+        List<Node> contentNodes = documentInfo.document.getContentNodes(false);
+        contentNodes =
+                RelevantElementsFinder.findAndAddElements(contentNodes, documentInfo.hiddenElements,
+                        documentInfo.dataTables, Document.get().getDocumentElement());
 
         mTimingInfo.setArticleProcessingTime(DomUtil.getTime() - now);
 
@@ -97,7 +103,6 @@ public class ContentExtractor {
 
         now = DomUtil.getTime();
         String html = formatExtractedNodes(textOnly, contentNodes);
-        mStatisticsInfo.setWordCount(TextDocumentStatistics.countWordsInContent(document));
         mTimingInfo.setFormattingTime(DomUtil.getTime() - now);
 
         if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_TIMING_INFO)) {
@@ -160,35 +165,34 @@ public class ContentExtractor {
      * @return a document with the list of extracted TextBlocks and additional information
      *         that can be useful for identifying the core elements of the page.
      */
-    private TextDocument createTextBlocksFromPage() {
+    private WebDocumentInfo createWebDocumentInfoFromPage() {
+        WebDocumentInfo info = new WebDocumentInfo();
         BoilerpipeHTMLContentHandler htmlParser = new BoilerpipeHTMLContentHandler();
         htmlParser.startDocument();
-        DomToSaxVisitor domToSaxVisitor = new DomToSaxVisitor(htmlParser);
-        FilteringDomVisitor filteringDomVisitor = new FilteringDomVisitor(domToSaxVisitor);
+        FilteringDomVisitor filteringDomVisitor =
+                new FilteringDomVisitor(new DomToSaxVisitor(htmlParser));
         new DomWalker(filteringDomVisitor).walk(documentElement);
         htmlParser.endDocument();
-        TextDocument document = htmlParser.toTextDocument();
+        info.document = htmlParser.toWebDocument();
         ensureTitleInitialized();
-        document.setCandidateTitles(candidateTitles);
-        document.setHiddenElements(filteringDomVisitor.getHiddenElements());
-        document.setDataTables(filteringDomVisitor.getDataTables());
-        return document;
+
+        info.dataTables = filteringDomVisitor.getDataTables();
+        info.hiddenElements = filteringDomVisitor.getHiddenElements();
+
+        return info;
     }
 
     /**
      * Implements the actual analysis of the page content, identifying the core elements of the
      * page.
-     * @param document the TextBlock representation of the page extracted from the DOM.
-     * @return a list of DOM nodes from the original document that contain the core elements of the
-     *         page.
+     *
+     * @param document the WebDocument representation of the page extracted from the DOM.
      */
-    private List<Node> processTextBlocks(TextDocument document) {
-        ArticleExtractor.INSTANCE.process(document);
-        List<Node> contentNodes = getContentNodesForTextDocument(document);
-        List<Node> contentAndRelevantElements = RelevantElementsFinder.findAndAddElements(
-                contentNodes, document.getHiddenElements(),
-                document.getDataTables(), Document.get().getDocumentElement());
-        return contentAndRelevantElements;
+    private void processDocument(WebDocument document) {
+        TextDocument textDocument = document.createTextDocumentView();
+        ArticleExtractor.INSTANCE.process(textDocument, candidateTitles);
+        mStatisticsInfo.setWordCount(TextDocumentStatistics.countWordsInContent(textDocument));
+        textDocument.applyToModel();
     }
 
     /**
@@ -263,19 +267,6 @@ public class ContentExtractor {
         // And remove it again.
         Document.get().getBody().removeChild(node);
         return output;
-    }
-
-    private static List<Node> getContentNodesForTextDocument(TextDocument document) {
-        List<Node> contentTextNodes = new ArrayList<Node>();
-        for (TextBlock tb : document.getTextBlocks()) {
-            if (!tb.isContent()) {
-                continue;
-            }
-            if (!tb.hasLabel(DefaultLabels.TITLE)) {
-                contentTextNodes.addAll(tb.getAllTextNodes());
-            }
-        }
-        return contentTextNodes;
     }
 
     private static void makeAllLinksAbsolute(Node rootNode) {

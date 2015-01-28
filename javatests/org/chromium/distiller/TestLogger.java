@@ -23,7 +23,7 @@ public class TestLogger {
     }
 
     public String getLog() {
-        return logBuffer.toString();
+        return LogUtil.getAndClearLog();
     }
 
     public static class NullLogger extends TestLogger {

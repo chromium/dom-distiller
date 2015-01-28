@@ -22,15 +22,13 @@
 package org.chromium.distiller.sax;
 
 import org.chromium.distiller.ContentExtractor;
-import org.chromium.distiller.document.TextBlock;
-import org.chromium.distiller.document.TextDocument;
-import org.chromium.distiller.util.TextBlockBuilder;
+import org.chromium.distiller.webdocument.WebDocument;
+import org.chromium.distiller.webdocument.WebText;
+import org.chromium.distiller.webdocument.WebTextBuilder;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Text;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
 /**
@@ -40,12 +38,13 @@ import java.util.Stack;
  * @author Christian Kohlschütter
  */
 public class BoilerpipeHTMLContentHandler implements ContentHandler {
-    int tagLevel = 0;
+    private int tagLevel;
+    private int nextWebTextIndex;
 
-    private final List<TextBlock> textBlocks = new ArrayList<TextBlock>();
-    private boolean flush = false;
+    private WebDocument document = new WebDocument();
+    private boolean flush;
     Stack<ElementAction> actionStack = new Stack<ElementAction>();
-    private TextBlockBuilder textBlockBuilder = new TextBlockBuilder();
+    private WebTextBuilder webTextBuilder = new WebTextBuilder();
 
     /**
      */
@@ -68,8 +67,6 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 
     @Override
     public void startElement(Element element) {
-        String tagName = element.getTagName().toUpperCase();
-
         ElementAction a = ElementAction.getForElement(element);
         actionStack.push(a);
 
@@ -112,49 +109,42 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
             flush = false;
         }
 
-        textBlockBuilder.textNode(textNode, tagLevel);
+        webTextBuilder.textNode(textNode, tagLevel);
     }
 
     private void enterAnchor() {
-        textBlockBuilder.enterAnchor();
+        webTextBuilder.enterAnchor();
     }
 
     private void exitAnchor() {
-        textBlockBuilder.exitAnchor();
-    }
-
-    List<TextBlock> getTextBlocks() {
-        return textBlocks;
+        webTextBuilder.exitAnchor();
     }
 
     public void flushBlock() {
-        TextBlock tb = textBlockBuilder.build(textBlocks.size());
+        WebText tb = webTextBuilder.build(nextWebTextIndex);
         if (tb != null) {
-            addTextBlock(tb);
+            nextWebTextIndex++;
+            addWebText(tb);
         }
     }
 
-    protected void addTextBlock(final TextBlock tb) {
+    protected void addWebText(final WebText tb) {
         for (ElementAction a : actionStack) {
             for (int i = 0; i < a.labels.length(); i++) {
                 tb.addLabel(a.labels.get(i));
             }
         }
-        textBlocks.add(tb);
+        document.addText(tb);
     }
 
     /**
-     * Returns a {@link TextDocument} containing the extracted {@link TextBlock}
+     * Returns a {@link WebDocument} containing the extracted {@link WebText}
      * s. NOTE: Only call this after parsing.
-     *
-     * @return The {@link TextDocument}
      */
-    public TextDocument toTextDocument() {
-        // just to be sure
+    public WebDocument toWebDocument() {
+        // Just to be sure.
         flushBlock();
-        // TODO(yfriedman): When BoilerpipeHTMLContentHandler is finished being moved to
-        // DomToSaxVisitor, we should be able to set Title directly.
-        return new TextDocument(null, getTextBlocks());
+        return document;
     }
 
 }

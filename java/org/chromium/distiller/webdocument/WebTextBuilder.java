@@ -2,10 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.distiller.util;
+package org.chromium.distiller.webdocument;
 
 import org.chromium.distiller.StringUtil;
-import org.chromium.distiller.document.TextBlock;
 
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.Text;
@@ -13,18 +12,18 @@ import com.google.gwt.dom.client.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextBlockBuilder {
-    private final StringBuilder textBuffer = new StringBuilder();
-    private int numWords = 0;
-    private int numAnchorWords = 0;
+public class WebTextBuilder {
+    private String textBuffer = "";
+    private int numWords;
+    private int numAnchorWords;
 
     private int blockTagLevel = -1;
-    private boolean inAnchor = false;
+    private boolean inAnchor;
 
     private final List<Node> allTextNodes = new ArrayList<Node>();
-    private int firstNode = 0;
+    private int firstNode;
     private int firstNonWhitespaceNode = -1;
-    private int lastNonWhitespaceNode = 0;
+    private int lastNonWhitespaceNode;
 
     public void textNode(Text textNode, int tagLevel) {
         String text = textNode.getData();
@@ -33,7 +32,7 @@ public class TextBlockBuilder {
             return;
         }
 
-        textBuffer.append(text);
+        textBuffer += text;
         allTextNodes.add(textNode);
 
         if (StringUtil.isStringAllWhitespace(text)) {
@@ -57,14 +56,14 @@ public class TextBlockBuilder {
     }
 
     public void reset() {
-        textBuffer.setLength(0);
+        textBuffer = "";
         numWords = 0;
         numAnchorWords = 0;
         firstNode = allTextNodes.size();
         blockTagLevel = -1;
     }
 
-    public TextBlock build(int offsetBlocks) {
+    public WebText build(int offsetBlock) {
         if (firstNode == allTextNodes.size()) {
             return null;
         }
@@ -74,21 +73,20 @@ public class TextBlockBuilder {
             return null;
         }
 
-        TextBlock tb = new TextBlock(textBuffer.toString(), allTextNodes, firstNonWhitespaceNode,
-                lastNonWhitespaceNode, firstNode, allTextNodes.size(), numWords, numAnchorWords,
-                offsetBlocks);
-        tb.setTagLevel(blockTagLevel);
+        WebText tb = new WebText(textBuffer, allTextNodes, firstNode, allTextNodes.size(),
+                firstNonWhitespaceNode, lastNonWhitespaceNode, numWords, numAnchorWords,
+                blockTagLevel, offsetBlock);
         reset();
         return tb;
     }
 
     public void enterAnchor() {
         inAnchor = true;
-        textBuffer.append(' ');
+        textBuffer += ' ';
     }
 
     public void exitAnchor() {
         inAnchor = false;
-        textBuffer.append(' ');
+        textBuffer += ' ';
     }
 }

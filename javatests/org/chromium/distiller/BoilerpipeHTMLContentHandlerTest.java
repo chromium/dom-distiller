@@ -5,6 +5,7 @@
 package org.chromium.distiller;
 
 import org.chromium.distiller.document.TextBlock;
+import org.chromium.distiller.document.TextDocument;
 import org.chromium.distiller.sax.BoilerpipeHTMLContentHandler;
 
 import com.google.gwt.dom.client.AnchorElement;
@@ -21,10 +22,12 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerJsTestCase {
     private static final String TEXT2 = "Another really long text thing which should be content.";
     private static final String TEXT3 = "And again a third long text for testing.";
     private BoilerpipeHTMLContentHandler mHandler;
+    private boolean mDocumentEnded;
 
     @Override
     protected void gwtSetUp() throws Exception {
         super.gwtSetUp();
+        mDocumentEnded = false;
         mHandler = new BoilerpipeHTMLContentHandler();
         mHandler.startDocument();
         startElement(mBody);
@@ -219,17 +222,10 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerJsTestCase {
         endElement(outerDiv);
         addText("\n"); // ignored
         endBodyAndDocument();
-        List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
+        List<TextBlock> textBlocks = getHandlerTextBlocks();
         assertEquals(1, textBlocks.size());
         assertEquals("\n" + TEXT1 + "\n\n" + TEXT2 + "\n\n" + TEXT3 + "\n",
                 textBlocks.get(0).getText());
-        assertEquals("\n"
-                        + "TEXT1\n"
-                        + "\n"
-                        + "TEXT2\n"
-                        + "\n"
-                        + "TEXT3\n",
-                joinTextNodes(textBlocks.get(0).getAllTextNodes()));
     }
 
     public void testNonWordCharacterMergedWithNextInlineTextBlock() {
@@ -259,16 +255,10 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerJsTestCase {
 
         endBodyAndDocument();
 
-        List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
+        List<TextBlock> textBlocks = getHandlerTextBlocks();
         assertEquals(2, textBlocks.size());
         assertEquals("\n-\n" + TEXT1 + "\n", textBlocks.get(0).getText());
-        assertEquals("\n"
-                        + "-\n"
-                        + "TEXT1\n",
-                joinTextNodes(textBlocks.get(0).getAllTextNodes()));
-
         assertEquals(TEXT2, textBlocks.get(1).getText());
-        assertEquals("TEXT2", joinTextNodes(textBlocks.get(1).getAllTextNodes()));
     }
 
     public void testNonWordCharacterNotMergedWithNextBlockLevelTextBlock() {
@@ -298,18 +288,11 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerJsTestCase {
 
         endBodyAndDocument();
 
-        List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
+        List<TextBlock> textBlocks = getHandlerTextBlocks();
         assertEquals(3, textBlocks.size());
         assertEquals("\n-\n", textBlocks.get(0).getText());
-        assertEquals("\n-\n", joinTextNodes(textBlocks.get(0).getAllTextNodes()));
-
         assertEquals(TEXT1, textBlocks.get(1).getText());
-        assertEquals("TEXT1", joinTextNodes(textBlocks.get(1).getAllTextNodes()));
-
         assertEquals("\n" + TEXT2 + "\n", textBlocks.get(2).getText());
-        assertEquals("\n"
-                        + "TEXT2\n",
-                joinTextNodes(textBlocks.get(2).getAllTextNodes()));
     }
 
     // Simulates many social-bar/leading-link type UIs where lists are used for laying out images.
@@ -343,10 +326,9 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerJsTestCase {
 
         endBodyAndDocument();
 
-        List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
+        List<TextBlock> textBlocks = getHandlerTextBlocks();
         assertEquals(1, textBlocks.size());
         assertEquals(TEXT1 + "\n", textBlocks.get(0).getText());
-        assertEquals("TEXT1\n", joinTextNodes(textBlocks.get(0).getAllTextNodes()));
     }
 
     private static String joinTextNodes(List<Node> elements) {
@@ -375,12 +357,23 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerJsTestCase {
     }
 
     private void endBodyAndDocument() {
+        assertFalse(mDocumentEnded);
         endElement(mBody);
         mHandler.endDocument();
+        mDocumentEnded = true;
+    }
+
+    private List<TextBlock> getHandlerTextBlocks() {
+        assertDocumentEnded();
+        return mHandler.toWebDocument().createTextDocumentView().getTextBlocks();
+    }
+
+    private void assertDocumentEnded() {
+        assertTrue(mDocumentEnded);
     }
 
     private void assertBlock() {
-        List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
+        List<TextBlock> textBlocks = getHandlerTextBlocks();
         assertEquals(3, textBlocks.size());
         assertEquals(2, textBlocks.get(0).getTagLevel());
         assertEquals(3, textBlocks.get(1).getTagLevel());
@@ -388,8 +381,50 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerJsTestCase {
     }
 
     private void assertInline() {
-        List<TextBlock> textBlocks = mHandler.toTextDocument().getTextBlocks();
+        List<TextBlock> textBlocks = getHandlerTextBlocks();
         assertEquals(1, textBlocks.size());
         assertEquals(1, textBlocks.get(0).getTagLevel());
+    }
+
+    public void testRegression0() {
+        String html = "<blockquote><p>“There are plenty of instances where provocation comes into" +
+            " consideration, instigation comes into consideration, and I will be on the record" +
+            " right here on national television and say that I am sick and tired of men" +
+            " constantly being vilified and accused of things and we stop there,”" +
+            " <a href=\"http://deadspin.com/i-do-not-believe-women-provoke-violence-says-stephen" +
+            "-a-1611060016\" target=\"_blank\">Smith said.</a>  “I’m saying, “Can we go a step" +
+            " further?” Since we want to dig all deeper into Chad Johnson, can we dig in deep" +
+            " to her?”</p></blockquote>";
+        Element div = Document.get().createDivElement();
+        mBody.appendChild(div);
+        div.setInnerHTML(html);
+        TextDocument document = TestTextDocumentBuilder.fromPage(div);
+        List<TextBlock> textBlocks = document.getTextBlocks();
+        assertEquals(1, textBlocks.size());
+        TextBlock tb = textBlocks.get(0);
+        assertEquals(74, tb.getNumWords());
+        assertTrue(0.1 > tb.getLinkDensity());
+    }
+
+    public void testRegression1() {
+        String html = "<p>\n"
+                + "<a href=\"example\" target=\"_top\"><u>More news</u></a> | \n"
+                + "<a href=\"example\" target=\"_top\"><u>Search</u></a> | \n"
+                + "<a href=\"example\" target=\"_top\"><u>Features</u></a> | \n"
+                + "<a href=\"example\" target=\"_top\"><u>Blogs</u></a> | \n"
+                + "<a href=\"example\" target=\"_top\"><u>Horse Health</u></a> | \n"
+                + "<a href=\"example\" target=\"_top\"><u>Ask the Experts</u></a> | \n"
+                + "<a href=\"example\" target=\"_top\"><u>Horse Breeding</u></a> | \n"
+                + "<a href=\"example\" target=\"_top\"><u>Forms</u></a> | \n"
+                + "<a href=\"example\" target=\"_top\"><u>Home</u></a> </p>\n";
+        Element div = Document.get().createDivElement();
+        mBody.appendChild(div);
+        div.setInnerHTML(html);
+        TextDocument document = TestTextDocumentBuilder.fromPage(div);
+        List<TextBlock> textBlocks = document.getTextBlocks();
+        assertEquals(1, textBlocks.size());
+        TextBlock tb = textBlocks.get(0);
+        assertEquals(14, tb.getNumWords());
+        assertEquals(1.0, tb.getLinkDensity(), 0.01);
     }
 }

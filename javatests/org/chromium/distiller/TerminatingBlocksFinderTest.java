@@ -43,9 +43,11 @@ public class TerminatingBlocksFinderTest extends DomDistillerJsTestCase {
             "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15",
     };
 
+    private final TestTextBlockBuilder builder = new TestTextBlockBuilder();
+
     public void testPositives() {
         for (String ex : positiveExamples) {
-            TextBlock tb = TestTextBlockBuilder.createForText(ex);
+            TextBlock tb = builder.createForText(ex);
             assertTrue("TerminatingBlocksFinder.isTerminating(createTextBlock(\"" + ex
                             + "\"))=false"
                             + ", expected true",
@@ -55,7 +57,7 @@ public class TerminatingBlocksFinderTest extends DomDistillerJsTestCase {
 
     public void testNegatives() {
         for (String ex : negativeExamples) {
-            TextBlock tb = TestTextBlockBuilder.createForText(ex);
+            TextBlock tb = builder.createForText(ex);
             assertFalse("TerminatingBlocksFinder.isTerminating(createTextBlock(\"" + ex
                             + "\"))=true"
                             + ", expected false",
@@ -64,13 +66,9 @@ public class TerminatingBlocksFinderTest extends DomDistillerJsTestCase {
     }
 
     public void testCommentLink() {
-        assertTrue(TerminatingBlocksFinder.isTerminating(
-                TestTextBlockBuilder.createForAnchorText("Comment")));
-        assertFalse(TerminatingBlocksFinder.isTerminating(
-                TestTextBlockBuilder.createForText("Comment")));
-        assertFalse(TerminatingBlocksFinder.isTerminating(
-                TestTextBlockBuilder.createForAnchorText("comment")));
-        assertFalse(TerminatingBlocksFinder.isTerminating(
-                TestTextBlockBuilder.createForAnchorText("foobar")));
+        assertTrue(TerminatingBlocksFinder.isTerminating(builder.createForAnchorText("Comment")));
+        assertFalse(TerminatingBlocksFinder.isTerminating(builder.createForText("Comment")));
+        assertFalse(TerminatingBlocksFinder.isTerminating(builder.createForAnchorText("comment")));
+        assertFalse(TerminatingBlocksFinder.isTerminating(builder.createForAnchorText("foobar")));
     }
 }

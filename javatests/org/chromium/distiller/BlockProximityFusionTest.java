@@ -5,6 +5,7 @@
 package org.chromium.distiller;
 
 import org.chromium.distiller.document.TextDocument;
+import org.chromium.distiller.document.TextDocumentTestUtil;
 import org.chromium.distiller.filters.heuristics.BlockProximityFusion;
 import org.chromium.distiller.labels.DefaultLabels;
 
@@ -37,9 +38,9 @@ public class BlockProximityFusionTest extends DomDistillerJsTestCase {
         assertEquals("Classifier: " + classifier,
                 1, document.getTextBlocks().size());
         assertTrue("Classifier: " + classifier,
-                document.getContent().contains(SHORT_TEXT));
+                TextDocumentTestUtil.getContent(document).contains(SHORT_TEXT));
         assertTrue("Classifier: " + classifier,
-                document.getContent().contains(LONG_TEXT));
+                TextDocumentTestUtil.getContent(document).contains(LONG_TEXT));
     }
 
     // Both kinds of BlockProximityFusion should not merge an LI non-content followed by content.
@@ -58,9 +59,9 @@ public class BlockProximityFusionTest extends DomDistillerJsTestCase {
         assertEquals("Classifier: " + classifier,
                 2, document.getTextBlocks().size());
         assertFalse("Classifier: " + classifier,
-                document.getContent().contains(SHORT_TEXT));
+                TextDocumentTestUtil.getContent(document).contains(SHORT_TEXT));
         assertTrue("Classifier: " + classifier,
-                document.getContent().contains(LONG_TEXT));
+                TextDocumentTestUtil.getContent(document).contains(LONG_TEXT));
     }
 
     // Both kinds of BlockProximityFusion should not merge a non-content followed by content.
@@ -77,8 +78,8 @@ public class BlockProximityFusionTest extends DomDistillerJsTestCase {
         classifier.process(document);
 
         assertEquals(2, document.getTextBlocks().size());
-        assertFalse(document.getContent().contains(SHORT_TEXT));
-        assertTrue(document.getContent().contains(LONG_TEXT));
+        assertFalse(TextDocumentTestUtil.getContent(document).contains(SHORT_TEXT));
+        assertTrue(TextDocumentTestUtil.getContent(document).contains(LONG_TEXT));
     }
 
     // ***** Larger-document tests *****
@@ -103,11 +104,11 @@ public class BlockProximityFusionTest extends DomDistillerJsTestCase {
         assertEquals("Classifier: " + classifier,
                 1, document.getTextBlocks().size());
         assertTrue("Classifier: " + classifier,
-                document.getContent().contains(LONG_LEADING_TEXT));
+                TextDocumentTestUtil.getContent(document).contains(LONG_LEADING_TEXT));
         assertTrue("Classifier: " + classifier,
-                document.getContent().contains(SHORT_TEXT));
+                TextDocumentTestUtil.getContent(document).contains(SHORT_TEXT));
         assertTrue("Classifier: " + classifier,
-                document.getContent().contains(LONG_TEXT));
+                TextDocumentTestUtil.getContent(document).contains(LONG_TEXT));
     }
 
     // If only merging content blocks, non-content in the body of any kind is not merged.
@@ -126,9 +127,9 @@ public class BlockProximityFusionTest extends DomDistillerJsTestCase {
         classifier.process(document);
 
         assertEquals(3, document.getTextBlocks().size());
-        assertTrue(document.getContent().contains(LONG_LEADING_TEXT));
-        assertFalse(document.getContent().contains(SHORT_TEXT));
-        assertTrue(document.getContent().contains(LONG_TEXT));
+        assertTrue(TextDocumentTestUtil.getContent(document).contains(LONG_LEADING_TEXT));
+        assertFalse(TextDocumentTestUtil.getContent(document).contains(SHORT_TEXT));
+        assertTrue(TextDocumentTestUtil.getContent(document).contains(LONG_TEXT));
     }
 
     // If "content" flag is ignored, a single non-content LI in the body is not merged.
@@ -144,8 +145,8 @@ public class BlockProximityFusionTest extends DomDistillerJsTestCase {
         classifier.process(document);
 
         assertEquals(3, document.getTextBlocks().size());
-        assertTrue(document.getContent().contains(LONG_LEADING_TEXT));
-        assertFalse(document.getContent().contains(SHORT_TEXT));
-        assertTrue(document.getContent().contains(LONG_TEXT));
+        assertTrue(TextDocumentTestUtil.getContent(document).contains(LONG_LEADING_TEXT));
+        assertFalse(TextDocumentTestUtil.getContent(document).contains(SHORT_TEXT));
+        assertTrue(TextDocumentTestUtil.getContent(document).contains(LONG_TEXT));
     }
 }

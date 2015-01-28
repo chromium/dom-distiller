@@ -26,7 +26,6 @@ import org.chromium.distiller.document.TextBlock;
 import org.chromium.distiller.document.TextDocument;
 
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Classifies {@link TextBlock}s as content/not-content through rules that have
@@ -53,16 +52,11 @@ public class NumWordsRulesClassifier implements BoilerpipeFilter {
 
         boolean hasChanges = false;
 
-        ListIterator<TextBlock> it = textBlocks.listIterator();
-        TextBlock prevBlock = TextBlock.EMPTY_START;
-        TextBlock currentBlock = TextBlock.EMPTY_START;
-        TextBlock nextBlock = it.next();
-
-        while (nextBlock != TextBlock.EMPTY_START) {
-            prevBlock = currentBlock;
-            currentBlock = nextBlock;
-            nextBlock = it.hasNext() ? it.next() : TextBlock.EMPTY_START;
-            hasChanges |= classify(prevBlock, currentBlock, nextBlock);
+        for (int i = 0; i < textBlocks.size(); i++) {
+            TextBlock prevBlock = i == 0 ? null : textBlocks.get(i - 1);
+            TextBlock currBlock = textBlocks.get(i);
+            TextBlock nextBlock = i + 1 == textBlocks.size() ? null : textBlocks.get(i + 1);
+            hasChanges |= classify(prevBlock, currBlock, nextBlock);
         }
 
         return hasChanges;
@@ -73,10 +67,10 @@ public class NumWordsRulesClassifier implements BoilerpipeFilter {
         final boolean isContent;
 
         if (curr.getLinkDensity() <= 0.333333) {
-            if (prev.getLinkDensity() <= 0.555556) {
+            if (prev == null || prev.getLinkDensity() <= 0.555556) {
                 if (curr.getNumWords() <= 16) {
-                    if (next.getNumWords() <= 15) {
-                        if (prev.getNumWords() <= 4) {
+                    if (next == null || next.getNumWords() <= 15) {
+                        if (prev == null || prev.getNumWords() <= 4) {
                             isContent = false;
                         } else {
                             isContent = true;
@@ -89,7 +83,7 @@ public class NumWordsRulesClassifier implements BoilerpipeFilter {
                 }
             } else {
                 if (curr.getNumWords() <= 40) {
-                    if (next.getNumWords() <= 17) {
+                    if (next == null || next.getNumWords() <= 17) {
                         isContent = false;
                     } else {
                         isContent = true;

@@ -7,31 +7,35 @@ package org.chromium.distiller;
 import org.chromium.distiller.document.TextBlock;
 import org.chromium.distiller.document.TextDocument;
 import org.chromium.distiller.sax.BoilerpipeHTMLContentHandler;
+import org.chromium.distiller.webdocument.WebElement;
+import org.chromium.distiller.webdocument.WebText;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class TestTextDocumentBuilder {
-    private LinkedList<TextBlock> textBlocks;
+    private ArrayList<TextBlock> textBlocks;
+    private ArrayList<WebElement> elements;
     private int textBlockIndex;
+
     public TestTextDocumentBuilder() {
-        textBlocks = new LinkedList<TextBlock>();
+        textBlocks = new ArrayList<>();
+        elements = new ArrayList<>();
         textBlockIndex = 0;
     }
 
     private TextBlock addBlock(String text, String... labels) {
         int numWords = text.split(" ").length;
-        TextBlock block =
-                new TextBlock(text, null, 0, 0, 0, 0, numWords, numWords, textBlockIndex++);
-        block.setIsContent(false);
+        WebText wt = new WebText(text, null, 0, 0, 0, 0, numWords, numWords, 0, textBlockIndex++);
         for (String label : labels) {
-            block.addLabel(label);
+            wt.addLabel(label);
         }
-        textBlocks.add(block);
-        return block;
+        elements.add(wt);
+        textBlocks.add(new TextBlock(elements, elements.size() - 1));
+        return textBlocks.get(textBlocks.size() - 1);
     }
 
     public TestTextDocumentBuilder addContentBlock(String text, String... labels) {
@@ -63,6 +67,6 @@ public class TestTextDocumentBuilder {
         }
 
         htmlParser.endDocument();
-        return htmlParser.toTextDocument();
+        return htmlParser.toWebDocument().createTextDocumentView();
     }
 }

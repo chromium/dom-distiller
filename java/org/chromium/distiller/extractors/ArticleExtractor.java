@@ -36,6 +36,8 @@ import org.chromium.distiller.filters.heuristics.SimilarSiblingContentExpansion;
 import org.chromium.distiller.filters.simple.BoilerplateBlockFilter;
 import org.chromium.distiller.filters.simple.LabelToBoilerplateFilter;
 
+import java.util.List;
+
 /**
  * A full-text extractor which is tuned towards news articles. In this scenario
  * it achieves higher accuracy than {@link DefaultExtractor}.
@@ -52,13 +54,13 @@ public final class ArticleExtractor {
         return INSTANCE;
     }
 
-    public boolean process(TextDocument doc) {
+    public boolean process(TextDocument doc, List<String> candidateTitles) {
         boolean changed;
 
         PrintDebugFilter.INSTANCE.process(doc, true, "Start");
 
         TerminatingBlocksFinder.INSTANCE.process(doc);
-        new DocumentTitleMatchClassifier(doc.getCandidateTitles()).process(doc);
+        new DocumentTitleMatchClassifier(candidateTitles).process(doc);
         // Intentionally don't print changes from these two steps.
 
         changed = NumWordsRulesClassifier.INSTANCE.process(doc);
