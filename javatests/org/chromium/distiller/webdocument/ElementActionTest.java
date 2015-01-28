@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.distiller;
+package org.chromium.distiller.webdocument;
 
+import org.chromium.distiller.DomDistillerJsTestCase;
 import org.chromium.distiller.labels.DefaultLabels;
-import org.chromium.distiller.sax.ElementAction;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;

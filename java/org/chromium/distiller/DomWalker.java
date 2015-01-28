@@ -11,7 +11,7 @@ import com.google.gwt.dom.client.Node;
  * Used to walk the subtree of the DOM rooted at a particular Node. It provides a Visitor interface
  * to allow some processing to be done at each node of the walk.
  */
-class DomWalker {
+public class DomWalker {
     private final Visitor visitor;
 
     public interface Visitor {

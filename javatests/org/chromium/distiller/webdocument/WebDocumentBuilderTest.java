@@ -2,11 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.distiller;
+package org.chromium.distiller.webdocument;
 
+import org.chromium.distiller.DomDistillerJsTestCase;
+import org.chromium.distiller.TestTextDocumentBuilder;
 import org.chromium.distiller.document.TextBlock;
 import org.chromium.distiller.document.TextDocument;
-import org.chromium.distiller.sax.BoilerpipeHTMLContentHandler;
 
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
@@ -16,20 +17,19 @@ import com.google.gwt.dom.client.Text;
 
 import java.util.List;
 
-public class BoilerpipeHTMLContentHandlerTest extends DomDistillerJsTestCase {
+public class WebDocumentBuilderTest extends DomDistillerJsTestCase {
 
     private static final String TEXT1 = "Some really long text which should be content.";
     private static final String TEXT2 = "Another really long text thing which should be content.";
     private static final String TEXT3 = "And again a third long text for testing.";
-    private BoilerpipeHTMLContentHandler mHandler;
+    private WebDocumentBuilder mBuilder;
     private boolean mDocumentEnded;
 
     @Override
     protected void gwtSetUp() throws Exception {
         super.gwtSetUp();
         mDocumentEnded = false;
-        mHandler = new BoilerpipeHTMLContentHandler();
-        mHandler.startDocument();
+        mBuilder = new WebDocumentBuilder();
         startElement(mBody);
     }
 
@@ -345,27 +345,26 @@ public class BoilerpipeHTMLContentHandlerTest extends DomDistillerJsTestCase {
     }
 
     private void startElement(Element e) {
-        mHandler.startElement(e);
+        mBuilder.startElement(e);
     }
 
     private void addText(String text) {
-        mHandler.textNode(createTextNode(text));
+        mBuilder.textNode(createTextNode(text));
     }
 
     private void endElement(Element e) {
-        mHandler.endElement(e);
+        mBuilder.endElement();
     }
 
     private void endBodyAndDocument() {
         assertFalse(mDocumentEnded);
         endElement(mBody);
-        mHandler.endDocument();
         mDocumentEnded = true;
     }
 
     private List<TextBlock> getHandlerTextBlocks() {
         assertDocumentEnded();
-        return mHandler.toWebDocument().createTextDocumentView().getTextBlocks();
+        return mBuilder.toWebDocument().createTextDocumentView().getTextBlocks();
     }
 
     private void assertDocumentEnded() {

@@ -2,25 +2,28 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.distiller;
+package org.chromium.distiller.webdocument;
 
-import org.chromium.distiller.sax.ContentHandler;
+import org.chromium.distiller.DomUtil;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.Text;
 
+import java.util.Stack;
+
 /**
- * This is a simple SAX content handler that converts sax events to an xml document. It only handles
- * a small subset of those events.
+ * A simple "WebDocumentBuilder" that just creates an html-like string from the calls.
  */
-class SimpleContentHandler implements ContentHandler {
+public class FakeWebDocumentBuilder implements WebDocumentBuilderInterface {
 
     private final StringBuilder documentStringBuilder;
+    private final Stack<Element> elements;
 
-    SimpleContentHandler() {
+    FakeWebDocumentBuilder() {
         documentStringBuilder = new StringBuilder();
+        elements = new Stack<Element>();
     }
 
     String getDocumentString() {
@@ -28,16 +31,11 @@ class SimpleContentHandler implements ContentHandler {
     }
 
     @Override
-    public void endDocument() {}
-
-    @Override
-    public void startDocument() {}
-
-    @Override
     public void skipElement(Element element) {}
 
     @Override
     public void startElement(Element element) {
+        elements.push(element);
         documentStringBuilder.append("<");
         documentStringBuilder.append(element.getTagName());
         JsArray<Node> attributes = DomUtil.getAttributes(element);
@@ -53,8 +51,9 @@ class SimpleContentHandler implements ContentHandler {
     }
 
     @Override
-    public void endElement(Element element) {
-        documentStringBuilder.append("</" + element.getTagName() + ">");
+    public void endElement() {
+        Element el = elements.pop();
+        documentStringBuilder.append("</" + el.getTagName() + ">");
     }
 
     @Override

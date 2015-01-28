@@ -6,9 +6,10 @@ package org.chromium.distiller;
 
 import org.chromium.distiller.document.TextBlock;
 import org.chromium.distiller.document.TextDocument;
-import org.chromium.distiller.sax.BoilerpipeHTMLContentHandler;
 import org.chromium.distiller.webdocument.WebElement;
 import org.chromium.distiller.webdocument.WebText;
+import org.chromium.distiller.webdocument.DomConverter;
+import org.chromium.distiller.webdocument.WebDocumentBuilder;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -53,20 +54,18 @@ public class TestTextDocumentBuilder {
     }
 
     public static TextDocument fromPage(Element docElement) {
-        BoilerpipeHTMLContentHandler htmlParser = new BoilerpipeHTMLContentHandler();
-        htmlParser.startDocument();
-        DomToSaxVisitor domToSaxVisitor = new DomToSaxVisitor(htmlParser);
+        WebDocumentBuilder builder = new WebDocumentBuilder();
+        DomConverter domConverter = new DomConverter(builder);
 
         Node body = Document.get().getBody();
         if (!JavaScript.contains(body, docElement) && body.equals(docElement)) {
             body.appendChild(docElement);
-            new DomWalker(domToSaxVisitor).walk(docElement);
+            new DomWalker(domConverter).walk(docElement);
             body.removeChild(docElement);
         } else {
-            new DomWalker(domToSaxVisitor).walk(docElement);
+            new DomWalker(domConverter).walk(docElement);
         }
 
-        htmlParser.endDocument();
-        return htmlParser.toWebDocument().createTextDocumentView();
+        return builder.toWebDocument().createTextDocumentView();
     }
 }

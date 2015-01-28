@@ -19,12 +19,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.chromium.distiller.sax;
+package org.chromium.distiller.webdocument;
 
 import org.chromium.distiller.ContentExtractor;
-import org.chromium.distiller.webdocument.WebDocument;
-import org.chromium.distiller.webdocument.WebText;
-import org.chromium.distiller.webdocument.WebTextBuilder;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Text;
@@ -32,32 +29,18 @@ import com.google.gwt.dom.client.Text;
 import java.util.Stack;
 
 /**
- * A simple SAX {@link ContentHandler}, used by {@link ContentExtractor}.
- * Can be used by different parser implementations, e.g. NekoHTML and TagSoup.
- *
- * @author Christian Kohlschütter
+ * A simple WebDocument builder.
  */
-public class BoilerpipeHTMLContentHandler implements ContentHandler {
+public class WebDocumentBuilder implements WebDocumentBuilderInterface {
     private int tagLevel;
     private int nextWebTextIndex;
 
     private WebDocument document = new WebDocument();
     private boolean flush;
-    Stack<ElementAction> actionStack = new Stack<ElementAction>();
+    private Stack<ElementAction> actionStack = new Stack<ElementAction>();
     private WebTextBuilder webTextBuilder = new WebTextBuilder();
 
-    /**
-     */
-    public BoilerpipeHTMLContentHandler() {
-    }
-
-    @Override
-    public void endDocument() {
-        flushBlock();
-    }
-
-    @Override
-    public void startDocument() {
+    public WebDocumentBuilder() {
     }
 
     @Override
@@ -82,7 +65,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
     }
 
     @Override
-    public void endElement(Element element) {
+    public void endElement() {
         ElementAction a = actionStack.peek();
 
         if (a.changesTagLevel) {

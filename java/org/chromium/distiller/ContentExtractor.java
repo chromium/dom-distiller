@@ -4,16 +4,15 @@
 
 package org.chromium.distiller;
 
-import org.chromium.distiller.document.TextBlock;
 import org.chromium.distiller.document.TextDocument;
 import org.chromium.distiller.document.TextDocumentStatistics;
 import org.chromium.distiller.extractors.ArticleExtractor;
-import org.chromium.distiller.labels.DefaultLabels;
 import org.chromium.distiller.proto.DomDistillerProtos.StatisticsInfo;
 import org.chromium.distiller.proto.DomDistillerProtos.TimingEntry;
 import org.chromium.distiller.proto.DomDistillerProtos.TimingInfo;
-import org.chromium.distiller.sax.BoilerpipeHTMLContentHandler;
+import org.chromium.distiller.webdocument.DomConverter;
 import org.chromium.distiller.webdocument.WebDocument;
+import org.chromium.distiller.webdocument.WebDocumentBuilder;
 
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
@@ -161,23 +160,18 @@ public class ContentExtractor {
     }
 
     /**
-     * Converts the original HTML page into a series of TextBlock for analysis.
-     * @return a document with the list of extracted TextBlocks and additional information
-     *         that can be useful for identifying the core elements of the page.
+     * Converts the original HTML page into a WebDocument for analysis.
      */
     private WebDocumentInfo createWebDocumentInfoFromPage() {
         WebDocumentInfo info = new WebDocumentInfo();
-        BoilerpipeHTMLContentHandler htmlParser = new BoilerpipeHTMLContentHandler();
-        htmlParser.startDocument();
-        FilteringDomVisitor filteringDomVisitor =
-                new FilteringDomVisitor(new DomToSaxVisitor(htmlParser));
-        new DomWalker(filteringDomVisitor).walk(documentElement);
-        htmlParser.endDocument();
-        info.document = htmlParser.toWebDocument();
+        WebDocumentBuilder documentBuilder = new WebDocumentBuilder();
+        DomConverter converter = new DomConverter(documentBuilder);
+        new DomWalker(converter).walk(documentElement);
+        info.document = documentBuilder.toWebDocument();
         ensureTitleInitialized();
 
-        info.dataTables = filteringDomVisitor.getDataTables();
-        info.hiddenElements = filteringDomVisitor.getHiddenElements();
+        info.dataTables = converter.getDataTables();
+        info.hiddenElements = converter.getHiddenElements();
 
         return info;
     }

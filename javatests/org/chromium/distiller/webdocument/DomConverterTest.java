@@ -2,22 +2,24 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.distiller;
+package org.chromium.distiller.webdocument;
+
+import org.chromium.distiller.DomDistillerJsTestCase;
+import org.chromium.distiller.DomWalker;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 
-public class FilteringDomVisitorTest extends DomDistillerJsTestCase {
+public class DomConverterTest extends DomDistillerJsTestCase {
     private void runTest(String innerHtml, String expectedHtml) throws Throwable {
         Element container = Document.get().createDivElement();
         mBody.appendChild(container);
         container.setInnerHTML(innerHtml);
-        SimpleContentHandler contentHandler = new SimpleContentHandler();
-        DomWalker.Visitor domVisitor = new DomToSaxVisitor(contentHandler);
-        FilteringDomVisitor filteringDomVisitor = new FilteringDomVisitor(domVisitor);
+        FakeWebDocumentBuilder builder = new FakeWebDocumentBuilder();
+        DomConverter filteringDomVisitor = new DomConverter(builder);
         new DomWalker(filteringDomVisitor).walk(container);
         String expectedDocument = "<div>" + expectedHtml + "</div>";
-        assertEquals(expectedDocument, contentHandler.getDocumentString().toLowerCase());
+        assertEquals(expectedDocument, builder.getDocumentString().toLowerCase());
     }
 
     public void testVisibleText() throws Throwable {
