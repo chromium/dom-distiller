@@ -184,4 +184,40 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         assertNull(PagingLinksFinder.findNext(root, "example.com"));
     }
 
+    public void testNextArticleLinks() {
+        Element root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
+        AnchorElement anchor = TestUtil.createAnchor(
+                TestUtil.formHrefWithWindowLocationPath("page2"), "next article");
+        root.appendChild(anchor);
+        assertNull(PagingLinksFinder.findNext(root, "example.com"));
+    }
+
+    public void testAsOneLinks() {
+        Element root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
+        AnchorElement anchor = TestUtil.createAnchor(
+                TestUtil.formHrefWithWindowLocationPath("page2"), "view as one page");
+        root.appendChild(anchor);
+        assertNull(PagingLinksFinder.findNext(root, "example.com"));
+    }
+
+    public void testLinksWithLongText() {
+        Element root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
+        AnchorElement anchor = TestUtil.createAnchor(
+                TestUtil.formHrefWithWindowLocationPath("page2"), "page 2 with long text)");
+        root.appendChild(anchor);
+        assertNull(PagingLinksFinder.findNext(root, "example.com"));
+    }
+
+    public void testNonTailPageInfo() {
+        Element root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
+        AnchorElement anchor = TestUtil.createAnchor(
+                TestUtil.formHrefWithWindowLocationPath("gap/12/somestuff"), "page down");
+        root.appendChild(anchor);
+        assertNull(PagingLinksFinder.findNext(root, "example.com"));
+        //checkLinks(anchor.getHref(), "", root);
+    }
 }

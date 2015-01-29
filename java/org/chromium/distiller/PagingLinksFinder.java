@@ -47,14 +47,16 @@ public class PagingLinksFinder {
             "article|body|content|entry|hentry|main|page|pagination|post|text|blog|story", "i");
     private static final RegExp REG_NEGATIVE = RegExp.compile(
             "combx|comment|com-|contact|foot|footer|footnote|masthead|media|meta"
-                    + "|outbrain|promo|related|scroll|shoutbox|sidebar|sponsor|shopping|tags"
+                    + "|outbrain|promo|related|shoutbox|sidebar|sponsor|shopping|tags"
                     + "|tool|widget",
             "i");
     private static final RegExp REG_EXTRANEOUS = RegExp.compile(
-            "print|archive|comment|discuss|e[\\-]?mail|share|reply|all|login|sign|single", "i");
+            "print|archive|comment|discuss|e[\\-]?mail|share|reply|all|login|sign|single"
+                    + "|as one|article",
+            "i");
     private static final RegExp REG_PAGINATION = RegExp.compile("pag(e|ing|inat)", "i");
     private static final RegExp REG_LINK_PAGINATION =
-            RegExp.compile("p(a|g|ag)?(e|ing|ination)?(=|\\/)[0-9]{1,2}", "i");
+            RegExp.compile("p(a|g|ag)?(e|ing|ination)?(=|\\/)[0-9]{1,2}$", "i");
     private static final RegExp REG_FIRST_LAST = RegExp.compile("(first|last)", "i");
     private static final RegExp REG_IS_HTTP_HTTPS = RegExp.compile("^https?://", "i");
     // Examples that match PAGE_NUMBER_REGEX are: "_p3", "-pg3", "p3", "_1", "-12-2".
@@ -274,6 +276,12 @@ public class PagingLinksFinder {
                 appendDbgStrForLink(link, "score=" + linkObj.mScore + ": has extra regex");
             }
 
+            // If the link text is too long, penalize the link.
+            if (linkText.length() > 10) {
+                linkObj.mScore -= linkText.length();
+                appendDbgStrForLink(link, "score=" + linkObj.mScore + ": text too long");
+            }
+
             // If the link text can be parsed as a number, give it a minor bonus, with a slight bias
             // towards lower numbered pages.  This is so that pages that might not have 'next' in
             // their text can still get scored, and sorted properly by score.
@@ -288,7 +296,8 @@ public class PagingLinksFinder {
                 } else {
                     linkObj.mScore += Math.max(0, 10 - linkTextAsNumber);
                 }
-                appendDbgStrForLink(link, "score=" + linkObj.mScore + ": linktxt is a num");
+                appendDbgStrForLink(link, "score=" + linkObj.mScore + ": linktxt is a num (" +
+                        linkTextAsNumber + ")");
             }
         }  // for all links
 
