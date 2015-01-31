@@ -69,7 +69,7 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         checkLinks(null, null, root);
     }
 
-    public void disabled_test1NextLink() {
+    public void test1NextLink() {
         Element root = TestUtil.createDiv(0);
         mBody.appendChild(root);
         AnchorElement anchor = TestUtil.createAnchor("next", "next page");
@@ -96,7 +96,7 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         checkLinks(anchor, null, root, "http://testing.com");
     }
 
-    public void disabled_test1PageNumberedLink() {
+    public void test1PageNumberedLink() {
         Element root = TestUtil.createDiv(0);
         mBody.appendChild(root);
         // Prepend href with window location path so that base URL is part of final href to increase
@@ -147,7 +147,7 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         checkLinks(anchor1, null, root);
     }
 
-    public void disabled_testPagingParent() {
+    public void testPagingParent() {
         Element root = TestUtil.createDiv(0);
         mBody.appendChild(root);
         Element div = TestUtil.createDiv(1);
@@ -185,7 +185,7 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         checkLinks(nextAnchor, prevAnchor, root);
     }
 
-    public void disabled_testFirstPageLinkAsBaseUrl() {
+    public void testFirstPageLinkAsBaseUrl() {
         // Some sites' first page links are the same as the base URL, previous page link needs to
         // recognize this.
 
