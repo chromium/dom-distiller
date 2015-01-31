@@ -11,7 +11,7 @@ import com.google.gwt.user.client.Window;
 public class PagingLinksFinderTest extends DomDistillerJsTestCase {
     // EXAMPLE_URL has to have a file extension, or findBaseUrl() would be
     // the same as URL, and this would break testFirstPageLinkAsBaseUrl().
-    private static String EXAMPLE_URL = "http://example.com/path/toward/article.php";
+    private static String EXAMPLE_URL = "http://example.com/path/toward/news.php";
 
     private static void checkResolveLinkHref(AnchorElement anchor, String original_url, String expected, String href) {
         anchor.setHref(href);
