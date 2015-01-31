@@ -12,7 +12,16 @@
     exit 1
   fi
 
-  apt-get install python-setuptools protobuf-compiler python-protobuf xvfb
+  apt-get install \
+    ant \
+    openjdk-7-jdk \
+    protobuf-compiler \
+    python \
+    python-setuptools \
+    python-protobuf \
+    unzip \
+    wget \
+    xvfb
 
   user=$SUDO_USER
   bit=$(getconf LONG_BIT)
