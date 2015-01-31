@@ -10,6 +10,7 @@ import org.chromium.distiller.proto.DomDistillerProtos.TimingInfo;
 
 import com.google.gwt.core.client.js.JsExport;
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.user.client.Window;
 
 @JsExport("DomDistiller")
 public class DomDistiller {
@@ -42,8 +43,8 @@ public class DomDistiller {
             result.addContentImages().setUrl(url);
         }
 
-        String original_domain = options.hasOriginalDomain() ? options.getOriginalDomain() : "";
-        result.setPaginationInfo(PagingLinksFinder.getPaginationInfo(original_domain));
+        String original_url = options.hasOriginalUrl() ? options.getOriginalUrl() : Window.Location.getHref();
+        result.setPaginationInfo(PagingLinksFinder.getPaginationInfo(original_url));
         result.setMarkupInfo(contentExtractor.getMarkupParser().getMarkupInfo());
         TimingInfo timingInfo = contentExtractor.getTimingInfo();
         timingInfo.setTotalTime(DomUtil.getTime() - startTime);

@@ -66,9 +66,9 @@ public class PagingLinksFinder {
 
     private static final RegExp REG_HREF_CLEANER = RegExp.compile("/?(#.*)?$");
 
-    public static DomDistillerProtos.PaginationInfo getPaginationInfo(String original_domain) {
+    public static DomDistillerProtos.PaginationInfo getPaginationInfo(String original_url) {
         DomDistillerProtos.PaginationInfo info = DomDistillerProtos.PaginationInfo.create();
-        String next = findNext(Document.get().getDocumentElement(), original_domain);
+        String next = findNext(Document.get().getDocumentElement(), original_url);
         if (next != null) {
             info.setNextPage(next);
         }
@@ -76,32 +76,31 @@ public class PagingLinksFinder {
     }
 
     /**
-     * @param original_domain The original domain of the page being processed if it's a file://.
+     * @param original_url The original url of the page being processed.
      * @return The next page link for the document.
      */
-    public static String findNext(Element root, String original_domain) {
-        return findPagingLink(root, original_domain, PageLink.NEXT);
+    public static String findNext(Element root, String original_url) {
+        return findPagingLink(root, original_url, PageLink.NEXT);
     }
 
     /**
-     * @param original_domain The original domain of the page being processed if it's a file://.
+     * @param original_url The original url of the page being processed.
      * @return The previous page link for the document.
      */
-    public static String findPrevious(Element root, String original_domain) {
-        return findPagingLink(root, original_domain, PageLink.PREV);
+    public static String findPrevious(Element root, String original_url) {
+        return findPagingLink(root, original_url, PageLink.PREV);
     }
 
-    private static String findPagingLink(Element root, String original_domain, PageLink pageLink) {
+    private static String findPagingLink(Element root, String original_url, PageLink pageLink) {
         // findPagingLink() is static, so clear mLinkDebugInfo before processing the links.
         if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_PAGING_INFO)) {
             mLinkDebugInfo.clear();
         }
 
-        String baseUrl = mockDomainForFile(findBaseUrl(), original_domain);
+        String baseUrl = findBaseUrl(original_url);
         // Remove trailing '/' from window location href, because it'll be used to compare with
         // other href's whose trailing '/' are also removed.
-        String wndLocationHref = StringUtil.findAndReplace(Window.Location.getHref(), "\\/$", "");
-        wndLocationHref = mockDomainForFile(wndLocationHref, original_domain);
+        String wndLocationHref = StringUtil.findAndReplace(original_url, "\\/$", "");
         NodeList<Element> allLinks = root.getElementsByTagName("A");
         Map<String, PagingLinkObj> possiblePages = new HashMap<String, PagingLinkObj>();
 
@@ -128,8 +127,8 @@ public class PagingLinksFinder {
             // Remove url anchor and then trailing '/' from link's href.
             // Note that AnchorElement.getHref() returns the absolute URI, so there's no need to
             // worry about relative links.
-            String linkHref = REG_HREF_CLEANER.replace(link.getHref(), "");
-            linkHref = mockDomainForFile(linkHref, original_domain);
+            String linkHref = REG_HREF_CLEANER.replace(resolveLinkHref(link, original_url), "");
+            appendDbgStrForLink(link, "-> " + linkHref);
 
             // Ignore page link that is empty, not http/https, or same as current window location.
             // If the page link is same as the base URL:
@@ -144,11 +143,11 @@ public class PagingLinksFinder {
                 continue;
             }
 
-            // If it's on a different domain, skip it.
+            // If it's on a different hostname, skip it.
             String[] urlSlashes = StringUtil.split(linkHref, "\\/+");
-            if (urlSlashes.length < 3 ||  // Expect at least the protocol, domain, and path.
-                    !getLocationHost(original_domain).equalsIgnoreCase(urlSlashes[1])) {
-                appendDbgStrForLink(link, "ignored: different domain");
+            if (urlSlashes.length < 3 ||  // Expect at least the protocol, hostname, and path.
+                    !getHostname(original_url).equalsIgnoreCase(urlSlashes[1])) {
+                appendDbgStrForLink(link, "ignored: different host");
                 continue;
             }
 
@@ -327,26 +326,69 @@ public class PagingLinksFinder {
         return pagingHref;
     }
 
-    public static String mockDomainForFile(String url, String original_domain) {
-        if (original_domain.isEmpty()) {
-            return url;
-        }
-        String[] urlSlashes = StringUtil.split(url, "\\/+");
-        if (!urlSlashes[0].equals("file:")) {
-            return url;
-        }
-        String replaced = "http://" + original_domain;
-        for (int i = 2; i< urlSlashes.length; i++) {
-            replaced += "/" + urlSlashes[i];
-        }
-        return replaced;
+    private static String fixMissingScheme(String url) {
+        if (url.isEmpty()) return "";
+        if (!url.contains("://")) return "http://" + url;
+        return url;
     }
 
-    private static String getLocationHost(String original_domain) {
-        return original_domain.isEmpty() ? Window.Location.getHost() : original_domain;
+    // The absolute URI of the link is used in production mode.
+    // In testing or scoring, where original_url is given, original_url is treated as if it is
+    // Window.Location.getHref().
+    public static String resolveLinkHref(AnchorElement link, String original_url) {
+        if (original_url.equals(Window.Location.getHref())) {
+            return link.getHref();
+        }
+        String linkHref = REG_HREF_CLEANER.replace(link.getAttribute("href"), "");
+
+        if (linkHref.substring(0, 1) == "/" ) {
+            return getScheme(original_url) + "://" + getHostname(original_url) + linkHref;
+        } else if (linkHref.contains("://") || linkHref.startsWith("javascript:")) {
+            return linkHref;
+        } else {
+            String ans = getScheme(original_url) + "://" + getHostname(original_url);
+            List<String> pathStack = new ArrayList<String>();
+            String[] pathArray = StringUtil.split(getPath(original_url), "\\/");
+            for (String e: pathArray) {
+                if(!e.isEmpty()) pathStack.add(e);
+            }
+            if (pathStack.size() > 0) {
+                pathStack.remove(pathStack.size()-1);
+            }
+            String[] dirs = StringUtil.split(linkHref, "\\/");
+            for (int i = 0; i < dirs.length; i++) {
+                if (dirs[i] == "..") {
+                    if (pathStack.size() > 0) {
+                        pathStack.remove(pathStack.size()-1);
+                    }
+                } else {
+                    pathStack.add(dirs[i]);
+                }
+            }
+            for (int i = 0; i < pathStack.size(); i++) {
+                ans += "/" + pathStack.get(i);
+            }
+            return ans;
+        }
     }
 
-    private static String findBaseUrl() {
+    private static String getScheme(String url) {
+        return StringUtil.split(url, ":\\/\\/")[0];
+    }
+
+    private static String getHostname(String url) {
+        url = StringUtil.split(url, ":\\/\\/")[1];
+        if (!url.contains("/")) return url;
+        return StringUtil.split(url, "\\/")[0];
+    }
+
+    private static String getPath(String url) {
+        url = StringUtil.split(url, ":\\/\\/")[1];
+        if (!url.contains("/")) return "";
+        return StringUtil.findAndReplace(url, "^([^/]*)/", "");
+    }
+
+    private static String findBaseUrl(String original_url) {
         // This extracts relevant parts from the window location's path based on various heuristics
         // to determine the path of the base URL of the document.  This path is then appended to the
         // window location protocol and host to form the base URL of the document.  This base URL is
@@ -358,13 +400,14 @@ public class PagingLinksFinder {
         // reverse the segments for easier processing.
         // Note: '?' is a special character in RegEx, so enclose it within [] to specify the actual
         // character.
-        String noUrlParams = Window.Location.getPath();
+        String url = StringUtil.findAndReplace(original_url, "\\?.*$", "");
+        String noUrlParams = StringUtil.split(url, ":\\/\\/")[1];
         String[] urlSlashes = StringUtil.split(noUrlParams, "/");
         Collections.reverse(Arrays.asList(urlSlashes));
 
         // Now, process each segment by extracting relevant information based on various heuristics.
         List<String> cleanedSegments = new ArrayList<String>();
-        for (int i = 0; i < urlSlashes.length; i++) {
+        for (int i = 0; i < urlSlashes.length - 1; i++) {
             String segment = urlSlashes[i];
 
             // Split off and save anything that looks like a file type.
@@ -408,7 +451,7 @@ public class PagingLinksFinder {
             cleanedSegments.add(segment);
         }  // for all urlSlashes
 
-        return Window.Location.getProtocol() + "//" + getLocationHost("") + "/" +
+        return StringUtil.split(url, ":\\/\\/")[0] + "://" + urlSlashes[urlSlashes.length-1] + "/" +
                 reverseJoin(cleanedSegments, "/");
     }
 
