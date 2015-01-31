@@ -220,7 +220,7 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         AnchorElement anchor = TestUtil.createAnchor(
                 TestUtil.formHrefWithWindowLocationPath("page2"), "next article");
         root.appendChild(anchor);
-        assertNull(PagingLinksFinder.findNext(root, "example.com"));
+        assertNull(PagingLinksFinder.findNext(root, EXAMPLE_URL));
     }
 
     public void testAsOneLinks() {
@@ -229,7 +229,7 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         AnchorElement anchor = TestUtil.createAnchor(
                 TestUtil.formHrefWithWindowLocationPath("page2"), "view as one page");
         root.appendChild(anchor);
-        assertNull(PagingLinksFinder.findNext(root, "example.com"));
+        assertNull(PagingLinksFinder.findNext(root, EXAMPLE_URL));
     }
 
     public void testLinksWithLongText() {
@@ -238,7 +238,7 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         AnchorElement anchor = TestUtil.createAnchor(
                 TestUtil.formHrefWithWindowLocationPath("page2"), "page 2 with long text)");
         root.appendChild(anchor);
-        assertNull(PagingLinksFinder.findNext(root, "example.com"));
+        assertNull(PagingLinksFinder.findNext(root, EXAMPLE_URL));
     }
 
     public void testNonTailPageInfo() {
@@ -247,7 +247,7 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         AnchorElement anchor = TestUtil.createAnchor(
                 TestUtil.formHrefWithWindowLocationPath("gap/12/somestuff"), "page down");
         root.appendChild(anchor);
-        assertNull(PagingLinksFinder.findNext(root, "example.com"));
+        assertNull(PagingLinksFinder.findNext(root, EXAMPLE_URL));
         //checkLinks(anchor.getHref(), "", root);
     }
 }
