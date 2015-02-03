@@ -216,8 +216,8 @@
   </target>
 
   <target name="test"
-    depends="jstests, package"
-    description="Run development and production mode tests">
+    depends="jstests"
+    description="Run tests">
   </target>
 
   <target name="build" depends="gwtc" description="Build this project" />
