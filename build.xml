@@ -26,6 +26,20 @@
 
   <property name="test.debug_level" value="0" />
 
+  <condition property="isLinux">
+    <and>
+      <os family="unix" />
+
+      <not>
+        <os family="mac" />
+      </not>
+    </and>
+  </condition>
+
+  <condition property="isMac">
+    <os family="mac" />
+  </condition>
+
   <path id="project.class.path">
     <pathelement location="war/WEB-INF/classes"/>
     <pathelement location="${gwt.sdk}/gwt-user.jar"/>
@@ -214,13 +228,31 @@
     </exec>
   </target>
 
-  <target name="jstests" depends="extractjs.jstests" description="Runs jstests">
+  <target
+      name="jstests.linux"
+      depends="extractjs.jstests"
+      if="isLinux"
+      description="Runs jstests for the Linux platform">
     <exec executable="xvfb-run" failonerror="true">
       <env key="PATH" path="${env.PATH}:${basedir}/buildtools"/>
       <arg value="./run_jstests.py"/>
       <arg line="--filter ${test.filter} --debug_level ${test.debug_level}"/>
     </exec>
   </target>
+
+  <target
+      name="jstests.mac"
+      depends="extractjs.jstests"
+      if="isMac"
+      description="Runs jstests for the Mac OS X platform">
+    <exec executable="python" failonerror="true">
+      <env key="PATH" path="${env.PATH}:${basedir}/buildtools"/>
+      <arg value="./run_jstests.py"/>
+      <arg line="--filter ${test.filter} --debug_level ${test.debug_level}"/>
+    </exec>
+  </target>
+
+  <target name="jstests" depends="jstests.linux, jstests.mac" description="Runs jstests" />
 
   <target name="test"
     depends="jstests"

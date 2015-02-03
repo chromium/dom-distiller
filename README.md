@@ -24,10 +24,46 @@ ChromeDriver requires Google Chrome to be installed at a specific location
 [ChromeDriver documentation](https://code.google.com/p/selenium/wiki/ChromeDriver)
 for details.
 
+## Developing on Linux
+
 Install the dependencies by entering the `dom-distiller` folder and running:
 ```bash
 sudo ./install-build-deps.sh
 ```
+
+## Developing on Mac OS X
+
+- Install JDK 7 using either your organizations software management tool,
+or download it from
+[Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html).
+- Install [Homebrew](http://brew.sh/).
+- Install `ant` and `python` using Homebrew:
+```bash
+brew install ant python
+```
+- Since both the protocol buffer compiler and Python bindings are needed,
+install the `protobuf` package with the `--with-python` command line parameter:
+```bash
+brew install protobuf --with-python
+```
+- Create a folder named `buildtools` inside your DOM Distiller checkout
+- Download ChromeDriver (chromedriver_mac32.zip) from the
+[Download page](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+- Unzip the `chromedriver_mac32.zip` and ensure the binary ends up in your
+`buildtools` folder.
+- Install the PyPI package management tool `pip` by running:
+```
+sudo easy_install pip
+```
+- Install `selenium` using `pip`:
+```
+pip install selenium
+```
+
+For the rest of this guide, there are sometimes references to a tool called
+`xvfb` and specifically when running shell commands using `xvfb-run`. When you
+develop using a Mac OS X, you can remove that part of the command. For example
+`xvfb-run echo` would just become `echo`.
 
 ## Tools for contributing
 
@@ -144,6 +180,8 @@ out/Debug/chrome --enable-dom-distiller
 - You can also go to `chrome://dom-distiller` to access the debug page.
 - To have a unique user profile every time you run Chrome, you can also add
 `--user-data-dir=/tmp/$(mktemp -d)` as a command line parameter.
+On Mac OS X, you can instead write
+`--user-data-dir=$(mktemp -d 2>/dev/null || mktemp -d -t 'chromeprofile')`.
 
 ## Running the automated tests in Chromium
 
@@ -219,7 +257,8 @@ distill http://example.com/article.html
 You can use the Chrome Developer Tools to debug DOM Distiller:
 - Update the test JavaScript by running `ant extractjs.jstests` or `ant test`.
 - Open `war/test.html` in Chrome desktop
-- Open the `Console` panel in Developer Tools (Ctrl-Shift-J).
+- Open the `Console` panel in Developer Tools (**Ctrl-Shift-J**).
+On Mac OS X you can use **&#x2325;-&#x2318;-I** (uppercase `I`) as the shortcut.
 - Run all tests by calling:
 ```javascript
 org.chromium.distiller.JsTestEntry.run()
