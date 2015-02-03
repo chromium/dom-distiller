@@ -13,6 +13,7 @@ import org.chromium.distiller.proto.DomDistillerProtos.TimingInfo;
 import org.chromium.distiller.webdocument.DomConverter;
 import org.chromium.distiller.webdocument.WebDocument;
 import org.chromium.distiller.webdocument.WebDocumentBuilder;
+import org.chromium.distiller.webdocument.filters.RelevantElements;
 
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
@@ -38,7 +39,6 @@ public class ContentExtractor {
     private class WebDocumentInfo {
         WebDocument document;
         Set<Node> hiddenElements;
-        Set<Node> dataTables;
     }
 
     public ContentExtractor(Element root) {
@@ -91,10 +91,11 @@ public class ContentExtractor {
 
         now = DomUtil.getTime();
         processDocument(documentInfo.document);
+        RelevantElements.process(documentInfo.document);
         List<Node> contentNodes = documentInfo.document.getContentNodes(false);
         contentNodes =
                 RelevantElementsFinder.findAndAddElements(contentNodes, documentInfo.hiddenElements,
-                        documentInfo.dataTables, Document.get().getDocumentElement());
+                        Document.get().getDocumentElement());
 
         mTimingInfo.setArticleProcessingTime(DomUtil.getTime() - now);
 
@@ -169,8 +170,6 @@ public class ContentExtractor {
         new DomWalker(converter).walk(documentElement);
         info.document = documentBuilder.toWebDocument();
         ensureTitleInitialized();
-
-        info.dataTables = converter.getDataTables();
         info.hiddenElements = converter.getHiddenElements();
 
         return info;

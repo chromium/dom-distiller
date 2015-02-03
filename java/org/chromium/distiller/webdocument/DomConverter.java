@@ -25,21 +25,15 @@ import java.util.Set;
  */
 public class DomConverter implements DomWalker.Visitor {
     private final WebDocumentBuilderInterface builder;
-    private final Set<Node> dataTables;
     private final Set<Node> hiddenElements;
 
     public DomConverter(WebDocumentBuilderInterface builder) {
         hiddenElements = new HashSet<Node>();
-        dataTables = new HashSet<Node>();
         this.builder = builder;
     }
 
     public final Set<Node> getHiddenElements() {
         return hiddenElements;
-    }
-
-    public final Set<Node> getDataTables() {
-        return dataTables;
     }
 
     @Override
@@ -76,7 +70,7 @@ public class DomConverter implements DomWalker.Visitor {
                 TableClassifier.Type type = TableClassifier.table(TableElement.as(e));
                 logTableInfo(e, type);
                 if (type == TableClassifier.Type.DATA) {
-                    dataTables.add(e);
+                    builder.dataTable(e);
                     return false;
                 }
                 break;

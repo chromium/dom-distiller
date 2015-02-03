@@ -27,6 +27,14 @@ public class WebDocument {
         elements.add(text);
     }
 
+    public void addTable(WebTable table) {
+        elements.add(table);
+    }
+
+    public List<WebElement> getElements() {
+        return elements;
+    }
+
     public List<Node> getContentNodes(boolean includeTitle) {
         List<Node> nodes = new ArrayList<Node>();
         for (WebElement e : elements) {

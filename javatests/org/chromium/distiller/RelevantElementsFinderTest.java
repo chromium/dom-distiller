@@ -26,7 +26,7 @@ public class RelevantElementsFinderTest extends DomDistillerJsTestCase {
 
         List<Node> contentNodes = Arrays.<Node>asList(contentText);
         List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,
-                mEmptySet, mEmptySet, root);
+                mEmptySet, root);
 
         assertEquals(1, contentAndImages.size());
         assertEquals(contentText, contentAndImages.get(0));
@@ -46,7 +46,7 @@ public class RelevantElementsFinderTest extends DomDistillerJsTestCase {
 
         List<Node> contentNodes = Arrays.<Node>asList(contentText);
         List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,
-                mEmptySet, mEmptySet, root);
+                mEmptySet, root);
 
         assertEquals(2, contentAndImages.size());
         assertEquals(image, contentAndImages.get(0));
@@ -75,7 +75,7 @@ public class RelevantElementsFinderTest extends DomDistillerJsTestCase {
 
         List<Node> contentNodes = Arrays.<Node>asList(contentText);
         List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,
-                mEmptySet, mEmptySet, root);
+                mEmptySet, root);
 
         assertEquals(1, contentAndImages.size());
         assertEquals(contentText, contentAndImages.get(0));
@@ -97,7 +97,7 @@ public class RelevantElementsFinderTest extends DomDistillerJsTestCase {
 
         List<Node> contentNodes = Arrays.<Node>asList(contentText);
         List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,
-                mEmptySet, mEmptySet, root);
+                mEmptySet, root);
 
         assertEquals(2, contentAndImages.size());
         assertEquals(image, contentAndImages.get(0));
@@ -127,7 +127,7 @@ public class RelevantElementsFinderTest extends DomDistillerJsTestCase {
 
         List<Node> contentNodes = Arrays.<Node>asList(contentText);
         List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,
-                mEmptySet, mEmptySet, root);
+                mEmptySet, root);
 
         assertEquals(2, contentAndImages.size());
         assertEquals(image, contentAndImages.get(0));
@@ -155,7 +155,7 @@ public class RelevantElementsFinderTest extends DomDistillerJsTestCase {
 
         List<Node> contentNodes = Arrays.<Node>asList(contentText);
         List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,
-                mEmptySet, mEmptySet, root);
+                mEmptySet, root);
 
         assertEquals(2, contentAndImages.size());
         assertEquals(goodImage, contentAndImages.get(0));
@@ -172,7 +172,7 @@ public class RelevantElementsFinderTest extends DomDistillerJsTestCase {
 
         List<Node> contentNodes = Arrays.<Node>asList(contentText);
         List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,
-                mEmptySet, mEmptySet, root);
+                mEmptySet, root);
 
         assertEquals(2, contentAndImages.size());
         assertEquals(contentText, contentAndImages.get(0));
@@ -191,7 +191,7 @@ public class RelevantElementsFinderTest extends DomDistillerJsTestCase {
         List<Node> contentNodes = Arrays.<Node>asList(contentText);
         Set<Node> hiddenElems = Collections.singleton(image);
         List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,
-                hiddenElems, mEmptySet, root);
+                hiddenElems, root);
 
         assertEquals(1, contentAndImages.size());
         assertEquals(contentText, contentAndImages.get(0));
@@ -211,7 +211,7 @@ public class RelevantElementsFinderTest extends DomDistillerJsTestCase {
         List<Node> contentNodes = Arrays.<Node>asList(contentText);
         Set<Node> hiddenElems = Collections.singleton(parent);
         List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,
-                hiddenElems, mEmptySet, root);
+                hiddenElems, root);
 
         assertEquals(1, contentAndImages.size());
         assertEquals(contentText, contentAndImages.get(0));
@@ -229,7 +229,7 @@ public class RelevantElementsFinderTest extends DomDistillerJsTestCase {
 
         List<Node> contentNodes = Arrays.<Node>asList(contentText);
         List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,
-                mEmptySet, mEmptySet, root);
+                mEmptySet, root);
 
         assertEquals(1, contentAndImages.size());
         assertEquals(contentText, contentAndImages.get(0));
@@ -249,113 +249,11 @@ public class RelevantElementsFinderTest extends DomDistillerJsTestCase {
 
         List<Node> contentNodes = Arrays.<Node>asList(contentText);
         List<Node> contentAndImages = RelevantElementsFinder.findAndAddElements(contentNodes,
-                mEmptySet, mEmptySet, root);
+                mEmptySet, root);
 
         assertEquals(2, contentAndImages.size());
         assertEquals(contentText, contentAndImages.get(0));
         assertEquals(image, contentAndImages.get(1));
-    }
-
-    public void testDataTable() {
-        Node root = TestUtil.createDiv(0);
-        mBody.appendChild(root);
-        Node contentText = TestUtil.createText("content");
-        root.appendChild(contentText);
-
-        Element div = TestUtil.createDiv(1);
-        Node table = Document.get().createTableElement();
-        String html = "<caption>Testing Data Table</caption>" + // This makes it a data table.
-                      "<tbody>" +
-                          "<tr>" +
-                              "<td>row1col1</td>" +
-                              "<td><img src=\"./table.png\"></td>" +
-                          "</tr>" +
-                      "</tbody>";
-        Element.as(table).setInnerHTML(html);
-        div.appendChild(table);
-        root.appendChild(div);
-
-        // Mark "content" as content.
-        List<Node> contentNodes = Arrays.<Node>asList(contentText);
-        Set<Node> dataTables = Collections.singleton(table);
-        List<Node> contentAndTable = RelevantElementsFinder.findAndAddElements(contentNodes,
-                mEmptySet, dataTables, root);
-
-        // Expected nodes: 1 "content" text node, 1 <table> node, and table has 8 child nodes.
-        assertEquals(10, contentAndTable.size());
-        assertEquals(contentText, contentAndTable.get(0));
-        Node n = contentAndTable.get(1);
-        assertEquals(Node.ELEMENT_NODE, n.getNodeType());
-        assertEquals("TABLE", Element.as(n).getNodeName());
-        n = contentAndTable.get(2);
-        assertEquals(Node.ELEMENT_NODE, n.getNodeType());
-        assertEquals("CAPTION", Element.as(n).getNodeName());
-        n = contentAndTable.get(3);
-        assertEquals("#text", n.getNodeName());
-        assertEquals("Testing Data Table", n.getNodeValue());
-        n = contentAndTable.get(4);
-        assertEquals(Node.ELEMENT_NODE, n.getNodeType());
-        assertEquals("TBODY", Element.as(n).getNodeName());
-        n = contentAndTable.get(5);
-        assertEquals(Node.ELEMENT_NODE, n.getNodeType());
-        assertEquals("TR", Element.as(n).getNodeName());
-        n = contentAndTable.get(6);
-        assertEquals(Node.ELEMENT_NODE, n.getNodeType());
-        assertEquals("TD", Element.as(n).getNodeName());
-        n = contentAndTable.get(7);
-        assertEquals("#text", n.getNodeName());
-        assertEquals("row1col1", n.getNodeValue());
-        n = contentAndTable.get(8);
-        assertEquals(Node.ELEMENT_NODE, n.getNodeType());
-        assertEquals("TD", Element.as(n).getNodeName());
-        n = contentAndTable.get(9);
-        assertEquals(Node.ELEMENT_NODE, n.getNodeType());
-        assertEquals("IMG", n.getNodeName());
-    }
-
-    public void testInvisibleTDInDataTable() {
-        Node root = TestUtil.createDiv(0);
-        mBody.appendChild(root);
-        Node contentText = TestUtil.createText("content");
-        root.appendChild(contentText);
-
-        Element div = TestUtil.createDiv(1);
-        Node table = Document.get().createTableElement();
-        String html = "<caption>Testing Data Table</caption>" + // This makes it a data table.
-                      "<tbody>" +
-                          "<tr>" +
-                              "<td style=\"display:none\">row1col1</td>" +
-                              "<td>row1col2</td>" +
-                          "</tr>" +
-                      "</tbody>";
-        Element.as(table).setInnerHTML(html);
-        div.appendChild(table);
-        root.appendChild(div);
-
-        // Get the invisible <td> node.
-        NodeList<Element> allTd = Element.as(table).getElementsByTagName("TD");
-        assertEquals(2, allTd.getLength());
-        Node hiddenTd = allTd.getItem(0);
-
-        // Mark "content" as content.
-        List<Node> contentNodes = Arrays.<Node>asList(contentText);
-        Set<Node> hiddenElems = Collections.singleton(hiddenTd);
-        Set<Node> dataTables = Collections.singleton(table);
-        List<Node> contentAndTable = RelevantElementsFinder.findAndAddElements(contentNodes,
-                hiddenElems, dataTables, root);
-
-        // Expected nodes: 1 "content" text node, 1 <table> node, and table has 6 child nodes.
-        assertEquals(8, contentAndTable.size());
-        assertEquals(contentText, contentAndTable.get(0));
-        Node n = contentAndTable.get(1);
-        assertEquals(Node.ELEMENT_NODE, n.getNodeType());
-        assertEquals("TABLE", Element.as(n).getNodeName());
-        n = contentAndTable.get(6);
-        assertEquals(Node.ELEMENT_NODE, n.getNodeType());
-        assertEquals("TD", Element.as(n).getNodeName());
-        n = contentAndTable.get(7);
-        assertEquals("#text", n.getNodeName());
-        assertEquals("row1col2", n.getNodeValue());
     }
 
     public void testNonDataTable() {
@@ -393,7 +291,7 @@ public class RelevantElementsFinderTest extends DomDistillerJsTestCase {
         // boilerpipe identifies some table cells as content.
         List<Node> contentNodes = Arrays.<Node>asList(contentText, row1col2, afterTable);
         List<Node> contentAndTable = RelevantElementsFinder.findAndAddElements(contentNodes,
-                mEmptySet, mEmptySet, root);
+                mEmptySet, root);
 
         assertEquals(3, contentAndTable.size());
         assertEquals(contentText, contentAndTable.get(0));
@@ -431,67 +329,10 @@ public class RelevantElementsFinderTest extends DomDistillerJsTestCase {
         // Mark "content" as content.
         List<Node> contentNodes = Arrays.<Node>asList(contentText);
         List<Node> contentAndTable = RelevantElementsFinder.findAndAddElements(contentNodes,
-                mEmptySet, mEmptySet, root);
+                mEmptySet, root);
 
         // Expected nodes: 1 "content" text node.
         assertEquals(1, contentAndTable.size());
         assertEquals(contentText, contentAndTable.get(0));
-    }
-
-    public void testDataTableWithNestedNonDataTable() {
-        Node root = TestUtil.createDiv(0);
-        mBody.appendChild(root);
-        Node contentText = TestUtil.createText("content");
-        root.appendChild(contentText);
-
-        Element div = TestUtil.createDiv(1);
-        Node table = Document.get().createTableElement();
-        String html = "<caption>Testing Data Table</caption>" + // This makes it a data table.
-                      "<tbody>" +
-                          "<tr>" +
-                              "<td>" +
-                                  "<table>" +  // Nested non-data table.
-                                      "<tbody>" +
-                                          "<tr>" +
-                                              "<td>row1col1</td>" +
-                                          "</tr>" +
-                                      "</tbody>" +
-                                  "</table>" +
-                              "</td>" +
-                              "<td>row1col2</td>" +
-                          "</tr>" +
-                      "</tbody>";
-        Element.as(table).setInnerHTML(html);
-        div.appendChild(table);
-        root.appendChild(div);
-
-        // Mark "content" as content.
-        List<Node> contentNodes = Arrays.<Node>asList(contentText);
-        Set<Node> dataTables = Collections.singleton(table);
-        List<Node> contentAndTable = RelevantElementsFinder.findAndAddElements(contentNodes,
-                mEmptySet, dataTables, root);
-
-        // Expected nodes: 1 "content" text node, 2 <table> nodes, and a total of 12 child nodes.
-        // 2nd table node has
-        assertEquals(14, contentAndTable.size());
-        assertEquals(contentText, contentAndTable.get(0));
-        Node n = contentAndTable.get(1);
-        assertEquals(Node.ELEMENT_NODE, n.getNodeType());
-        assertEquals("TABLE", Element.as(n).getNodeName());
-        n = contentAndTable.get(7);
-        assertEquals(Node.ELEMENT_NODE, n.getNodeType());
-        assertEquals("TABLE", n.getNodeName());
-        n = contentAndTable.get(10);
-        assertEquals(Node.ELEMENT_NODE, n.getNodeType());
-        assertEquals("TD", n.getNodeName());
-        n = contentAndTable.get(11);
-        assertEquals("#text", n.getNodeName());
-        assertEquals("row1col1", n.getNodeValue());
-        n = contentAndTable.get(12);
-        assertEquals(Node.ELEMENT_NODE, n.getNodeType());
-        assertEquals("TD", n.getNodeName());
-        n = contentAndTable.get(13);
-        assertEquals("#text", n.getNodeName());
-        assertEquals("row1col2", n.getNodeValue());
     }
 }

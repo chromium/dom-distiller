@@ -6,10 +6,11 @@ package org.chromium.distiller;
 
 import org.chromium.distiller.document.TextBlock;
 import org.chromium.distiller.document.TextDocument;
+import org.chromium.distiller.webdocument.DomConverter;
+import org.chromium.distiller.webdocument.TestWebTextBuilder;
+import org.chromium.distiller.webdocument.WebDocumentBuilder;
 import org.chromium.distiller.webdocument.WebElement;
 import org.chromium.distiller.webdocument.WebText;
-import org.chromium.distiller.webdocument.DomConverter;
-import org.chromium.distiller.webdocument.WebDocumentBuilder;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -20,17 +21,18 @@ import java.util.ArrayList;
 public class TestTextDocumentBuilder {
     private ArrayList<TextBlock> textBlocks;
     private ArrayList<WebElement> elements;
+    private TestWebTextBuilder webTextBuilder;
     private int textBlockIndex;
 
     public TestTextDocumentBuilder() {
         textBlocks = new ArrayList<>();
         elements = new ArrayList<>();
+        webTextBuilder = new TestWebTextBuilder();
         textBlockIndex = 0;
     }
 
     private TextBlock addBlock(String text, String... labels) {
-        int numWords = text.split(" ").length;
-        WebText wt = new WebText(text, null, 0, 0, 0, 0, numWords, numWords, 0, textBlockIndex++);
+        WebText wt = webTextBuilder.createForText(text);
         for (String label : labels) {
             wt.addLabel(label);
         }

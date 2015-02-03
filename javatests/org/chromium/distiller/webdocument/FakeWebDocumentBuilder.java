@@ -31,6 +31,11 @@ public class FakeWebDocumentBuilder implements WebDocumentBuilderInterface {
     }
 
     @Override
+    public void dataTable(Element element) {
+        documentStringBuilder.append("<datatable/>");
+    }
+
+    @Override
     public void skipElement(Element element) {}
 
     @Override

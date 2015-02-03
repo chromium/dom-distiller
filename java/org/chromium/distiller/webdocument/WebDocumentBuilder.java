@@ -95,6 +95,11 @@ public class WebDocumentBuilder implements WebDocumentBuilderInterface {
         webTextBuilder.textNode(textNode, tagLevel);
     }
 
+    @Override
+    public void dataTable(Element e) {
+        document.addTable(new WebTable(e));
+    }
+
     private void enterAnchor() {
         webTextBuilder.enterAnchor();
     }

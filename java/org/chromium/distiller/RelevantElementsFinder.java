@@ -23,9 +23,8 @@ public class RelevantElementsFinder {
      * @return An ordered list of both content and relevant element nodes.
      */
     public static List<Node> findAndAddElements(final List<Node> contentNodes,
-            final Set<Node> hiddenElements, final Set<Node> dataTables, final Node root) {
-        RelevantElementsFinder finder = new RelevantElementsFinder(contentNodes, hiddenElements,
-                               dataTables);
+            final Set<Node> hiddenElements, final Node root) {
+        RelevantElementsFinder finder = new RelevantElementsFinder(contentNodes, hiddenElements);
         finder.find(root);
 
         // remove all but one potential header image
@@ -45,25 +44,20 @@ public class RelevantElementsFinder {
     }
 
     private final Set<Node> hiddenElements;
-    private final Set<Node> dataTables;
     private final OrderedNodeMatcher nodeMatcher;
     private final List<Node> contentAndElements;
 
     private final HeaderImageFinder finder;
-    private final Node firstContentNode;
     private final List<ImageInfo> headerImageScores;
 
-    private RelevantElementsFinder(final List<Node> contentNodes, final Set<Node> hiddenElements,
-                                   final Set<Node> dataTables) {
+    private RelevantElementsFinder(final List<Node> contentNodes, final Set<Node> hiddenElements) {
         nodeMatcher = new OrderedNodeMatcher(contentNodes);
         this.hiddenElements = hiddenElements;
-        this.dataTables = dataTables;
         contentAndElements = new ArrayList<Node>();
 
+        Node firstContentNode = null;
         if (contentNodes != null && contentNodes.size() > 0) {
             firstContentNode = contentNodes.get(0);
-        } else {
-            firstContentNode = null;
         }
         finder = new HeaderImageFinder(firstContentNode);
         headerImageScores = new ArrayList<ImageInfo>();
@@ -83,7 +77,6 @@ public class RelevantElementsFinder {
         sRelevantTags.add("BR");
         sRelevantTags.add("FIGURE");
         sRelevantTags.add("IMG");
-        sRelevantTags.add("TABLE");
         sRelevantTags.add("VIDEO");
     }
 
@@ -110,35 +103,39 @@ public class RelevantElementsFinder {
                 return false;
             }
 
-            if (nodeMatcher.match(n)) {
-                inContent = true;
+            boolean isContent = nodeMatcher.match(n);
+
+            if (isContent) {
                 contentAndElements.add(n);
-            } else if (inContent && isNonWhitespaceTextNode(n)) {
-                inContent = false;
             }
 
             switch (n.getNodeType()) {
                 case Node.TEXT_NODE:
-                    return true;
+                    inContent = isContent || (inContent &&
+                            StringUtil.isStringAllWhitespace(n.getNodeValue()));
+                    return false;
 
                 case Node.ELEMENT_NODE:
-                    Element e = Element.as(n);
-                    if (hiddenElements.contains(e)) return false;
-                    // Check if element needs to be extracted.
-                    if (!inContent || !sRelevantTags.contains(e.getTagName())) {
-                        // if this node is an image, reconsider retaining it
-                        if ("IMG".equals(e.getTagName())) {
-                            int score = finder.scoreNonContentImage(e);
-                            if (score > HeaderImageFinder.MINIMUM_ACCEPTED_SCORE) {
-                                headerImageScores.add(new ImageInfo(e, score));
-                                contentAndElements.add(n);
-                            }
-                        }
+                    if (isContent) {
                         return true;
                     }
-
-                    return addElementAndChildren(e);
-
+                    Element e = Element.as(n);
+                    if (hiddenElements.contains(e)) {
+                        return false;
+                    }
+                    // Check if element needs to be extracted.
+                    if (inContent && sRelevantTags.contains(e.getTagName())) {
+                        return addElementAndChildren(e);
+                    }
+                    // if this node is an image, reconsider retaining it
+                    if ("IMG".equals(e.getTagName())) {
+                        int score = finder.scoreNonContentImage(e);
+                        if (score > HeaderImageFinder.MINIMUM_ACCEPTED_SCORE) {
+                            headerImageScores.add(new ImageInfo(e, score));
+                            contentAndElements.add(n);
+                        }
+                    }
+                    return true;
                 case Node.DOCUMENT_NODE:
                 default:
                     return false;  // Don't recurse into comments or sub-documents.
@@ -149,27 +146,14 @@ public class RelevantElementsFinder {
         public void exit(Node n) {
         }
 
-        private boolean isNonWhitespaceTextNode(Node n) {
-            return n.getNodeType() == Node.TEXT_NODE &&
-                    !StringUtil.isStringAllWhitespace(n.getNodeValue());
-        }
-
         /**
          * @Returns true if caller should recurse into |e|.
          */
         private boolean addElementAndChildren(Element e) {
-            if (isNonDataTable(e)) {
-                logDiscardElement(e, "non-data table");
-                return true;
-            }
             logAddElement(e);
             ElementVisitor visitor = new ElementVisitor();
             new DomWalker(visitor).walk(e);
             return false;
-        }
-
-        private boolean isNonDataTable(Element e) {
-            return e.hasTagName("TABLE") && !dataTables.contains(e);
         }
 
         private void logDiscardElement(Element e, String reason) {
@@ -217,7 +201,7 @@ public class RelevantElementsFinder {
             switch (n.getNodeType()) {
                 case Node.TEXT_NODE:
                     contentAndElements.add(n);
-                    return true;
+                    return false;
 
                 case Node.ELEMENT_NODE:
                     Element e = Element.as(n);

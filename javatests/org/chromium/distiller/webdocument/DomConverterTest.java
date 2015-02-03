@@ -103,7 +103,7 @@ public class DomConverterTest extends DomDistillerJsTestCase {
                               "</tr>" +
                           "</tbody>" +
                       "</table>";
-        runTest(html, "");
+        runTest(html, "<datatable/>");
     }
 
     public void testNonDataTable() throws Throwable {

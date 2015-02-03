@@ -5,6 +5,7 @@
 package org.chromium.distiller;
 
 import org.chromium.distiller.document.TextBlock;
+import org.chromium.distiller.webdocument.TestWebTextBuilder;
 import org.chromium.distiller.webdocument.WebElement;
 import org.chromium.distiller.webdocument.WebText;
 
@@ -12,17 +13,16 @@ import java.util.ArrayList;
 
 class TestTextBlockBuilder {
     private ArrayList<WebElement> elements = new ArrayList<WebElement>();
+    private TestWebTextBuilder webTextBuilder = new TestWebTextBuilder();
 
     public TextBlock createForText(String text) {
-        int numWords = StringUtil.countWords(text);
-        WebText wt = new WebText(text, null, 0, 0, 0, 0, numWords, 0, 0, 0);
+        WebText wt = webTextBuilder.createForText(text);
         elements.add(wt);
         return new TextBlock(elements, elements.size() - 1);
     }
 
     public TextBlock createForAnchorText(String text) {
-        int numWords = StringUtil.countWords(text);
-        WebText wt = new WebText(text, null, 0, 0, 0, 0, numWords, numWords, 0, 0);
+        WebText wt = webTextBuilder.createForAnchorText(text);
         elements.add(wt);
         return new TextBlock(elements, elements.size() - 1);
     }
