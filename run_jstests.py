@@ -29,6 +29,8 @@ def main(argv):
   parser = argparse.ArgumentParser()
   parser.add_argument('--filter', help='Only tests that match this pattern will be run.')
   parser.add_argument('--debug_level', help='Verbosity level of debug messages.')
+  parser.add_argument('--no_console_log',
+      action='store_true', help='Disable the console log output.')
   options = parser.parse_args(argv)
 
   params = {}
@@ -37,6 +39,9 @@ def main(argv):
 
   if options.debug_level:
     params['debug_level'] = int(options.debug_level)
+
+  if options.no_console_log:
+    params['console_log'] = '0'
 
   start = time.time()
   test_runner = "return org.chromium.distiller.JsTestEntry.run()";

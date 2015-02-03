@@ -56,23 +56,39 @@ public class LogUtil {
      */
     private static boolean sIncludeLog = false;
 
+    /**
+     * Whether the log should be suppressed. If this flag is true, there will be no output to
+     * the JS console. This is used when running the JS Tests in Chromium, where the log is
+     * retreived using {@link #getAndClearLog} instead.
+     */
+    private static boolean sSuppressConsoleOutput;
+
     public static boolean isLoggable(int level) {
         return sDebugLevel >= level;
     }
 
     /**
-     * Log a string to console.
+     * Log a string to console unless {@link #sSuppressLogOutput} is true. The log string is always
+     * added to the log builder.
      */
     public static void logToConsole(String str) {
         if (str == null) {
             str = "";
         }
 
-        if (str.contains("[0;") || str.contains("[1;"))
+        if (str.contains("[0;") || str.contains("[1;")) {
             str += kReset;
+        }
 
-        jsLogToConsole(str);
+        if (!sSuppressConsoleOutput) {
+            jsLogToConsole(str);
+        }
+
         sLogBuilder += str + "\n";
+    }
+
+    static void setSuppressConsoleOutput(boolean suppress) {
+        sSuppressConsoleOutput = suppress;
     }
 
     static int getDebugLevel() {

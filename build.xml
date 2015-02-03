@@ -133,12 +133,16 @@
 
   </target>
 
-  <target name="package" depends="extractjs, protoc.json"
+  <target name="package" depends="extractjs, extractjs.jstests, protoc.json"
       description="Copies the main build artifacts into the out/package directory." >
     <mkdir dir="out/extension"/>
     <mkdir dir="out/package"/>
     <mkdir dir="out/package/js"/>
     <mkdir dir="out/package/proto"/>
+    <mkdir dir="out/package/test"/>
+    <mkdir dir="out/package/test/data"/>
+    <mkdir dir="out/package/test/data/out"/>
+    <mkdir dir="out/package/test/data/war"/>
 
     <copy file="out/domdistiller.js" todir="out/package/js" />
     <copy todir="out/package/proto_gen">
@@ -152,6 +156,9 @@
     <copy todir="out/extension">
       <fileset dir="extension"/>
     </copy>
+
+    <copy file="out/domdistillerjstest.js" todir="out/package/test/data/out" />
+    <copy file="war/test.html" todir="out/package/test/data/war" />
   </target>
 
 
@@ -234,6 +241,7 @@
     <delete dir="war/WEB-INF" failonerror="false" />
     <delete dir="war/domdistiller" failonerror="false" />
     <delete dir="war/domdistillerjs" failonerror="false" />
+    <delete dir="war/domdistillerjstest" failonerror="false" />
     <delete file="war/DomDistiller.war" failonerror="false" />
     <delete dir="gwt-unitCache" failonerror="false" />
     <delete dir="out" failonerror="false" />

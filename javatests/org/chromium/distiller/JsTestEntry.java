@@ -33,13 +33,15 @@ public class JsTestEntry implements EntryPoint {
     @JsExport
     public static TestSuiteResults run() {
         String filter = Window.Location.getParameter("filter");
-        int debugLevel = JavaScript.parseInt(Window.Location.getParameter("debug_level"));
-        LogUtil.setDebugLevel(debugLevel);
         return runWithFilter(filter);
     }
 
     @JsExport
     public static TestSuiteResults runWithFilter(String filter) {
+        int debugLevel = JavaScript.parseInt(Window.Location.getParameter("debug_level"));
+        LogUtil.setDebugLevel(debugLevel);
+        boolean consoleLog = !"0".equals(Window.Location.getParameter("console_log"));
+        LogUtil.setSuppressConsoleOutput(!consoleLog);
         JsTestSuiteBuilder builder = GWT.<JsTestSuiteBuilder>create(JsTestSuiteBuilder.class);
         TestLogger logger = new TestLogger();
         Map<String, JsTestSuiteBase.TestCaseResults> results = builder.build().run(logger, filter);
