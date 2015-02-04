@@ -3,6 +3,7 @@
 # To use `git cl format`, several things are expected to be in the buildtools/
 # directory. You can create a symlink to the relevant directories in a normal
 # Chromium checkout to make git cl format work.
+# See README.md for instructions.
 BasedOnStyle: Chromium
 
 Language: Java

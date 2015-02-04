@@ -161,6 +161,20 @@ git branch -u master
   [application settings page](https://github.com/settings/applications) and use
   that as your password.
 
+## Code formatting
+
+Before uploading a CL it is recommended to run `git cl format`. However, this
+requires adding symbolic links to your chromium checkout.
+
+Inside the `buildtools` folder of your checkout, add the following symbolic
+links:
+- `clang_format`	&rarr; `/path/to/chromium/src/buildtools/clang_format/`
+- `linux64` ->	&rarr; `/path/to/chromium/src/buildtools/linux64/` (only for Linux 64-bit platform)
+- `mac` &rarr; `/path/to/chromium/mac/buildtools/linux64/` (only for Mac platform)
+
+Doing this enables you to run the command `git cl format` to fix the formatting
+of your code.
+
 # Run in Chrome for desktop
 
 In this section, the following shell variables and are assumed correctly set:
