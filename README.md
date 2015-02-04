@@ -1,3 +1,23 @@
+# DOM Distiller
+
+DOM Distiller aims to provide a better reading experience by distilling the
+content of the page. This distilled content can then be used in a variety of
+ways.
+
+The current efforts that will be powered by DOM Distiller:
+- Reader mode: a mobile-friendly viewing mode for Chrome mobile
+
+## How to use Reader mode on mobile Chrome
+
+- Open Chrome on your mobile device
+- Navigate to [chrome://flags](chrome://flags) and search for "Reader mode"
+  (Menu -> Find in page -> Enable Reader Mode Toolbar Icon), or directly go to
+  [chrome://flags#enable-reader-mode-toolbar-icon](chrome://flags#enable-reader-mode-toolbar-icon)
+- Click Enable to turn on Reader mode
+- Click "Relaunch Now" at the bottom of the page
+- Next time you're trying to read a page, tap on the "Reader mode" icon in
+  the toolbar to try it out!
+
 # Continuous integration
 
 - [![Build Status](https://drone.io/github.com/chromium/dom-distiller/status.png)](https://drone.io/github.com/chromium/dom-distiller/latest)
