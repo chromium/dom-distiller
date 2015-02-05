@@ -138,16 +138,25 @@
     </java>
   </target>
 
-  <target name="extractjs" depends="gwtc" description="Extract standalone javascript from compiled javascript">
+  <target name="extractjs" depends="gwtc" description="Extract standalone JavaScript from compiled JavaScript">
     <exec executable="python" failonerror="true">
       <arg value="create_standalone_js.py"/>
       <arg line="--module domdistiller"/>
       <arg value="--auto"/>
     </exec>
-
   </target>
 
-  <target name="package" depends="extractjs, extractjs.jstests, protoc.json"
+  <target name="extractwrappedjs" depends="extractjs"
+      description="Create wrapped standalone javascript from compiled JavaScript for direct inclusion in Chrome.">
+    <exec executable="python" failonerror="true">
+      <arg value="create_wrapped_standalone_js.py"/>
+      <arg value="--templatefile=war/wrapped_domdistiller_template.js"/>
+      <arg value="--infile=out/domdistiller.js"/>
+      <arg value="--outfile=out/domdistiller_wrapped.js"/>
+    </exec>
+  </target>
+
+  <target name="package" depends="extractjs, extractwrappedjs, extractjs.jstests, protoc.json"
       description="Copies the main build artifacts into the out/package directory." >
     <mkdir dir="out/extension"/>
     <mkdir dir="out/package"/>
@@ -159,6 +168,7 @@
     <mkdir dir="out/package/test/data/war"/>
 
     <copy file="out/domdistiller.js" todir="out/package/js" />
+    <copy file="out/domdistiller_wrapped.js" todir="out/package/js" />
     <copy todir="out/package/proto_gen">
       <fileset dir="out/proto/json"/>
     </copy>
