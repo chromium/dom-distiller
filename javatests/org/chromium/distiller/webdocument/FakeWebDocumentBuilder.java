@@ -65,4 +65,8 @@ public class FakeWebDocumentBuilder implements WebDocumentBuilderInterface {
     public void textNode(Text textNode) {
         documentStringBuilder.append(textNode.getData());
     }
+
+    @Override
+    public void embed(WebEmbed embed) {
+    }
 }

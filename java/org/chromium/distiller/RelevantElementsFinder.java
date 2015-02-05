@@ -27,7 +27,7 @@ public class RelevantElementsFinder {
         RelevantElementsFinder finder = new RelevantElementsFinder(contentNodes, hiddenElements);
         finder.find(root);
 
-        // remove all but one potential header image
+        // Remove all but one potential header image.
         ImageInfo topImage = null;
         for (ImageInfo info : finder.headerImageScores) {
             if (topImage == null || info.imageScore > topImage.imageScore) {

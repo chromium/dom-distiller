@@ -8,6 +8,7 @@ import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.HeadingElement;
+import com.google.gwt.dom.client.IFrameElement;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.MetaElement;
 import com.google.gwt.dom.client.Text;
@@ -71,6 +72,10 @@ class TestUtil {
 
     public static ImageElement createImage() {
         return Document.get().createImageElement();
+    }
+
+    public static IFrameElement createIframe() {
+        return Document.get().createIFrameElement();
     }
 
     public static TitleElement createTitle(String value) {

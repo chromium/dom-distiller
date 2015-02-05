@@ -100,6 +100,11 @@ public class WebDocumentBuilder implements WebDocumentBuilderInterface {
         document.addTable(new WebTable(e));
     }
 
+    @Override
+    public void embed(WebEmbed embedNode) {
+        document.addEmbed(embedNode);
+    }
+
     private void enterAnchor() {
         webTextBuilder.enterAnchor();
     }

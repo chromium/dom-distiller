@@ -9,6 +9,8 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 
+import java.util.Map;
+
 public class DomUtilTest extends DomDistillerJsTestCase {
     public void testGetAttributes() {
         Element e = Document.get().createDivElement();
@@ -47,6 +49,41 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         assertEquals(null, DomUtil.getFirstElementWithClassName(rootDiv, "t xy"));
         assertEquals(null, DomUtil.getFirstElementWithClassName(rootDiv, "tes"));
         assertEquals(div3, DomUtil.getFirstElementWithClassName(rootDiv, "foo"));
+    }
+
+    public void testHasRootDomain() {
+        // Positive tests.
+        assertTrue(DomUtil.hasRootDomain("http://www.foo.bar/foo/bar.html", "foo.bar"));
+        assertTrue(DomUtil.hasRootDomain("https://www.m.foo.bar/foo/bar.html", "foo.bar"));
+        assertTrue(DomUtil.hasRootDomain("https://www.m.foo.bar/foo/bar.html", "www.m.foo.bar"));
+        assertTrue(DomUtil.hasRootDomain("http://localhost/foo/bar.html", "localhost"));
+        assertTrue(DomUtil.hasRootDomain("https://www.m.foo.bar.baz", "foo.bar.baz"));
+        // Negative tests.
+        assertFalse(DomUtil.hasRootDomain("https://www.m.foo.bar.baz", "x.foo.bar.baz"));
+        assertFalse(DomUtil.hasRootDomain("https://www.foo.bar.baz", "foo.bar"));
+        assertFalse(DomUtil.hasRootDomain("http://foo", "m.foo"));
+        assertFalse(DomUtil.hasRootDomain("https://www.badfoobar.baz", "foobar.baz"));
+        assertFalse(DomUtil.hasRootDomain("", "foo"));
+        assertFalse(DomUtil.hasRootDomain("http://foo.bar", ""));
+        assertFalse(DomUtil.hasRootDomain(null, "foo"));
+        assertFalse(DomUtil.hasRootDomain("http://foo.bar", null));
+    }
+
+    public void testSplitUrlParams() {
+        Map<String, String> result = DomUtil.splitUrlParams("param1=apple&param2=banana");
+        assertEquals(2, result.size());
+        assertEquals("apple", result.get("param1"));
+        assertEquals("banana", result.get("param2"));
+
+        result = DomUtil.splitUrlParams("123=abc");
+        assertEquals(1, result.size());
+        assertEquals("abc", result.get("123"));
+
+        result = DomUtil.splitUrlParams("");
+        assertEquals(0, result.size());
+
+        result = DomUtil.splitUrlParams(null);
+        assertEquals(0, result.size());
     }
 
     public void testNearestCommonAncestor() {

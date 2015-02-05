@@ -31,6 +31,10 @@ public class WebDocument {
         elements.add(table);
     }
 
+    public void addEmbed(WebEmbed embed) {
+        elements.add(embed);
+    }
+
     public List<WebElement> getElements() {
         return elements;
     }

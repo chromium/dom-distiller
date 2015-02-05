@@ -5,13 +5,18 @@
 package org.chromium.distiller;
 
 import com.google.gwt.core.client.JsArray;
+import com.google.gwt.dom.client.AnchorElement;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.http.client.URL;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DomUtil {
     /**
@@ -34,6 +39,44 @@ public class DomUtil {
     public static native boolean hasClassName(Element elem, String className) /*-{
         return elem.classList.contains(className);
     }-*/;
+
+    /**
+     * Check to see if a provided URL has the specified root domain (ex. http://a.b.c/foo/bar has
+     * root domain of b.c).
+     * @param url The URL to test.
+     * @param root The root domain to test against.
+     * @return True if url has the specified root domain.
+     */
+    public static boolean hasRootDomain(String url, String root) {
+        if (url == null || root == null) {
+            return false;
+        }
+        AnchorElement anchor = Document.get().createAnchorElement();
+        anchor.setHref(url);
+        String host = anchor.getPropertyString("host");
+        return ("." + host).endsWith("." + root);
+    }
+
+    /**
+     * Split URL parameters into key/value pairs and return them in a map.
+     * @param query The query string after the "?".
+     * @return Map of all query parameters or an empty map.
+     */
+    public static Map<String, String> splitUrlParams(String query) {
+        if (query == null || query.isEmpty()) {
+            return new HashMap<>();
+        }
+        Map<String, String> paramMap = new HashMap<>();
+        String[] params = query.split("&");
+        for (int i = 0; i < params.length; i++) {}
+        for (String currentParam : params) {
+            String[] paramSplit = currentParam.split("=");
+            if (paramSplit.length > 1) {
+                paramMap.put(paramSplit[0], URL.decode(paramSplit[1]));
+            }
+        }
+        return paramMap;
+    }
 
     /**
       * @Return The CSS style of an element after applying the active stylesheets and resolving any
