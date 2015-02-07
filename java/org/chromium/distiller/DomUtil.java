@@ -166,4 +166,8 @@ public class DomUtil {
     public static native NodeList<Element> querySelectorAll(Node l, String selectors) /*-{
         return l.querySelectorAll(selectors);
     }-*/;
+
+    public static native Document createHTMLDocument(Document doc) /*-{
+        return doc.implementation.createHTMLDocument();
+    }-*/;
 }

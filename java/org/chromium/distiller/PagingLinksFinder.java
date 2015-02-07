@@ -14,6 +14,7 @@ package org.chromium.distiller;
 import org.chromium.distiller.proto.DomDistillerProtos;
 
 import com.google.gwt.dom.client.AnchorElement;
+import com.google.gwt.dom.client.BaseElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
@@ -104,6 +105,8 @@ public class PagingLinksFinder {
         NodeList<Element> allLinks = root.getElementsByTagName("A");
         Map<String, PagingLinkObj> possiblePages = new HashMap<String, PagingLinkObj>();
 
+        AnchorElement baseAnchor = createAnchorWithBase(original_url);
+
         // Loop through all links, looking for hints that they may be next- or previous- page links.
         // Things like having "page" in their textContent, className or id, or being a child of a
         // node with a page-y className or id.
@@ -127,7 +130,7 @@ public class PagingLinksFinder {
             // Remove url anchor and then trailing '/' from link's href.
             // Note that AnchorElement.getHref() returns the absolute URI, so there's no need to
             // worry about relative links.
-            String linkHref = REG_HREF_CLEANER.replace(resolveLinkHref(link, original_url), "");
+            String linkHref = REG_HREF_CLEANER.replace(resolveLinkHref(link, baseAnchor), "");
             appendDbgStrForLink(link, "-> " + linkHref);
 
             // Ignore page link that is empty, not http/https, or same as current window location.
@@ -326,50 +329,29 @@ public class PagingLinksFinder {
         return pagingHref;
     }
 
+    public static AnchorElement createAnchorWithBase(String base_url) {
+        Document doc = DomUtil.createHTMLDocument(Document.get());
+
+        BaseElement base = doc.createBaseElement();
+        base.setHref(base_url);
+        doc.getHead().appendChild(base);
+
+        AnchorElement a = doc.createAnchorElement();
+        doc.getBody().appendChild(base);
+        return a;
+    }
+
     private static String fixMissingScheme(String url) {
         if (url.isEmpty()) return "";
         if (!url.contains("://")) return "http://" + url;
         return url;
     }
 
-    // The absolute URI of the link is used in production mode.
-    // In testing or scoring, where original_url is given, original_url is treated as if it is
-    // Window.Location.getHref().
-    public static String resolveLinkHref(AnchorElement link, String original_url) {
-        if (original_url.equals(Window.Location.getHref())) {
-            return link.getHref();
-        }
+    // The link is resolved using an anchor within a new HTML document with a base tag.
+    public static String resolveLinkHref(AnchorElement link, AnchorElement baseAnchor) {
         String linkHref = REG_HREF_CLEANER.replace(link.getAttribute("href"), "");
-
-        if (linkHref.substring(0, 1) == "/" ) {
-            return getScheme(original_url) + "://" + getHostname(original_url) + linkHref;
-        } else if (linkHref.contains("://") || linkHref.startsWith("javascript:")) {
-            return linkHref;
-        } else {
-            String ans = getScheme(original_url) + "://" + getHostname(original_url);
-            List<String> pathStack = new ArrayList<String>();
-            String[] pathArray = StringUtil.split(getPath(original_url), "\\/");
-            for (String e: pathArray) {
-                if(!e.isEmpty()) pathStack.add(e);
-            }
-            if (pathStack.size() > 0) {
-                pathStack.remove(pathStack.size()-1);
-            }
-            String[] dirs = StringUtil.split(linkHref, "\\/");
-            for (int i = 0; i < dirs.length; i++) {
-                if (dirs[i] == "..") {
-                    if (pathStack.size() > 0) {
-                        pathStack.remove(pathStack.size()-1);
-                    }
-                } else {
-                    pathStack.add(dirs[i]);
-                }
-            }
-            for (int i = 0; i < pathStack.size(); i++) {
-                ans += "/" + pathStack.get(i);
-            }
-            return ans;
-        }
+        baseAnchor.setAttribute("href", linkHref);
+        return baseAnchor.getHref();
     }
 
     private static String getScheme(String url) {

@@ -15,7 +15,8 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
 
     private static void checkResolveLinkHref(AnchorElement anchor, String original_url, String expected, String href) {
         anchor.setHref(href);
-        assertEquals(expected, PagingLinksFinder.resolveLinkHref(anchor, original_url));
+        AnchorElement baseAnchor = PagingLinksFinder.createAnchorWithBase(original_url);
+        assertEquals(expected, PagingLinksFinder.resolveLinkHref(anchor, baseAnchor));
     }
 
     public void testResolveLinkHref() {
@@ -40,16 +41,17 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
     }
 
     private static void checkLinks(AnchorElement next, AnchorElement prev, Element root, String original_url) {
+        AnchorElement baseAnchor = PagingLinksFinder.createAnchorWithBase(original_url);
         if (next == null) {
             assertNull(PagingLinksFinder.findNext(root, original_url));
         } else {
-            String href = PagingLinksFinder.resolveLinkHref(next, original_url);
+            String href = PagingLinksFinder.resolveLinkHref(next, baseAnchor);
             assertEquals(href, PagingLinksFinder.findNext(root, original_url));
         }
         if (prev == null) {
             assertNull(PagingLinksFinder.findPrevious(root, original_url));
         } else {
-            String href = PagingLinksFinder.resolveLinkHref(prev, original_url);
+            String href = PagingLinksFinder.resolveLinkHref(prev, baseAnchor);
             assertEquals(href, PagingLinksFinder.findPrevious(root, original_url));
         }
     }
