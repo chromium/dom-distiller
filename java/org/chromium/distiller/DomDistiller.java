@@ -44,9 +44,11 @@ public class DomDistiller {
         }
 
         String original_url = options.hasOriginalUrl() ? options.getOriginalUrl() : Window.Location.getHref();
-        result.setPaginationInfo(PagingLinksFinder.getPaginationInfo(original_url));
-        result.setMarkupInfo(contentExtractor.getMarkupParser().getMarkupInfo());
         TimingInfo timingInfo = contentExtractor.getTimingInfo();
+        double stPaging = DomUtil.getTime();
+        result.setPaginationInfo(PagingLinksFinder.getPaginationInfo(original_url));
+        LogUtil.addTimingInfo(stPaging, timingInfo, "Pagination");
+        result.setMarkupInfo(contentExtractor.getMarkupParser().getMarkupInfo());
         timingInfo.setTotalTime(DomUtil.getTime() - startTime);
         result.setTimingInfo(timingInfo);
         result.setStatisticsInfo(contentExtractor.getStatisticsInfo());
