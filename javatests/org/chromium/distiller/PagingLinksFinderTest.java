@@ -34,6 +34,8 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         checkResolveLinkHref(anchor, url, "http://example.com/path/next", "../next");
         checkResolveLinkHref(anchor, url, "http://example.com/1/2/next", "../../1/3/../2/next");
         checkResolveLinkHref(anchor, url, "javascript:void(0)", "javascript:void(0)");
+        checkResolveLinkHref(anchor, url, "mailto:user@example.com", "mailto:user@example.com");
+        checkResolveLinkHref(anchor, url, "http://example.com/path/toward/page.html?page=2#table_of_content", "?page=2#table_of_content");
     }
 
     private static void checkLinks(AnchorElement next, AnchorElement prev, Element root) {
@@ -96,6 +98,30 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         root.appendChild(anchor);
 
         checkLinks(anchor, null, root, "http://testing.com");
+    }
+
+    public void testCaseInsensitive() {
+        Element root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
+        AnchorElement anchor = TestUtil.createAnchor("HTTP://testing.COM/page2", "next page");
+        root.appendChild(anchor);
+
+        checkLinks(anchor, null, root, "http://testing.com");
+    }
+
+    public void testCaseSensitive() {
+        Element root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
+        // Prepend href with window location path so that base URL is part of final href to increase
+        // score.
+        AnchorElement anchor = TestUtil.createAnchor(
+                formHrefMockedUrl("page2").toUpperCase(), "page 2");
+        root.appendChild(anchor);
+
+        // This would have been checkLinks(anchor, anchor, root), but the URL is converted to upper
+        // case, and no longer matches base URL.
+        // See test1PageNumberedLink() for reference.
+        checkLinks(null, null, root);
     }
 
     public void test1PageNumberedLink() {

@@ -59,7 +59,6 @@ public class PagingLinksFinder {
     private static final RegExp REG_LINK_PAGINATION =
             RegExp.compile("p(a|g|ag)?(e|ing|ination)?(=|\\/)[0-9]{1,2}$", "i");
     private static final RegExp REG_FIRST_LAST = RegExp.compile("(first|last)", "i");
-    private static final RegExp REG_IS_HTTP_HTTPS = RegExp.compile("^https?://", "i");
     // Examples that match PAGE_NUMBER_REGEX are: "_p3", "-pg3", "p3", "_1", "-12-2".
     // Examples that don't match PAGE_NUMBER_REGEX are: "_p3 ", "p", "p123".
     private static final RegExp REG_PAGE_NUMBER =
@@ -107,6 +106,10 @@ public class PagingLinksFinder {
 
         AnchorElement baseAnchor = createAnchorWithBase(original_url);
 
+        // The trailing "/" is essential to ensure the whole hostname is matched, and not just the
+        // prefix of the hostname. It also maintains the requirement of having a "path" in the URL.
+        String allowedPrefix = getScheme(original_url) + "://" + getHostname(original_url) + "/";
+
         // Loop through all links, looking for hints that they may be next- or previous- page links.
         // Things like having "page" in their textContent, className or id, or being a child of a
         // node with a page-y className or id.
@@ -114,6 +117,15 @@ public class PagingLinksFinder {
         // After we do that, assign each page a score.
         for (int i = 0; i < allLinks.getLength(); i++) {
             AnchorElement link = AnchorElement.as(allLinks.getItem(i));
+
+            // Note that AnchorElement.getHref() returns the absolute URI, so there's no need to
+            // worry about relative links.
+            String linkHref = resolveLinkHref(link, baseAnchor);
+
+            if (!linkHref.substring(0, allowedPrefix.length()).equalsIgnoreCase(allowedPrefix)) {
+                appendDbgStrForLink(link, "ignored: prefix");
+                continue;
+            }
 
             int width = link.getOffsetWidth();
             int height = link.getOffsetHeight();
@@ -128,29 +140,18 @@ public class PagingLinksFinder {
             }
 
             // Remove url anchor and then trailing '/' from link's href.
-            // Note that AnchorElement.getHref() returns the absolute URI, so there's no need to
-            // worry about relative links.
-            String linkHref = REG_HREF_CLEANER.replace(resolveLinkHref(link, baseAnchor), "");
+            linkHref = REG_HREF_CLEANER.replace(linkHref, "");
             appendDbgStrForLink(link, "-> " + linkHref);
 
-            // Ignore page link that is empty, not http/https, or same as current window location.
+            // Ignore page link that is the same as current window location.
             // If the page link is same as the base URL:
             // - next page link: ignore it, since we would already have seen it.
             // - previous page link: don't ignore it, since some sites will simply have the same
             //                       base URL for the first page.
-            if (linkHref.isEmpty() || !REG_IS_HTTP_HTTPS.test(linkHref)
-                    || linkHref.equalsIgnoreCase(wndLocationHref)
+            if (linkHref.equalsIgnoreCase(wndLocationHref)
                     || (pageLink == PageLink.NEXT && linkHref.equalsIgnoreCase(baseUrl))) {
                 appendDbgStrForLink(
-                        link, "ignored: empty or same as current or base url " + baseUrl);
-                continue;
-            }
-
-            // If it's on a different hostname, skip it.
-            String[] urlSlashes = StringUtil.split(linkHref, "\\/+");
-            if (urlSlashes.length < 3 ||  // Expect at least the protocol, hostname, and path.
-                    !getHostname(original_url).equalsIgnoreCase(urlSlashes[1])) {
-                appendDbgStrForLink(link, "ignored: different host");
+                        link, "ignored: same as current or base url " + baseUrl);
                 continue;
             }
 
@@ -349,7 +350,7 @@ public class PagingLinksFinder {
 
     // The link is resolved using an anchor within a new HTML document with a base tag.
     public static String resolveLinkHref(AnchorElement link, AnchorElement baseAnchor) {
-        String linkHref = REG_HREF_CLEANER.replace(link.getAttribute("href"), "");
+        String linkHref = link.getAttribute("href");
         baseAnchor.setAttribute("href", linkHref);
         return baseAnchor.getHref();
     }
@@ -358,6 +359,7 @@ public class PagingLinksFinder {
         return StringUtil.split(url, ":\\/\\/")[0];
     }
 
+    // Port number is also included if it exists.
     private static String getHostname(String url) {
         url = StringUtil.split(url, ":\\/\\/")[1];
         if (!url.contains("/")) return url;
