@@ -5,6 +5,8 @@
 package org.chromium.distiller;
 
 import com.google.gwt.dom.client.AnchorElement;
+import com.google.gwt.dom.client.BaseElement;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Window;
 
@@ -276,6 +278,48 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
                 TestUtil.formHrefWithWindowLocationPath("gap/12/somestuff"), "page down");
         root.appendChild(anchor);
         assertNull(PagingLinksFinder.findNext(root, EXAMPLE_URL));
-        //checkLinks(anchor.getHref(), "", root);
+    }
+
+    public void testNoBase() {
+        Element doc = Document.get().getDocumentElement();
+        String base = PagingLinksFinder.getBaseUrlForRelative(doc, EXAMPLE_URL);
+        assertEquals(base, EXAMPLE_URL);
+    }
+
+    public void testBaseUrlForRelative() {
+        BaseElement base = Document.get().createBaseElement();
+        mHead.appendChild(base);
+
+        BaseElement bogusBase = Document.get().createBaseElement();
+        bogusBase.setHref("https://itsatrap.com/");
+        mHead.appendChild(bogusBase);
+
+        Element doc = Document.get().getDocumentElement();
+        String[] baseUrls = {
+                "http://example.com",
+                "https://example.com/no/trailing/slash.php",
+                "http://example.com/trailingslash/",
+                "/another/path/index.html",
+                "section/page2.html",
+                "//testing.com/",
+        };
+
+        String[] expected = {
+                "http://example.com/", // Note the trailing slash.
+                "https://example.com/no/trailing/slash.php",
+                "http://example.com/trailingslash/",
+                "http://example.com/another/path/index.html",
+                "http://example.com/path/toward/section/page2.html",
+                "http://testing.com/",
+        };
+
+        for (int i = 0; i < baseUrls.length; i++) {//String baseUrl: baseUrls) {
+            String baseUrl = baseUrls[i];
+            base.setHref(baseUrl);
+            assertEquals(expected[i], PagingLinksFinder.getBaseUrlForRelative(doc, EXAMPLE_URL));
+        }
+
+        mHead.removeChild(base);
+        mHead.removeChild(bogusBase);
     }
 }
