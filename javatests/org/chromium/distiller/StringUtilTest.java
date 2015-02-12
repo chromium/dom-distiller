@@ -4,6 +4,8 @@
 
 package org.chromium.distiller;
 
+import com.google.gwt.regexp.shared.RegExp;
+
 public class StringUtilTest extends JsTestCase {
     public void testCountWords() {
         assertEquals(0, StringUtil.countWords(""));
@@ -41,5 +43,18 @@ public class StringUtilTest extends JsTestCase {
     public void testFindAndReplace() {
         assertEquals("", StringUtil.findAndReplace("sdf", ".", ""));
         assertEquals("abc", StringUtil.findAndReplace(" a\tb  c ", "\\s", ""));
+    }
+
+    private RegExp toRegex(String s) {
+        return RegExp.compile(StringUtil.regexEscape(s));
+    }
+
+    public void testRegexEscape() {
+        assertTrue(toRegex(".*").test(".*"));
+        assertFalse(toRegex(".*").test("test"));
+        assertFalse(toRegex("[a-z]+").test("az"));
+        assertFalse(toRegex("[a-z]+").test("[a-z]"));
+        assertTrue(toRegex("[a-z]+").test("[a-z]+"));
+        assertTrue(toRegex("\t\n\\\\d[").test("\t\n\\\\d["));
     }
 }

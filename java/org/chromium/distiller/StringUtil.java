@@ -50,4 +50,8 @@ public class StringUtil {
         var m = s.match(/(\S*[\w\u00C0-\u1FFF\u2C00-\uD7FF]\S*)/g);
         return m ? m.length : 0;
     }-*/;
+
+    public static native String regexEscape(String s) /*-{
+        return s.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
+    }-*/;
 }
