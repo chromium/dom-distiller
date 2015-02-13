@@ -351,4 +351,18 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         mHead.removeChild(base);
         mHead.removeChild(bogusBase);
     }
+
+    public void testPageDiff() {
+        assertNull(PagingLinksFinder.pageDiff("", "", null, 0));
+        assertNull(PagingLinksFinder.pageDiff("asdf", "qwer", null, 0));
+        assertNull(PagingLinksFinder.pageDiff("commonA", "commonB", null, 0));
+        assertEquals((Integer) 1, PagingLinksFinder.pageDiff("common1", "common2", null, 0));
+        assertNull(PagingLinksFinder.pageDiff("common1", "common2", null, 7));
+        assertNull(PagingLinksFinder.pageDiff("common1", "Common2", null, 0));
+        assertEquals((Integer) (-8), PagingLinksFinder.pageDiff("common10", "common02", null, 0));
+        assertNull(PagingLinksFinder.pageDiff("commonA10", "commonB02", null, 0));
+        assertNull(PagingLinksFinder.pageDiff("common10", "commonB02", null, 0));
+        assertNull(PagingLinksFinder.pageDiff("commonA10", "common02", null, 0));
+        assertEquals((Integer) (-7), PagingLinksFinder.pageDiff("common11", "common4", null, 0));
+    }
 }

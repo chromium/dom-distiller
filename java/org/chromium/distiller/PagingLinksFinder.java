@@ -310,6 +310,14 @@ public class PagingLinksFinder {
                 appendDbgStrForLink(link, "score=" + linkObj.mScore + ": linktxt is a num (" +
                         linkTextAsNumber + ")");
             }
+            Integer diff = pageDiff(original_url, linkHref, link, allowedPrefix.length());
+            if (diff != null) {
+                if (((pageLink == PageLink.NEXT) && (diff == 1))
+                        || ((pageLink == PageLink.PREV) && (diff == -1))) {
+                    linkObj.mScore += 25;
+                    appendDbgStrForLink(link, "score=" + linkObj.mScore + ": diff = " + diff);
+                }
+            }
         }  // for all links
 
         // Loop through all of the possible pages from above and find the top candidate for the next
@@ -473,6 +481,28 @@ public class PagingLinksFinder {
             if (i > 0) joined += delim;
         }
         return joined;
+    }
+
+    public static Integer pageDiff(String url, String linkHref, AnchorElement link, int skip) {
+        int commonLen = skip;
+        int i;
+        for (i=skip; i<Math.min(url.length(), linkHref.length()); i++) {
+            if (url.charAt(i) != linkHref.charAt(i)) {
+                break;
+            }
+        }
+        commonLen = i;
+        url = url.substring(commonLen, url.length());
+        linkHref = linkHref.substring(commonLen, linkHref.length());
+        appendDbgStrForLink(link, "remains: " + url + ", " + linkHref);
+
+        int linkAsNumber = JavaScript.parseInt(linkHref, 10);
+        int urlAsNumber = JavaScript.parseInt(url, 10);
+        appendDbgStrForLink(link, "remains: " + urlAsNumber + ", " + linkAsNumber);
+        if (urlAsNumber > 0 && linkAsNumber > 0) {
+            return linkAsNumber - urlAsNumber;
+        }
+        return null;
     }
 
     private static void appendDbgStrForLink(Element link, String message) {
