@@ -215,6 +215,35 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         checkLinks(nextAnchor, prevAnchor, root);
     }
 
+    public void testPopularBadLinks() {
+        Element root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
+        AnchorElement nextAnchor = TestUtil.createAnchor("page2", "next page");
+        root.appendChild(nextAnchor);
+        // If the same bad URL can get scores accumulated across links,
+        // it would wrongly get selected.
+        AnchorElement bad1 = TestUtil.createAnchor("not-page1", "not page");
+        root.appendChild(bad1);
+        AnchorElement bad2 = TestUtil.createAnchor("not-page1", "not page");
+        root.appendChild(bad2);
+        AnchorElement bad3 = TestUtil.createAnchor("not-page1", "not page");
+        root.appendChild(bad3);
+
+        checkLinks(nextAnchor, null, root);
+    }
+
+    public void testHeldBackLinks() {
+        Element root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
+        AnchorElement nextAnchor = TestUtil.createAnchor("page2", "next");
+        root.appendChild(nextAnchor);
+        // If "page2" gets bad scores from other links, it would be missed.
+        AnchorElement bad = TestUtil.createAnchor("page2", "prev or next");
+        root.appendChild(bad);
+
+        checkLinks(nextAnchor, null, root);
+    }
+
     public void testFirstPageLinkAsBaseUrl() {
         // Some sites' first page links are the same as the base URL, previous page link needs to
         // recognize this.

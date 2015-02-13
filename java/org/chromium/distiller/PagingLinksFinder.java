@@ -25,8 +25,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This class finds the next and previous page links for the distilled document.  The functionality
@@ -105,7 +107,7 @@ public class PagingLinksFinder {
         // other href's whose trailing '/' are also removed.
         String wndLocationHref = StringUtil.findAndReplace(original_url, "\\/$", "");
         NodeList<Element> allLinks = root.getElementsByTagName("A");
-        Map<String, PagingLinkObj> possiblePages = new HashMap<String, PagingLinkObj>();
+        Set<PagingLinkObj> possiblePages = new HashSet<PagingLinkObj>();
 
         AnchorElement baseAnchor = createAnchorWithBase(original_url);
 
@@ -193,13 +195,8 @@ public class PagingLinksFinder {
             }
 
             PagingLinkObj linkObj = null;
-            if (!possiblePages.containsKey(linkHref)) {  // Have not encountered this href.
-                linkObj = new PagingLinkObj(i, 0, linkText, linkHref);
-                possiblePages.put(linkHref, linkObj);
-            } else {  // Have already encountered this href, append its text to existing entry's.
-                linkObj = possiblePages.get(linkHref);
-                linkObj.mLinkText += " | " + linkText;
-            }
+            linkObj = new PagingLinkObj(i, 0, linkText, linkHref);
+            possiblePages.add(linkObj);
 
             // If the base URL isn't part of this URL, penalize this link.  It could still be the
             // link, but the odds are lower.
@@ -320,7 +317,7 @@ public class PagingLinksFinder {
         // this page is the next link.
         PagingLinkObj topPage = null;
         if (!possiblePages.isEmpty()) {
-            for (PagingLinkObj pageObj : possiblePages.values()) {
+            for (PagingLinkObj pageObj : possiblePages) {
                 if (pageObj.mScore >= 50 && (topPage == null || topPage.mScore < pageObj.mScore)) {
                     topPage = pageObj;
                 }
