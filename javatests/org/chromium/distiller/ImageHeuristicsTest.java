@@ -4,11 +4,11 @@
 
 package org.chromium.distiller;
 
-import org.chromium.distiller.imageheuristics.AreaScorer;
-import org.chromium.distiller.imageheuristics.DimensionsRatioScorer;
-import org.chromium.distiller.imageheuristics.DomDistanceScorer;
-import org.chromium.distiller.imageheuristics.HasFigureScorer;
-import org.chromium.distiller.imageheuristics.ImageScorer;
+import org.chromium.distiller.webdocument.filters.images.AreaScorer;
+import org.chromium.distiller.webdocument.filters.images.DimensionsRatioScorer;
+import org.chromium.distiller.webdocument.filters.images.DomDistanceScorer;
+import org.chromium.distiller.webdocument.filters.images.HasFigureScorer;
+import org.chromium.distiller.webdocument.filters.images.ImageScorer;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;

@@ -4,7 +4,7 @@
 
 package org.chromium.distiller.extractors.embeds;
 
-import org.chromium.distiller.webdocument.WebEmbed;
+import org.chromium.distiller.webdocument.WebElement;
 
 import com.google.gwt.dom.client.Element;
 
@@ -25,7 +25,7 @@ public interface EmbedExtractor {
      * Give a particular element, detect if it should be extracted as an embedded element; if not
      * return null.
      * @param e The element to test.
-     * @return A {@link WebEmbed} object that contains information about the embed including node and type.
+     * @return A {@link WebElement} object that contains information about the embed including type.
      */
-    public WebEmbed extract(Element e);
+    public WebElement extract(Element e);
 }

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.distiller.imageheuristics;
+package org.chromium.distiller.webdocument.filters.images;
 
 import com.google.gwt.dom.client.Element;
 
@@ -11,7 +11,6 @@ import com.google.gwt.dom.client.Element;
  * provided image will be given a score based on the heuristic and a max score.
  */
 public interface ImageScorer {
-
     /**
      * Give a particular image a score based on the heuristic implemented in this ImageScorer and
      * what the max score is set to.

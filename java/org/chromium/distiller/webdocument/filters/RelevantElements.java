@@ -6,6 +6,7 @@ package org.chromium.distiller.webdocument.filters;
 
 import org.chromium.distiller.webdocument.WebDocument;
 import org.chromium.distiller.webdocument.WebElement;
+import org.chromium.distiller.webdocument.WebImage;
 import org.chromium.distiller.webdocument.WebTable;
 import org.chromium.distiller.webdocument.WebText;
 
@@ -13,12 +14,13 @@ public class RelevantElements {
     public static boolean process(WebDocument document) {
         boolean changes = false;
         boolean inContent = false;
+
         for (WebElement e : document.getElements()) {
             if (e.getIsContent()) {
                 inContent = true;
             } else if (e instanceof WebText) {
                 inContent = false;
-            } else if (e instanceof WebTable) {
+            } else if (e instanceof WebTable || e instanceof WebImage) {
                 if (inContent) {
                     e.setIsContent(true);
                     changes = true;

@@ -15,6 +15,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.TableElement;
 import com.google.gwt.dom.client.Text;
 import org.chromium.distiller.extractors.embeds.EmbedExtractor;
+import org.chromium.distiller.extractors.embeds.ImageExtractor;
 import org.chromium.distiller.extractors.embeds.TwitterExtractor;
 import org.chromium.distiller.extractors.embeds.VimeoExtractor;
 import org.chromium.distiller.extractors.embeds.YouTubeExtractor;
@@ -41,6 +42,7 @@ public class DomConverter implements DomWalker.Visitor {
         this.builder = builder;
 
         extractors = new ArrayList<EmbedExtractor>();
+        extractors.add(new ImageExtractor());
         extractors.add(new TwitterExtractor());
         extractors.add(new VimeoExtractor());
         extractors.add(new YouTubeExtractor());
@@ -89,7 +91,7 @@ public class DomConverter implements DomWalker.Visitor {
         if (embedTagNames.contains(e.getTagName())) {
             // If the tag is marked as interesting, check the extractors.
             for (EmbedExtractor extractor : extractors) {
-                WebEmbed embed = extractor.extract(e);
+                WebElement embed = extractor.extract(e);
                 if (embed != null) {
                     builder.embed(embed);
                     return false;

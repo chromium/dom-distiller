@@ -7,6 +7,7 @@ package org.chromium.distiller.webdocument;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +18,11 @@ import java.util.Map;
 public class WebEmbed extends WebElement {
 
     // The element that was extracted.
-    private final Element embedNode;
-    // The type of embed (YouTube, Twitter, etc.).
-    private final String type;
+    protected List<Node> embedNodes;
+    // The ID associated with the embed.
+    private String id;
+    // The type of embed that this is.
+    private String type;
     // Other parameters that may have been found on the embed URL or in attributes.
     private final Map<String, String> altParams;
 
@@ -27,11 +30,14 @@ public class WebEmbed extends WebElement {
      * Build an embed element.
      * @param e The element detected as an embed.
      * @param t The type of embed that this is.
+     * @param embedId The ID of the embedded object.
      * @param params Extra parameters that the embed might have associated with it.
      */
-    public WebEmbed(Element e, String t, Map<String, String> params) {
-        embedNode = e;
-        type = t;
+    public WebEmbed(Element e, String t, String embedId, Map<String, String> params) {
+        embedNodes = new ArrayList<>();
+        id = embedId;
+        embedNodes.add(e);
+        setType(t);
         if (params == null) {
             altParams = new HashMap<>();
         } else {
@@ -45,18 +51,27 @@ public class WebEmbed extends WebElement {
     }
 
     /**
-     * Get the type of embed that this is (twitter, youtube, etc.).
-     * @return The type of embed that this element is.
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
      * Get the map of parameters associated with this embed.
      * @return A map of the parameters or an empty map if there are no parameters.
      */
     public Map<String, String> getParams() {
         return altParams;
+    }
+
+    /**
+     * Get the ID of this embed.
+     * @return Embed ID.
+     */
+    public String getId() {
+        return id;
+    }
+
+    protected void setType(String t) {
+        type = t;
+    }
+
+    public String getType() {
+        if (type == null) return "";
+        return type;
     }
 }

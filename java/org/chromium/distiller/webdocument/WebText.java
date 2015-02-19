@@ -8,7 +8,6 @@ import org.chromium.distiller.NodeListExpander;
 import org.chromium.distiller.JavaScript;
 import org.chromium.distiller.labels.DefaultLabels;
 
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Node;
 
 import java.util.List;

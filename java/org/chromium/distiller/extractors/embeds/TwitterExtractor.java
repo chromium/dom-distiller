@@ -52,7 +52,7 @@ public class TwitterExtractor implements EmbedExtractor {
 
         if (result != null && LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_VISIBILITY_INFO)) {
             LogUtil.logToConsole("Twitter embed extracted:");
-            LogUtil.logToConsole("    ID: " + result.getParams().get("tweetid"));
+            LogUtil.logToConsole("    ID: " + result.getId());
         }
 
         return result;
@@ -89,10 +89,7 @@ public class TwitterExtractor implements EmbedExtractor {
             return null;
         }
 
-        Map<String, String> attributes = new HashMap<String, String>();
-        attributes.put("tweetid", id);
-
-        return new WebEmbed(e, "twitter", attributes);
+        return new WebEmbed(e, "twitter", id, null);
     }
 
     /**
@@ -146,9 +143,6 @@ public class TwitterExtractor implements EmbedExtractor {
             return null;
         }
 
-        Map<String, String> attributes = new HashMap<String, String>();
-        attributes.put("tweetid", id);
-
-        return new WebEmbed(e, "twitter", attributes);
+        return new WebEmbed(e, "twitter", id, null);
     }
 }
