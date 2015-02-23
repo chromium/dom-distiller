@@ -101,15 +101,13 @@ public class PagingLinksFinder {
 
         String baseUrl = findBaseUrl(original_url);
 
-        original_url = getBaseUrlForRelative(root, original_url);
-
         // Remove trailing '/' from window location href, because it'll be used to compare with
         // other href's whose trailing '/' are also removed.
         String wndLocationHref = StringUtil.findAndReplace(original_url, "\\/$", "");
         NodeList<Element> allLinks = root.getElementsByTagName("A");
         Set<PagingLinkObj> possiblePages = new HashSet<PagingLinkObj>();
 
-        AnchorElement baseAnchor = createAnchorWithBase(original_url);
+        AnchorElement baseAnchor = createAnchorWithBase(getBaseUrlForRelative(root, original_url));
 
         // The trailing "/" is essential to ensure the whole hostname is matched, and not just the
         // prefix of the hostname. It also maintains the requirement of having a "path" in the URL.

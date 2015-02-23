@@ -15,6 +15,15 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
     // the same as URL, and this would break testFirstPageLinkAsBaseUrl().
     private static String EXAMPLE_URL = "http://example.com/path/toward/news.php";
 
+    private static String resolveLinkHref(String link, String base) {
+        return resolveLinkHref(TestUtil.createAnchor(link, ""), base);
+    }
+
+    private static String resolveLinkHref(AnchorElement anchor, String base) {
+        AnchorElement baseAnchor = PagingLinksFinder.createAnchorWithBase(base);
+        return PagingLinksFinder.resolveLinkHref(anchor, baseAnchor);
+    }
+
     private static void checkResolveLinkHref(AnchorElement anchor, String original_url, String expected, String href) {
         anchor.setHref(href);
         AnchorElement baseAnchor = PagingLinksFinder.createAnchorWithBase(original_url);
@@ -242,6 +251,25 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         root.appendChild(bad);
 
         checkLinks(nextAnchor, null, root);
+    }
+
+    public void testBaseTag() {
+        Element root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
+
+        // Base.href should not be mixed up with original_url.
+        String base = resolveLinkHref("page2", EXAMPLE_URL);
+        BaseElement baseTag = Document.get().createBaseElement();
+        baseTag.setHref(base);
+        mHead.appendChild(baseTag);
+
+        AnchorElement nextAnchor = TestUtil.createAnchor("page2", "next page");
+        root.appendChild(nextAnchor);
+
+        assertEquals(base, PagingLinksFinder.getBaseUrlForRelative(mRoot, EXAMPLE_URL));
+        checkLinks(nextAnchor, null, mRoot);
+
+        mHead.removeChild(baseTag);
     }
 
     public void testFirstPageLinkAsBaseUrl() {
