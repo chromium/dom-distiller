@@ -76,7 +76,7 @@
   </path>
 
   <target name="protoc.plugin.base"
-      description="Generates proto stuff needed for the gwt_overlay plugin">
+      description="Generate proto stuff needed for the gwt_overlay plugin">
     <mkdir dir="out/proto/python" />
     <exec executable="protoc" failonerror="true">
       <arg value="--python_out=out/proto/python"/>
@@ -86,7 +86,7 @@
   </target>
 
   <target name="protoc" depends="protoc.plugin.base"
-      description="Generates JavascriptObject proto classes.">
+      description="Generate JavascriptObject proto classes">
     <mkdir dir="out/proto/java" />
     <apply executable="protoc" failonerror="true" relative="true">
       <arg value="--plugin=protoc-gen-gwt_overlay=protoc_plugins/gwt_overlay.py"/>
@@ -97,7 +97,7 @@
   </target>
 
   <target name="protoc.json" depends="protoc.plugin.base"
-      description="Generates base::Value-based json proto reader/writers.">
+      description="Generate base::Value-based json proto reader/writers">
     <mkdir dir="out/proto/json" />
     <apply executable="protoc" failonerror="true" relative="true">
       <arg value="--plugin=protoc-gen-json_converter=protoc_plugins/json_values_converter.py"/>
@@ -147,7 +147,7 @@
   </target>
 
   <target name="extractwrappedjs" depends="extractjs"
-      description="Create wrapped standalone javascript from compiled JavaScript for direct inclusion in Chrome.">
+      description="Create wrapped standalone JavaScript from compiled JavaScript for direct inclusion in Chrome">
     <exec executable="python" failonerror="true">
       <arg value="create_wrapped_standalone_js.py"/>
       <arg value="--templatefile=war/wrapped_domdistiller_template.js"/>
@@ -157,7 +157,7 @@
   </target>
 
   <target name="package" depends="extractjs, extractwrappedjs, extractjs.jstests, protoc.json"
-      description="Copies the main build artifacts into the out/package directory." >
+      description="Copy the main build artifacts into the out/package directory" >
     <mkdir dir="out/extension"/>
     <mkdir dir="out/package"/>
     <mkdir dir="out/package/js"/>
@@ -186,7 +186,7 @@
   </target>
 
 
-  <target name="protoc.tests" depends="protoc.plugin.base" description="Generates test proto code">
+  <target name="protoc.tests" depends="protoc.plugin.base" description="Generate test proto code">
     <mkdir dir="out/test/proto" />
     <apply executable="protoc" failonerror="true" relative="true">
       <arg value="--plugin=protoc-gen-gwt_overlay=protoc_plugins/gwt_overlay.py"/>
@@ -196,7 +196,7 @@
     </apply>
   </target>
 
-  <target name="javac.jstests" depends="javac, protoc.tests" description="Compiles test code">
+  <target name="javac.jstests" depends="javac, protoc.tests" description="Compile test code">
     <mkdir dir="war/WEB-INF/jstest/classes"/>
     <javac includes="**" encoding="utf-8"
       source="1.7" target="1.7" nowarn="true"
@@ -229,7 +229,7 @@
     </java>
   </target>
 
-  <target name="extractjs.jstests" depends="gwtc.jstests" description="Extract standalone javascript from compiled javascript">
+  <target name="extractjs.jstests" depends="gwtc.jstests" description="Extract standalone JavaScript from compiled JavaScript">
     <exec executable="python" failonerror="true">
       <arg value="create_standalone_js.py"/>
       <arg line="--module domdistillerjstest"/>
@@ -242,7 +242,7 @@
       name="jstests.linux"
       depends="extractjs.jstests"
       if="isLinux"
-      description="Runs jstests for the Linux platform">
+      description="Run jstests for the Linux platform">
     <exec executable="xvfb-run" failonerror="true">
       <env key="PATH" path="${env.PATH}:${basedir}/buildtools"/>
       <arg value="./run_jstests.py"/>
@@ -254,7 +254,7 @@
       name="jstests.mac"
       depends="extractjs.jstests"
       if="isMac"
-      description="Runs jstests for the Mac OS X platform">
+      description="Run jstests for the Mac OS X platform">
     <exec executable="python" failonerror="true">
       <env key="PATH" path="${env.PATH}:${basedir}/buildtools"/>
       <arg value="./run_jstests.py"/>
@@ -262,7 +262,7 @@
     </exec>
   </target>
 
-  <target name="jstests" depends="jstests.linux, jstests.mac" description="Runs jstests" />
+  <target name="jstests" depends="jstests.linux, jstests.mac" description="Run jstests" />
 
   <target name="test"
     depends="jstests"
@@ -279,7 +279,7 @@
     </javadoc>
   </target>
 
-  <target name="clean" description="Cleans this project">
+  <target name="clean" description="Clean this project">
     <delete dir="war/WEB-INF" failonerror="false" />
     <delete dir="war/domdistiller" failonerror="false" />
     <delete dir="war/domdistillerjs" failonerror="false" />
