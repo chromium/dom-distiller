@@ -365,7 +365,7 @@ public class PagingLinksFinder {
         doc.getHead().appendChild(base);
 
         AnchorElement a = doc.createAnchorElement();
-        doc.getBody().appendChild(base);
+        doc.getBody().appendChild(a);
         return a;
     }
 
