@@ -35,8 +35,8 @@ import java.util.Set;
  * for next page links is migrated from readability.getArticleTitle() in chromium codebase's
  * third_party/readability/js/readability.js, and then expanded for previous page links; boilerpipe
  * doesn't have such capability.
- * First, it determines the base URL of the document.  Then, for each anchor in the document, its
- * href and text are compared to the base URL and examined for next- or previous-paging-related
+ * First, it determines the prefix URL of the document.  Then, for each anchor in the document, its
+ * href and text are compared to the prefix URL and examined for next- or previous-paging-related
  * information.  If it passes, its score is then determined by applying various heuristics on its
  * href, text, class name and ID,  Lastly, the page link with the highest score of at least 50 is
  * considered to have enough confidence as the next or previous page link.
@@ -67,6 +67,7 @@ public class PagingLinksFinder {
             RegExp.compile("((_|-)?p[a-z]*|(_|-))[0-9]{1,2}$", "gi");
 
     private static final RegExp REG_HREF_CLEANER = RegExp.compile("/?(#.*)?$");
+    private static final RegExp REG_NUMBER = RegExp.compile("\\d");
 
     public static DomDistillerProtos.PaginationInfo getPaginationInfo(String original_url) {
         DomDistillerProtos.PaginationInfo info = DomDistillerProtos.PaginationInfo.create();
@@ -99,7 +100,7 @@ public class PagingLinksFinder {
             mLinkDebugInfo.clear();
         }
 
-        String baseUrl = findBaseUrl(original_url);
+        String folderUrl = StringUtil.findAndReplace(original_url, "\\/[^/]*$", "");
 
         // Remove trailing '/' from window location href, because it'll be used to compare with
         // other href's whose trailing '/' are also removed.
@@ -112,7 +113,7 @@ public class PagingLinksFinder {
         // The trailing "/" is essential to ensure the whole hostname is matched, and not just the
         // prefix of the hostname. It also maintains the requirement of having a "path" in the URL.
         String allowedPrefix = getScheme(original_url) + "://" + getHostname(original_url) + "/";
-        RegExp REG_PREFIX_NUM = RegExp.compile("^" + StringUtil.regexEscape(allowedPrefix) + ".*\\d", "i");
+        RegExp regPrefixNum = RegExp.compile("^" + StringUtil.regexEscape(allowedPrefix) + ".*\\d", "i");
 
         // Loop through all links, looking for hints that they may be next- or previous- page links.
         // Things like having "page" in their textContent, className or id, or being a child of a
@@ -127,7 +128,7 @@ public class PagingLinksFinder {
             String linkHref = resolveLinkHref(link, baseAnchor);
 
             if (pageLink == PageLink.NEXT) {
-                if (!REG_PREFIX_NUM.test(linkHref)) {
+                if (!regPrefixNum.test(linkHref)) {
                     appendDbgStrForLink(link, "ignored: not prefix + num");
                     continue;
                 }
@@ -155,14 +156,14 @@ public class PagingLinksFinder {
             appendDbgStrForLink(link, "-> " + linkHref);
 
             // Ignore page link that is the same as current window location.
-            // If the page link is same as the base URL:
+            // If the page link is same as the folder URL:
             // - next page link: ignore it, since we would already have seen it.
             // - previous page link: don't ignore it, since some sites will simply have the same
-            //                       base URL for the first page.
+            //                       folder URL for the first page.
             if (linkHref.equalsIgnoreCase(wndLocationHref)
-                    || (pageLink == PageLink.NEXT && linkHref.equalsIgnoreCase(baseUrl))) {
+                    || (pageLink == PageLink.NEXT && linkHref.equalsIgnoreCase(folderUrl))) {
                 appendDbgStrForLink(
-                        link, "ignored: same as current or base url " + baseUrl);
+                        link, "ignored: same as current or folder url " + folderUrl);
                 continue;
             }
 
@@ -176,18 +177,19 @@ public class PagingLinksFinder {
                 continue;
             }
 
-            // For next page link, if the initial part of the URL is identical to the base URL, but
+            // For next page link, if the initial part of the URL is identical to the folder URL, but
             // the rest of it doesn't contain any digits, it's certainly not a next page link.
             // However, this doesn't apply to previous page link, because most sites will just have
-            // the base URL for the first page.
-            // TODO(kuan): baseUrl (returned by findBaseUrl()) is NOT the prefix of the current
-            // window location, even though it appears to be so the way it's used here.
+            // the folder URL for the first page.
             // TODO(kuan): do we need to apply this heuristic to previous page links if current page
             // number is not 2?
             if (pageLink == PageLink.NEXT) {
-                String linkHrefRemaining = StringUtil.findAndReplace(linkHref, baseUrl, "");
-                if (!StringUtil.match(linkHrefRemaining, "\\d")) {
-                    appendDbgStrForLink(link, "ignored: no number beyond base url " + baseUrl);
+                String linkHrefRemaining = linkHref;
+                if (linkHref.startsWith(folderUrl)) {
+                    linkHrefRemaining = linkHref.substring(folderUrl.length());
+                }
+                if (!REG_NUMBER.test(linkHrefRemaining)) {
+                    appendDbgStrForLink(link, "ignored: no number beyond folder url " + folderUrl);
                     continue;
                 }
             }
@@ -196,15 +198,13 @@ public class PagingLinksFinder {
             linkObj = new PagingLinkObj(i, 0, linkText, linkHref);
             possiblePages.add(linkObj);
 
-            // If the base URL isn't part of this URL, penalize this link.  It could still be the
+            // If the folder URL isn't part of this URL, penalize this link.  It could still be the
             // link, but the odds are lower.
             // Example: http://www.actionscript.org/resources/articles/745/1/JavaScript-and-VBScript-Injection-in-ActionScript-3/Page1.html.
-            // TODO(kuan): again, baseUrl (returned by findBaseUrl()) is NOT the prefix of the
-            // current window location, even though it appears to be so the way it's used here.
-            if (linkHref.indexOf(baseUrl) != 0) {
+            if (linkHref.indexOf(folderUrl) != 0) {
                 linkObj.mScore -= 25;
                 appendDbgStrForLink(link, "score=" + linkObj.mScore +
-                        ": not part of base url " + baseUrl);
+                        ": not part of folder url " + folderUrl);
             }
 
             // Concatenate the link text with class name and id, and determine the score based on
@@ -401,84 +401,6 @@ public class PagingLinksFinder {
         url = StringUtil.split(url, ":\\/\\/")[1];
         if (!url.contains("/")) return "";
         return StringUtil.findAndReplace(url, "^([^/]*)/", "");
-    }
-
-    private static String findBaseUrl(String original_url) {
-        // This extracts relevant parts from the window location's path based on various heuristics
-        // to determine the path of the base URL of the document.  This path is then appended to the
-        // window location protocol and host to form the base URL of the document.  This base URL is
-        // then used as reference for comparison against an anchor's href to to determine if the
-        // anchor is a next or previous paging link.
-
-        // First, from the window's location's path, extract the segments delimited by '/'.  Then,
-        // because the later segments probably contain less relevant information for the base URL,
-        // reverse the segments for easier processing.
-        // Note: '?' is a special character in RegEx, so enclose it within [] to specify the actual
-        // character.
-        String url = StringUtil.findAndReplace(original_url, "\\?.*$", "");
-        String noUrlParams = StringUtil.split(url, ":\\/\\/")[1];
-        String[] urlSlashes = StringUtil.split(noUrlParams, "/");
-        Collections.reverse(Arrays.asList(urlSlashes));
-
-        // Now, process each segment by extracting relevant information based on various heuristics.
-        List<String> cleanedSegments = new ArrayList<String>();
-        for (int i = 0; i < urlSlashes.length - 1; i++) {
-            String segment = urlSlashes[i];
-
-            // Split off and save anything that looks like a file type.
-            if (segment.indexOf(".") != -1) {
-                // Because '.' is a special character in RegEx, enclose it within [] to specify the
-                // actual character.
-                String possibleType = StringUtil.split(segment, "[.]")[1];
-
-                // If the type isn't alpha-only, it's probably not actually a file extension.
-                if (!StringUtil.match(possibleType, "[^a-zA-Z]")) {
-                    segment = StringUtil.split(segment, "[.]")[0];
-                }
-            }
-
-            // EW-CMS specific segment replacement. Ugly.
-            // Example: http://www.ew.com/ew/article/0,,20313460_20369436,00.html.
-            segment = StringUtil.findAndReplace(segment, ",00", "");
-
-            // If the first or second segment has anything looking like a page number, remove it.
-            if (i < 2) {
-                segment = REG_PAGE_NUMBER.replace(segment, "");
-            }
-
-            // Ignore an empty segment.
-            if (segment.isEmpty()) continue;
-
-            // If this is purely a number in the first or second segment, it's probably a page
-            // number, ignore it.
-            if (i < 2 && StringUtil.match(segment, "^\\d{1,2}$")) continue;
-
-            // If this is the first segment and it's just "index", ignore it.
-            if (i == 0 && segment.equalsIgnoreCase("index")) continue;
-
-            // If the first or second segment is shorter than 3 characters, and the first
-            // segment was purely alphas, ignore it.
-            if (i < 2 && segment.length() < 3 && !StringUtil.match(urlSlashes[0], "[a-z]")) {
-                continue;
-            }
-
-            // If we got here, append the segment to cleanedSegments.
-            cleanedSegments.add(segment);
-        }  // for all urlSlashes
-
-        return StringUtil.split(url, ":\\/\\/")[0] + "://" + urlSlashes[urlSlashes.length-1] + "/" +
-                reverseJoin(cleanedSegments, "/");
-    }
-
-    private static String reverseJoin(List<String> array, String delim) {
-        // As per http://stackoverflow.com/questions/5748044/gwt-string-concatenation-operator-vs-stringbuffer,
-        // + operator is faster for javascript than StringBuffer/StringBuilder.
-        String joined = "";
-        for (int i = array.size() - 1; i >= 0; i--) {
-            joined += array.get(i);
-            if (i > 0) joined += delim;
-        }
-        return joined;
     }
 
     public static Integer pageDiff(String url, String linkHref, AnchorElement link, int skip) {
