@@ -150,7 +150,7 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         checkLinks(anchor1, null, root);
     }
 
-    public void flaky_testPagingParent() {
+    public void testPagingParent() {
         Element root = TestUtil.createDiv(0);
         mBody.appendChild(root);
         Element div = TestUtil.createDiv(1);
@@ -165,7 +165,7 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         checkLinks(anchor, anchor, root);
     }
 
-    public void flaky_test1PrevLink() {
+    public void test1PrevLink() {
         Element root = TestUtil.createDiv(0);
         mBody.appendChild(root);
         AnchorElement anchor = TestUtil.createAnchor("prev", "prev page");
