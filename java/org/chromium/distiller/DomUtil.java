@@ -106,7 +106,10 @@ public class DomUtil {
 
     public static native double getTime() /*-{
         // window.performance is unavailable in Gwt's dev environment.
-        return window.performance.now();
+        if (window.performance) {
+          return window.performance.now();
+        }
+        return Date.now();
     }-*/;
 
     /**
