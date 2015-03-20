@@ -238,11 +238,8 @@
     </exec>
   </target>
 
-  <target
-      name="jstests.linux"
-      depends="extractjs.jstests"
-      if="isLinux"
-      description="Run jstests for the Linux platform">
+  <!-- Run jstests for the Linux platform -->
+  <target name="-jstests.linux" if="isLinux">
     <exec executable="xvfb-run" failonerror="true">
       <env key="PATH" path="${env.PATH}:${basedir}/buildtools"/>
       <arg value="--auto-servernum"/>
@@ -251,11 +248,8 @@
     </exec>
   </target>
 
-  <target
-      name="jstests.mac"
-      depends="extractjs.jstests"
-      if="isMac"
-      description="Run jstests for the Mac OS X platform">
+  <!-- Run jstests for the Mac OS X platform -->
+  <target name="-jstests.mac" if="isMac">
     <exec executable="python" failonerror="true">
       <env key="PATH" path="${env.PATH}:${basedir}/buildtools"/>
       <arg value="./run_jstests.py"/>
@@ -263,11 +257,17 @@
     </exec>
   </target>
 
-  <target name="jstests" depends="jstests.linux, jstests.mac" description="Run jstests" />
+  <!-- Run jstests -->
+  <target name="-jstests" depends="-jstests.linux, -jstests.mac" />
 
   <target name="test"
-    depends="jstests"
+    depends="extractjs.jstests, -jstests"
     description="Run tests">
+  </target>
+
+  <target name="runtest"
+    depends="-jstests"
+    description="Run tests without recompilation">
   </target>
 
   <target name="build" depends="gwtc" description="Build this project" />
