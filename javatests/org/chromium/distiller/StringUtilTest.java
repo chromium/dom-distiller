@@ -57,4 +57,60 @@ public class StringUtilTest extends JsTestCase {
         assertTrue(toRegex("[a-z]+").test("[a-z]+"));
         assertTrue(toRegex("\t\n\\\\d[").test("\t\n\\\\d["));
     }
+
+    public void testIsDigit() {
+        assertTrue(StringUtil.isDigit('1'));
+        assertTrue(StringUtil.isDigit('0'));
+        assertFalse(StringUtil.isDigit(' '));
+        assertFalse(StringUtil.isDigit('a'));
+        assertFalse(StringUtil.isDigit('$'));
+        assertFalse(StringUtil.isDigit('_'));
+        assertFalse(StringUtil.isDigit('\u0460'));
+    }
+
+    public void testIsStringAllDigits() {
+        assertTrue(StringUtil.isStringAllDigits("0"));
+        assertTrue(StringUtil.isStringAllDigits("018"));
+        assertFalse(StringUtil.isStringAllDigits(""));
+        assertFalse(StringUtil.isStringAllDigits("a0"));
+        assertFalse(StringUtil.isStringAllDigits("0a"));
+        assertFalse(StringUtil.isStringAllDigits(" "));
+        assertFalse(StringUtil.isStringAllDigits(" 8"));
+        assertFalse(StringUtil.isStringAllDigits("8 "));
+        assertFalse(StringUtil.isStringAllDigits("'8_"));
+        assertFalse(StringUtil.isStringAllDigits("\u00a0\u0460"));
+    }
+
+    public void testContainsDigit() {
+        assertTrue(StringUtil.containsDigit("0"));
+        assertTrue(StringUtil.containsDigit("018"));
+        assertTrue(StringUtil.containsDigit("a0"));
+        assertTrue(StringUtil.containsDigit("0a"));
+        assertTrue(StringUtil.containsDigit(" 8"));
+        assertTrue(StringUtil.containsDigit("8 "));
+        assertTrue(StringUtil.containsDigit("'8_"));
+        assertFalse(StringUtil.containsDigit(""));
+        assertFalse(StringUtil.containsDigit(" "));
+        assertFalse(StringUtil.containsDigit("\u00a0\u0460"));
+        assertFalse(StringUtil.containsDigit("abc"));
+        assertFalse(StringUtil.containsDigit("$"));
+        assertFalse(StringUtil.containsDigit("_"));
+    }
+
+    public void testToNumber() {
+        assertEquals(0, StringUtil.toNumber("0"));
+        assertEquals(18, StringUtil.toNumber("018"));
+        assertEquals(-1, StringUtil.toNumber("a0"));
+        assertEquals(-1, StringUtil.toNumber("0a"));
+        assertEquals(-1, StringUtil.toNumber(" 8"));
+        assertEquals(-1, StringUtil.toNumber("8 "));
+        assertEquals(-1, StringUtil.toNumber("'8_"));
+        assertEquals(-1, StringUtil.toNumber(""));
+        assertEquals(-1, StringUtil.toNumber(" "));
+        assertEquals(-1, StringUtil.toNumber("\u00a0\u0460"));
+        assertEquals(-1, StringUtil.toNumber("abc"));
+        assertEquals(-1, StringUtil.toNumber("$"));
+        assertEquals(-1, StringUtil.toNumber("_"));
+    }
+
 }
