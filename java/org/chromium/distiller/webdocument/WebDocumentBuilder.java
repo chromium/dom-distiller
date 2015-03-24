@@ -21,6 +21,8 @@
  */
 package org.chromium.distiller.webdocument;
 
+import org.chromium.distiller.ContentExtractor;
+
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Text;
 
@@ -99,7 +101,7 @@ public class WebDocumentBuilder implements WebDocumentBuilderInterface {
     }
 
     @Override
-    public void embed(WebElement embedNode) {
+    public void embed(WebEmbed embedNode) {
         document.addEmbed(embedNode);
     }
 

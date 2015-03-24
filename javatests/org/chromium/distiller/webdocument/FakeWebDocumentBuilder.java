@@ -67,5 +67,6 @@ public class FakeWebDocumentBuilder implements WebDocumentBuilderInterface {
     }
 
     @Override
-    public void embed(WebElement embed) {}
+    public void embed(WebEmbed embed) {
+    }
 }

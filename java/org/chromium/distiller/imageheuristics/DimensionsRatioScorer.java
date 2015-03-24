@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.distiller.webdocument.filters.images;
+package org.chromium.distiller.imageheuristics;
 
 import com.google.gwt.dom.client.Element;
 
@@ -10,6 +10,7 @@ import com.google.gwt.dom.client.Element;
  * ImageScorer that uses dimension ratio (width/length) as its heuristic.
  */
 public class DimensionsRatioScorer extends BaseImageScorer {
+
     public final int maxScore;
 
     /**
@@ -29,13 +30,13 @@ public class DimensionsRatioScorer extends BaseImageScorer {
         int width = e.getOffsetWidth();
         float multiplier = 0.0f;
         // We are mainly interested in wide images.
-        float ratio = (float) width / height;
+        float ratio = (float)width/height;
         if (ratio > 1.45f && ratio < 1.8f) {
             multiplier = 1.0f;
         } else if (ratio > 1.3f && ratio < 2.2f) {
             multiplier = 0.4f;
         }
-        return (int) (maxScore * multiplier);
+        return (int)(maxScore * multiplier);
     }
 
     @Override

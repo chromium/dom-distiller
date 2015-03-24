@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * A mixed bag of stuff used in tests.
  */
-public class TestUtil {
+class TestUtil {
     public final static String expectedDivTreeHtml =
                 "<div id=\"0\">" +
                     "<div id=\"1\">" +
@@ -146,4 +146,5 @@ public class TestUtil {
     public static String removeAllDirAttributes(String originalHtml) {
         return originalHtml.replaceAll(" dir=\\\"(ltr|rtl|inherit)\\\"","");
     }
+
 }

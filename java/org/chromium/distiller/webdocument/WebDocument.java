@@ -31,7 +31,7 @@ public class WebDocument {
         elements.add(table);
     }
 
-    public void addEmbed(WebElement embed) {
+    public void addEmbed(WebEmbed embed) {
         elements.add(embed);
     }
 

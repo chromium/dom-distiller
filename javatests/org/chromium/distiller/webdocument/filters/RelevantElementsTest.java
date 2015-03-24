@@ -9,7 +9,6 @@ import org.chromium.distiller.webdocument.TestWebTextBuilder;
 import org.chromium.distiller.webdocument.TestWebDocumentBuilder;
 import org.chromium.distiller.webdocument.WebDocument;
 import org.chromium.distiller.webdocument.WebElement;
-import org.chromium.distiller.webdocument.WebImage;
 import org.chromium.distiller.webdocument.WebText;
 import org.chromium.distiller.webdocument.WebTable;
 
@@ -50,23 +49,5 @@ public class RelevantElementsTest extends DomDistillerJsTestCase {
         WebDocument document = builder.build();
         assertFalse(RelevantElements.process(document));
         assertFalse(wt.getIsContent());
-    }
-
-    public void testRelevantImage() {
-        TestWebDocumentBuilder builder = new TestWebDocumentBuilder();
-        builder.addText("text 1").setIsContent(true);
-        WebImage wi = builder.addImage();
-        WebDocument document = builder.build();
-        assertTrue(RelevantElements.process(document));
-        assertTrue(wi.getIsContent());
-    }
-
-    public void testNonRelevantImage() {
-        TestWebDocumentBuilder builder = new TestWebDocumentBuilder();
-        WebImage wi = builder.addImage();
-        builder.addText("text 1").setIsContent(true);
-        WebDocument document = builder.build();
-        assertFalse(RelevantElements.process(document));
-        assertFalse(wi.getIsContent());
     }
 }

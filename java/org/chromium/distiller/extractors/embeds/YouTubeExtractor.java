@@ -54,13 +54,14 @@ public class YouTubeExtractor implements EmbedExtractor {
         if (id == null) {
             return null;
         }
+        paramMap.put("videoid", id);
 
         if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_VISIBILITY_INFO)) {
             LogUtil.logToConsole("YouTube embed extracted:");
-            LogUtil.logToConsole("    ID:    " + id);
+            LogUtil.logToConsole("    ID:    " + paramMap.get("videoid"));
         }
 
-        return new WebEmbed(e, "youtube", id, paramMap);
+        return new WebEmbed(e, "youtube", paramMap);
     }
 
     /**
