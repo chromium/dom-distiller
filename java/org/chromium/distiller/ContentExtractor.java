@@ -262,7 +262,8 @@ public class ContentExtractor {
         return output;
     }
 
-    private static void makeAllLinksAbsolute(Node rootNode) {
+    // VisibleForTesting
+    public static void makeAllLinksAbsolute(Node rootNode) {
         Element root = Element.as(rootNode);
 
         // AnchorElement.getHref() and ImageElement.getSrc() both return the
@@ -283,6 +284,9 @@ public class ContentExtractor {
             }
         }
         makeAllSrcAttributesAbsolute(root);
+
+        // TODO(wychen): make all srcset attributes absolute
+        handleSrcSetAttribute(root);
     }
 
     private static native void makeAllSrcAttributesAbsolute(Element root) /*-{
@@ -301,4 +305,10 @@ public class ContentExtractor {
         }
     }-*/;
 
+    private static void handleSrcSetAttribute(Element root) {
+        NodeList<Element> imgs = DomUtil.querySelectorAll(root, "IMG[SRCSET]");
+        for (int i = 0; i < imgs.getLength(); i++) {
+            imgs.getItem(i).removeAttribute("srcset");
+        }
+    }
 }
