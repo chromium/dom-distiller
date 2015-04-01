@@ -352,22 +352,18 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
 
     private void parseMetaTags(Element root) {
         NodeList<Element> allMeta = null;
-        if (DomUtil.supportQuerySelectorAll(root)) {
-            if (doPrefixFiltering) {
-                // Attribute selectors with prefix
-                // https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors
-                String query = "";
-                for (Map.Entry<Prefix, String> entry : mPrefixes.entrySet()) {
-                    query += "meta[property^=\"" + entry.getValue() + "\"],";
-                }
-                query = query.substring(0, query.length() - 1);
-
-                allMeta = DomUtil.querySelectorAll(root, query);
-            } else {
-                allMeta = DomUtil.querySelectorAll(root, "meta[property]");
+        if (doPrefixFiltering) {
+            // Attribute selectors with prefix
+            // https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors
+            String query = "";
+            for (Map.Entry<Prefix, String> entry : mPrefixes.entrySet()) {
+                query += "meta[property^=\"" + entry.getValue() + "\"],";
             }
+            query = query.substring(0, query.length() - 1);
+
+            allMeta = DomUtil.querySelectorAll(root, query);
         } else {
-            allMeta = root.getElementsByTagName("META");
+            allMeta = DomUtil.querySelectorAll(root, "meta[property]");
         }
 
         for (int i = 0; i < allMeta.getLength(); i++) {

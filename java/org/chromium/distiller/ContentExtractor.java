@@ -290,13 +290,6 @@ public class ContentExtractor {
     }
 
     private static native void makeAllSrcAttributesAbsolute(Element root) /*-{
-        if (!root.querySelectorAll) {
-            // In all contexts we intend to support, root.querySelectorAll is
-            // available. This is just a hack to allow this function to be
-            // run in gwt. Note that the underlying functionality is tested in
-            // chromium, so we have coverage for it.
-            return;
-        }
         var elementsWithSrc = root.querySelectorAll('img,source,track,video');
         for (var key in elementsWithSrc) {
             if (elementsWithSrc[key].src) {
