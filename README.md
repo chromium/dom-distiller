@@ -189,8 +189,8 @@ bash-function to help with that:
 roll-distiller () {
   (
     (cd $DOM_DISTILLER_DIR && ant package) && \
-    rm -rf $CHROME_SRC/third_party/dom_distiller_js/package/* && \
-    cp -rf $DOM_DISTILLER_DIR/out/package/* $CHROME_SRC/third_party/dom_distiller_js/package && \
+    rm -rf $CHROME_SRC/third_party/dom_distiller_js/dist/* && \
+    cp -rf $DOM_DISTILLER_DIR/out/package/* $CHROME_SRC/third_party/dom_distiller_js/dist/ && \
     touch $CHROME_SRC/components/resources/dom_distiller_resources.grdp
   )
 }
