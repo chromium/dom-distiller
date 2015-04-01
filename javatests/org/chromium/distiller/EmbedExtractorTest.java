@@ -23,19 +23,19 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         youtube.setAttribute("src", "http://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1");
 
         EmbedExtractor extractor = new YouTubeExtractor();
-        WebEmbed result = extractor.extract(youtube);
+        WebEmbed result = (WebEmbed) extractor.extract(youtube);
 
         // Check YouTube specific attributes
         assertNotNull(result);
         assertEquals("youtube", result.getType());
-        assertEquals("M7lc1UVf-VE", result.getParams().get("videoid"));
+        assertEquals("M7lc1UVf-VE", result.getId());
         assertEquals("1", result.getParams().get("autoplay"));
 
         // Begin negative test:
         Element notYoutube = TestUtil.createIframe();
         notYoutube.setAttribute("src", "http://www.notyoutube.com/embed/M7lc1UVf-VE?autoplay=1");
 
-        result = extractor.extract(notYoutube);
+        result = (WebEmbed) extractor.extract(notYoutube);
         assertNull(result);
     }
 
@@ -44,18 +44,18 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         youtube.setAttribute("src", "http://www.youtube.com/embed/M7lc1UVf-VE///?autoplay=1");
 
         EmbedExtractor extractor = new YouTubeExtractor();
-        WebEmbed result = extractor.extract(youtube);
+        WebEmbed result = (WebEmbed) extractor.extract(youtube);
 
         // Check YouTube specific attributes
         assertNotNull(result);
         assertEquals("youtube", result.getType());
-        assertEquals("M7lc1UVf-VE", result.getParams().get("videoid"));
+        assertEquals("M7lc1UVf-VE", result.getId());
 
         // Begin negative test.
         Element badYoutube = TestUtil.createIframe();
         badYoutube.setAttribute("src", "http://www.youtube.com/embed");
 
-        result = extractor.extract(badYoutube);
+        result = (WebEmbed) extractor.extract(badYoutube);
 
         assertNull(result);
     }
@@ -65,19 +65,19 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         vimeo.setAttribute("src", "http://player.vimeo.com/video/12345?portrait=0");
 
         EmbedExtractor extractor = new VimeoExtractor();
-        WebEmbed result = extractor.extract(vimeo);
+        WebEmbed result = (WebEmbed) extractor.extract(vimeo);
 
         // Check Vimeo specific attributes
         assertNotNull(result);
         assertEquals("vimeo", result.getType());
-        assertEquals("12345", result.getParams().get("videoid"));
+        assertEquals("12345", result.getId());
         assertEquals("0", result.getParams().get("portrait"));
 
         // Begin negative test:
         Element wrongDomain = TestUtil.createIframe();
         wrongDomain.setAttribute("src", "http://vimeo.com/video/09876?portrait=1");
 
-        result = extractor.extract(wrongDomain);
+        result = (WebEmbed) extractor.extract(wrongDomain);
         assertNull(result);
     }
 
@@ -86,18 +86,18 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         vimeo.setAttribute("src", "http://player.vimeo.com/video/12345/?portrait=0");
 
         EmbedExtractor extractor = new VimeoExtractor();
-        WebEmbed result = extractor.extract(vimeo);
+        WebEmbed result = (WebEmbed) extractor.extract(vimeo);
 
         // Check Vimeo specific attributes
         assertNotNull(result);
         assertEquals("vimeo", result.getType());
-        assertEquals("12345", result.getParams().get("videoid"));
+        assertEquals("12345", result.getId());
 
         // Begin negative test.
         Element badVimeo = TestUtil.createIframe();
         badVimeo.setAttribute("src", "http://player.vimeo.com/video");
 
-        result = extractor.extract(badVimeo);
+        result = (WebEmbed) extractor.extract(badVimeo);
 
         assertNull(result);
     }
@@ -112,12 +112,12 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
                 TestUtil.createAnchor("http://twitter.com/foo/bar/12345", "January 1, 1900"));
 
         EmbedExtractor extractor = new TwitterExtractor();
-        WebEmbed result = extractor.extract(tweetBlock);
+        WebEmbed result = (WebEmbed) extractor.extract(tweetBlock);
 
         // Check twitter specific attributes - namely twitter id
         assertNotNull(result);
         assertEquals("twitter", result.getType());
-        assertEquals("12345", result.getParams().get("tweetid"));
+        assertEquals("12345", result.getId());
 
         // Test trailing slash.
         tweetBlock = Document.get().createBlockQuoteElement();
@@ -128,12 +128,12 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         tweetBlock.appendChild(
                 TestUtil.createAnchor("http://twitter.com/foo/bar/12345///", "January 1, 1900"));
 
-        result = extractor.extract(tweetBlock);
+        result = (WebEmbed) extractor.extract(tweetBlock);
 
         // Check twitter specific attributes - namely twitter id
         assertNotNull(result);
         assertEquals("twitter", result.getType());
-        assertEquals("12345", result.getParams().get("tweetid"));
+        assertEquals("12345", result.getId());
 
         // Begin negative test:
         Element nontweet = Document.get().createBlockQuoteElement();
@@ -143,7 +143,7 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         nontweet.appendChild(temp);
         nontweet.appendChild(TestUtil.createAnchor("http://nottwitter.com/12345", "timestamp"));
 
-        result = extractor.extract(nontweet);
+        result = (WebEmbed) extractor.extract(nontweet);
         assertNull(result);
     }
 
@@ -175,12 +175,12 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         twitter.getContentDocument().getBody().setInnerHTML(iframeStructure);
 
         EmbedExtractor extractor = new TwitterExtractor();
-        WebEmbed result = extractor.extract(twitter);
+        WebEmbed result = (WebEmbed) extractor.extract(twitter);
 
         // Check twitter specific attributes - namely twitter id
         assertNotNull(result);
         assertEquals("twitter", result.getType());
-        assertEquals("1234567890", result.getParams().get("tweetid"));
+        assertEquals("1234567890", result.getId());
 
         // Begin negative test:
         IFrameElement notTwitter = TestUtil.createIframe();
@@ -188,7 +188,7 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         notTwitter.getContentDocument().getBody().setInnerHTML(
                 iframeStructure.replaceAll("blockquote", "div"));
 
-        result = extractor.extract(notTwitter);
+        result = (WebEmbed) extractor.extract(notTwitter);
         assertNull(result);
 
         // Test no important twitter content.
@@ -197,7 +197,7 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         notTwitter.getContentDocument().getBody().setInnerHTML(
                 iframeStructure.replaceAll("data-tweet-id", "data-bad-id"));
 
-        result = extractor.extract(notTwitter);
+        result = (WebEmbed) extractor.extract(notTwitter);
         assertNull(result);
     }
 }

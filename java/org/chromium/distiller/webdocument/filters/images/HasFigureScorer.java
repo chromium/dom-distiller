@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.distiller.imageheuristics;
+package org.chromium.distiller.webdocument.filters.images;
 
 import org.chromium.distiller.DomUtil;
 
@@ -15,7 +15,6 @@ import java.util.List;
  * ImageScorer that scores based on if the image has a "figure" node as an ancestor.
  */
 public class HasFigureScorer extends BaseImageScorer {
-
     public final int maxScore;
 
     /**
@@ -30,8 +29,8 @@ public class HasFigureScorer extends BaseImageScorer {
     protected int computeScore(Element e) {
         List<Node> parents = DomUtil.getParentNodes(e);
         for (Node n : parents) {
-            if (n.getNodeType() == Node.ELEMENT_NODE &&
-                    "FIGURE".equals(Element.as(n).getTagName())) {
+            if (n.getNodeType() == Node.ELEMENT_NODE
+                    && "FIGURE".equals(Element.as(n).getTagName())) {
                 return maxScore;
             }
         }

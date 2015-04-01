@@ -14,6 +14,7 @@ import org.chromium.distiller.webdocument.DomConverter;
 import org.chromium.distiller.webdocument.WebDocument;
 import org.chromium.distiller.webdocument.WebDocumentBuilder;
 import org.chromium.distiller.webdocument.filters.RelevantElements;
+import org.chromium.distiller.webdocument.filters.LeadImageFinder;
 
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
@@ -92,6 +93,7 @@ public class ContentExtractor {
         now = DomUtil.getTime();
         processDocument(documentInfo.document);
         RelevantElements.process(documentInfo.document);
+        LeadImageFinder.process(documentInfo.document);
         List<Node> contentNodes = documentInfo.document.getContentNodes(false);
         contentNodes =
                 RelevantElementsFinder.findAndAddElements(contentNodes, documentInfo.hiddenElements,

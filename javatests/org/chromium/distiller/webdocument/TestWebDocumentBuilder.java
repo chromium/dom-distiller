@@ -6,6 +6,7 @@ package org.chromium.distiller.webdocument;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import org.chromium.distiller.TestUtil;
 
 public class TestWebDocumentBuilder {
     private WebDocument document = new WebDocument();
@@ -13,6 +14,12 @@ public class TestWebDocumentBuilder {
 
     public WebText addText(String text) {
         WebText wt = webTextBuilder.createForText(text);
+        document.addText(wt);
+        return wt;
+    }
+
+    public WebText addNestedText(String text) {
+        WebText wt = webTextBuilder.createNestedText(text, 5);
         document.addText(wt);
         return wt;
     }
@@ -30,6 +37,23 @@ public class TestWebDocumentBuilder {
         WebTable wt = new WebTable(table);
         document.addTable(wt);
         return wt;
+    }
+
+    public WebImage addImage() {
+        Element image = TestUtil.createImage();
+        WebImage wi = new WebImage(image, 100, 100, "http://www.example.com/foo.jpg");
+        document.addEmbed(wi);
+        return wi;
+    }
+
+    public WebImage addLeadImage() {
+        Element image = TestUtil.createImage();
+        image.setAttribute("width", "600");
+        image.setAttribute("height", "400");
+        Document.get().getBody().appendChild(image);
+        WebImage wi = new WebImage(image, 600, 400, "http://www.example.com/lead.bmp");
+        document.addEmbed(wi);
+        return wi;
     }
 
     public WebDocument build() {

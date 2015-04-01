@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.distiller.imageheuristics;
+package org.chromium.distiller.webdocument.filters.images;
 
 import com.google.gwt.dom.client.Element;
 
@@ -10,7 +10,6 @@ import com.google.gwt.dom.client.Element;
  * ImageScorer that uses image area (length*width) as its heuristic.
  */
 public class AreaScorer extends BaseImageScorer {
-
     public final int maxScore;
     public final int minArea;
     public final int maxArea;
@@ -32,7 +31,7 @@ public class AreaScorer extends BaseImageScorer {
         int area = e.getOffsetWidth() * e.getOffsetHeight();
         if (area < minArea) return 0;
 
-        int score = (int)((float)(area-minArea)/(maxArea-minArea) * maxScore);
+        int score = (int) ((float) (area - minArea) / (maxArea - minArea) * maxScore);
         return Math.min(score, maxScore);
     }
 

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.distiller.imageheuristics;
+package org.chromium.distiller.webdocument.filters.images;
 
 import org.chromium.distiller.LogUtil;
 
@@ -13,7 +13,6 @@ import com.google.gwt.dom.client.Element;
  * directly related to score computation.
  */
 public abstract class BaseImageScorer implements ImageScorer {
-
     @Override
     public int getImageScore(Element e) {
         int score = 0;
@@ -26,8 +25,7 @@ public abstract class BaseImageScorer implements ImageScorer {
         return Math.min(score, getMaxScore());
     }
 
-    @Override
-    public abstract int getMaxScore();
+    @Override public abstract int getMaxScore();
 
     /**
      * Do the actual computation of the score. This method is never called if the Element provided
