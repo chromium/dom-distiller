@@ -69,4 +69,14 @@ public class RelevantElementsTest extends DomDistillerJsTestCase {
         assertFalse(RelevantElements.process(document));
         assertFalse(wi.getIsContent());
     }
+
+    public void testImageAfterNonContent() {
+        TestWebDocumentBuilder builder = new TestWebDocumentBuilder();
+        builder.addText("text 1").setIsContent(true);
+        builder.addText("text 2").setIsContent(false);
+        WebImage wi = builder.addImage();
+        WebDocument document = builder.build();
+        assertFalse(RelevantElements.process(document));
+        assertFalse(wi.getIsContent());
+    }
 }

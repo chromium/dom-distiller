@@ -4,10 +4,9 @@
 
 package org.chromium.distiller.webdocument;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Node;
-
-import java.util.List;
+import com.google.gwt.dom.client.ImageElement;
 
 /**
  * WebImage represents an image in the WebDocument potentially needing extraction.
@@ -40,10 +39,13 @@ public class WebImage extends WebElement {
     }
 
     @Override
-    public void addOutputNodes(List<Node> nodes, boolean includeTitle) {
-        // TODO(mdjones): This will only contain the image element but should eventually include
-        // caption.
-        nodes.add(imgElement);
+    public String generateOutput(boolean textOnly) {
+        if (textOnly) return "";
+        Element container = Document.get().createDivElement();
+        ImageElement ie = ImageElement.as(Element.as(imgElement.cloneNode(false)));
+        ie.setSrc(ie.getSrc()); // Get the absolute src and give it back to the image.
+        container.appendChild(ie);
+        return container.getInnerHTML();
     }
 
     /**

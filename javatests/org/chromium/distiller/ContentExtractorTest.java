@@ -63,9 +63,9 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
 
         ContentExtractor extractor = new ContentExtractor(mRoot);
         String extractedContent = extractor.extractContent();
-        assertEquals("<span>" + CONTENT_TEXT + "</span> " +
+        assertEquals("<div><span>" + CONTENT_TEXT + "</span> " +
                      "<span>" + CONTENT_TEXT + "</span>\n" +
-                     "<span>" + CONTENT_TEXT + "</span> ",
+                     "<span>" + CONTENT_TEXT + "</span> </div>",
                 TestUtil.removeAllDirAttributes(extractedContent));
     }
 
@@ -86,34 +86,6 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
         ContentExtractor extractor = new ContentExtractor(mRoot);
         assertEquals("OpenGraph title should be picked over document.title",
                 MARKUP_PARSER_TITLE, extractor.extractTitle());
-    }
-
-    public void testMakeAllLinksAbsolute() {
-        final String html =
-            "<!DOCTYPE html>" +
-            "<html><head><base href=\"http://example.com/\"></head><body>" +
-            "<a href=\"link\"></a>" +
-            "<img src=\"image\" srcset=\"image200 200w, image400 400w\">" +
-            "<video src=\"video\" poster=\"poster\">" +
-            "<source src=\"source\">" +
-            "<track src=\"track\"></track>" +
-            "</video>" +
-            "</body></html>";
-
-        final String expected =
-            "<a href=\"http://example.com/link\"></a>" +
-            "<img src=\"http://example.com/image\">" +
-            "<video src=\"http://example.com/video\" poster=\"http://example.com/poster\">" +
-            "<source src=\"http://example.com/source\">" +
-            "<track src=\"http://example.com/track\"></track>" +
-            "</video>";
-
-        Document doc = DomUtil.createHTMLDocument(Document.get());
-        Element root = doc.getDocumentElement();
-        root.setInnerHTML(html);
-        ContentExtractor.makeAllLinksAbsolute(root);
-        LogUtil.logToConsole(doc.getBody().getInnerHTML());
-        assertEquals(expected, doc.getBody().getInnerHTML());
     }
 
     private void createMeta(String property, String content) {

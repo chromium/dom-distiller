@@ -56,6 +56,9 @@ public class NodeTree {
         Node clone = node.cloneNode(false);
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             String direction = DomUtil.getComputedStyle(Element.as(node)).getProperty("direction");
+            if (direction.isEmpty()) {
+                direction = "auto";
+            }
             Element.as(clone).setAttribute("dir", direction);
         }
         for (NodeTree child : children) {

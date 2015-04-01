@@ -144,6 +144,6 @@ public class TestUtil {
     }
 
     public static String removeAllDirAttributes(String originalHtml) {
-        return originalHtml.replaceAll(" dir=\\\"(ltr|rtl|inherit)\\\"","");
+        return originalHtml.replaceAll(" dir=\\\"(ltr|rtl|inherit|auto)\\\"","");
     }
 }

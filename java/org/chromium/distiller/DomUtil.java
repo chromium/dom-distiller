@@ -11,6 +11,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.VideoElement;
 import com.google.gwt.http.client.URL;
 
 import java.util.ArrayList;
@@ -159,6 +160,159 @@ public class DomUtil {
         while (parent != null && !JavaScript.contains(parent, n2)) parent = parent.getParentNode();
         return parent;
     }
+
+    /**
+     * Get all text from a tree/sub-tree.
+     * @param node The root of the tree.
+     * @return The text contained in this tree.
+     */
+    public static String getTextFromTree(Node node) {
+        // Temporarily add the node to the DOM so that style is calculated.
+        Document.get().getBody().appendChild(node);
+        String output = DomUtil.getInnerText(node);
+
+        // And remove it again.
+        Document.get().getBody().removeChild(node);
+        return output;
+    }
+
+    /**
+     * Generate the HTML output for a list of relevant nodes.
+     * @param outputNodes The list of nodes in a subtree that are considered relevant.
+     * @param textOnly If this function should return text only instead of HTML.
+     * @return Displayable HTML content representing this WebElement.
+     */
+    public static String generateOutputFromList(List<Node> outputNodes, boolean textOnly) {
+        if (outputNodes.size() == 0) {
+            return "";
+        }
+
+        NodeTree expanded = NodeListExpander.expand(outputNodes);
+
+        Node clonedSubtree = expanded.cloneSubtreeRetainDirection();
+        if (clonedSubtree.getNodeType() != Node.ELEMENT_NODE) return "";
+
+        stripIds(clonedSubtree);
+        makeAllLinksAbsolute(clonedSubtree);
+
+        if (textOnly) {
+            return DomUtil.getTextFromTree(clonedSubtree);
+        }
+        Element container = Document.get().createDivElement();
+        container.appendChild(clonedSubtree);
+        return Element.as(container).getInnerHTML();
+    }
+
+    public static void makeAllLinksAbsolute(Node rootNode) {
+        Element root = Element.as(rootNode);
+
+        // AnchorElement.getHref() and ImageElement.getSrc() both return the
+        // absolute URI, so simply set them as the respective attributes.
+
+        NodeList<Element> allLinks = root.getElementsByTagName("A");
+        for (int i = 0; i < allLinks.getLength(); i++) {
+            AnchorElement link = AnchorElement.as(allLinks.getItem(i));
+            if (!link.getHref().isEmpty()) {
+                link.setHref(link.getHref());
+            }
+        }
+        NodeList<Element> videoTags = root.getElementsByTagName("VIDEO");
+        for (int i = 0; i < videoTags.getLength(); i++) {
+            VideoElement video = (VideoElement) videoTags.getItem(i);
+            if (!video.getPoster().isEmpty()) {
+                video.setPoster(video.getPoster());
+            }
+        }
+        makeAllSrcAttributesAbsolute(root);
+
+        // TODO(wychen): make all srcset attributes absolute
+        handleSrcSetAttribute(root);
+    }
+
+    private static void handleSrcSetAttribute(Element root) {
+        NodeList<Element> imgs = DomUtil.querySelectorAll(root, "IMG[SRCSET]");
+        for (int i = 0; i < imgs.getLength(); i++) {
+            imgs.getItem(i).removeAttribute("srcset");
+        }
+    }
+
+    private static native void makeAllSrcAttributesAbsolute(Element root) /*-{
+        var elementsWithSrc = root.querySelectorAll('img,source,track,video');
+        for (var key in elementsWithSrc) {
+            if (elementsWithSrc[key].src) {
+                elementsWithSrc[key].src = elementsWithSrc[key].src;
+            }
+        }
+    }-*/;
+
+    /**
+     * Strips all "id" attributes from nodes in the tree rooted at |clonedSubtree|
+     */
+    private static void stripIds(Node node) {
+        switch (node.getNodeType()) {
+            case Node.ELEMENT_NODE:
+                Element e = Element.as(node);
+                if (e.hasAttribute("id")) {
+                    e.removeAttribute("id");
+                }
+                // Intentional fall-through.
+            case Node.DOCUMENT_NODE:
+                for (int i = 0; i < node.getChildCount(); i++) {
+                    stripIds(node.getChild(i));
+                }
+        }
+    }
+
+    /**
+     * Get a list of relevant nodes from a subtree.
+     * @param root The root of the subtree.
+     * @return A list of relevant nodes.
+     */
+    public static List<Node> getOutputNodes(Node root) {
+        final List<Node> nodes = new ArrayList<>();
+        new DomWalker(new DomWalker.Visitor() {
+            @Override
+            public boolean visit(Node n) {
+                switch (n.getNodeType()) {
+                    case Node.TEXT_NODE:
+                        nodes.add(n);
+                        return false;
+                    case Node.ELEMENT_NODE:
+                        if (!DomUtil.isVisible(Element.as(n))) return false;
+                        nodes.add(n);
+                        return true;
+                    case Node.DOCUMENT_NODE:
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public void exit(Node n) {
+            }
+
+            @Override
+            public void skip(Element e) {
+            }
+        }).walk(root);
+        return nodes;
+    }
+
+    /**
+     * Generate HTML/text output for a given node tree/subree. This will ignore hidden
+     * elements.
+     * @param subtree The root of the subtree.
+     * @param textOnly If this function should return text only and not HTML.
+     * @return The output for the provided subtree.
+     */
+    public static String generateOutputFromTree(Node subtree, boolean textOnly) {
+        return generateOutputFromList(getOutputNodes(subtree), textOnly);
+    }
+
+    // Returns whether querySelectorAll is available
+    public static native boolean supportQuerySelectorAll(Element root) /*-{
+        return (typeof(root.querySelectorAll) == 'function');
+    }-*/;
 
     // GWT doesn't support querySelectorAll, so testing the caller could be harder.
     public static native NodeList<Element> querySelectorAll(Node l, String selectors) /*-{

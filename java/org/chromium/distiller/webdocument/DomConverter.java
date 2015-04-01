@@ -100,6 +100,9 @@ public class DomConverter implements DomWalker.Visitor {
         }
 
         switch (e.getTagName()) {
+            case "BR":
+                builder.embed(new WebBreak());
+                return false;
             // Skip data tables, keep track of them to be extracted by RelevantElementsFinder
             // later.
             case "TABLE":
@@ -113,15 +116,13 @@ public class DomConverter implements DomWalker.Visitor {
 
             // Some components are revisited later in context as they break text-flow of a
             // document.  e.g. <video> can contain text if format is unsupported.
-            case "FIGURE":
             case "VIDEO":
                 if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_VISIBILITY_INFO)) {
                     LogUtil.logToConsole("SKIP " + e.getTagName() + " from processing. " +
                             "It may be restored later.");
                 }
-                // TODO(cjhopman): These should probably call domVisitor.skip();
+                skip(e);
                 return false;
-
 
             // These element types are all skipped (but may affect document construction).
             case "OPTION":
@@ -138,7 +139,6 @@ public class DomConverter implements DomWalker.Visitor {
             case "LINK":
             case "NOSCRIPT":
                 return false;
-
         }
         builder.startElement(e);
         return true;

@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class LeadImageFinder {
     // The minimum score to be accepted when ranking candidate images.
-    public static final int MINIMUM_ACCEPTED_SCORE = 25;
+    public static final int MINIMUM_ACCEPTED_SCORE = 26;
 
     public static boolean process(WebDocument w) {
         List<WebImage> candidates = new ArrayList<>();
@@ -39,9 +39,15 @@ public class LeadImageFinder {
         // document.
         for (WebElement e : w.getElements()) {
             // If the element is an image and not already considered content:
-            if (e instanceof WebImage && !e.getIsContent()) {
-                candidates.add((WebImage) e);
-            } else if (firstContent == null && e instanceof WebText) {
+            if (e instanceof WebImage) {
+                if (!e.getIsContent()) {
+                    candidates.add((WebImage) e);
+                } else {
+                    // If we hit an image that is content, we are no longer searching for a "lead"
+                    // image.
+                    break;
+                }
+            } else if (firstContent == null && e instanceof WebText && e.getIsContent()) {
                 firstContent = (WebText) e;
             }
         }
