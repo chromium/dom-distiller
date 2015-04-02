@@ -203,6 +203,10 @@ public class DomUtil {
         return Element.as(container).getInnerHTML();
     }
 
+    /**
+     * Makes all anchors and video posters absolute. This calls "makeAllSrcAttributesAbsolute".
+     * @param rootNode The root Node to look through.
+     */
     public static void makeAllLinksAbsolute(Node rootNode) {
         Element root = Element.as(rootNode);
 
@@ -236,7 +240,11 @@ public class DomUtil {
         }
     }
 
-    private static native void makeAllSrcAttributesAbsolute(Element root) /*-{
+    /**
+     * Makes all "img", "source", "track", and "video" tags have an absolute "src" attribute.
+     * @param root The root element to look through.
+     */
+    public static native void makeAllSrcAttributesAbsolute(Element root) /*-{
         var elementsWithSrc = root.querySelectorAll('img,source,track,video');
         for (var key in elementsWithSrc) {
             if (elementsWithSrc[key].src) {
@@ -246,9 +254,9 @@ public class DomUtil {
     }-*/;
 
     /**
-     * Strips all "id" attributes from nodes in the tree rooted at |clonedSubtree|
+     * Strips all "id" attributes from nodes in the tree rooted at |node|
      */
-    private static void stripIds(Node node) {
+    public static void stripIds(Node node) {
         switch (node.getNodeType()) {
             case Node.ELEMENT_NODE:
                 Element e = Element.as(node);

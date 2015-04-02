@@ -117,11 +117,7 @@ public class DomConverter implements DomWalker.Visitor {
             // Some components are revisited later in context as they break text-flow of a
             // document.  e.g. <video> can contain text if format is unsupported.
             case "VIDEO":
-                if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_VISIBILITY_INFO)) {
-                    LogUtil.logToConsole("SKIP " + e.getTagName() + " from processing. " +
-                            "It may be restored later.");
-                }
-                skip(e);
+                builder.embed(new WebVideo(e, e.getClientHeight(), e.getClientHeight()));
                 return false;
 
             // These element types are all skipped (but may affect document construction).
