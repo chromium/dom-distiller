@@ -188,8 +188,8 @@ public class DomUtil {
         }
 
         NodeTree expanded = NodeListExpander.expand(outputNodes);
-
         Node clonedSubtree = expanded.cloneSubtreeRetainDirection();
+
         if (clonedSubtree.getNodeType() != Node.ELEMENT_NODE) return "";
 
         stripIds(clonedSubtree);
@@ -198,9 +198,7 @@ public class DomUtil {
         if (textOnly) {
             return DomUtil.getTextFromTree(clonedSubtree);
         }
-        Element container = Document.get().createDivElement();
-        container.appendChild(clonedSubtree);
-        return Element.as(container).getInnerHTML();
+        return Element.as(clonedSubtree).getString();
     }
 
     /**

@@ -120,7 +120,6 @@ public class ContentExtractor {
                     mTimingInfo.getFormattingTime()
                     );
         }
-
         return html;
     }
 

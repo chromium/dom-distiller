@@ -14,7 +14,7 @@ import com.google.gwt.dom.client.Node;
 import java.util.List;
 
 public class WebTableTest extends DomDistillerJsTestCase {
-    public void testAddOutputNodes() {
+    public void testGenerateOutput() {
         Element table = Document.get().createTableElement();
         String html = "<tbody>" +
                           "<tr>" +
@@ -23,8 +23,9 @@ public class WebTableTest extends DomDistillerJsTestCase {
                           "</tr>" +
                       "</tbody>";
         table.setInnerHTML(html);
-        WebTable webTable = new WebTable(table);
+        mBody.appendChild(table);
 
+        WebTable webTable = new WebTable(table);
         String got = webTable.generateOutput(false);
 
         // Output should be the same as the input in this case.

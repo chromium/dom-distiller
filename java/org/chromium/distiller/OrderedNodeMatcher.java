@@ -34,6 +34,10 @@ public class OrderedNodeMatcher {
         return true;
     }
 
+    public Node peek() {
+        return nextNode;
+    }
+
     /**
      * @return Whether there are any nodes left to match in the list.
      */

@@ -4,12 +4,12 @@
 
 package org.chromium.distiller.webdocument;
 
+import com.google.gwt.dom.client.Element;
 import org.chromium.distiller.DomUtil;
+import org.chromium.distiller.TreeCloneBuilder;
 import org.chromium.distiller.labels.DefaultLabels;
-
 import com.google.gwt.dom.client.Node;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
@@ -52,27 +52,26 @@ public class WebText extends WebElement {
     public String generateOutput(boolean textOnly) {
         if (hasLabel(DefaultLabels.TITLE)) return "";
 
-        // TODO(mdjones): Insted of doing this next part, in the future track font size weight
-        // and etc. and wrap the nodes in a "p" or "div" tag.
-        String output = DomUtil.generateOutputFromList(getOutputNodes(), textOnly);
+        // TODO(mdjones): Instead of doing this next part, in the future track font size weight
+        // and etc. and wrap the nodes in a "p" tag.
+        Node clonedRoot = TreeCloneBuilder.buildTreeClone(getTextNodes());
 
-        return output;
-    }
-
-    private List<Node> getOutputNodes() {
-        List<Node> nodes = new ArrayList<>();
-
-        List<Node> textNodes = getTextNodes();
-        if (textNodes.size() == 0) return nodes;
-
-        // Get the parent node to retain some of the structure of this block of text; text nodes
-        // do not have style or structure by themselves.
-        nodes.add(textNodes.get(0).getParentElement());
-        for (Node n : textNodes) {
-            nodes.add(n);
+        // To keep formatting/structure, at least one parent element should be in the output. This
+        // is necessary because many times a WebText is only a single node.
+        if (clonedRoot.getNodeType() != Node.ELEMENT_NODE) {
+            Node parentClone = getTextNodes().get(0).getParentElement().cloneNode(false);
+            parentClone.appendChild(clonedRoot);
+            clonedRoot = parentClone;
         }
 
-        return nodes;
+        // Make sure links are absolute and IDs are gone.
+        DomUtil.makeAllLinksAbsolute(clonedRoot);
+        DomUtil.stripIds(clonedRoot);
+
+        if (textOnly) {
+            return Element.as(clonedRoot).getInnerText();
+        }
+        return Element.as(clonedRoot).getString();
     }
 
     public List<Node> getTextNodes() {
