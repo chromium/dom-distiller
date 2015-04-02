@@ -27,7 +27,7 @@ except:
 
 def main(argv):
   parser = argparse.ArgumentParser()
-  parser.add_argument('--filter', help='Only tests that match this pattern will be run.')
+  parser.add_argument('--filter', help='See gtest_filter syntax.')
   parser.add_argument('--debug_level', help='Verbosity level of debug messages.')
   parser.add_argument('--no_console_log',
       action='store_true', help='Disable the console log output.')

@@ -8,6 +8,8 @@ import com.google.gwt.core.client.JavaScriptException;
 import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.user.client.Window;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -125,14 +127,56 @@ public class JsTestSuiteBase {
     }
 
     private class TestFilter {
-        RegExp regexp;
+        private final List<RegExp> pos;
+        private final List<RegExp> neg;
+
+        private RegExp convert(String q) {
+            // This is a simplified conversion, and doesn't handle all
+            // possible glob strings correctly.
+            q = q.replace(".", "\\.");
+            q = q.replace("*", ".*");
+            q = q.replace("?", ".");
+            return RegExp.compile("^" + q + "$");
+        }
+
         TestFilter(String filter) {
-            if (filter != null) regexp = RegExp.compile(filter);
+            pos = new ArrayList<RegExp>();
+            neg = new ArrayList<RegExp>();
+
+            if (filter == null) return;
+
+            String[] segments = filter.split("-");
+            if (segments.length > 2) {
+                LogUtil.logToConsole("[ERROR] filter \"" + filter + "\" is malformed.");
+            }
+            for (int i = 0; i < segments.length; i++) {
+                String[] filters = segments[i].split(":");
+                for (int j = 0; j < filters.length; j++) {
+                    if (filters[j].length() == 0) continue;
+                    RegExp r = convert(filters[j]);
+                    if (i == 0) {
+                        pos.add(r);
+                    } else {
+                        neg.add(r);
+                    }
+                }
+            }
         }
 
         public boolean test(String className, String methodName) {
-            if (regexp == null) return true;
-            return regexp.test(className + "." + methodName);
+            boolean ans = false;
+            if (pos.size() == 0) ans = true;
+            for (int i = 0; i < pos.size(); i++) {
+                if (pos.get(i).test(className + "." + methodName)) {
+                    ans = true;
+                }
+            }
+            for (int i = 0; i < neg.size(); i++) {
+                if (neg.get(i).test(className + "." + methodName)) {
+                    ans = false;
+                }
+            }
+            return ans;
         }
     }
 

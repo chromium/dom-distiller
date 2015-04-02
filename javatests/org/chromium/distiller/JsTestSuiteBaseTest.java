@@ -73,17 +73,81 @@ public class JsTestSuiteBaseTest extends JsTestCase {
         suite.addTestCase(null, "TestClass")
             .addTest(null, "test1")
             .addTest(null, "test2");
+        suite.addTestCase(null, "Test2Class")
+            .addTest(null, "test1");
+
         Map<String, JsTestSuiteBase.TestCaseResults> results = suite.run(
-                new TestLogger.NullLogger(), ".*TestClass.*");
+                new TestLogger.NullLogger(), "TestClass.*");
         assertFalse(results.get("TestClass").getResults().get("test1").skipped());
         assertFalse(results.get("TestClass").getResults().get("test2").skipped());
+        assertTrue(results.get("Test2Class").getResults().get("test1").skipped());
 
-        results = suite.run(new TestLogger.NullLogger(), ".*NotTestClass.*");
+        results = suite.run(new TestLogger.NullLogger(), "*NotTestClass*");
         assertTrue(results.get("TestClass").getResults().get("test1").skipped());
         assertTrue(results.get("TestClass").getResults().get("test2").skipped());
+        assertTrue(results.get("Test2Class").getResults().get("test1").skipped());
 
-        results = suite.run(new TestLogger.NullLogger(), ".*TestClass.test1");
+        results = suite.run(new TestLogger.NullLogger(), "TestClass.test1");
         assertFalse(results.get("TestClass").getResults().get("test1").skipped());
         assertTrue(results.get("TestClass").getResults().get("test2").skipped());
+        assertTrue(results.get("Test2Class").getResults().get("test1").skipped());
+
+        results = suite.run(new TestLogger.NullLogger(), "TestClass.*-*.test1");
+        assertTrue(results.get("TestClass").getResults().get("test1").skipped());
+        assertFalse(results.get("TestClass").getResults().get("test2").skipped());
+        assertTrue(results.get("Test2Class").getResults().get("test1").skipped());
+
+        results = suite.run(new TestLogger.NullLogger(), ":*.test1::*.test2:");
+        assertFalse(results.get("TestClass").getResults().get("test1").skipped());
+        assertFalse(results.get("TestClass").getResults().get("test2").skipped());
+        assertFalse(results.get("Test2Class").getResults().get("test1").skipped());
+
+        results = suite.run(new TestLogger.NullLogger(), "T*C*-*tes?2");
+        assertFalse(results.get("TestClass").getResults().get("test1").skipped());
+        assertTrue(results.get("TestClass").getResults().get("test2").skipped());
+        assertFalse(results.get("Test2Class").getResults().get("test1").skipped());
+
+        results = suite.run(new TestLogger.NullLogger(), "TestClass*:*test1-*test2");
+        assertFalse(results.get("TestClass").getResults().get("test1").skipped());
+        assertTrue(results.get("TestClass").getResults().get("test2").skipped());
+        assertFalse(results.get("Test2Class").getResults().get("test1").skipped());
+
+        results = suite.run(new TestLogger.NullLogger(), "-*1");
+        assertTrue(results.get("TestClass").getResults().get("test1").skipped());
+        assertFalse(results.get("TestClass").getResults().get("test2").skipped());
+        assertTrue(results.get("Test2Class").getResults().get("test1").skipped());
+
+        results = suite.run(new TestLogger.NullLogger(), "-*.e*");
+        assertFalse(results.get("TestClass").getResults().get("test1").skipped());
+        assertFalse(results.get("TestClass").getResults().get("test2").skipped());
+        assertFalse(results.get("Test2Class").getResults().get("test1").skipped());
+
+        results = suite.run(new TestLogger.NullLogger(), "-TestClass.test1:TestClass.test2");
+        assertTrue(results.get("TestClass").getResults().get("test1").skipped());
+        assertTrue(results.get("TestClass").getResults().get("test2").skipped());
+        assertFalse(results.get("Test2Class").getResults().get("test1").skipped());
+
+        suite.addTestCase(null, "Test3Class")
+            .addTest(null, "test1")
+            .addTest(null, "test2")
+            .addTest(null, "test3");
+
+        results = suite.run(new TestLogger.NullLogger(),
+                            "Test?Class.test*-Test2Class.test1:Test*Class.test3");
+        assertTrue(results.get("TestClass").getResults().get("test1").skipped());
+        assertTrue(results.get("TestClass").getResults().get("test2").skipped());
+        assertTrue(results.get("Test2Class").getResults().get("test1").skipped());
+        assertFalse(results.get("Test3Class").getResults().get("test1").skipped());
+        assertFalse(results.get("Test3Class").getResults().get("test2").skipped());
+        assertTrue(results.get("Test3Class").getResults().get("test3").skipped());
+
+        results = suite.run(new TestLogger.NullLogger(),
+                            "TestClass.*:Test?Class.test1:Test3Class.test3-TestClass.test1:Test3Class.test*");
+        assertTrue(results.get("TestClass").getResults().get("test1").skipped());
+        assertFalse(results.get("TestClass").getResults().get("test2").skipped());
+        assertFalse(results.get("Test2Class").getResults().get("test1").skipped());
+        assertTrue(results.get("Test3Class").getResults().get("test1").skipped());
+        assertTrue(results.get("Test3Class").getResults().get("test2").skipped());
+        assertTrue(results.get("Test3Class").getResults().get("test3").skipped());
     }
 }
