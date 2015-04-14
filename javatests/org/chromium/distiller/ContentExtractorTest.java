@@ -12,8 +12,6 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
     private static final String TITLE_TEXT = "I am the document title";
 
     public void testDoesNotExtractTitleInContent() {
-        mRoot.appendChild(mBody);
-
         Element titleDiv = TestUtil.createDiv(0);
         titleDiv.appendChild(TestUtil.createText(TITLE_TEXT));
         mBody.appendChild(titleDiv);
@@ -86,6 +84,37 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
         ContentExtractor extractor = new ContentExtractor(mRoot);
         assertEquals("OpenGraph title should be picked over document.title",
                 MARKUP_PARSER_TITLE, extractor.extractTitle());
+    }
+
+    public void testImageWithSrcset() {
+        final String html =
+            "<!DOCTYPE html>" +
+            "<html><head><base href=\"http://example.com/\"></head><body>" +
+            "<h1>" + CONTENT_TEXT + "</h1>" +
+            "<img src=\"image\" srcset=\"image200 200w, image400 400w\">" +
+            "<table role=\"grid\"><tbody><tr><td>" +
+                "<img src=\"image\" srcset=\"image200 200w, image400 400w\">" +
+                "</td></tr></tbody></table>" +
+            "<p>" + CONTENT_TEXT + "</p>" +
+            "</body></html>";
+
+        final String expected =
+            "<h1>" + CONTENT_TEXT + "</h1>" +
+            "<img src=\"http://example.com/image\">" +
+            "<table role=\"grid\"><tbody><tr><td>" +
+                "<img src=\"http://example.com/image\">" +
+            "</td></tr></tbody></table>" +
+            "<p>" + CONTENT_TEXT + "</p>";
+
+        Document doc = DomUtil.createHTMLDocument(Document.get());
+        Element root = doc.getDocumentElement();
+        root.setInnerHTML(html);
+
+        ContentExtractor extractor = new ContentExtractor(root);
+        String extractedContent = extractor.extractContent();
+
+        assertEquals(expected,
+                TestUtil.removeAllDirAttributes(extractedContent));
     }
 
     private void createMeta(String property, String content) {

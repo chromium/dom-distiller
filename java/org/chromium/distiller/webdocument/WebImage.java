@@ -8,6 +8,8 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
 
+import org.chromium.distiller.DomUtil;
+
 /**
  * WebImage represents an image in the WebDocument potentially needing extraction.
  */
@@ -44,6 +46,7 @@ public class WebImage extends WebElement {
         Element container = Document.get().createDivElement();
         ImageElement ie = ImageElement.as(Element.as(imgElement.cloneNode(false)));
         ie.setSrc(ie.getSrc()); // Get the absolute src and give it back to the image.
+        DomUtil.handleSrcSetAttribute(ie);
         container.appendChild(ie);
         return container.getInnerHTML();
     }

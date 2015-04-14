@@ -251,7 +251,6 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         Element root = doc.getDocumentElement();
         root.setInnerHTML(html);
         DomUtil.makeAllLinksAbsolute(root);
-        //LogUtil.logToConsole(doc.getBody().getInnerHTML());
         assertEquals(expected, doc.getBody().getInnerHTML());
     }
 }

@@ -8,6 +8,7 @@ import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style;
@@ -227,15 +228,19 @@ public class DomUtil {
         }
         makeAllSrcAttributesAbsolute(root);
 
-        // TODO(wychen): make all srcset attributes absolute
         handleSrcSetAttribute(root);
     }
 
     private static void handleSrcSetAttribute(Element root) {
         NodeList<Element> imgs = DomUtil.querySelectorAll(root, "IMG[SRCSET]");
         for (int i = 0; i < imgs.getLength(); i++) {
-            imgs.getItem(i).removeAttribute("srcset");
+            handleSrcSetAttribute(ImageElement.as(imgs.getItem(i)));
         }
+    }
+
+    // TODO(wychen): make all srcset attributes absolute
+    public static void handleSrcSetAttribute(ImageElement ie) {
+        ie.removeAttribute("srcset");
     }
 
     /**
