@@ -120,4 +120,26 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
     private void createMeta(String property, String content) {
         mHead.appendChild(TestUtil.createMetaProperty(property, content));
     }
+
+    public void testRemoveFontColorAttributes() {
+        Element outerFontTag = Document.get().createElement("FONT");
+        outerFontTag.setAttribute("COLOR", "blue");
+        mBody.appendChild(outerFontTag);
+
+        String text = "<font color=\"red\">" + CONTENT_TEXT + "</font>";
+
+        outerFontTag.appendChild(TestUtil.createSpan(text));
+        outerFontTag.appendChild(TestUtil.createText(" "));
+        outerFontTag.appendChild(TestUtil.createSpan(text));
+        outerFontTag.appendChild(TestUtil.createText("\n"));
+        outerFontTag.appendChild(TestUtil.createSpan(text));
+        outerFontTag.appendChild(TestUtil.createText(" "));
+
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals("<font><span><font>" + CONTENT_TEXT + "</font></span> " +
+                     "<span><font>" + CONTENT_TEXT + "</font></span>\n" +
+                     "<span><font>" + CONTENT_TEXT + "</font></span> </font>",
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
 }

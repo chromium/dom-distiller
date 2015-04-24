@@ -195,6 +195,7 @@ public class DomUtil {
 
         stripIds(clonedSubtree);
         makeAllLinksAbsolute(clonedSubtree);
+        stripFontColorAttributes(clonedSubtree);
 
         if (textOnly) {
             return DomUtil.getTextFromTree(clonedSubtree);
@@ -271,6 +272,21 @@ public class DomUtil {
                 for (int i = 0; i < node.getChildCount(); i++) {
                     stripIds(node.getChild(i));
                 }
+        }
+    }
+
+    /**
+     * Strips all "color" attributes from "font" nodes in the tree rooted at |rootNode|
+     */
+    public static void stripFontColorAttributes(Node rootNode) {
+        Element root = Element.as(rootNode);
+        if (root.getTagName() == "FONT")
+            root.removeAttribute("COLOR");
+
+        NodeList<Element> tags = DomUtil.querySelectorAll(root, "FONT[COLOR]");
+        for (int i = 0; i < tags.getLength(); i++) {
+            Element fontElement = tags.getItem(i);
+            fontElement.removeAttribute("COLOR");
         }
     }
 
