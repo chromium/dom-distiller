@@ -123,10 +123,9 @@ is:
 - `ant test -Dtest.filter=$FILTER_PATTERN` where `$FILTER_PATTERN` is a regexp
 pattern. For example `^FilterTest.*` would run all tests with a name starting
 with `FilterTest`.
-- `ant gwtc` compiles .class+.java files to JavaScript
-- `ant extractjs` creates standalone JavaScript from output of ant gwtc, the
-compiled JavaScript file is available at `out/domdistiller.js`.
-- `ant extractjs.jstests` creates a standalone JavaScript for the tests.
+- `ant gwtc` compiles .class+.java files to JavaScript. Standalone JavaScript
+  is available at `war/domdistiller/domdistiller.nocache.js`.
+- `ant gwtc.jstests` creates a standalone JavaScript for the tests.
 - `ant package` Copies the main build artifacts into the `out/package` folder,
 typically the extracted JS and protocol buffer files.
 
@@ -289,7 +288,7 @@ distill http://example.com/article.html
 ## Interactive debugging
 
 You can use the Chrome Developer Tools to debug DOM Distiller:
-- Update the test JavaScript by running `ant extractjs.jstests` or `ant test`.
+- Update the test JavaScript by running `ant gwtc.jstests` or `ant test`.
 - Open `war/test.html` in Chrome desktop
 - Open the `Console` panel in Developer Tools (**Ctrl-Shift-J**).
 On Mac OS X you can use **&#x2325;-&#x2318;-I** (uppercase `I`) as the shortcut.

@@ -29,8 +29,11 @@
   </generate-with>
 
   <!-- Specify the paths for translatable code                    -->
-  <source path='org/chromium/distiller' excludes='rebind/*'/>
+  <source path='org/chromium/distiller'>
+    <exclude name="rebind/*" />
+    <exclude name="dev/*" />
+  </source>
 
-  <!-- Use the SingleScriptLinker. -->
-  <add-linker name='sso'/>
+  <define-linker name="distillerlinker" class="org.chromium.distiller.dev.DistillerScriptLinker" />
+  <add-linker name='distillerlinker'/>
 </module>
