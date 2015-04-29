@@ -120,9 +120,11 @@ git cl config
 is:
 
 - `ant test` Runs all tests.
-- `ant test -Dtest.filter=$FILTER_PATTERN` where `$FILTER_PATTERN` is a regexp
-pattern. For example `^FilterTest.*` would run all tests with a name starting
-with `FilterTest`.
+- `ant test -Dtest.filter=$FILTER_PATTERN` where `$FILTER_PATTERN` is a [gtest\_filter
+pattern]
+(https://code.google.com/p/googletest/wiki/AdvancedGuide#Running_a_Subset_of_the_Tests).
+For example `*.FilterTest.*:*Foo*-*Bar*` would run all tests containing `.FilterTest.`
+and `Foo`, but not those with `Bar`.
 - `ant gwtc` compiles .class+.java files to JavaScript. Standalone JavaScript
   is available at `war/domdistiller/domdistiller.nocache.js`.
 - `ant gwtc.jstests` creates a standalone JavaScript for the tests.
