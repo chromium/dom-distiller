@@ -5,6 +5,7 @@
 package org.chromium.distiller.webdocument;
 
 import org.chromium.distiller.DomDistillerJsTestCase;
+import org.chromium.distiller.DomUtil;
 import org.chromium.distiller.labels.DefaultLabels;
 
 import com.google.gwt.dom.client.Document;
@@ -84,6 +85,18 @@ public class ElementActionTest extends DomDistillerJsTestCase {
     public void testCommentsLabels() {
         assertFalse(hasLabel(getForHtml("<span></span>"), DefaultLabels.STRICTLY_NOT_CONTENT));
         assertFalse(hasLabel(getForHtml("<div></div>"), DefaultLabels.STRICTLY_NOT_CONTENT));
+
+        Document newDocument = DomUtil.createHTMLDocument(Document.get());
+
+        Element htmlElement = DomUtil.getFirstElementChild(newDocument);
+        htmlElement.setClassName("comment");
+        assertFalse(hasLabel(ElementAction.getForElement(htmlElement),
+                DefaultLabels.STRICTLY_NOT_CONTENT));
+
+        Element bodyElement = newDocument.getBody();
+        bodyElement.setClassName("comment");
+        assertFalse(hasLabel(ElementAction.getForElement(bodyElement),
+                DefaultLabels.STRICTLY_NOT_CONTENT));
 
         assertTrue(hasLabel(getForHtml("<div class=\" comment \"></div>"),
                     DefaultLabels.STRICTLY_NOT_CONTENT));

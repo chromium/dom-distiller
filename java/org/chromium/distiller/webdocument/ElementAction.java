@@ -53,7 +53,7 @@ public class ElementAction {
         }
 
         String tagName = element.getTagName();
-        if (!"BODY".equals(tagName)) {
+        if (!"HTML".equals(tagName) && !"BODY".equals(tagName)) {
             String className = element.getAttribute("class");
             String id = element.getAttribute("id");
             if (REG_COMMENT.test(className) || REG_COMMENT.test(id)) {

@@ -349,4 +349,8 @@ public class DomUtil {
     public static native Document createHTMLDocument(Document doc) /*-{
         return doc.implementation.createHTMLDocument();
     }-*/;
+
+    public static native Element getFirstElementChild(Document document) /*-{
+        return document.firstElementChild;
+    }-*/;
 }
