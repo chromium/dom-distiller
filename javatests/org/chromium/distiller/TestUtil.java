@@ -13,9 +13,11 @@ import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.MetaElement;
 import com.google.gwt.dom.client.Text;
 import com.google.gwt.dom.client.TitleElement;
+import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Window;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -145,5 +147,15 @@ public class TestUtil {
 
     public static String removeAllDirAttributes(String originalHtml) {
         return originalHtml.replaceAll(" dir=\\\"(ltr|rtl|inherit|auto)\\\"","");
+    }
+
+    /**
+     * Randomly shuffle the list in-place.
+     */
+    public static void shuffle(List<?> list) {
+        int size = list.size();
+        for (int i=size; i>1; i--) {
+            Collections.swap(list, i-1, Random.nextInt(i));
+        }
     }
 }

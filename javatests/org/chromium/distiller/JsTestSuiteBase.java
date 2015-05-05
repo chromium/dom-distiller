@@ -89,11 +89,16 @@ public class JsTestSuiteBase {
             return this;
         }
 
-        public TestCaseResults run(TestLogger logger, TestFilter filter) {
+        public TestCaseResults run(TestLogger logger, TestFilter filter, boolean shuffle) {
             if (debug) logger.log(TestLogger.WARNING, "Starting " + testCaseName);
             TestCaseResults results = new TestCaseResults(testCaseName);
             try {
-                for (Map.Entry<String, TestCaseRunner> test : tests.entrySet()) {
+                List<Map.Entry<String, TestCaseRunner>> list =
+                        new ArrayList<Map.Entry<String, TestCaseRunner>>(tests.entrySet());
+                if (shuffle) {
+                    TestUtil.shuffle(list);
+                }
+                for (Map.Entry<String, TestCaseRunner> test : list) {
                     Assert.setDumpTraceOnFailure(true);
                     TestResult result = new TestResult();
                     if (!filter.test(testCaseName, test.getKey())) {
@@ -202,10 +207,21 @@ public class JsTestSuiteBase {
     }
 
     public Map<String, TestCaseResults> run(TestLogger logger, String filterString) {
+        return run(logger, filterString, false);
+    }
+
+    public Map<String, TestCaseResults> run(
+            TestLogger logger, String filterString, boolean shuffle) {
         TreeMap<String, TestCaseResults> results = new TreeMap<String, TestCaseResults>();
         TestFilter filter = new TestFilter(filterString);
-        for (Map.Entry<String, TestCase> caseEntries : testCases.entrySet()) {
-            results.put(caseEntries.getKey(), caseEntries.getValue().run(logger, filter));
+        List<Map.Entry<String, TestCase>> list =
+                new ArrayList<Map.Entry<String, TestCase>>(testCases.entrySet());
+        if (shuffle) {
+            TestUtil.shuffle(list);
+        }
+        for (Map.Entry<String, TestCase> caseEntries : list) {
+            results.put(caseEntries.getKey(),
+                        caseEntries.getValue().run(logger, filter, shuffle));
         }
         for (Map.Entry<String, TestCaseResults> resultsEntry : results.entrySet()) {
             logger.log(TestLogger.RESULTS, "Results for " + resultsEntry.getKey());

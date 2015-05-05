@@ -26,6 +26,8 @@
 
   <property name="test.debug_level" value="0" />
 
+  <property name="test.shuffle" value="0" />
+
   <condition property="isLinux">
     <and>
       <os family="unix" />
@@ -227,7 +229,7 @@
       <env key="PATH" path="${env.PATH}:${basedir}/buildtools"/>
       <arg value="--auto-servernum"/>
       <arg value="./run_jstests.py"/>
-      <arg line="--filter=${test.filter} --debug_level ${test.debug_level}"/>
+      <arg line="--filter=${test.filter} --debug_level ${test.debug_level} --shuffle ${test.shuffle}"/>
     </exec>
   </target>
 
@@ -236,7 +238,7 @@
     <exec executable="python" failonerror="true">
       <env key="PATH" path="${env.PATH}:${basedir}/buildtools"/>
       <arg value="./run_jstests.py"/>
-      <arg line="--filter=${test.filter} --debug_level ${test.debug_level}"/>
+      <arg line="--filter=${test.filter} --debug_level ${test.debug_level} --shuffle ${test.shuffle}"/>
     </exec>
   </target>
 

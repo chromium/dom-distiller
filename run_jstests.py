@@ -31,6 +31,7 @@ def main(argv):
   parser.add_argument('--debug_level', help='Verbosity level of debug messages.')
   parser.add_argument('--no_console_log',
       action='store_true', help='Disable the console log output.')
+  parser.add_argument('--shuffle', help='Run test cases in random order.')
   options = parser.parse_args(argv)
 
   params = {}
@@ -42,6 +43,9 @@ def main(argv):
 
   if options.no_console_log:
     params['console_log'] = '0'
+
+  if options.shuffle:
+    params['shuffle'] = options.shuffle
 
   start = time.time()
   test_runner = "return org.chromium.distiller.JsTestEntry.run()";

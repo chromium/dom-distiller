@@ -44,7 +44,9 @@ public class JsTestEntry implements EntryPoint {
         LogUtil.setSuppressConsoleOutput(!consoleLog);
         JsTestSuiteBuilder builder = GWT.<JsTestSuiteBuilder>create(JsTestSuiteBuilder.class);
         TestLogger logger = new TestLogger();
-        Map<String, JsTestSuiteBase.TestCaseResults> results = builder.build().run(logger, filter);
+        boolean shuffle = "1".equals(Window.Location.getParameter("shuffle"));
+        Map<String, JsTestSuiteBase.TestCaseResults> results =
+            builder.build().run(logger, filter, shuffle);
         return createTestSuiteResults(results, logger);
     }
 
