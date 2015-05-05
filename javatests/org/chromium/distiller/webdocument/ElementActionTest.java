@@ -107,7 +107,19 @@ public class ElementActionTest extends DomDistillerJsTestCase {
 
         assertTrue(hasLabel(getForHtml("<div class=\"user-comments\"></div>"),
                     DefaultLabels.STRICTLY_NOT_CONTENT));
+
+        /**
+         * Element.getClassName() returns SVGAnimatedString for SvgElement
+         * https://code.google.com/p/google-web-toolkit/issues/detail?id=9195
+         */
+        assertFalse(hasLabel(getForHtml("<svg></svg>"), DefaultLabels.STRICTLY_NOT_CONTENT));
+
+        assertFalse(hasLabel(getForHtml(
+                "<div class=\"user-comments another-class lots-of-classes too-many-classes" +
+                             "class1 class2 class3 class4 class5 class6 class7 class8\"></div>"),
+                DefaultLabels.STRICTLY_NOT_CONTENT));
+        assertTrue(hasLabel(getForHtml(
+                "<div class=\"     user-comments                         a       b   \"></div>"),
+                DefaultLabels.STRICTLY_NOT_CONTENT));
     }
-
-
 }

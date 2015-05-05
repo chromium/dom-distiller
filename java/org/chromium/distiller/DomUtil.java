@@ -5,6 +5,7 @@
 package org.chromium.distiller;
 
 import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -40,6 +41,10 @@ public class DomUtil {
 
     public static native boolean hasClassName(Element elem, String className) /*-{
         return elem.classList.contains(className);
+    }-*/;
+
+    public static native JsArrayString getClassList(Element elem) /*-{
+        return elem.classList;
     }-*/;
 
     /**
