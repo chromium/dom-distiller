@@ -4,6 +4,7 @@
 
 package org.chromium.distiller;
 
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
@@ -25,6 +26,10 @@ public class DomDistillerJsTestCase extends JsTestCase {
 
     protected void gwtSetUp() throws Exception {
         mRoot = Document.get().getDocumentElement();
+        JsArray<Node> attrs = DomUtil.getAttributes(mRoot);
+        for (int i = 0; i < attrs.length(); i++) {
+            mRoot.removeAttribute(attrs.get(i).getNodeName());
+        }
         NodeList<Node> children = mRoot.getChildNodes();
         for (int i = children.getLength() - 1; i >= 0; i--) {
             children.getItem(i).removeFromParent();
