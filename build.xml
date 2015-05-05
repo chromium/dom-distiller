@@ -24,6 +24,8 @@
 
   <property name="test.filter" value="*" />
 
+  <property name="test.repeat" value="1" />
+
   <property name="test.debug_level" value="0" />
 
   <property name="test.shuffle" value="0" />
@@ -229,7 +231,10 @@
       <env key="PATH" path="${env.PATH}:${basedir}/buildtools"/>
       <arg value="--auto-servernum"/>
       <arg value="./run_jstests.py"/>
-      <arg line="--filter=${test.filter} --debug_level ${test.debug_level} --shuffle ${test.shuffle}"/>
+      <arg line="--filter=${test.filter}
+        --debug_level ${test.debug_level}
+        --shuffle ${test.shuffle}
+        --repeat ${test.repeat}"/>
     </exec>
   </target>
 
@@ -238,7 +243,10 @@
     <exec executable="python" failonerror="true">
       <env key="PATH" path="${env.PATH}:${basedir}/buildtools"/>
       <arg value="./run_jstests.py"/>
-      <arg line="--filter=${test.filter} --debug_level ${test.debug_level} --shuffle ${test.shuffle}"/>
+      <arg line="--filter=${test.filter}
+        --debug_level ${test.debug_level}
+        --shuffle ${test.shuffle}
+        --repeat ${test.repeat}"/>
     </exec>
   </target>
 

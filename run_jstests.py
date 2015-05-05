@@ -28,6 +28,7 @@ except:
 def main(argv):
   parser = argparse.ArgumentParser()
   parser.add_argument('--filter', help='See gtest_filter syntax.')
+  parser.add_argument('--repeat', type=int, default=1, help='Number of times to repeat the tests.')
   parser.add_argument('--debug_level', help='Verbosity level of debug messages.')
   parser.add_argument('--no_console_log',
       action='store_true', help='Disable the console log output.')
@@ -47,21 +48,30 @@ def main(argv):
   if options.shuffle:
     params['shuffle'] = options.shuffle
 
-  start = time.time()
   test_runner = "return org.chromium.distiller.JsTestEntry.run()";
   test_html = os.path.abspath(os.path.join(os.path.dirname(__file__), "war", "test.html"))
   test_html += "?" + urllib.urlencode(params)
 
   driver = webdriver.Chrome()
   driver.get("file://" + test_html)
-  result = driver.execute_script(test_runner)
-  driver.quit()
+  for i in range(options.repeat):
+    start = time.time()
+    result = driver.execute_script(test_runner)
 
-  end = time.time()
-  print result['log'].encode('utf-8')
-  print 'Tests run: %d, Failures: %d, Skipped: %d, Time elapsed: %0.3f sec' % (result['numTests'],
-      result['failed'], result['skipped'], end - start)
-  return 0 if result['success'] else 1
+    end = time.time()
+    if not result['success'] or options.repeat == i+1:
+      print result['log'].encode('utf-8')
+    print 'Tests run: %d, Failures: %d, Skipped: %d, Time elapsed: %0.3f sec' % (result['numTests'],
+        result['failed'], result['skipped'], end - start)
+    if not result['success']:
+      driver.quit()
+      if options.repeat > 1:
+        print 'Failed at run #%d/%d' % (i+1, options.repeat)
+      return 1
+  driver.quit()
+  if options.repeat > 1:
+    print 'Passed %d runs' % (options.repeat)
+  return 0
 
 if __name__ == '__main__':
   sys.exit(main(sys.argv[1:]))
