@@ -88,15 +88,12 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
 
     public void testImageWithSrcset() {
         final String html =
-            "<!DOCTYPE html>" +
-            "<html><head><base href=\"http://example.com/\"></head><body>" +
             "<h1>" + CONTENT_TEXT + "</h1>" +
             "<img src=\"image\" srcset=\"image200 200w, image400 400w\">" +
             "<table role=\"grid\"><tbody><tr><td>" +
                 "<img src=\"image\" srcset=\"image200 200w, image400 400w\">" +
                 "</td></tr></tbody></table>" +
-            "<p>" + CONTENT_TEXT + "</p>" +
-            "</body></html>";
+            "<p>" + CONTENT_TEXT + "</p>";
 
         final String expected =
             "<h1>" + CONTENT_TEXT + "</h1>" +
@@ -106,11 +103,10 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
             "</td></tr></tbody></table>" +
             "<p>" + CONTENT_TEXT + "</p>";
 
-        Document doc = DomUtil.createHTMLDocument(Document.get());
-        Element root = doc.getDocumentElement();
-        root.setInnerHTML(html);
+        mHead.setInnerHTML("<base href=\"http://example.com/\">");
+        mBody.setInnerHTML(html);
 
-        ContentExtractor extractor = new ContentExtractor(root);
+        ContentExtractor extractor = new ContentExtractor(mRoot);
         String extractedContent = extractor.extractContent();
 
         assertEquals(expected,
