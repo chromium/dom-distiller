@@ -253,4 +253,42 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         DomUtil.makeAllLinksAbsolute(root);
         assertEquals(expected, doc.getBody().getInnerHTML());
     }
+
+    public void testStripTableBackgroundColorAttributes() {
+        String tableWithBGColorHTML =
+            "<table bgcolor=\"red\">" +
+                "<tbody>" +
+                    "<tr bgcolor=\"red\">" +
+                        "<th bgcolor=\"red\">text</th>" +
+                        "<th bgcolor=\"red\">text</th>" +
+                    "</tr><tr bgcolor=\"red\">" +
+                        "<td bgcolor=\"red\">text</td>" +
+                        "<td bgcolor=\"red\">text</td>" +
+                    "</tr>" +
+                "</tbody>" +
+            "</table>";
+
+        final String expected =
+            "<table>" +
+                "<tbody>" +
+                    "<tr>" +
+                        "<th>text</th>" +
+                        "<th>text</th>" +
+                    "</tr><tr>" +
+                        "<td>text</td>" +
+                        "<td>text</td>" +
+                    "</tr>" +
+                "</tbody>" +
+            "</table>";
+
+        mBody.setInnerHTML(tableWithBGColorHTML);
+        DomUtil.stripTableBackgroundColorAttributes(mBody);
+        assertEquals(expected, mBody.getInnerHTML());
+
+        // We also test stripping the table element directly to ensure that
+        // stripTableBackgroundColorAttributes deals with root elements properly.
+        mBody.setInnerHTML(tableWithBGColorHTML);
+        DomUtil.stripTableBackgroundColorAttributes(mBody.getFirstChildElement());
+        assertEquals(expected, mBody.getInnerHTML());
+    }
 }

@@ -201,6 +201,7 @@ public class DomUtil {
         stripIds(clonedSubtree);
         makeAllLinksAbsolute(clonedSubtree);
         stripFontColorAttributes(clonedSubtree);
+        stripTableBackgroundColorAttributes(clonedSubtree);
 
         if (textOnly) {
             return DomUtil.getTextFromTree(clonedSubtree);
@@ -292,6 +293,22 @@ public class DomUtil {
         for (int i = 0; i < tags.getLength(); i++) {
             Element fontElement = tags.getItem(i);
             fontElement.removeAttribute("COLOR");
+        }
+    }
+
+    /**
+     * Strips all "bgcolor" attributes from table nodes in the tree rooted at |rootNode|
+     */
+    public static void stripTableBackgroundColorAttributes(Node rootNode) {
+        Element root = Element.as(rootNode);
+        if (root.getTagName().equals("TABLE")) {
+            root.removeAttribute("BGCOLOR");
+        }
+
+        NodeList<Element> tags = DomUtil.querySelectorAll(root,
+            "TABLE[BGCOLOR], TR[BGCOLOR], TD[BGCOLOR], TH[BGCOLOR]");
+        for (int i = 0; i < tags.getLength(); i++) {
+            tags.getItem(i).removeAttribute("BGCOLOR");
         }
     }
 
