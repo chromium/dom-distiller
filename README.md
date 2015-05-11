@@ -77,7 +77,7 @@ sudo easy_install pip
 ```
 - Install `selenium` using `pip`:
 ```
-pip install selenium
+pip install --user selenium
 ```
 
 For the rest of this guide, there are sometimes references to a tool called
