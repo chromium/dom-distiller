@@ -43,7 +43,6 @@ window.onload = function() {
 
     chrome.devtools.inspectedWindow.eval(domdistiller);
     chrome.devtools.inspectedWindow.eval(extract, function(res, err) {
-      console.log(res);
       extracting = false;
       updateButtonReady();
     });

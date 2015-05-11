@@ -8,7 +8,9 @@ function onTabsUpdated(tabId, changeInfo, tab) {
 
 function onPageActionClicked(tab) {
   chrome.tabs.executeScript({ file: "domdistiller.js" }, function() {
-    chrome.tabs.executeScript({ file: "extract.js" })
+    chrome.tabs.executeScript({ file: "extract.js" }, function() {
+      chrome.tabs.executeScript({ file: "preview.js" });
+    });
   });
 }
 
