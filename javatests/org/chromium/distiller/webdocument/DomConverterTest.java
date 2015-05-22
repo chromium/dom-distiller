@@ -147,4 +147,9 @@ public class DomConverterTest extends DomDistillerJsTestCase {
         assertTrue(elements.get(1) instanceof WebImage);
         assertTrue(elements.get(2) instanceof WebText);
     }
+
+    public void testLineBreak() throws Throwable {
+        String html = "text<br>split<br/>with<br/>lines";
+        runTest(html, "text\nsplit\nwith\nlines");
+    }
 }

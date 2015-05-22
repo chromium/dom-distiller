@@ -67,5 +67,10 @@ public class FakeWebDocumentBuilder implements WebDocumentBuilderInterface {
     }
 
     @Override
+    public void lineBreak(Node node) {
+        documentStringBuilder.append("\n");
+    }
+
+    @Override
     public void embed(WebElement embed) {}
 }

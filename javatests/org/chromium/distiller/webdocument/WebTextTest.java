@@ -15,7 +15,6 @@ import java.util.List;
 
 public class WebTextTest extends DomDistillerJsTestCase {
     public void testGenerateOutputMultipleContentNodes() {
-        mRoot.appendChild(mBody);
         Element container = Document.get().createDivElement();
         mBody.appendChild(container);
 
@@ -41,7 +40,6 @@ public class WebTextTest extends DomDistillerJsTestCase {
     }
 
     public void testGenerateOutputSingleContentNode() {
-        mRoot.appendChild(mBody);
         Element container = Document.get().createDivElement();
         mBody.appendChild(container);
 
@@ -65,4 +63,32 @@ public class WebTextTest extends DomDistillerJsTestCase {
         assertEquals(want, TestUtil.removeAllDirAttributes(got));
     }
 
+    public void testGenerateOutputBRElements() {
+        Element container = Document.get().createDivElement();
+        mBody.appendChild(container);
+
+        Element content1 = Document.get().createPElement();
+        content1.appendChild(Document.get().createTextNode("Words"));
+        content1.appendChild(Document.get().createBRElement());
+        content1.appendChild(Document.get().createTextNode("split"));
+        content1.appendChild(Document.get().createBRElement());
+        content1.appendChild(Document.get().createTextNode("with"));
+        content1.appendChild(Document.get().createBRElement());
+        content1.appendChild(Document.get().createTextNode("lines"));
+        container.appendChild(content1);
+
+        WebTextBuilder builder = new WebTextBuilder();
+        builder.textNode(Text.as(content1.getChild(0)), 0);
+        builder.lineBreak(content1.getChild(1));
+        builder.textNode(Text.as(content1.getChild(2)), 0);
+        builder.lineBreak(content1.getChild(3));
+        builder.textNode(Text.as(content1.getChild(4)), 0);
+        builder.lineBreak(content1.getChild(5));
+        builder.textNode(Text.as(content1.getChild(6)), 0);
+
+        WebText text = builder.build(0);
+        String got = text.generateOutput(false);
+        String want = "<p>Words<br>split<br>with<br>lines</p>";
+        assertEquals(want, TestUtil.removeAllDirAttributes(got));
+    }
 }

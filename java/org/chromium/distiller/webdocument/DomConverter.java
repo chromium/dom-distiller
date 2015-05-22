@@ -101,7 +101,7 @@ public class DomConverter implements DomWalker.Visitor {
 
         switch (e.getTagName()) {
             case "BR":
-                builder.embed(new WebBreak());
+                builder.lineBreak(e);
                 return false;
             // Skip data tables, keep track of them to be extracted by RelevantElementsFinder
             // later.

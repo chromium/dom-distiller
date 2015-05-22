@@ -55,6 +55,11 @@ public class WebTextBuilder {
         }
     }
 
+    public void lineBreak(Node node) {
+        textBuffer += "\n";
+        allTextNodes.add(node);
+    }
+
     public void reset() {
         textBuffer = "";
         numWords = 0;

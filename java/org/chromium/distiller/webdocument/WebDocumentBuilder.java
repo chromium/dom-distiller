@@ -22,6 +22,7 @@
 package org.chromium.distiller.webdocument;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.Text;
 
 import java.util.Stack;
@@ -95,6 +96,16 @@ public class WebDocumentBuilder implements WebDocumentBuilderInterface {
         }
 
         webTextBuilder.textNode(textNode, tagLevel);
+    }
+
+    @Override
+    public void lineBreak(Node node) {
+        if (flush) {
+            flushBlock(groupNumber);
+            groupNumber++;
+            flush = false;
+        }
+        webTextBuilder.lineBreak(node);
     }
 
     @Override

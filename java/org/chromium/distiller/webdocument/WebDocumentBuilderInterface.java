@@ -5,6 +5,7 @@
 package org.chromium.distiller.webdocument;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.Text;
 
 public interface WebDocumentBuilderInterface {
@@ -12,6 +13,7 @@ public interface WebDocumentBuilderInterface {
     void startElement(Element element);
     void endElement();
     void textNode(Text textNode);
+    void lineBreak(Node node);
     void dataTable(Element e);
     void embed(WebElement embedNode);
 }

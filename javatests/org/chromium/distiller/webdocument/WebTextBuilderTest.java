@@ -122,4 +122,19 @@ public class WebTextBuilderTest extends DomDistillerJsTestCase {
         tb = builder.build(0);
         assertFalse(tb.getFirstNonWhitespaceTextNode().equals(tb.getLastNonWhitespaceTextNode()));
     }
+
+    public void testBRElement() {
+        WebTextBuilder builder = new WebTextBuilder();
+        addText(builder, "words", 0);
+        builder.lineBreak(Document.get().createBRElement());
+        addText(builder, "split", 0);
+        builder.lineBreak(Document.get().createBRElement());
+        addText(builder, "with", 0);
+        builder.lineBreak(Document.get().createBRElement());
+        addText(builder, "lines", 0);
+
+        WebText webText = builder.build(0);
+        assertEquals(7, webText.getTextNodes().size());
+        assertEquals("words\nsplit\nwith\nlines", webText.getText());
+    }
 }
