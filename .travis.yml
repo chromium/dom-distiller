@@ -1,2 +1,3 @@
+sudo: required
 language: java
 script: ./run-continuous-integration.sh
