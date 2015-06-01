@@ -23,6 +23,13 @@
     wget \
     xvfb
 
+  if ! command -v google-chrome >/dev/null 2>&1; then
+    wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+    echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+    apt-get update
+    apt-get install google-chrome-stable
+  fi
+
   user=$SUDO_USER
   bit=$(getconf LONG_BIT)
   domdistiller=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
