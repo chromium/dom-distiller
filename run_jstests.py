@@ -32,7 +32,8 @@ def main(argv):
   parser.add_argument('--debug_level', help='Verbosity level of debug messages.')
   parser.add_argument('--no_console_log',
       action='store_true', help='Disable the console log output.')
-  parser.add_argument('--shuffle', help='Run test cases in random order.')
+  parser.add_argument('--shuffle', help='Set to 1 to run test cases in random order.')
+  parser.add_argument('--no_sandbox', help='Set to 1 to add --no-sandbox option to Chrome.')
   options = parser.parse_args(argv)
 
   params = {}
@@ -52,7 +53,17 @@ def main(argv):
   test_html = os.path.abspath(os.path.join(os.path.dirname(__file__), "war", "test.html"))
   test_html += "?" + urllib.urlencode(params)
 
-  driver = webdriver.Chrome()
+  chrome_options = webdriver.ChromeOptions()
+
+  # Travis-CI uses OpenVZ containers which are incompatible with the sandbox technology.
+  # See https://code.google.com/p/chromium/issues/detail?id=31077 for more information.
+  # Ref: https://github.com/travis-ci/travis-ci/issues/938#issuecomment-16336150
+  # Drone.io also has issues running newer versions of Chrome.
+  # Ref: http://crbug.com/495254
+  if options.no_sandbox:
+    chrome_options.add_argument("--no-sandbox")
+
+  driver = webdriver.Chrome(chrome_options=chrome_options)
   driver.get("file://" + test_html)
   for i in range(options.repeat):
     start = time.time()

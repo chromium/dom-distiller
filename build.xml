@@ -30,6 +30,8 @@
 
   <property name="test.shuffle" value="0" />
 
+  <property name="test.no_sandbox" value="0" />
+
   <condition property="isLinux">
     <and>
       <os family="unix" />
@@ -233,6 +235,7 @@
       <arg value="./run_jstests.py"/>
       <arg line="--filter=${test.filter}
         --debug_level ${test.debug_level}
+        --no_sandbox ${test.no_sandbox}
         --shuffle ${test.shuffle}
         --repeat ${test.repeat}"/>
     </exec>
