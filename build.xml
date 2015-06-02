@@ -230,7 +230,7 @@
   <!-- Run jstests for the Linux platform -->
   <target name="-jstests.linux" if="isLinux">
     <exec executable="xvfb-run" failonerror="true">
-      <env key="PATH" path="${env.PATH}:${basedir}/buildtools"/>
+      <env key="PATH" path="${basedir}/buildtools:${env.PATH}"/>
       <arg value="--auto-servernum"/>
       <arg value="./run_jstests.py"/>
       <arg line="--filter=${test.filter}
@@ -244,7 +244,7 @@
   <!-- Run jstests for the Mac OS X platform -->
   <target name="-jstests.mac" if="isMac">
     <exec executable="python" failonerror="true">
-      <env key="PATH" path="${env.PATH}:${basedir}/buildtools"/>
+      <env key="PATH" path="${basedir}/buildtools:${env.PATH}"/>
       <arg value="./run_jstests.py"/>
       <arg line="--filter=${test.filter}
         --debug_level ${test.debug_level}
