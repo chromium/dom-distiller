@@ -5,6 +5,8 @@
 
 # Installs required build dependencies (to buildtools/ and the local system).
 
+CHROME_MIN_VERSION=32
+
 (
   set -e
   if [ "$(id -u)" != "0" ]; then
@@ -12,6 +14,7 @@
     exit 1
   fi
 
+  apt-get update
   apt-get install \
     ant \
     openjdk-7-jdk \
@@ -28,6 +31,21 @@
     echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
     apt-get update
     apt-get install google-chrome-stable
+  fi
+
+  # Update chrome if it is too old, and keep the default channel.
+  if ! google-chrome --version | tr " " "\n" | awk '/[0-9.]/{exit ($1<'${CHROME_MIN_VERSION}')}'; then
+    case "$(google-chrome --version)" in
+      *dev*)
+        apt-get install google-chrome-unstable
+        ;;
+      *beta*)
+        apt-get install google-chrome-beta
+        ;;
+      *)
+        apt-get install google-chrome-stable
+        ;;
+    esac
   fi
 
   user=$SUDO_USER
