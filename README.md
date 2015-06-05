@@ -44,12 +44,14 @@ ChromeDriver requires Google Chrome to be installed at a specific location
 [ChromeDriver documentation](https://code.google.com/p/selenium/wiki/ChromeDriver)
 for details.
 
-## Developing on Linux
+## Developing on Ubuntu/Debian
 
 Install the dependencies by entering the `dom-distiller` folder and running:
 ```bash
 sudo ./install-build-deps.sh
 ```
+
+Ubuntu 14.04 64-bit is recommended.
 
 ## Developing on Mac OS X
 
@@ -84,6 +86,25 @@ For the rest of this guide, there are sometimes references to a tool called
 `xvfb` and specifically when running shell commands using `xvfb-run`. When you
 develop using a Mac OS X, you can remove that part of the command. For example
 `xvfb-run echo` would just become `echo`.
+
+## Developing with Vagrant
+
+This option could be useful if you want to develop on an unsupported system
+like Windows or Red Hat Linux. Even if you are on a supported system but
+would rather not touch the system too much, Vagrant is a viable alternative.
+
+The Vagrant VM is based on Ubuntu 14.04.
+
+- [Install Vagrant](http://www.vagrantup.com/downloads.html) on your system.
+  Version 1.7.2 or higher is recommended.
+- Launch the Vagrant VM instance
+```bash
+vagrant up
+```
+- SSH to the VM
+```bash
+vagrant ssh
+```
 
 ## Tools for contributing
 
