@@ -59,6 +59,12 @@ public class DocumentTitleGetterTest extends DomDistillerJsTestCase {
         assertEquals("part with 6 words before dash", title);
     }
 
+    public void test1Dash2LongPartsChinese() {
+        String title = DocumentTitleGetter.getDocumentTitle(
+                "比較長一點的句子 - 這是不要的部分", null);
+        assertEquals("比較長一點的句子", title);
+    }
+
     public void test1DashLongAndShortParts() {
         String title = DocumentTitleGetter.getDocumentTitle(
                 "part with 6 words before dash - after dash", null);
@@ -66,10 +72,15 @@ public class DocumentTitleGetterTest extends DomDistillerJsTestCase {
     }
 
     public void test1DashShortAndLongParts() {
-        // TODO(kuan): if using RegExp.split, this fails with "ant test.prod".
         String title = DocumentTitleGetter.getDocumentTitle(
                 "before dash - part with 6 words after dash", null);
         assertEquals("part with 6 words after dash", title);
+    }
+
+    public void test1DashShortAndLongPartsChinese() {
+        String title = DocumentTitleGetter.getDocumentTitle(
+                "短語 - 比較長一點的句子", null);
+        assertEquals("比較長一點的句子", title);
     }
 
     public void test2DashesShortParts() {
@@ -97,16 +108,34 @@ public class DocumentTitleGetterTest extends DomDistillerJsTestCase {
         assertEquals("start : midway : end", title);
     }
 
+    public void test2ColonsShortPartsChinese() {
+        String title = DocumentTitleGetter.getDocumentTitle(
+                "開始 : 中間 : 最後", null);
+        assertEquals("開始 : 中間 : 最後", title);
+    }
+
     public void test2ColonsShortAndLongParts() {
         String title = DocumentTitleGetter.getDocumentTitle(
                 "start : midway : part with 6 words at end", null);
         assertEquals("part with 6 words at end", title);
     }
 
+    public void test2ColonsShortAndLongPartsChinese() {
+        String title = DocumentTitleGetter.getDocumentTitle(
+                "開始 : 中間 : 最後比較長的部分", null);
+        assertEquals("最後比較長的部分", title);
+    }
+
     public void test2ColonsShortAndLongAndShortParts() {
         String title = DocumentTitleGetter.getDocumentTitle(
                 "start : part with 6 words at midway : end", null);
         assertEquals("part with 6 words at midway : end", title);
+    }
+
+    public void test2ColonsShortAndLongAndShortPartsChinese() {
+        String title = DocumentTitleGetter.getDocumentTitle(
+                "開始 : 中間要的部分 : 最後", null);
+        assertEquals("中間要的部分 : 最後", title);
     }
 
     public void testH1WithShortText() {

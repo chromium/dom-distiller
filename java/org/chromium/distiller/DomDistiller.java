@@ -7,6 +7,8 @@ package org.chromium.distiller;
 import org.chromium.distiller.proto.DomDistillerProtos;
 import org.chromium.distiller.proto.DomDistillerProtos.DebugInfo;
 import org.chromium.distiller.proto.DomDistillerProtos.TimingInfo;
+import org.chromium.distiller.DomUtil;
+import org.chromium.distiller.StringUtil;
 
 import com.google.gwt.core.client.js.JsExport;
 import com.google.gwt.dom.client.Document;
@@ -23,6 +25,8 @@ public class DomDistiller {
     public static DomDistillerProtos.DomDistillerResult applyWithOptions(
             DomDistillerProtos.DomDistillerOptions options) {
         double startTime = DomUtil.getTime();
+        StringUtil.setWordCounter(
+                DomUtil.javascriptTextContent(Document.get().getDocumentElement()));
         DomDistillerProtos.DomDistillerResult result =
                 DomDistillerProtos.DomDistillerResult.create();
         ContentExtractor contentExtractor =
