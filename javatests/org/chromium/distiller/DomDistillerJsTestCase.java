@@ -38,5 +38,7 @@ public class DomDistillerJsTestCase extends JsTestCase {
         mRoot.appendChild(mHead);
         mBody = Document.get().createElement("body");
         mRoot.appendChild(mBody);
+         // With this, the width of chrome window won't affect the layout.
+        mRoot.getStyle().setProperty("width", "800px");
     }
 }

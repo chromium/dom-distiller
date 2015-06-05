@@ -10,6 +10,11 @@ import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.TableElement;
 
 public class TableClassifierTest extends DomDistillerJsTestCase {
+    public void testDocumentWidth() {
+        assertEquals(800, mRoot.getOffsetWidth());
+        assertEquals("800px", DomUtil.getComputedStyle(mRoot).getProperty("width"));
+    }
+
     public void testInputElement() {
         Element input = Document.get().createTextInputElement();
         mBody.appendChild(input);
@@ -294,20 +299,16 @@ public class TableClassifierTest extends DomDistillerJsTestCase {
 
     public void testWideTable() {
         TableElement table = createDefaultTableWithNoTH();
-        Element root = Document.get().getDocumentElement();
-        int width = (int) ((0.95 * root.getOffsetWidth()) + 1.0);
+        int rootWidth = mRoot.getOffsetWidth();
+        int width = (int) ((0.95 * rootWidth) + 1.0);
         table.setAttribute("style", "width:" + width + "px");
-        NodeList<Element> bodies = root.getElementsByTagName("BODY");
-        assertTrue(bodies.getLength() > 0);
-        bodies.getItem(0).appendChild(table);
+        assertEquals(rootWidth, mRoot.getOffsetWidth());
         assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
         assertEquals(TableClassifier.Reason.MORE_95_PERCENT_DOC_WIDTH, TableClassifier.sReason);
 
         // Test same wide table with viewport meta.
-        NodeList<Element> heads = root.getElementsByTagName("HEAD");
-        assertTrue(heads.getLength() > 0);
         Element meta = TestUtil.createMetaName("viewport", "width=device-width");
-        heads.getItem(0).appendChild(meta);
+        mHead.appendChild(meta);
         assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
         assertEquals(TableClassifier.Reason.LESS_EQ_10_CELLS, TableClassifier.sReason);
         meta.removeFromParent();
@@ -453,21 +454,24 @@ public class TableClassifierTest extends DomDistillerJsTestCase {
     }
 
     public void testIframeElement() {
+        int rootWidth = mRoot.getOffsetWidth();
         TableElement table = createBigDefaultTableWithNoTH();
         Element embed = Document.get().createElement("IFRAME");
         getFirstElement(table, "TD").appendChild(embed);
+        assertEquals(rootWidth, mRoot.getOffsetWidth());
         assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
         assertEquals(TableClassifier.Reason.EMBED_OBJECT_APPLET_IFRAME, TableClassifier.sReason);
     }
 
     public void testTallTable() {
         TableElement table = createBigDefaultTableWithNoTH();
-        Element root = Document.get().getDocumentElement();
-        int height = (int) ((0.90 * root.getOffsetHeight()) + 1.0);
+        // With min-height, the height of mRoot remains the same after resizing the table.
+        mRoot.getStyle().setProperty("min-height", "200px");
+        int rootHeight = mRoot.getOffsetHeight();
+        int height = (int) ((0.90 * rootHeight) + 1.0);
         table.setAttribute("style", "height:" + height + "px");
-        NodeList<Element> bodies = root.getElementsByTagName("BODY");
-        assertTrue(bodies.getLength() > 0);
-        bodies.getItem(0).appendChild(table);
+        assertEquals(height, table.getOffsetHeight());
+        assertEquals(rootHeight, mRoot.getOffsetHeight());
         assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
         assertEquals(TableClassifier.Reason.MORE_90_PERCENT_DOC_HEIGHT, TableClassifier.sReason);
     }
@@ -495,10 +499,10 @@ public class TableClassifierTest extends DomDistillerJsTestCase {
                               "</tr>" +
                           "</tbody>";
         TableElement table = createTable(tableStr);
+        mBody.appendChild(table);
         assertEquals(TableClassifier.Type.DATA, TableClassifier.table(table));
         assertEquals(TableClassifier.Reason.CAPTION_THEAD_TFOOT_COLGROUP_COL_TH,
                      TableClassifier.sReason);
-        mBody.appendChild(table);
         return table;
     }
 
@@ -514,9 +518,9 @@ public class TableClassifierTest extends DomDistillerJsTestCase {
                               "</tr>" +
                           "</tbody>";
         TableElement table = createTable(tableStr);
+        mBody.appendChild(table);
         assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
         assertEquals(TableClassifier.Reason.LESS_EQ_10_CELLS, TableClassifier.sReason);
-        mBody.appendChild(table);
         return table;
     }
 
@@ -542,9 +546,9 @@ public class TableClassifierTest extends DomDistillerJsTestCase {
                               "</tr>" +
                           "</tbody>";
         TableElement table = createTable(tableStr);
+        mBody.appendChild(table);
         assertEquals(TableClassifier.Type.DATA, TableClassifier.table(table));
         assertEquals(TableClassifier.Reason.DEFAULT, TableClassifier.sReason);
-        mBody.appendChild(table);
         return table;
     }
 
