@@ -20,6 +20,7 @@ import org.chromium.distiller.webdocument.filters.LeadImageFinder;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.NodeList;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -159,13 +160,39 @@ public class ContentExtractor {
     }
 
     /**
+     * Get the element of the main article, if any.
+     * @return An element of article (not necessarily the html5 article element).
+     */
+    private Element getArticleElement(Element root) {
+        NodeList<Element> allArticles = root.getElementsByTagName("ARTICLE");
+        // Having multiple article elements usually indicates a bad case for this shortcut.
+        // TODO(wychen): some sites exclude things like title and author in article element.
+        if (allArticles.getLength() == 1) {
+            return allArticles.getItem(0);
+        }
+        // Note that the CSS property matching is case sensitive, and "Article" is the correct
+        // capitalization.
+        String query = "[itemscope][itemtype*=\"Article\"],[itemscope][itemtype*=\"Post\"]";
+        allArticles = DomUtil.querySelectorAll(root, query);
+        // It is commonly seen that the article is wrapped separately or in multiple layers.
+        if (allArticles.getLength() > 0) {
+            return Element.as(DomUtil.getNearestCommonAncestor(allArticles));
+        }
+        return null;
+    }
+
+    /**
      * Converts the original HTML page into a WebDocument for analysis.
      */
     private WebDocumentInfo createWebDocumentInfoFromPage() {
         WebDocumentInfo info = new WebDocumentInfo();
         WebDocumentBuilder documentBuilder = new WebDocumentBuilder();
         DomConverter converter = new DomConverter(documentBuilder);
-        new DomWalker(converter).walk(documentElement);
+        Element walkerRoot = getArticleElement(documentElement);
+        if (walkerRoot == null) {
+            walkerRoot = documentElement;
+        }
+        new DomWalker(converter).walk(walkerRoot);
         info.document = documentBuilder.toWebDocument();
         ensureTitleInitialized();
         info.hiddenElements = converter.getHiddenElements();

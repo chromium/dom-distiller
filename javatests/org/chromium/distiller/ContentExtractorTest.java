@@ -138,4 +138,100 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
                      "<span><font>" + CONTENT_TEXT + "</font></span> </font>",
                 TestUtil.removeAllDirAttributes(extractedContent));
     }
+
+    private void assertExtractor(String expected, String html) {
+        mBody.setInnerHTML("");
+        Element div = TestUtil.createDiv(0);
+        mBody.appendChild(div);
+
+        div.setInnerHTML(html);
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals(expected, TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
+    public void testOnlyProcessArticleElement() {
+        final String article = "<p>" + CONTENT_TEXT + "</p><p>" + CONTENT_TEXT + "</p>";
+
+        final String html = "<h1>" + CONTENT_TEXT + "</h1><div>" + article + "</div>";
+        final String expected = "<h1>" + CONTENT_TEXT + "</h1>" + article;
+
+        // Make sure everything is there before using the fast path.
+        assertExtractor(expected, html);
+
+        final String htmlArticle =
+            "<h1>" + CONTENT_TEXT + "</h1>" +
+            "<article>" + article + "</article>";
+
+        assertExtractor(article, htmlArticle);
+    }
+
+    public void testOnlyProcessArticleElementMultiple() {
+        final String article = "<p>" + CONTENT_TEXT + "</p><p>" + CONTENT_TEXT + "</p>";
+
+        final String htmlArticle =
+            "<h1>" + CONTENT_TEXT + "</h1>" +
+            "<article>" + article + "</article>" +
+            "<article>" + article + "</article>";
+        final String expected = "<h1>" + CONTENT_TEXT + "</h1>" + article + article;
+
+        // The existence of multiple articles disables the fast path.
+        assertExtractor(expected, htmlArticle);
+    }
+
+    public void testOnlyProcessOGArticle() {
+        final String article = "<p>" + CONTENT_TEXT + "</p><p>" + CONTENT_TEXT + "</p>";
+
+        final String htmlArticle =
+            "<h1>" + CONTENT_TEXT + "</h1>" +
+            "<div itemscope itemtype=\"http://schema.org/Article\">" + article + "</div>";
+
+        assertExtractor(article, htmlArticle);
+    }
+
+    public void testOnlyProcessOGArticleNews() {
+        final String article = "<p>" + CONTENT_TEXT + "</p><p>" + CONTENT_TEXT + "</p>";
+
+        final String htmlArticle =
+            "<h1>" + CONTENT_TEXT + "</h1>" +
+            "<div itemscope itemtype=\"http://schema.org/NewsArticle\">" + article + "</div>";
+
+        assertExtractor(article, htmlArticle);
+    }
+
+    public void testOnlyProcessOGArticleBlog() {
+        final String article = "<p>" + CONTENT_TEXT + "</p><p>" + CONTENT_TEXT + "</p>";
+
+        final String htmlArticle =
+            "<h1>" + CONTENT_TEXT + "</h1>" +
+            "<div itemscope itemtype=\"http://schema.org/BlogPosting\">" + article + "</div>";
+
+        assertExtractor(article, htmlArticle);
+    }
+
+    public void testOnlyProcessOGArticleNested() {
+        final String paragraph = "<p>" + CONTENT_TEXT + "</p>";
+        final String article = paragraph + paragraph;
+
+        final String htmlArticle =
+            "<h1>" + CONTENT_TEXT + "</h1>" +
+            "<div itemscope itemtype=\"http://schema.org/Article\">" +
+                paragraph +
+                "<div itemscope itemtype=\"http://schema.org/Article\">" + paragraph + "</div>" +
+            "</div>";
+
+        assertExtractor(article, htmlArticle);
+    }
+
+    public void testOnlyProcessOGNonArticleMovie() {
+        final String article = "<p>" + CONTENT_TEXT + "</p><p>" + CONTENT_TEXT + "</p>";
+
+        final String htmlArticle =
+            "<h1>" + CONTENT_TEXT + "</h1>" +
+            "<div itemscope itemtype=\"http://schema.org/Movie\">" + article + "</div>";
+        final String expected = "<h1>" + CONTENT_TEXT + "</h1>" + article;
+
+        // Non-article schema.org types should not use the fast path.
+        assertExtractor(expected, htmlArticle);
+    }
 }

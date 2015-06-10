@@ -89,8 +89,14 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         assertEquals(0, result.size());
     }
 
+    /**
+     * The tree graph is:
+     * 1 - 2 - 3
+     *       \ 4 - 5
+     */
     public void testNearestCommonAncestor() {
         Element div = TestUtil.createDiv(1);
+        mBody.appendChild(div);
 
         Element div2 = TestUtil.createDiv(2);
         div.appendChild(div2);
@@ -104,10 +110,17 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         currDiv.appendChild(TestUtil.createDiv(5));
 
         assertEquals(div2, DomUtil.getNearestCommonAncestor(finalDiv1, currDiv.getChild(0)));
+        assertEquals(div2, DomUtil.getNearestCommonAncestor(
+                DomUtil.querySelectorAll(mRoot, "[id=\"3\"],[id=\"5\"]")));
     }
 
+    /**
+     * The tree graph is:
+     * 1 - 2 - 3
+     */
     public void testNearestCommonAncestorIsRoot() {
         Element div = TestUtil.createDiv(1);
+        mBody.appendChild(div);
 
         Element div2 = TestUtil.createDiv(2);
         div.appendChild(div2);
@@ -116,6 +129,8 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         div2.appendChild(div3);
 
         assertEquals(div, DomUtil.getNearestCommonAncestor(div, div3));
+        assertEquals(div, DomUtil.getNearestCommonAncestor(
+                DomUtil.querySelectorAll(mRoot, "[id=\"1\"],[id=\"3\"]")));
     }
 
     public void testNodeDepth() {

@@ -168,6 +168,18 @@ public class DomUtil {
     }
 
     /**
+     * Get the nearest common ancestor of nodes.
+     */
+    public static Node getNearestCommonAncestor(final NodeList ns) {
+        if (ns.getLength() == 0) return null;
+        Node parent = ns.getItem(0);
+        for (int i = 1; i < ns.getLength(); i++) {
+            parent = getNearestCommonAncestor(parent, ns.getItem(i));
+        }
+        return parent;
+    }
+
+    /**
      * Get all text from a tree/sub-tree.
      * @param node The root of the tree.
      * @return The text contained in this tree.
