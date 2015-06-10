@@ -13,37 +13,28 @@ import java.util.Set;
  * This class stores information about the page parameter detected from potential pagination URLs
  * with numeric anchor text:
  * - type of page parameter detected
+ * - URL pattern which contains a PageParameterDetector.PAGE_PARAM_PLACEHOLDER to replace the page
+ *   parameter
  * - list of pagination URLs with their page numbers
  * - coefficient and delta values of the linear formula formed by the pagination URLs:
- *     pageParamValue = coefficient * pageNum + delta.
+ *     pageParamValue = coefficient * pageNum + delta
+ * - next paging URL.
  */
-class PageParamInfo implements Cloneable {
+class PageParamInfo {
     private static final int MIN_LINKS_TO_JUSTIFY_LINEAR_MAP = 2;
-
-    static final int PAGE_NUM_ADJACENT_MASK = 1 << 0;
-    static final int PAGE_NUM_CONSECUTIVE_MASK = 1 << 1;
 
     /**
      * Stores potential pagination info:
      * - page number represented as original plain text in document URL
      * - if the info is extracted from an anchor, its HRef.
      */
-    static class PageInfo implements Comparable<PageInfo> {
+    static class PageInfo {
         int mPageNum;
         String mUrl;
 
         PageInfo(int pageNum, String url) {
             mPageNum = pageNum;
             mUrl = url;
-        }
-
-        /**
-         * Allows sorting of PageInfo by mPageNum.
-         */
-        @Override
-        public int compareTo(PageInfo other) {
-            if (mPageNum == other.mPageNum) return 0;
-            return mPageNum < other.mPageNum ? -1 : 1;
         }
 
         @Override
@@ -81,18 +72,42 @@ class PageParamInfo implements Cloneable {
         UNKNOWN,      // None of the above.
     }
 
+    /**
+     * Class returned by getPageNumbersState() after it has checked if the given list of
+     * PageLinkInfo's and PageInfo's are adjacent and consecutive, and if there's a gap in the list.
+     */
+    static class PageNumbersState {
+        boolean mIsAdjacent = false;
+        boolean mIsConsecutive = false;
+        String mNextPagingUrl = "";
+    }
+
     Type mType = Type.UNSET;
+    String mPagePattern = "";
     List<PageInfo> mAllPageInfo;
     LinearFormula mFormula = null;
+    String mNextPagingUrl = "";
 
     PageParamInfo() {
         mAllPageInfo = new ArrayList<PageInfo>();
     }
 
-    PageParamInfo(Type type, List<PageInfo> allPageInfo, LinearFormula formula) {
+    /**
+     * @return new PageParamInfo initialized according to given parameters.
+     *
+     * @param type must not be Type.UNSET.
+     * @param allPageInfo can be null.
+     * @param formula can be null.
+     * @param pagePattern must be non-empty string.
+     * @param nextPagingUrl a non-empty string or "".
+     */
+    PageParamInfo(Type type, String pagePattern, List<PageInfo> allPageInfo, LinearFormula formula,
+           String nextPagingUrl) {
         mType = type;
+        mPagePattern = pagePattern;
         mAllPageInfo = allPageInfo;
         mFormula = formula;
+        mNextPagingUrl = nextPagingUrl;
     }
 
     /**
@@ -114,26 +129,27 @@ class PageParamInfo implements Cloneable {
     static PageParamInfo evaluate(PageParameterDetector.PagePattern pagePattern,
             List<PageLinkInfo> allLinkInfo, List<PageInfo> ascendingNumbers, String firstPageUrl) {
         if (allLinkInfo.size() >= MIN_LINKS_TO_JUSTIFY_LINEAR_MAP) {
-            int result = arePageNumsAdjacentAndConsecutive(allLinkInfo, ascendingNumbers);
-            if ((result & PAGE_NUM_ADJACENT_MASK) == 0) return null;
-
-            LinearFormula linearFormula = getLinearFormula(allLinkInfo);
+            PageNumbersState state = getPageNumbersState(allLinkInfo, ascendingNumbers);
+            if (!state.mIsAdjacent) return null;
 
             // Type.PAGE_NUMBER: ascending numbers must be consecutive and form a page number
             // sequence.
-            if ((result & PAGE_NUM_CONSECUTIVE_MASK) == 0) return null;
-            if (!isPageNumberSequence(ascendingNumbers)) return null;
+            if (!state.mIsConsecutive) return null;
+            if (!isPageNumberSequence(ascendingNumbers, state)) return null;
+
+            LinearFormula linearFormula = getLinearFormula(allLinkInfo);
 
             List<PageInfo> allPageInfo = new ArrayList<PageInfo>();
             for (PageLinkInfo link : allLinkInfo) {
                 allPageInfo.add(new PageInfo(link.mPageNum,
                         ascendingNumbers.get(link.mPosInAscendingList).mUrl));
             }
-            return new PageParamInfo(Type.PAGE_NUMBER, allPageInfo, linearFormula);
+            return new PageParamInfo(Type.PAGE_NUMBER, pagePattern.toString(), allPageInfo,
+                    linearFormula, state.mNextPagingUrl);
         }
 
         // Most of news article have no more than 3 pages and the first page probably doesn't have
-        // any page parameter.  If the first page url matches the the page pattern, we treat it as
+        // any page parameter.  If the first page URL matches the the page pattern, we treat it as
         // the first page of this pattern.
         if (allLinkInfo.size() == 1 && !firstPageUrl.isEmpty()) {
             final PageLinkInfo onlyLink = allLinkInfo.get(0);
@@ -161,21 +177,16 @@ class PageParamInfo implements Cloneable {
                 allPageInfo.add(new PageInfo(1, firstPageUrl));
                 allPageInfo.add(new PageInfo(onlyLink.mPageNum,
                         ascendingNumbers.get(onlyLink.mPosInAscendingList).mUrl));
-                return new PageParamInfo(Type.PAGE_NUMBER, allPageInfo,
-                        new LinearFormula(coefficient, delta));
+                return new PageParamInfo(Type.PAGE_NUMBER, pagePattern.toString(), allPageInfo,
+                        new LinearFormula(coefficient, delta),
+                        // If third page is outlink, the next page would be that 3rd page.
+                        thirdPageIsOutlink ? allPageInfo.get(1).mUrl : "");
             }
         }
 
         return null;
     }
 
-    /**
-     * Returns a new PageParamInfo that is a clone of this object.
-     */
-    public Object clone() {
-        return new PageParamInfo(this.mType, this.mAllPageInfo, this.mFormula);
-    }
-   
     /**
      * Evaluates which PageParamInfo is better based on the properties of PageParamInfo.
      * We prefer the one if the list of PageLinkInfo forms a linear formula, see getLinearFormula().
@@ -197,19 +208,94 @@ class PageParamInfo implements Cloneable {
         return 0;
     }
 
+    /**
+     * @return true if the given URL, which is the current document URL, can be inserted as first
+     * page.
+     *
+     * Often times, the first page of paginated content does not have a page parameter to identify
+     * itself, so it is hard for us to cluster the first page into a paginated cluster.  However,
+     * while parsing the first page, we do have some extra signals that can help decide if the
+     * current page is the first page of its cluster.
+     *
+     * @param docUrl the current document URL that was parsed.
+     * @param ascendingNumbers the list of PageInfo's with ascending mPageNum's.
+     */
+    boolean canInsertFirstPage(String docUrl, List<PageInfo> ascendingNumbers) {
+        // Not enough info to determine whether the URL is fit to be first page.
+        if (mAllPageInfo.size() < 2) return false;
+
+        // Already detected first page, no need to add another one.
+        if (mAllPageInfo.get(0).mPageNum == 1) return false;
+
+        // If the current document URL is not shorter than other paginated page URL, it should have
+        // a page parameter to identify itself.  This means we could detect it as part of paginated
+        // cluster while parsing other members.
+        // On the other hand, it is still possible to be the last page of cluster.
+        if (docUrl.length() >= mAllPageInfo.get(0).mUrl.length()) return false;
+
+        // The other paginated members must be page 2 through last of paginated content, and the
+        // current document isn't detected as any one of them.
+        for (int i = 0; i < mAllPageInfo.size(); i++) {
+            if (mAllPageInfo.get(i).mPageNum != i + 2) return false;
+            if (mAllPageInfo.get(i).mUrl.equals(docUrl)) return false;
+        }
+
+        // If there is a digital outlink with anchor text "1", don't insert this URL as first page,
+        // because the first page rarely has an outlink with anchor text "1" pointing to other
+        // pages.  Normally this is the last page of paginated cluster.
+        for (PageInfo link : ascendingNumbers) {
+            if (link.mPageNum == 1 && !link.mUrl.isEmpty() && !link.mUrl.equals(docUrl)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Inserts the given URL, which is the current document URL, as first page.  Only call this
+     * if canInsertFirstPage() returns true.
+     *
+     * @param docUrl the current document URL that was parsed.
+     */
+    void insertFirstPage(String docUrl) {
+        mAllPageInfo.add(0, new PageParamInfo.PageInfo(1, docUrl));
+    }
+
+    /**
+     * Determines the next paging URL for the given document URL.
+     *
+     * @param docUrl the current document URL that was parsed.
+     */
+    void determineNextPagingUrl(String docUrl) {
+        if (!mNextPagingUrl.isEmpty() || mAllPageInfo.isEmpty()) return;
+
+        // If document URL is among mAllPageInfo, the next page is the one after.
+        boolean hasDocUrl = false;
+        for (PageInfo page : mAllPageInfo) {
+            if (hasDocUrl) {
+                mNextPagingUrl = page.mUrl;
+                return;
+            }
+            if (page.mUrl.equals(docUrl)) hasDocUrl = true;
+        }
+    }
+
     @Override
     public String toString() {  // For debugging.
        String str = new String("Type: " + mType + "\nPageInfo: " + mAllPageInfo.size());
+       str += "\npattern: " + mPagePattern;
        for (PageInfo page : mAllPageInfo) {
            str += "\n  " + page.toString();
        }
-       str += "\nformula: " + (mFormula == null ? "null" : mFormula.toString());
+       str += "\nformula: " + (mFormula == null ? "null" : mFormula.toString()) +
+              "\nnextPagingUrl: " + mNextPagingUrl;
        return str;
     }
 
     /**
-     * Detects if page numbers in list of PageLinkInfo's are adjacent, and if page numbers in list
-     * of PageInfo's are consecutive.
+     * Detects if page numbers in list of PageLinkInfo's are adjacent, if page numbers in list
+     * of PageInfo's are consecutive, and if there's a gap in the list.
      *
      * For adjacency, the page numbers in list of PageLinkInfo's must either be adjacent, or
      * separated by at most 1 plain text number which must represent the current page number in one
@@ -217,16 +303,14 @@ class PageParamInfo implements Cloneable {
      * For consecutiveness, there must be at least one pair of consecutive number values in the list
      * of PageLinkInfo's, or between a PageLinkInfo and a plain text number.
      *
-     * Returns a int value that is a combination of bits:
-     * - bit for PAGE_PARAM_ADJACENT_MASK is set if allLinkInfo are adjacent
-     * - bit for PAGE_PARAM_CONSECUTIVE_MASK is set if ascendingNumbers are consecutive.
+     * Returns a populated PageNumbersState.
      *
      * @param allLinkInfo the list of PageLinkInfo's to evaluate
      * @param ascendingNumbers list of PageInfo's with ascending mPageNum's
      */
-    static int arePageNumsAdjacentAndConsecutive(List<PageLinkInfo> allLinkInfo,
+    static PageNumbersState getPageNumbersState(List<PageLinkInfo> allLinkInfo,
             List<PageInfo> ascendingNumbers) {
-        int result = 0;
+        PageNumbersState state = new PageNumbersState();
 
         // Check if elements in allLinkInfo are adjacent or there's only 1 gap i.e. the gap is
         // current page number respresented in plain text.
@@ -242,21 +326,21 @@ class PageParamInfo implements Cloneable {
                 // If position is not strictly ascending, or the gap size is > 1 (e.g. "[3] [4] 5 6
                 // [7]"), or there's more than 1 gap (e.g. "[3] 4 [5] 6 [7]"), allLinkInfo is not
                 // adjacent.
-                if (currPos <= lastPos || currPos != lastPos + 2 || gapPos != -1) return result;
+                if (currPos <= lastPos || currPos != lastPos + 2 || gapPos != -1) return state;
                 gapPos = currPos - 1;
             }
             // Make sure page param value, i.e. page number represented in plain text, is unique.
-            if (!pageParamSet.add(linkInfo.mPageParamValue)) return result;
+            if (!pageParamSet.add(linkInfo.mPageParamValue)) return state;
             lastPos = currPos;
         }  // for all LinkInfo's
 
-        result |= PAGE_NUM_ADJACENT_MASK;
+        state.mIsAdjacent = true;
 
         // Now, determine if page numbers in ascendingNumbers are consecutive.
 
         // First, handle the gap.
         if (gapPos != -1) {
-           if (gapPos <= 0 || gapPos >= ascendingNumbers.size() - 1) return result;
+           if (gapPos <= 0 || gapPos >= ascendingNumbers.size() - 1) return state;
            // The "gap" should represent current page number in plain text.
            // Check if its adjacent page numbers are consecutive.
            // e.g. "[1] [5] 6 [7] [12]" is accepted; "[4] 8 [16]" is rejected.
@@ -264,38 +348,43 @@ class PageParamInfo implements Cloneable {
            final int currPageNum = ascendingNumbers.get(gapPos).mPageNum;
            if (ascendingNumbers.get(gapPos - 1).mPageNum == currPageNum - 1 &&
                    ascendingNumbers.get(gapPos + 1).mPageNum == currPageNum + 1) {
-               return result | PAGE_NUM_CONSECUTIVE_MASK;
+               state.mIsConsecutive = true;
+               state.mNextPagingUrl = ascendingNumbers.get(gapPos + 1).mUrl;
            }
-           return result;
+           return state;
         }
 
         // There is no gap.  Check if at least one of the following cases is satisfied:
         // Case #1: "[1] [2] ..." or "1 [2] ... ".
         if ((firstPos == 0 || firstPos == 1) && ascendingNumbers.get(0).mPageNum == 1 &&
                 ascendingNumbers.get(1).mPageNum == 2) {
-            return result | PAGE_NUM_CONSECUTIVE_MASK;
+            state.mIsConsecutive = true;
+            return state;
         }
         // Case #2: "[1] 2 [3] ..." where [1] doesn't belong to current pattern.
         if (firstPos == 2 && ascendingNumbers.get(2).mPageNum == 3 &&
                 ascendingNumbers.get(1).mUrl.isEmpty() && !ascendingNumbers.get(0).mUrl.isEmpty()) {
-            return result | PAGE_NUM_CONSECUTIVE_MASK;
+            state.mIsConsecutive = true;
+            return state;
         }
         // Case #3: "... [n-1] [n]" or "... [n - 1] n".
         final int numbersSize = ascendingNumbers.size();
         if ((lastPos == numbersSize - 1 || lastPos == numbersSize - 2) &&
                 ascendingNumbers.get(numbersSize - 2).mPageNum + 1 ==
                         ascendingNumbers.get(numbersSize - 1).mPageNum) {
-            return result | PAGE_NUM_CONSECUTIVE_MASK;
+            state.mIsConsecutive = true;
+            return state;
         }
         // Case #4: "... [i-1] [i] [i+1] ...".
         for (int i = firstPos + 1; i < lastPos; i++) {
             if (ascendingNumbers.get(i - 1).mPageNum + 2 == ascendingNumbers.get(i + 1).mPageNum) {
-                return result | PAGE_NUM_CONSECUTIVE_MASK;
+                state.mIsConsecutive = true;
+                return state;
             }
         }
 
         // Otherwise, there's no pair of consecutive values.
-        return result;
+        return state;
     }
 
     /**
@@ -352,7 +441,8 @@ class PageParamInfo implements Cloneable {
      *
      * @param ascendingNumbers list of PageInfo's with ascending mPageNum's
      */
-    private static boolean isPageNumberSequence(List<PageInfo> ascendingNumbers) {
+    private static boolean isPageNumberSequence(List<PageInfo> ascendingNumbers,
+            PageNumbersState state) {
         if (ascendingNumbers.size() <= 1) return false;
 
         // The first one must have a URL unless it is the first page.
@@ -365,6 +455,8 @@ class PageParamInfo implements Cloneable {
             if (page.mUrl.isEmpty()) {
                 if (hasPlainNum) return false;
                 hasPlainNum = true;
+            } else if (hasPlainNum && state.mNextPagingUrl.isEmpty()) {
+                state.mNextPagingUrl = page.mUrl;
             }
         }
 

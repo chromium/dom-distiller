@@ -27,7 +27,7 @@ import java.util.Set;
  * "digital" means the text contains only digits.
  * A page pattern is a paging URL whose page parameter value is replaced with a place holder
  * (PAGE_PARAM_PLACEHOLDER).
- * Example: if the original url is "http://www.foo.com/a/b-3.html", the page pattern is
+ * Example: if the original URL is "http://www.foo.com/a/b-3.html", the page pattern is
  * "http://www.foo.com/a/b-[*!].html".
  *
  * This class extracts the page parameter from a document's outlinks.
@@ -48,6 +48,8 @@ import java.util.Set;
 public class PageParameterDetector {
     static final String PAGE_PARAM_PLACEHOLDER = "[*!]";
     static final int PAGE_PARAM_PLACEHOLDER_LEN = PAGE_PARAM_PLACEHOLDER.length();
+    // The max number of paging documents for a doc, beyond which the doc is ignored.
+    static final int MAX_PAGING_DOCS = 50;
 
     /**
      * The interface that page pattern handlers must implement to detect page parameter from
@@ -64,7 +66,7 @@ public class PageParameterDetector {
         * this interface.
         */
         int getPageNumber();
-        
+
         /**
          * Validates this page pattern according to the current document URL through a pipeline of
          * rules.
@@ -114,8 +116,229 @@ public class PageParameterDetector {
         }
     }
 
+    /**
+     * Keeps track of the detection state:
+     * - best PageParamInfo detected so far
+     * - if multiple page patterns have been found.
+     */
+    private static class DetectionState {
+        PageParamInfo mBestPageParamInfo = null;
+        boolean mMultiPagePatterns = false;
+
+        DetectionState() {
+        }
+
+        DetectionState(PageParamInfo pageParamInfo) {
+            mBestPageParamInfo = pageParamInfo;
+        }
+
+        boolean isEmpty() {
+            return mBestPageParamInfo == null;
+        }
+
+        boolean hasMultiPagePatterns() {
+            return mMultiPagePatterns;
+        }
+
+        void update(DetectionState state) {
+            mBestPageParamInfo = state.mBestPageParamInfo;
+            mMultiPagePatterns = state.mMultiPagePatterns;
+        }
+
+        void compareAndUpdate(DetectionState state) {
+            if (isEmpty()) {
+                update(state);
+                return;
+            }
+
+            // Compare both PageParamInfo's.
+            int ret = mBestPageParamInfo.compareTo(state.mBestPageParamInfo);
+            if (ret == -1) {  // The formal one is better.
+                update(state);
+            } else if (ret == 0) {  // Can't decide which one is better.
+                mMultiPagePatterns = true;
+            }
+        }
+    }
+
     // All the known bad page param names.
     private static Set<String> sBadPageParamNames = null;
+
+    /**
+     * Entry point for PageParameterDetector.
+     * Creates a PageParamInfo based on outlinks and numeric text around them.
+     *
+     * @return PageParamInfo (see PageParamInfo.java), always.  If no page parameter is detected or
+     * determined to be best, its mType is PageParamInfo.Type.UNSET.
+     *
+     * @param adjacentNumbersGroups all numeric content parsed from the document, grouped by their
+     * adjacency and monotonicity (see MonotonicPageInfosGroups)
+     * @param docUrl the current document URL that was parsed
+     */
+    public static PageParamInfo detect(MonotonicPageInfosGroups adjacentNumbersGroups,
+            String docUrl) {
+        ParsedUrl parsedDocUrl = ParsedUrl.create(docUrl);
+        if (parsedDocUrl == null) return new PageParamInfo();  // Invalid document URL.
+        parsedDocUrl.setUsername("");
+        parsedDocUrl.setPassword("");
+
+        DetectionState detectionState = new DetectionState();
+        for (MonotonicPageInfosGroups.Group group : adjacentNumbersGroups.getGroups()) {
+            if (group.mList.size() < 2) continue;
+
+            DetectionState state = detectPageParamForMonotonicNumbers(group.mList,
+                    group.mDeltaSign < 0, parsedDocUrl,
+                    detectionState.isEmpty() ? "" : detectionState.mBestPageParamInfo.mPagePattern);
+            if (state != null) detectionState.compareAndUpdate(state);
+        }  // for all adjacentNumbersGroups.
+
+        if (detectionState.isEmpty()) return new PageParamInfo();
+
+        // For now, if there're multiple page patterns, we take the first one.
+        // If this doesn't work for most sites, we might have to return nothing.
+        if (detectionState.hasMultiPagePatterns() &&
+                LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_PAGING_INFO)) {
+            LogUtil.logToConsole("Detected multiple page patterns");
+        }
+
+        final PageParamInfo bestPageParamInfo = detectionState.mBestPageParamInfo;
+        bestPageParamInfo.determineNextPagingUrl(docUrl);
+        return bestPageParamInfo;
+    }
+
+    /**
+     * Detects the page parameter info for the given list of monotonic numbers.
+     *
+     * @return a populated detection state with the best PageParamInfo detected so far, null if none
+     * is detected.
+     *
+     * @param monotonicNumbers list of numeric values which are either ascending or descending;
+     * a descending list will be reversed and list elements could be mutated here.
+     * @param isDescending true for a descending monotonicNumbers
+     * @param parsedDocUrl ParsedUrl of the current document URL that was parsed
+     * @param acceptedPagePattern the best accepted URL pattern if available so far, which contains
+     * a PAGE_PARAM_PLACEHOLDER to replace the page parameter, and yields the best PageParamInfo.
+     */
+    private static DetectionState detectPageParamForMonotonicNumbers(
+            List<PageParamInfo.PageInfo> monotonicNumbers, boolean isDescending,
+            ParsedUrl parsedDocUrl, String acceptedPagePattern) {
+        // Count number of outlinks.
+        int outlinks = 0;
+        for (PageParamInfo.PageInfo pageInfo : monotonicNumbers) {
+            if (!pageInfo.mUrl.isEmpty()) outlinks++;
+        }
+        if (outlinks == 0) return null;
+
+        if (isDescending) Collections.reverse(monotonicNumbers);
+
+        // Some documents only have two partial pages, where each has a digital outlink to the
+        // other.  But we need at least 2 URLs to extract page parameters.  To handle this case, use
+        // current doc URL as the URL for the original plain text number.
+        // Note we only do this when the known digital link's page number is 1 or 2.
+        if (monotonicNumbers.size() == 2 && outlinks == 1 &&
+                monotonicNumbers.get(0).mPageNum == 1 && monotonicNumbers.get(1).mPageNum == 2) {
+            if (monotonicNumbers.get(0).mUrl.isEmpty()) {
+                monotonicNumbers.set(0, new PageParamInfo.PageInfo(1, parsedDocUrl.toString()));
+            } else {
+                monotonicNumbers.set(1, new PageParamInfo.PageInfo(2, parsedDocUrl.toString()));
+            }
+            outlinks++;  // Increment to include current document URL.
+        }
+
+        // Now, extract the the page parameter.  If feasible, insert current document URL as first
+        // page.
+        if (outlinks >= 2) {
+            DetectionState state = extractPageParam(monotonicNumbers, parsedDocUrl,
+                    acceptedPagePattern);
+            if (state != null) {
+                if (state.mBestPageParamInfo.canInsertFirstPage(parsedDocUrl.toString(),
+                        monotonicNumbers)) {
+                    state.mBestPageParamInfo.insertFirstPage(parsedDocUrl.toString());
+                }
+                return state;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Extracts page parameter from given list of ascending PageParamInfo.PageInfo's.
+     * From each PageInfo.mURL, detects the page parameter, and formulates the URL pattern which
+     * contains a PAGE_PARAM_PLACEHOLDER to replace the page parameter.
+     * For each URL pattern, validates it, compares the detected PageParamInfo with previously
+     * detected one, and updates the better one in mPageParamInfo.
+     *
+     * @return a populated detection state with the best PageParamInfo detected among all page
+     * patterns, null if none is detected.
+     *
+     * @param ascendingNumbers list of PageParamInfo.PageInfo's with ascending mPageNum's.
+     * @param parsedDocUrl ParsedUrl of the current document URL that was parsed
+     * @param acceptedPagePattern the best accepted URL pattern if available so far
+    */
+    private static DetectionState extractPageParam(List<PageParamInfo.PageInfo> ascendingNumbers,
+            ParsedUrl parsedDocUrl, String acceptedPagePattern) {
+        // Eliminate calendar date links.
+        if (areCalendarDates(ascendingNumbers)) return null;
+
+        String firstPageUrl = "";
+        PageCandidatesMap pageCandidates = new PageCandidatesMap();
+        // An array of ParsedUrl objects for URLs in ascendingNumbers' PageInfo's.
+        ParsedUrl[] parsedUrls = new ParsedUrl[ascendingNumbers.size()];
+
+        // First, try query components of URLs, looking out for first page URL.
+        for (int i = 0; i < ascendingNumbers.size(); i++) {
+            final PageParamInfo.PageInfo page = ascendingNumbers.get(i);
+            if (!page.mUrl.isEmpty()) {
+                ParsedUrl url = ParsedUrl.create(page.mUrl);
+                parsedUrls[i] = url;
+                if (url == null) continue;
+                url.setUsername("");
+                url.setPassword("");
+                extractPageParamCandidatesFromQuery(url, page.mPageNum, i, pageCandidates);
+                if (page.mPageNum == 1) firstPageUrl = page.mUrl;
+            }
+        }
+
+        // If query components yield nothing, try paths of URLs.
+        if (pageCandidates.map.isEmpty()) {
+            for (int i = 0; i < ascendingNumbers.size(); i++) {
+                final PageParamInfo.PageInfo page = ascendingNumbers.get(i);
+                if (parsedUrls[i] != null) {
+                    extractPageParamCandidatesFromPath(parsedUrls[i], page.mPageNum, i,
+                            pageCandidates);
+                }
+            }
+        }
+
+        // Determine which URL page pattern is valid with a valid, and the best, PageParamInfo.
+        DetectionState state = new DetectionState();
+        for (Map.Entry<String, PageCandidatesMap.Info> entry : pageCandidates.map.entrySet()) {
+            final String patternStr = entry.getKey();
+            final PageCandidatesMap.Info info = entry.getValue();
+            if (patternStr.equals(acceptedPagePattern) || info.mLinks.size() > MAX_PAGING_DOCS ||
+                    !info.mPattern.isValidFor(parsedDocUrl)) {
+                continue;
+            }
+
+            PageParamInfo pageParamInfo = PageParamInfo.evaluate(info.mPattern, info.mLinks,
+                    ascendingNumbers, firstPageUrl);
+            if (pageParamInfo != null) state.compareAndUpdate(new DetectionState(pageParamInfo));
+        }  // for each URL pattern in pageCandidates.
+
+        return state.isEmpty() ? null : state;
+    }
+
+    /**
+     * Returns true if given list of page numbers are calendar dates.
+     */
+    private static boolean areCalendarDates(List<PageParamInfo.PageInfo> ascendingNumbers) {
+        int possibleDateNum = 0;  // Match consecutive increasing numbers starting from 1.
+        for (PageParamInfo.PageInfo page : ascendingNumbers) {
+            if (page.mPageNum == possibleDateNum + 1) possibleDateNum++;
+        }
+        return possibleDateNum >= 28 && possibleDateNum <= 31;
+    }
 
     /**
      * Extracts page parameter candidates from the query part of given URL and adds the associated
