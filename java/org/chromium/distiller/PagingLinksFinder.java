@@ -55,7 +55,7 @@ public class PagingLinksFinder {
             "i");
     private static final RegExp REG_EXTRANEOUS = RegExp.compile(
             "print|archive|comment|discuss|e[\\-]?mail|share|reply|all|login|sign|single"
-                    + "|as one|article|post",
+                    + "|as one|article|post|篇",
             "i");
     private static final RegExp REG_PAGINATION = RegExp.compile("pag(e|ing|inat)", "i");
     private static final RegExp REG_LINK_PAGINATION =

@@ -280,6 +280,18 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         checkLinks(anchor, null, root);
     }
 
+    public void testNextChineseArticleLinks() {
+        Element root = TestUtil.createDiv(0);
+        root.setClassName("page");
+        mBody.appendChild(root);
+        AnchorElement anchor = TestUtil.createAnchor("page2", "下一篇");
+        root.appendChild(anchor);
+        assertNull(PagingLinksFinder.findNext(root, EXAMPLE_URL));
+
+        anchor.setInnerHTML("下一頁");
+        checkLinks(anchor, anchor, root);
+    }
+
     public void testNextPostLinks() {
         Element root = TestUtil.createDiv(0);
         mBody.appendChild(root);
