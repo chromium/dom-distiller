@@ -280,17 +280,28 @@ public class DomUtil {
      * Strips all "id" attributes from nodes in the tree rooted at |node|
      */
     public static void stripIds(Node node) {
-        switch (node.getNodeType()) {
-            case Node.ELEMENT_NODE:
-                Element e = Element.as(node);
-                if (e.hasAttribute("id")) {
-                    e.removeAttribute("id");
-                }
-                // Intentional fall-through.
-            case Node.DOCUMENT_NODE:
-                for (int i = 0; i < node.getChildCount(); i++) {
-                    stripIds(node.getChild(i));
-                }
+        stripAttributeFromTags(node, "ID", new String[]{"*"});
+    }
+
+    /**
+     * Strips some attribute from certain tags in the tree rooted at |rootNode|
+     * @param tagNames The tag names to be processed. ["*"] means all.
+     */
+    public static void stripAttributeFromTags(Node rootNode, String attribute, String[] tagNames) {
+        Element root = Element.as(rootNode);
+        for (String tag: tagNames) {
+            if (root.getTagName().equals(tag) || tag.equals("*")) {
+                root.removeAttribute(attribute);
+            }
+        }
+
+        for (String tag: tagNames) {
+            tag += "[" + attribute + "]";
+        }
+        String query = StringUtil.join(tagNames, ", ");
+        NodeList<Element> tags = DomUtil.querySelectorAll(root, query);
+        for (int i = 0; i < tags.getLength(); i++) {
+            tags.getItem(i).removeAttribute(attribute);
         }
     }
 
@@ -298,45 +309,21 @@ public class DomUtil {
      * Strips all "color" attributes from "font" nodes in the tree rooted at |rootNode|
      */
     public static void stripFontColorAttributes(Node rootNode) {
-        Element root = Element.as(rootNode);
-        if (root.getTagName() == "FONT")
-            root.removeAttribute("COLOR");
-
-        NodeList<Element> tags = DomUtil.querySelectorAll(root, "FONT[COLOR]");
-        for (int i = 0; i < tags.getLength(); i++) {
-            Element fontElement = tags.getItem(i);
-            fontElement.removeAttribute("COLOR");
-        }
+        stripAttributeFromTags(rootNode, "COLOR", new String[]{"FONT"});
     }
 
     /**
      * Strips all "bgcolor" attributes from table nodes in the tree rooted at |rootNode|
      */
     public static void stripTableBackgroundColorAttributes(Node rootNode) {
-        Element root = Element.as(rootNode);
-        if (root.getTagName().equals("TABLE")) {
-            root.removeAttribute("BGCOLOR");
-        }
-
-        NodeList<Element> tags = DomUtil.querySelectorAll(root,
-            "TABLE[BGCOLOR], TR[BGCOLOR], TD[BGCOLOR], TH[BGCOLOR]");
-        for (int i = 0; i < tags.getLength(); i++) {
-            tags.getItem(i).removeAttribute("BGCOLOR");
-        }
+        stripAttributeFromTags(rootNode, "BGCOLOR", new String[]{"TABLE", "TR", "TD", "TH"});
     }
 
     /**
      * Strips all "style" attributes from all nodes in the tree rooted at |rootNode|
      */
     public static void stripStyleAttributes(Node rootNode) {
-        Element root = Element.as(rootNode);
-        root.removeAttribute("STYLE");
-
-        NodeList<Element> tags = DomUtil.querySelectorAll(root, "[STYLE]");
-        for (int i = 0; i < tags.getLength(); i++) {
-            Element fontElement = tags.getItem(i);
-            fontElement.removeAttribute("STYLE");
-        }
+        stripAttributeFromTags(rootNode, "STYLE", new String[]{"*"});
     }
 
     /**

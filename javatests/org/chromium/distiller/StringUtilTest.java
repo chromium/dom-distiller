@@ -202,4 +202,14 @@ public class StringUtilTest extends JsTestCase {
         assertEquals(-1, StringUtil.toNumber("_"));
     }
 
+    public void testJoin() {
+        assertEquals("", StringUtil.join(new String[]{}, ""));
+        assertEquals("abc", StringUtil.join(new String[]{"abc"}, "def"));
+        assertEquals("", StringUtil.join(new String[]{}, "def"));
+        assertEquals("1, 2, 3", StringUtil.join(new String[]{"1", "2", "3"}, ", "));
+        assertEquals("1, 2, ", StringUtil.join(new String[]{"1", "2", ""}, ", "));
+        assertEquals(" , ,  ", StringUtil.join(new String[]{" ", "", " "}, ", "));
+        assertEquals("123", StringUtil.join(new String[]{"1", "2", "3"}, ""));
+        assertEquals("abc123def", StringUtil.join(new String[]{"abc", "def"}, "123"));
+    }
 }

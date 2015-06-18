@@ -31,6 +31,10 @@ public class StringUtil {
         return input.split(regex);
     }
 
+    public static native String join(String[] strings, String sep) /*-{
+        return strings.join(sep);
+    }-*/;
+
     public static int splitLength(String input, String regex) {
         return StringUtil.split(input, regex).length;
     }
