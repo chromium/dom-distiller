@@ -306,4 +306,42 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         DomUtil.stripTableBackgroundColorAttributes(mBody.getFirstChildElement());
         assertEquals(expected, mBody.getInnerHTML());
     }
+
+    public void testStripStyleAttributes() {
+        String html =
+            "<div style=\"font-weight: folder\">" +
+                "text" +
+            "</div>" +
+            "<table style=\"position: absolute\">" +
+                "<tbody style=\"font-size: 2\">" +
+                    "<tr style=\"z-index: 0\">" +
+                        "<th style=\"top: 0px\">text</th>" +
+                        "<th style=\"width: 20px\">text</th>" +
+                    "</tr><tr style=\"left: 0\">" +
+                        "<td style=\"display: block\">text</td>" +
+                        "<td style=\"color: #123\">text</td>" +
+                    "</tr>" +
+                "</tbody>" +
+            "</table>";
+
+        final String expected =
+            "<div>" +
+                "text" +
+            "</div>" +
+            "<table>" +
+                "<tbody>" +
+                    "<tr>" +
+                        "<th>text</th>" +
+                        "<th>text</th>" +
+                    "</tr><tr>" +
+                        "<td>text</td>" +
+                        "<td>text</td>" +
+                    "</tr>" +
+                "</tbody>" +
+            "</table>";
+
+        mBody.setInnerHTML(html);
+        DomUtil.stripStyleAttributes(mBody);
+        assertEquals(expected, mBody.getInnerHTML());
+    }
 }
