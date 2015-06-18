@@ -279,7 +279,7 @@ xvfb-run out/Debug/components_browsertests \
 
 If you need more logging, you can add the following arguments to the command:
 - Chrome browser: `--vmodule=*distiller*=2`
-- Content extractor: `--debug-level=2`
+- Content extractor: `--debug-level=99`
 
 If this is something you often do, you can put the following function in a bash
 file you include (for example `~/.bashrc`) and use it for iterative development:
@@ -354,7 +354,8 @@ extraction on a mobile device which you are currently inspecting using
 
 To add logging, you can use the LogUtil. You can use the Java function
 `LogUtil.logToConsole()`. Destination of logs:
-- `ant test`: Terminal
+- `ant test`: Terminal.
+To get more verbose output, use `ant test -Dtest.debug_level=99`.
 - Chrome browser: the Chrome log file, as set by shell variable
 `$CHROME_LOG_FILE`. A release mode build of Chrome will log all JavaScript
 `INFO` there if you start Chrome with `--enable-logging`. You can add
