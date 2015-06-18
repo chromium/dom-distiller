@@ -55,7 +55,7 @@ public class PagingLinksFinder {
             "i");
     private static final RegExp REG_EXTRANEOUS = RegExp.compile(
             "print|archive|comment|discuss|e[\\-]?mail|share|reply|all|login|sign|single"
-                    + "|as one|article",
+                    + "|as one|article|post",
             "i");
     private static final RegExp REG_PAGINATION = RegExp.compile("pag(e|ing|inat)", "i");
     private static final RegExp REG_LINK_PAGINATION =
@@ -107,6 +107,7 @@ public class PagingLinksFinder {
         String wndLocationHref = StringUtil.findAndReplace(original_url, "\\/$", "");
         NodeList<Element> allLinks = root.getElementsByTagName("A");
         Set<PagingLinkObj> possiblePages = new HashSet<PagingLinkObj>();
+        Set<String> bannedUrls = new HashSet<String>();
 
         AnchorElement baseAnchor = createAnchorWithBase(getBaseUrlForRelative(root, original_url));
 
@@ -172,8 +173,16 @@ public class PagingLinksFinder {
             String linkText = DomUtil.getInnerText(link);
 
             // If the linkText looks like it's not the next or previous page, skip it.
-            if (REG_EXTRANEOUS.test(linkText) || linkText.length() > 25) {
+            if (linkText.length() > 25) {
+                appendDbgStrForLink(link, "ignored: link text too long");
+                continue;
+            }
+
+            // If the linkText contains banned text, skip it, and also ban other anchors with the
+            // same link URL.
+            if (REG_EXTRANEOUS.test(linkText)) {
                 appendDbgStrForLink(link, "ignored: one of extra");
+                bannedUrls.add(linkHref);
                 continue;
             }
 
@@ -324,6 +333,9 @@ public class PagingLinksFinder {
         PagingLinkObj topPage = null;
         if (!possiblePages.isEmpty()) {
             for (PagingLinkObj pageObj : possiblePages) {
+                if (bannedUrls.contains(pageObj.mLinkHref)) {
+                    continue;
+                }
                 if (pageObj.mScore >= 50 && (topPage == null || topPage.mScore < pageObj.mScore)) {
                     topPage = pageObj;
                 }

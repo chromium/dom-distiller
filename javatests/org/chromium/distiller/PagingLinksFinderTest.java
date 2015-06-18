@@ -143,10 +143,10 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         AnchorElement anchor1 = TestUtil.createAnchor("page2", "dummy link");
         AnchorElement anchor2 = TestUtil.createAnchor("page2", "next page");
         root.appendChild(anchor1);
-        root.appendChild(anchor2);
+        checkLinks(null, null, root);
 
-        // anchor1 by itself is not a confident next page link, but anchor2's link text helps bump
-        // up the score for the shared href, so anchor1 is now a confident next page link.
+        // anchor1 is not a confident next page link, but anchor2 is due to the link text.
+        root.appendChild(anchor2);
         checkLinks(anchor1, null, root);
     }
 
@@ -266,8 +266,24 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
     public void testNextArticleLinks() {
         Element root = TestUtil.createDiv(0);
         mBody.appendChild(root);
-        AnchorElement anchor = TestUtil.createAnchor(
-                TestUtil.formHrefWithWindowLocationPath("page2"), "next article");
+        AnchorElement anchor = TestUtil.createAnchor("page2", "next article");
+        root.appendChild(anchor);
+        assertNull(PagingLinksFinder.findNext(root, EXAMPLE_URL));
+
+        // The banned word "article" also affects anchor2 because it has the same hRef as anchor.
+        AnchorElement anchor2 = TestUtil.createAnchor("page2", "next page");
+        root.appendChild(anchor2);
+        assertNull(PagingLinksFinder.findNext(root, EXAMPLE_URL));
+
+        // Removing the banned word revives the link.
+        anchor.setInnerHTML("next thing");
+        checkLinks(anchor, null, root);
+    }
+
+    public void testNextPostLinks() {
+        Element root = TestUtil.createDiv(0);
+        mBody.appendChild(root);
+        AnchorElement anchor = TestUtil.createAnchor("page2", "next post");
         root.appendChild(anchor);
         assertNull(PagingLinksFinder.findNext(root, EXAMPLE_URL));
     }
@@ -275,10 +291,12 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
     public void testAsOneLinks() {
         Element root = TestUtil.createDiv(0);
         mBody.appendChild(root);
-        AnchorElement anchor = TestUtil.createAnchor(
-                TestUtil.formHrefWithWindowLocationPath("page2"), "view as one page");
+        AnchorElement anchor = TestUtil.createAnchor("page2", "view as one page");
         root.appendChild(anchor);
         assertNull(PagingLinksFinder.findNext(root, EXAMPLE_URL));
+
+        anchor.setInnerHTML("next");
+        checkLinks(anchor, null, root);
     }
 
     public void testLinksWithLongText() {
