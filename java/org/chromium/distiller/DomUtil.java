@@ -248,19 +248,29 @@ public class DomUtil {
         }
         makeAllSrcAttributesAbsolute(root);
 
-        handleSrcSetAttribute(root);
+        makeSrcSetAbsolute(root);
     }
 
-    private static void handleSrcSetAttribute(Element root) {
+    private static void makeSrcSetAbsolute(Element root) {
         NodeList<Element> imgs = DomUtil.querySelectorAll(root, "IMG[SRCSET]");
         for (int i = 0; i < imgs.getLength(); i++) {
-            handleSrcSetAttribute(ImageElement.as(imgs.getItem(i)));
+            makeSrcSetAbsolute(ImageElement.as(imgs.getItem(i)));
         }
     }
 
-    // TODO(wychen): make all srcset attributes absolute
-    public static void handleSrcSetAttribute(ImageElement ie) {
-        ie.removeAttribute("srcset");
+    public static void makeSrcSetAbsolute(ImageElement ie) {
+        String oldsrc = ie.getSrc();
+        String[] sizes = StringUtil.jsSplit(ie.getAttribute("srcset"), ",");
+        for(int i = 0; i < sizes.length; i++) {
+            String size = StringUtil.jsTrim(sizes[i]);
+            if (size.isEmpty()) continue;
+            String[] comp = size.split(" ");
+            ie.setSrc(comp[0]);
+            comp[0] = ie.getSrc();
+            sizes[i] = StringUtil.join(comp, " ");
+        }
+        ie.setAttribute("srcset", StringUtil.join(sizes, ", "));
+        ie.setSrc(oldsrc);
     }
 
     /**

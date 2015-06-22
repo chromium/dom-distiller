@@ -31,6 +31,10 @@ public class StringUtil {
         return input.split(regex);
     }
 
+    public static native String[] jsSplit(String input, String sep) /*-{
+        return input.split(sep);
+    }-*/;
+
     public static native String join(String[] strings, String sep) /*-{
         return strings.join(sep);
     }-*/;

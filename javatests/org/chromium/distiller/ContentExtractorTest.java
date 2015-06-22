@@ -87,23 +87,27 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
     }
 
     public void testImageWithSrcset() {
+        // Test the absolute and different kinds of relative URLs for image sources,
+        // and also add an extra comma (,) as malformed srcset syntax for robustness.
         final String html =
             "<h1>" + CONTENT_TEXT + "</h1>" +
-            "<img src=\"image\" srcset=\"image200 200w, image400 400w\">" +
+            "<img src=\"image\" srcset=\"image200 200w, //example.org/image400 400w\">" +
             "<table role=\"grid\"><tbody><tr><td>" +
-                "<img src=\"image\" srcset=\"image200 200w, image400 400w\">" +
+                "<img src=\"/image\" srcset=\"https://example.com/image2x 2x, /image4x 4x,\">" +
                 "</td></tr></tbody></table>" +
             "<p>" + CONTENT_TEXT + "</p>";
 
         final String expected =
             "<h1>" + CONTENT_TEXT + "</h1>" +
-            "<img src=\"http://example.com/image\">" +
+            "<img src=\"http://example.com/path/image\" " +
+                 "srcset=\"http://example.com/path/image200 200w, http://example.org/image400 400w\">" +
             "<table role=\"grid\"><tbody><tr><td>" +
-                "<img src=\"http://example.com/image\">" +
+                "<img src=\"http://example.com/image\" " +
+                     "srcset=\"https://example.com/image2x 2x, http://example.com/image4x 4x, \">" +
             "</td></tr></tbody></table>" +
             "<p>" + CONTENT_TEXT + "</p>";
 
-        mHead.setInnerHTML("<base href=\"http://example.com/\">");
+        mHead.setInnerHTML("<base href=\"http://example.com/path/\">");
         mBody.setInnerHTML(html);
 
         ContentExtractor extractor = new ContentExtractor(mRoot);

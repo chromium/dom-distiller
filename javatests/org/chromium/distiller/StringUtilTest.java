@@ -202,6 +202,24 @@ public class StringUtilTest extends JsTestCase {
         assertEquals(-1, StringUtil.toNumber("_"));
     }
 
+    public void testJsSplit() {
+        assertArrayEquals(new String[]{""}, StringUtil.jsSplit("", ","));
+        assertArrayEquals(new String[]{"1", " 2", " 3"}, StringUtil.jsSplit("1, 2, 3", ","));
+        assertArrayEquals(new String[]{"1", "2", "3,4"}, StringUtil.jsSplit("1, 2, 3,4", ", "));
+
+        // Separator is not regex in jsSplit:
+        assertArrayEquals(new String[]{"1", "2"}, StringUtil.jsSplit("1.*2", ".*"));
+        assertArrayEquals(new String[]{}, "1.*2".split(".*"));
+
+        assertArrayEquals(new String[]{"1", "2", ""}, StringUtil.jsSplit("1,2,", ","));
+        // Note the different behavior of Java String.split().
+        assertArrayEquals(new String[]{"1", "2"}, "1,2,".split(","));
+
+        assertArrayEquals(new String[]{"1", " 2", " "}, StringUtil.jsSplit("1, 2, ", ","));
+        // Note the same behavior of Java String.split().
+        assertArrayEquals(new String[]{"1", " 2", " "}, "1, 2, ".split(","));
+    }
+
     public void testJoin() {
         assertEquals("", StringUtil.join(new String[]{}, ""));
         assertEquals("abc", StringUtil.join(new String[]{"abc"}, "def"));

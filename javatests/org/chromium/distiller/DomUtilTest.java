@@ -256,7 +256,8 @@ public class DomUtilTest extends DomDistillerJsTestCase {
 
         final String expected =
             "<a href=\"http://example.com/link\"></a>" +
-            "<img src=\"http://example.com/image\">" +
+            "<img src=\"http://example.com/image\" " +
+              "srcset=\"http://example.com/image200 200w, http://example.com/image400 400w\">" +
             "<video src=\"http://example.com/video\" poster=\"http://example.com/poster\">" +
             "<source src=\"http://example.com/source\">" +
             "<track src=\"http://example.com/track\"></track>" +

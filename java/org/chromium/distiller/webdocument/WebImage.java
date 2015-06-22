@@ -45,8 +45,7 @@ public class WebImage extends WebElement {
         if (textOnly) return "";
         Element container = Document.get().createDivElement();
         ImageElement ie = ImageElement.as(Element.as(imgElement.cloneNode(false)));
-        ie.setSrc(ie.getSrc()); // Get the absolute src and give it back to the image.
-        DomUtil.handleSrcSetAttribute(ie);
+        DomUtil.makeSrcSetAbsolute(ie);
         container.appendChild(ie);
         return container.getInnerHTML();
     }
