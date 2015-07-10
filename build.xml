@@ -117,6 +117,7 @@
     <mkdir dir="war/WEB-INF/classes"/>
     <javac includes="**" encoding="utf-8"
         destdir="war/WEB-INF/classes"
+        includeantruntime="false"
         source="1.7" target="1.7" nowarn="true"
         debug="true" debuglevel="lines,vars,source">
       <src refid="project.java.path"/>
@@ -196,6 +197,7 @@
   <target name="javac.jstests" depends="javac, protoc.tests" description="Compile test code">
     <mkdir dir="war/WEB-INF/jstest/classes"/>
     <javac includes="**" encoding="utf-8"
+      includeantruntime="false"
       source="1.7" target="1.7" nowarn="true"
       destdir="war/WEB-INF/jstest/classes"
       debug="true" debuglevel="lines,vars,source">
