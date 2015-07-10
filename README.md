@@ -50,7 +50,10 @@ Install the dependencies by entering the `dom-distiller` folder and running:
 ```bash
 sudo ./install-build-deps.sh
 ```
-
+If you have multiple JDKs installed, select the right JDK version by running:
+```bash
+source ./select-jdk.sh
+```
 Ubuntu 14.04 64-bit is recommended.
 
 ## Developing on Mac OS X
