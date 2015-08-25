@@ -143,6 +143,267 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
                 TestUtil.removeAllDirAttributes(extractedContent));
     }
 
+    public void testPreserveOrderedList() {
+        Element outerListTag = Document.get().createElement("OL");
+        mBody.appendChild(outerListTag);
+
+        outerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        outerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        outerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        outerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals("<OL>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                     "</OL>",
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
+    public void testPreserveNestedOrderedList() {
+        Element outerListTag = Document.get().createElement("OL");
+        Element outerListItem = Document.get().createElement("LI");
+
+        Element innerListTag = Document.get().createElement("OL");
+        innerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        innerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        innerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        innerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+
+        outerListItem.appendChild(innerListTag);
+        outerListTag.appendChild(outerListItem);
+        outerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+
+        mBody.appendChild(outerListTag);
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals("<OL>" +
+                        "<LI>" +
+                          "<OL>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                          "</OL>" +
+                        "</LI>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                     "</OL>",
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
+    public void testPreserveNestedOrderedListWithOtherElementsInside() {
+        Element outerListTag = Document.get().createElement("OL");
+        Element outerListItem = Document.get().createElement("LI");
+        outerListItem.appendChild(TestUtil.createText(CONTENT_TEXT));
+        outerListItem.appendChild(TestUtil.createParagraph(CONTENT_TEXT));
+
+        Element innerListTag = Document.get().createElement("OL");
+        innerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        innerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        innerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        innerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        innerListTag.appendChild(TestUtil.createParagraph(""));
+
+        outerListItem.appendChild(innerListTag);
+        outerListTag.appendChild(outerListItem);
+        outerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        outerListTag.appendChild(TestUtil.createParagraph(CONTENT_TEXT));
+
+        mBody.appendChild(outerListTag);
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals("<OL>" +
+                        "<LI>" + CONTENT_TEXT +
+                          "<p>" + CONTENT_TEXT + "</p>" +
+                          "<OL>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                          "</OL>" +
+                        "</LI>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                        "<p>" + CONTENT_TEXT + "</p>" +
+                     "</OL>",
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
+    public void testPreserveUnorderedList() {
+        Element outerListTag = Document.get().createElement("UL");
+        mBody.appendChild(outerListTag);
+
+        outerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        outerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        outerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        outerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals("<UL>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                     "</UL>",
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
+    public void testPreserveNestedUnorderedList() {
+        Element outerListTag = Document.get().createElement("UL");
+        Element outerListItem = Document.get().createElement("LI");
+
+        Element innerListTag = Document.get().createElement("UL");
+        innerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        innerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        innerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        innerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+
+        outerListItem.appendChild(innerListTag);
+        outerListTag.appendChild(outerListItem);
+        outerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+
+        mBody.appendChild(outerListTag);
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals("<UL>" +
+                        "<LI>" +
+                          "<UL>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                          "</UL>" +
+                        "</LI>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                     "</UL>",
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
+    public void testPreserveNestedUnorderedListWithOtherElementsInside() {
+        Element outerListTag = Document.get().createElement("UL");
+        Element outerListItem = Document.get().createElement("LI");
+        outerListItem.appendChild(TestUtil.createText(CONTENT_TEXT));
+        outerListItem.appendChild(TestUtil.createParagraph(CONTENT_TEXT));
+
+        Element innerListTag = Document.get().createElement("UL");
+        innerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        innerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        innerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        innerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        innerListTag.appendChild(TestUtil.createParagraph(""));
+
+        outerListItem.appendChild(innerListTag);
+        outerListTag.appendChild(outerListItem);
+        outerListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        outerListTag.appendChild(TestUtil.createParagraph(CONTENT_TEXT));
+
+        mBody.appendChild(outerListTag);
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals("<UL>" +
+                        "<LI>" + CONTENT_TEXT +
+                          "<p>" + CONTENT_TEXT + "</p>" +
+                          "<UL>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                          "</UL>" +
+                        "</LI>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                        "<p>" + CONTENT_TEXT + "</p>" +
+                     "</UL>",
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
+    public void testPreserveUnorderedListWithNestedOrderedList() {
+        Element unorderedListTag = Document.get().createElement("UL");
+        Element li = Document.get().createElement("LI");
+        Element orderedList = Document.get().createElement("OL");
+        orderedList.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        orderedList.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        li.appendChild(orderedList);
+        unorderedListTag.appendChild(li);
+        unorderedListTag.appendChild(TestUtil.createListItem(CONTENT_TEXT));
+        mBody.appendChild(unorderedListTag);
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals("<UL>" +
+                        "<LI>" +
+                          "<OL>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                            "<LI>" + CONTENT_TEXT + "</LI>" +
+                          "</OL>" +
+                        "</LI>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                     "</UL>",
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
+    public void testMalformedListStructureWithExtraLITagEnd() {
+        Element unorderedListTag = Document.get().createElement("UL");
+        String html = "<LI>" +  CONTENT_TEXT + "</LI></LI><LI>" + CONTENT_TEXT + "</LI>";
+        unorderedListTag.setInnerHTML(html);
+        mBody.appendChild(unorderedListTag);
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals("<UL>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                     "</UL>",
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
+    public void testMalformedListStructureWithExtraLITagStart() {
+        Element unorderedListTag = Document.get().createElement("OL");
+        String html = "<LI><LI>" + CONTENT_TEXT + "</LI><LI>" + CONTENT_TEXT + "</LI>";
+        unorderedListTag.setInnerHTML(html);
+        mBody.appendChild(unorderedListTag);
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals("<OL>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                     "</OL>",
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
+    public void testMalformedListStructureWithExtraOLTagStart() {
+        Element unorderedListTag = Document.get().createElement("OL");
+        String html = "<OL><LI>" + CONTENT_TEXT + "</LI><LI>" + CONTENT_TEXT + "</LI>";
+        unorderedListTag.setInnerHTML(html);
+        mBody.appendChild(unorderedListTag);
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals("<OL>" +
+                        "<OL>" +
+                          "<LI>" + CONTENT_TEXT + "</LI>" +
+                          "<LI>" + CONTENT_TEXT + "</LI>" +
+                        "</OL>" +
+                     "</OL>",
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
+    public void testMalformedListStructureWithoutLITag(){
+        Element orderedListTag = Document.get().createElement("OL");
+        String html = "<LI>" + CONTENT_TEXT + "</LI>" +
+                       CONTENT_TEXT +
+                      "<LI>" + CONTENT_TEXT + "</LI>";
+        orderedListTag.setInnerHTML(html);
+        mBody.appendChild(orderedListTag);
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals("<OL>" +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                         CONTENT_TEXT +
+                        "<LI>" + CONTENT_TEXT + "</LI>" +
+                     "</OL>" ,
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
     private void assertExtractor(String expected, String html) {
         mBody.setInnerHTML("");
         Element div = TestUtil.createDiv(0);

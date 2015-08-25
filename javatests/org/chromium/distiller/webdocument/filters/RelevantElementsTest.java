@@ -5,12 +5,10 @@
 package org.chromium.distiller.webdocument.filters;
 
 import org.chromium.distiller.DomDistillerJsTestCase;
-import org.chromium.distiller.webdocument.TestWebTextBuilder;
 import org.chromium.distiller.webdocument.TestWebDocumentBuilder;
 import org.chromium.distiller.webdocument.WebDocument;
 import org.chromium.distiller.webdocument.WebElement;
 import org.chromium.distiller.webdocument.WebImage;
-import org.chromium.distiller.webdocument.WebText;
 import org.chromium.distiller.webdocument.WebTable;
 
 

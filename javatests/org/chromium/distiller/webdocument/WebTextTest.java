@@ -91,4 +91,19 @@ public class WebTextTest extends DomDistillerJsTestCase {
         String want = "<p>Words<br>split<br>with<br>lines</p>";
         assertEquals(want, TestUtil.removeAllDirAttributes(got));
     }
+
+    public void testGenerateOutputLIElements() {
+        Element container = Document.get().createLIElement();
+        mBody.appendChild(container);
+
+        container.appendChild(TestUtil.createText("Some text content 1."));
+
+        WebTextBuilder builder = new WebTextBuilder();
+        builder.textNode(Text.as(container.getChild(0)), 0);
+
+        WebText text = builder.build(0);
+        String got = text.generateOutput(false);
+        String want = "Some text content 1.";
+        assertEquals(want, TestUtil.removeAllDirAttributes(got));
+    }
 }

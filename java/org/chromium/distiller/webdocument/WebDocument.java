@@ -29,6 +29,10 @@ public class WebDocument {
         elements.add(table);
     }
 
+    public void addTag(WebTag tag) {
+        elements.add(tag);
+    }
+
     public void addEmbed(WebElement embed) {
         elements.add(embed);
     }

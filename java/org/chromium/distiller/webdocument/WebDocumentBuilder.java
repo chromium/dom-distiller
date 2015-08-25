@@ -115,6 +115,12 @@ public class WebDocumentBuilder implements WebDocumentBuilderInterface {
     }
 
     @Override
+    public void tag(WebTag tag) {
+        flushBlock(groupNumber);
+        document.addTag(tag);
+    }
+
+    @Override
     public void embed(WebElement embedNode) {
         flushBlock(groupNumber);
         document.addEmbed(embedNode);

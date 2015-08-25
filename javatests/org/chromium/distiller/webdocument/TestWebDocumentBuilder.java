@@ -56,6 +56,18 @@ public class TestWebDocumentBuilder {
         return wi;
     }
 
+    public WebTag addTagStart() {
+        WebTag webTag = new WebTag("OL", WebTag.TagType.START);
+        document.addTag(webTag);
+        return webTag;
+    }
+
+    public WebTag addTagEnd() {
+        WebTag webTag = new WebTag("OL", WebTag.TagType.END);
+        document.addTag(webTag);
+        return webTag;
+    }
+
     public WebDocument build() {
         return document;
     }

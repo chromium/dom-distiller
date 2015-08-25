@@ -120,6 +120,18 @@ public class TestUtil {
         return s;
     }
 
+    public static Element createParagraph(String value) {
+        Element s = Document.get().createElement("P");
+        s.setInnerHTML(value);
+        return s;
+    }
+
+    public static Element createListItem(String value) {
+        Element s = Document.get().createElement("LI");
+        s.setInnerText(value);
+        return s;
+    }
+
     private static void createDivTreeImpl(Element e, int depth, List<Element> divs) {
         if (depth > 2) return;
         for (int i = 0; i < 2; i++) {

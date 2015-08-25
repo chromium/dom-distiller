@@ -16,6 +16,7 @@ import org.chromium.distiller.webdocument.WebDocumentBuilder;
 import org.chromium.distiller.webdocument.WebImage;
 import org.chromium.distiller.webdocument.filters.RelevantElements;
 import org.chromium.distiller.webdocument.filters.LeadImageFinder;
+import org.chromium.distiller.webdocument.filters.NestedElementRetainer;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -93,6 +94,7 @@ public class ContentExtractor {
         processDocument(documentInfo.document);
         RelevantElements.process(documentInfo.document);
         LeadImageFinder.process(documentInfo.document);
+        NestedElementRetainer.process(documentInfo.document);
 
         List<WebImage> images = documentInfo.document.getContentImages();
         for (WebImage wi : images) {

@@ -69,10 +69,16 @@ public class WebText extends WebElement {
         DomUtil.stripIds(clonedRoot);
         DomUtil.stripFontColorAttributes(clonedRoot);
 
+        // Since there are tag elements that are being wrapped
+        // by a pair of {@link WebTag}s, we only need to
+        // get the innerHTML, otherwise these tags would be duplicated.
+        Element elementClonedRoot = Element.as(clonedRoot);
         if (textOnly) {
-            return Element.as(clonedRoot).getInnerText();
+            return elementClonedRoot.getInnerText();
+        } else if (WebTag.canBeNested(elementClonedRoot.getTagName())) {
+            return elementClonedRoot.getInnerHTML();
         }
-        return Element.as(clonedRoot).getString();
+        return elementClonedRoot.getString();
     }
 
     public List<Node> getTextNodes() {

@@ -152,4 +152,39 @@ public class DomConverterTest extends DomDistillerJsTestCase {
         String html = "text<br>split<br/>with<br/>lines";
         runTest(html, "text\nsplit\nwith\nlines");
     }
+
+    public void testList() throws Throwable {
+        Element container = Document.get().createDivElement();
+        container.setInnerHTML("<ol><li>some text1</li><li>some text2</li></ol>");
+
+        WebDocumentBuilder builder = new WebDocumentBuilder();
+        DomConverter converter = new DomConverter(builder);
+        new DomWalker(converter).walk(container);
+
+        WebDocument doc = builder.toWebDocument();
+        List<WebElement> elements = doc.getElements();
+
+        assertEquals(8, elements.size());
+        assertTrue(elements.get(0) instanceof WebTag);
+        assertTrue(((WebTag) elements.get(0)).isStartTag());
+
+        assertTrue(elements.get(1) instanceof WebTag);
+        assertTrue(((WebTag) elements.get(1)).isStartTag());
+
+        assertTrue(elements.get(2) instanceof WebText);
+
+        assertTrue(elements.get(3) instanceof WebTag);
+        assertFalse(((WebTag) elements.get(3)).isStartTag());
+
+        assertTrue(elements.get(4) instanceof WebTag);
+        assertTrue(((WebTag) elements.get(4)).isStartTag());
+
+        assertTrue(elements.get(5) instanceof WebText);
+
+        assertTrue(elements.get(6) instanceof WebTag);
+        assertFalse(((WebTag) elements.get(6)).isStartTag());
+
+        assertTrue(elements.get(7) instanceof WebTag);
+        assertFalse(((WebTag) elements.get(7)).isStartTag());
+    }
 }

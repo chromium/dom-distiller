@@ -99,6 +99,11 @@ public class DomConverter implements DomWalker.Visitor {
             }
         }
 
+        // Create a placeholder for the elements we want to preserve.
+        if (WebTag.canBeNested(e.getTagName())) {
+            builder.tag(new WebTag(e.getTagName(), WebTag.TagType.START));
+        }
+
         switch (e.getTagName()) {
             case "BR":
                 builder.lineBreak(e);
@@ -142,6 +147,12 @@ public class DomConverter implements DomWalker.Visitor {
 
     @Override
     public void exit(Node n) {
+        if (n.getNodeType() == Node.ELEMENT_NODE) {
+            Element e = Element.as(n);
+            if (WebTag.canBeNested(e.getTagName())) {
+                builder.tag(new WebTag(e.getTagName(), WebTag.TagType.END));
+            }
+        }
         builder.endElement();
     }
 
