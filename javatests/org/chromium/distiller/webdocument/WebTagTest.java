@@ -15,9 +15,9 @@ public class WebTagTest extends DomDistillerJsTestCase {
 
     public void testULGenerateOutput() {
         WebTag ulStartWebTag = new WebTag("ul", WebTag.TagType.START);
-        WebTag u = new WebTag("ul", WebTag.TagType.END);
+        WebTag ulEndWebTag = new WebTag("ul", WebTag.TagType.END);
         String startResult = ulStartWebTag.generateOutput(false);
-        String endResult = u.generateOutput(false);
+        String endResult = ulEndWebTag.generateOutput(false);
         assertEquals(startResult, "<ul>");
         assertEquals(endResult, "</ul>");
     }
@@ -31,10 +31,22 @@ public class WebTagTest extends DomDistillerJsTestCase {
         assertEquals(endResult, "</li>");
     }
 
-    public void testShouldGetInnerHTML() {
+    public void testBlockquoteGenerateOutput() {
+        WebTag blockquoteStartWebTag = new WebTag("blockquote",
+                WebTag.TagType.START);
+        WebTag blockquoteEndWebTag = new WebTag("blockquote",
+                WebTag.TagType.END);
+        String startResult = blockquoteStartWebTag.generateOutput(false);
+        String endResult = blockquoteEndWebTag.generateOutput(false);
+        assertEquals(startResult, "<blockquote>");
+        assertEquals(endResult, "</blockquote>");
+    }
+
+    public void testCanBeNested() {
         assertTrue(WebTag.canBeNested("LI"));
         assertTrue(WebTag.canBeNested("UL"));
         assertTrue(WebTag.canBeNested("OL"));
+        assertTrue(WebTag.canBeNested("BLOCKQUOTE"));
         assertFalse(WebTag.canBeNested("SPAN"));
     }
 }

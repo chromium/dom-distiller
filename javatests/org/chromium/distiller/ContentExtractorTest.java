@@ -404,6 +404,40 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
                 TestUtil.removeAllDirAttributes(extractedContent));
     }
 
+    public void testPreserveChildElementWithinBlockquote() {
+        Element blockquote = Document.get().createElement("BLOCKQUOTE");
+        mBody.appendChild(blockquote);
+
+        blockquote.appendChild(TestUtil.createParagraph(CONTENT_TEXT
+                + CONTENT_TEXT + CONTENT_TEXT + CONTENT_TEXT));
+
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals("<BLOCKQUOTE>" +
+                       "<p>" + CONTENT_TEXT + CONTENT_TEXT
+                        + CONTENT_TEXT + CONTENT_TEXT + "</p>" +
+                     "</BLOCKQUOTE>",
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
+    public void testPreserveChildrenElementsWithinBlockquote() {
+        Element blockquote = Document.get().createElement("BLOCKQUOTE");
+        mBody.appendChild(blockquote);
+
+        blockquote.appendChild(TestUtil.createParagraph(CONTENT_TEXT));
+        blockquote.appendChild(TestUtil.createParagraph(CONTENT_TEXT));
+        blockquote.appendChild(TestUtil.createParagraph(CONTENT_TEXT));
+
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals("<BLOCKQUOTE>" +
+                        "<p>" + CONTENT_TEXT + "</p>" +
+                        "<p>" + CONTENT_TEXT + "</p>" +
+                        "<p>" + CONTENT_TEXT + "</p>" +
+                     "</BLOCKQUOTE>",
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
     private void assertExtractor(String expected, String html) {
         mBody.setInnerHTML("");
         Element div = TestUtil.createDiv(0);

@@ -21,6 +21,7 @@ public class WebTag extends WebElement {
         nestingTags.add("UL");
         nestingTags.add("OL");
         nestingTags.add("LI");
+        nestingTags.add("BLOCKQUOTE");
     }
 
     public WebTag(String tagName, TagType tagType) {
