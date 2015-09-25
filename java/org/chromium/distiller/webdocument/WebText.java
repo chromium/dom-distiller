@@ -68,6 +68,7 @@ public class WebText extends WebElement {
         DomUtil.makeAllLinksAbsolute(clonedRoot);
         DomUtil.stripIds(clonedRoot);
         DomUtil.stripFontColorAttributes(clonedRoot);
+        DomUtil.stripStyleAttributes(clonedRoot);
 
         // Since there are tag elements that are being wrapped
         // by a pair of {@link WebTag}s, we only need to

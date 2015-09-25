@@ -143,6 +143,53 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
                 TestUtil.removeAllDirAttributes(extractedContent));
     }
 
+    public void testRemoveStyleAttributes() {
+        String html =
+            "<h1 style=\"font-weight: folder\">" +
+                CONTENT_TEXT +
+            "</h1>" +
+            "<p style=\"\">" +
+                CONTENT_TEXT +
+            "</p>" +
+            "<table style=\"position: absolute\">" +
+                "<tbody style=\"font-size: 2\">" +
+                    "<tr style=\"z-index: 0\">" +
+                        "<th style=\"top: 0px\">" + CONTENT_TEXT + "</th>" +
+                        "<th style=\"width: 20px\">" + CONTENT_TEXT + "</th>" +
+                    "</tr><tr style=\"left: 0\">" +
+                        "<td style=\"display: block\">" + CONTENT_TEXT + "</td>" +
+                        "<td style=\"color: #123\">" + CONTENT_TEXT + "</td>" +
+                    "</tr>" +
+                "</tbody>" +
+            "</table>";
+
+        final String expected =
+            "<h1>" +
+                CONTENT_TEXT +
+            "</h1>" +
+            "<p>" +
+                CONTENT_TEXT +
+            "</p>" +
+            "<table>" +
+                "<tbody>" +
+                    "<tr>" +
+                        "<th>" + CONTENT_TEXT + "</th>" +
+                        "<th>" + CONTENT_TEXT + "</th>" +
+                    "</tr><tr>" +
+                        "<td>" + CONTENT_TEXT + "</td>" +
+                        "<td>" + CONTENT_TEXT + "</td>" +
+                    "</tr>" +
+                "</tbody>" +
+            "</table>";
+
+        mBody.setInnerHTML(html);
+
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals(expected,
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
     public void testPreserveOrderedList() {
         Element outerListTag = Document.get().createElement("OL");
         mBody.appendChild(outerListTag);
