@@ -54,6 +54,18 @@ public class ParsedUrlTest extends JsTestCase {
         assertEquals("http://www.foo.com/path0/path1/;pathParams?qA=B&qC=D", url.toString());
     }
 
+    public void testSetHash() {
+        ParsedUrl url = ParsedUrl.create(VALID_URL + "#jumpToFoo");
+        assertTrue(url != null);
+        assertEquals("#jumpToFoo", url.getHash());
+        url.setHash("dontJumpToFoo");
+        assertEquals("#dontJumpToFoo", url.getHash());
+        assertEquals(VALID_URL + "#dontJumpToFoo", url.toString());
+        url.setHash("");
+        assertEquals("", url.getHash());
+        assertEquals(VALID_URL, url.toString());
+    }
+
     public void testReplaceQueryValue() {
         ParsedUrl url = ParsedUrl.create(VALID_URL);
         assertTrue(url != null);

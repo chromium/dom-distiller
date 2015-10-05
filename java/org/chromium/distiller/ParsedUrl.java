@@ -51,12 +51,20 @@ public final class ParsedUrl {
             return this.password;
         }-*/;
 
+        private final native String getHash() /*-{
+            return this.hash;
+        }-*/;
+
         private final native String setUsername(String username) /*-{
             this.username = username;
         }-*/;
 
         private final native String setPassword(String password) /*-{
             this.password = password;
+        }-*/;
+
+        private final native String setHash(String hash) /*-{
+            this.hash = hash;
         }-*/;
 
         private final native String replaceQueryValue(String queryName, String currentQueryValue,
@@ -141,6 +149,14 @@ public final class ParsedUrl {
     }
 
     /**
+     * Returns URLUtils.hash.
+     */
+    public final String getHash() {
+        return mUrl.getHash();
+    }
+
+    /**
+    /**
      * Returns a array of components broken down from URLUtils.path without the part after ';'.
      */
     public final String[] getPathComponents() {
@@ -191,6 +207,13 @@ public final class ParsedUrl {
      */
     public final String setPassword(String password) {
         return mUrl.setPassword(password);
+    }
+
+    /**
+     * Sets URLUtils.hash.
+     */
+    public final String setHash(String hash) {
+        return mUrl.setHash(hash);
     }
 
     /**

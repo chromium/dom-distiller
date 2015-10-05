@@ -37,13 +37,11 @@ class MonotonicPageInfosGroups {
     }
 
     /**
-     * Add a PageParamInfo.PageInfo for the given page number and URL, ensuring the group stays
-     * monotonic:
+     * Add the given PageParamInfo.PageInfo, ensuring the group stays monotonic:
      * - add in the current group if the page number is strictly increasing or decreasing
      * - otherwise, start a new group.
      */
-    void addNumber(int number, String url) {
-        PageParamInfo.PageInfo pageInfo = new PageParamInfo.PageInfo(number, url);
+    void addPageInfo(PageParamInfo.PageInfo pageInfo) {
         Group group = getLastGroup();
         if (group.mList.isEmpty()) {
             group.mList.add(pageInfo);
@@ -72,6 +70,14 @@ class MonotonicPageInfosGroups {
         group.mList.add(pageInfo);
         mPrevPageInfo = pageInfo;
         group.mDeltaSign = deltaSign;
+    }
+
+    /**
+     * Add a PageParamInfo.PageInfo for the given page number and URL, ensuring the group stays
+     * monotonic.
+     */
+    void addNumber(int number, String url) {
+        addPageInfo(new PageParamInfo.PageInfo(number, url));
     }
 
     void cleanup() {
