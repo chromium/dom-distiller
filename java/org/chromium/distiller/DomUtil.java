@@ -112,8 +112,9 @@ public class DomUtil {
     }-*/;
 
     public static native double getTime() /*-{
-        // window.performance is unavailable in Gwt's dev environment.
-        if (window.performance) {
+        // window.performance is unavailable in Gwt's dev environment and even referencing it on iOS
+        // causes a crash.
+        if ((typeof distiller_on_ios === 'undefined' || !distiller_on_ios) && window.performance) {
           return window.performance.now();
         }
         return Date.now();
