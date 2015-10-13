@@ -47,7 +47,9 @@ public class DomDistiller {
             result.addContentImages().setUrl(url);
         }
 
-        String original_url = options.hasOriginalUrl() ? options.getOriginalUrl() : Window.Location.getHref();
+        // iOS doesn't support reading window.location.href, so we use document.URL instead.
+        String original_url =
+                options.hasOriginalUrl() ? options.getOriginalUrl() : Document.get().getURL();
         TimingInfo timingInfo = contentExtractor.getTimingInfo();
         double stPaging = DomUtil.getTime();
         result.setPaginationInfo(PagingLinksFinder.getPaginationInfo(original_url));
