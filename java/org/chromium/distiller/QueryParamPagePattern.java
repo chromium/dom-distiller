@@ -32,10 +32,10 @@ public class QueryParamPagePattern implements PageParameterDetector.PagePattern 
     /**
      * Returns a new QueryParamPagePattern if url is valid and page param is in the query.
      */
-    static PageParameterDetector.PagePattern create(ParsedUrl url, String queryName,
-            String queryValue) {
+    static PageParameterDetector.PagePattern create(ParsedUrl url, boolean isFirstQueryParam,
+            String queryName, String queryValue) {
         try {
-            return new QueryParamPagePattern(url, queryName, queryValue);
+            return new QueryParamPagePattern(url, isFirstQueryParam, queryName, queryValue);
         } catch (IllegalArgumentException e) {
             return null;
         }
@@ -108,7 +108,13 @@ public class QueryParamPagePattern implements PageParameterDetector.PagePattern 
         if (!url.startsWith(mPrefix)) return false;
 
         // If the url doesn't have page number query, it is fine.
-        if (mPlaceholderSegmentStart == suffixStart) return true;
+        // Also, if page pattern is http://foo.com/a/?page=[*!] ('/' just before '?'),
+        // returns true for http://foo.com/a.
+        if (mPlaceholderSegmentStart == suffixStart ||
+                (suffixStart == mPlaceholderSegmentStart - 1 &&
+                 mUrlStr.charAt(suffixStart) == '/')) {
+            return true;
+        }
 
         // If the only difference in the page param between url and pattern is "/", ".htm" or
         // ".html", it is fine.
@@ -127,8 +133,10 @@ public class QueryParamPagePattern implements PageParameterDetector.PagePattern 
         return PageParameterDetector.isPlainNumber(url.substring(mPlaceholderStart, suffixStart));
     }
 
-    private QueryParamPagePattern(ParsedUrl url, String queryName, String queryValue)
-            throws IllegalArgumentException {
+    private static RegExp sHrefCleaner = null;
+
+    private QueryParamPagePattern(ParsedUrl url, boolean isFirstQueryParam, String queryName,
+            String queryValue) throws IllegalArgumentException {
         if (queryName.isEmpty()) throw new IllegalArgumentException("Empty query name");
         if (queryValue.isEmpty()) throw new IllegalArgumentException("Empty query value");
         if (!StringUtil.isStringAllDigits(queryValue)) {
@@ -143,7 +151,7 @@ public class QueryParamPagePattern implements PageParameterDetector.PagePattern 
             throw new IllegalArgumentException("Query value is an invalid number: " + queryValue);
         }
 
-        String pattern = url.replaceQueryValue(queryName, queryValue,
+        String pattern = url.replaceQueryValue(isFirstQueryParam, queryName, queryValue,
                 PageParameterDetector.PAGE_PARAM_PLACEHOLDER);
         mUrl = ParsedUrl.create(pattern);
         if (mUrl == null) throw new IllegalArgumentException("Invalid URL: " + pattern);
@@ -155,7 +163,8 @@ public class QueryParamPagePattern implements PageParameterDetector.PagePattern 
         if (mPlaceholderSegmentStart == -1) {  // Page param is the first query.
             mPlaceholderSegmentStart = mQueryStart;
         }
-        mPrefix = mUrlStr.substring(0, mPlaceholderSegmentStart);
+        if (sHrefCleaner == null) sHrefCleaner = RegExp.compile("\\/$");
+        mPrefix = sHrefCleaner.replace(mUrlStr.substring(0, mPlaceholderSegmentStart) , "");
         // Determine suffix, if available.
         final int urlLen = mUrlStr.length();
         mSuffixLen = urlLen - mPlaceholderStart - PageParameterDetector.PAGE_PARAM_PLACEHOLDER_LEN;

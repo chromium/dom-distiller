@@ -5,6 +5,7 @@
 package org.chromium.distiller;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.regexp.shared.RegExp;
 
 /**
  * Wraps a javascript URL object and its URLUtils properties, with additional methods and instance
@@ -25,6 +26,10 @@ public final class ParsedUrl {
             } catch (e) {
                 return null;
             }
+        }-*/;
+
+        private final native String getHref() /*-{
+            return this.href;
         }-*/;
 
         private final native String getHost() /*-{
@@ -67,10 +72,11 @@ public final class ParsedUrl {
             this.hash = hash;
         }-*/;
 
-        private final native String replaceQueryValue(String queryName, String currentQueryValue,
-                String newQueryValue) /*-{
-            return this.href.replace(queryName + "=" + currentQueryValue,
-                    queryName + "=" + newQueryValue);
+        private final native String replaceQueryValue(boolean isFirstQueryParam, String queryName,
+                String currentQueryValue, String newQueryValue) /*-{
+            var queryNameWithSeps = (isFirstQueryParam ? "?" : "&") + queryName + "=";
+            return this.href.replace(queryNameWithSeps + currentQueryValue,
+                    queryNameWithSeps + newQueryValue);
         }-*/;
 
         /**
@@ -216,13 +222,24 @@ public final class ParsedUrl {
         return mUrl.setHash(hash);
     }
 
+    private static RegExp sHrefCleaner = null;
+
+    /**
+     * Returns URLUtils.href without trailing '/'.
+     */
+    public final String getCleanHref() {
+        if (sHrefCleaner == null) sHrefCleaner = RegExp.compile("\\/$");
+        return sHrefCleaner.replace(mUrl.getHref(), "");
+    }
+
     /**
      * Replaces the specified name-value query parameter with the new query value.
      * Returns the new HRef.  The original HRef is not mutated.
      */
-    public final String replaceQueryValue(String queryName, String currentQueryValue,
-            String newQueryValue) {
-       return mUrl.replaceQueryValue(queryName, currentQueryValue, newQueryValue);
+    public final String replaceQueryValue(boolean isFirstQueryParam, String queryName,
+            String currentQueryValue, String newQueryValue) {
+       return mUrl.replaceQueryValue(isFirstQueryParam, queryName, currentQueryValue,
+               newQueryValue);
     }
 
     @Override

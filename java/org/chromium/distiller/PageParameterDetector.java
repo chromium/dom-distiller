@@ -48,8 +48,13 @@ import java.util.Set;
 public class PageParameterDetector {
     static final String PAGE_PARAM_PLACEHOLDER = "[*!]";
     static final int PAGE_PARAM_PLACEHOLDER_LEN = PAGE_PARAM_PLACEHOLDER.length();
-    // The max number of paging documents for a doc, beyond which the doc is ignored.
-    static final int MAX_PAGING_DOCS = 50;
+    // The max number of paging documents for a document, beyond which the document is ignored and
+    // pagination detection is aborted.
+    // The original heuristic has this at 50, but it fails one of the URLs in the
+    // multi-page-golden-data.sstable dataset: http://m.worldstarhiphop.com/apple/index.php?pg=13,
+    // where there're always 100 pagination outlinks available regardless of which page you're
+    // looking at.
+    static final int MAX_PAGING_DOCS = 100;
 
     /**
      * The interface that page pattern handlers must implement to detect page parameter from
@@ -245,18 +250,9 @@ public class PageParameterDetector {
             outlinks++;  // Increment to include current document URL.
         }
 
-        // Now, extract the the page parameter.  If feasible, insert current document URL as first
-        // page.
+        // Now, extract the the page parameter.
         if (outlinks >= 2) {
-            DetectionState state = extractPageParam(monotonicNumbers, parsedDocUrl,
-                    acceptedPagePattern);
-            if (state != null) {
-                if (state.mBestPageParamInfo.canInsertFirstPage(parsedDocUrl.toString(),
-                        monotonicNumbers)) {
-                    state.mBestPageParamInfo.insertFirstPage(parsedDocUrl.toString());
-                }
-                return state;
-            }
+            return extractPageParam(monotonicNumbers, parsedDocUrl, acceptedPagePattern);
         }
 
         return null;
@@ -323,7 +319,23 @@ public class PageParameterDetector {
 
             PageParamInfo pageParamInfo = PageParamInfo.evaluate(info.mPattern, info.mLinks,
                     ascendingNumbers, firstPageUrl);
-            if (pageParamInfo != null) state.compareAndUpdate(new DetectionState(pageParamInfo));
+            if (pageParamInfo == null) continue;
+
+            // If feasible, insert current document URL as first page.
+            // Otherwise, we enhance the heuristic: if current document URL fits the paging pattern
+            // of the potential pagination URLs, consider it as first page too.
+            final String docUrl = parsedDocUrl.getCleanHref();
+            if (pageParamInfo.canInsertFirstPage(docUrl, ascendingNumbers)) {
+                pageParamInfo.insertFirstPage(docUrl);
+            } else if (info.mPattern.isPagingUrl(docUrl)) {
+                final PageParamInfo.PageInfo firstPage = pageParamInfo.mAllPageInfo.get(0);
+                if (firstPage.mPageNum == 2 && !firstPage.mUrl.equals(docUrl) &&
+                        docUrl.length() < firstPage.mUrl.length()) {
+                    pageParamInfo.insertFirstPage(docUrl);
+                }
+            }
+
+            state.compareAndUpdate(new DetectionState(pageParamInfo));
         }  // for each URL pattern in pageCandidates.
 
         return state.isEmpty() ? null : state;
@@ -360,8 +372,10 @@ public class PageParameterDetector {
         String[][] queryParams = url.getQueryParams();
         if (queryParams.length == 0) return;  // No query.
 
-        for (String[] nameValue : queryParams) {
-            PagePattern pattern = QueryParamPagePattern.create(url, nameValue[0], nameValue[1]);
+        for (int i = 0; i < queryParams.length; i++) {
+            String[] nameValue = queryParams[i];
+            PagePattern pattern = QueryParamPagePattern.create(url, i == 0, nameValue[0],
+                    nameValue[1]);
             if (pattern != null) {
                 pageCandidates.add(pattern,
                         new PageLinkInfo(pageNum, pattern.getPageNumber(), posInAscendingNumbers));

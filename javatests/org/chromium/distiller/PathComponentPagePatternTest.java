@@ -23,9 +23,6 @@ public class PathComponentPagePatternTest extends DomDistillerJsTestCase {
         assertTrue(isPagingUrl("http://www.foo.com/a-p-1-c-3", "http://www.foo.com/a-p-[*!]-c-3"));
         assertFalse(isPagingUrl("http://www.foo.com/a/abc-page", "http://www.foo.com/a/abc-[*!]"));
         assertFalse(isPagingUrl("http://www.foo.com/a/2", "http://www.foo.com/a/abc-[*!]"));
-        assertFalse(isPagingUrl("http://www.foo.com/a", "http://www.foo.com/a/abc-[*!]"));
-        assertFalse(isPagingUrl("http://www.foo.com/a/abc.html",
-                                "http://www.foo.com/a/abc[*!].html"));
 
         assertTrue(isPagingUrl("http://www.foo.com/a/page/2", "http://www.foo.com/a/page/[*!]"));
         assertTrue(isPagingUrl("http://www.foo.com/a", "http://www.foo.com/a/page/[*!]"));

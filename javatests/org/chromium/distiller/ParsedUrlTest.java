@@ -71,7 +71,7 @@ public class ParsedUrlTest extends JsTestCase {
         assertTrue(url != null);
         assertEquals("?qA=B&qC=D", url.getQuery());
         assertEquals("http://fooUser:fooPwd@www.foo.com/path0/path1/;pathParams?qA=E&qC=D",
-                url.replaceQueryValue("qA", "B", "E"));
+                url.replaceQueryValue(true, "qA", "B", "E"));
         // Original query shouldn't change.
         assertEquals("?qA=B&qC=D", url.getQuery());
     }

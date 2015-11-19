@@ -218,7 +218,7 @@ public class PathComponentPagePattern implements PageParameterDetector.PagePatte
         int commonSuffixLen = 0;
         for (int i = str1.length() - 1, j = str2.length() - 1;
              i > startIndex && j > startIndex; i--, j--, commonSuffixLen++) {
-            if (str1.charAt(i) != str2.charAt(i)) break;
+            if (str1.charAt(i) != str2.charAt(j)) break;
         }
         return commonSuffixLen;
     }
@@ -294,6 +294,8 @@ public class PathComponentPagePattern implements PageParameterDetector.PagePatte
                     isPageParamSeparator(mUrlStr.charAt(firstDiffPos))) {
                 return true;
             }
+            // If the url doesn't have page parameter, it is fine.
+            if (firstDiffPos + mSuffix.length() == urlLen) return true;
         } else if (firstDiffPos == mPlaceholderStart) {  // First different character is page param.
             if (PageParameterDetector.isPlainNumber(url.substring(firstDiffPos, suffixStart))) {
                 return true;

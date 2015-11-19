@@ -61,13 +61,14 @@ public class QueryParamPagePatternTest extends DomDistillerJsTestCase {
         ParsedUrl url = ParsedUrl.create(patternStr);
         String[][] queryParams = url.getQueryParams();
         assertTrue(queryParams.length > 0);
-        for (String[] nameValue : queryParams) {
+        for (int i = 0; i < queryParams.length; i++) {
+            final String[] nameValue = queryParams[i];
             final String queryName = nameValue[0];
             final String queryValue = nameValue[1];
             if (queryValue.contains(PageParameterDetector.PAGE_PARAM_PLACEHOLDER)) {
                 return QueryParamPagePattern.create(ParsedUrl.create(
-                        url.replaceQueryValue(queryName, queryValue, PAGE_PARAM_VALUE)),
-                        queryName, PAGE_PARAM_VALUE);
+                        url.replaceQueryValue(i == 0, queryName, queryValue, PAGE_PARAM_VALUE)),
+                        i == 0, queryName, PAGE_PARAM_VALUE);
             }
         }
         return null;
