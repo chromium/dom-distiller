@@ -48,12 +48,30 @@ public class DomDistiller {
         }
 
         // iOS doesn't support reading window.location.href, so we use document.URL instead.
-        String original_url =
+        String originalUrl =
                 options.hasOriginalUrl() ? options.getOriginalUrl() : Document.get().getURL();
         TimingInfo timingInfo = contentExtractor.getTimingInfo();
         double stPaging = DomUtil.getTime();
-        result.setPaginationInfo(PagingLinksFinder.getPaginationInfo(original_url));
+        String paginationAlgo = options.hasPaginationAlgo() ? options.getPaginationAlgo() : "next";
+        if (paginationAlgo.equals("pagenum")) {
+            PageParamInfo paramInfo = PageParameterParser.parse(originalUrl, timingInfo);
+            DomDistillerProtos.PaginationInfo info = DomDistillerProtos.PaginationInfo.create();
+            String next = paramInfo.mNextPagingUrl;
+            if (!next.isEmpty()) {
+                info.setNextPage(next);
+            }
+            result.setPaginationInfo(info);
+            if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_PAGING_INFO)) {
+                LogUtil.logToConsole("paging by pagenum: " + paramInfo.toString());
+            }
+        } else {
+            if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_PAGING_INFO)) {
+                LogUtil.logToConsole("paging by next");
+            }
+            result.setPaginationInfo(PagingLinksFinder.getPaginationInfo(originalUrl));
+        }
         LogUtil.addTimingInfo(stPaging, timingInfo, "Pagination");
+
         result.setMarkupInfo(contentExtractor.getMarkupParser().getMarkupInfo());
         timingInfo.setTotalTime(DomUtil.getTime() - startTime);
         result.setTimingInfo(timingInfo);

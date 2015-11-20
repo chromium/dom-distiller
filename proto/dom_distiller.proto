@@ -105,4 +105,9 @@ message DomDistillerOptions {
   // The original URL of the page, which is used in the heuristics in
   // detecting next/prev page links.
   optional string original_url = 3;
+
+  // Which algorithm to use for next page detection:
+  // "next" : detect anchors with "next" text
+  // "pagenum" : detect anchors with numeric page numbers
+  optional string pagination_algo = 4;
 }
