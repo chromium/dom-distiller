@@ -13,33 +13,13 @@ public class WebTagTest extends DomDistillerJsTestCase {
         assertEquals(endResult, "</ol>");
     }
 
-    public void testULGenerateOutput() {
-        WebTag ulStartWebTag = new WebTag("ul", WebTag.TagType.START);
-        WebTag ulEndWebTag = new WebTag("ul", WebTag.TagType.END);
-        String startResult = ulStartWebTag.generateOutput(false);
-        String endResult = ulEndWebTag.generateOutput(false);
-        assertEquals(startResult, "<ul>");
-        assertEquals(endResult, "</ul>");
-    }
-
-    public void testLIGenerateOutput() {
-        WebTag liStartWebTag = new WebTag("li", WebTag.TagType.START);
-        WebTag liEndWebTag = new WebTag("li", WebTag.TagType.END);
-        String startResult = liStartWebTag.generateOutput(false);
-        String endResult = liEndWebTag.generateOutput(false);
-        assertEquals(startResult, "<li>");
-        assertEquals(endResult, "</li>");
-    }
-
-    public void testBlockquoteGenerateOutput() {
-        WebTag blockquoteStartWebTag = new WebTag("blockquote",
-                WebTag.TagType.START);
-        WebTag blockquoteEndWebTag = new WebTag("blockquote",
-                WebTag.TagType.END);
-        String startResult = blockquoteStartWebTag.generateOutput(false);
-        String endResult = blockquoteEndWebTag.generateOutput(false);
-        assertEquals(startResult, "<blockquote>");
-        assertEquals(endResult, "</blockquote>");
+    public void testGenerateOutput() {
+        WebTag startWebTag = new WebTag("anytext", WebTag.TagType.START);
+        WebTag endWebTag = new WebTag("anytext", WebTag.TagType.END);
+        String startResult = startWebTag.generateOutput(false);
+        String endResult = endWebTag.generateOutput(false);
+        assertEquals(startResult, "<anytext>");
+        assertEquals(endResult, "</anytext>");
     }
 
     public void testCanBeNested() {
@@ -47,6 +27,7 @@ public class WebTagTest extends DomDistillerJsTestCase {
         assertTrue(WebTag.canBeNested("UL"));
         assertTrue(WebTag.canBeNested("OL"));
         assertTrue(WebTag.canBeNested("BLOCKQUOTE"));
+        assertTrue(WebTag.canBeNested("PRE"));
         assertFalse(WebTag.canBeNested("SPAN"));
     }
 }

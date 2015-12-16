@@ -498,6 +498,17 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
                 TestUtil.removeAllDirAttributes(extractedContent));
     }
 
+    public void testDiscardBlockquoteWithoutContent() {
+        assertExtractor("", "<BLOCKQUOTE></BLOCKQUOTE>");
+    }
+
+    public void testPreservePre() {
+        final String article = CONTENT_TEXT + CONTENT_TEXT + CONTENT_TEXT;
+        final String html = "<h1>" + CONTENT_TEXT + "</h1><PRE><kbd>" + article + "</kbd></PRE>";
+
+        assertExtractor(html, html);
+    }
+
     private void assertExtractor(String expected, String html) {
         mBody.setInnerHTML("");
         Element div = TestUtil.createDiv(0);
