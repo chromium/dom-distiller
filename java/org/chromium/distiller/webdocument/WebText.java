@@ -69,6 +69,7 @@ public class WebText extends WebElement {
         DomUtil.stripIds(clonedRoot);
         DomUtil.stripFontColorAttributes(clonedRoot);
         DomUtil.stripStyleAttributes(clonedRoot);
+        // TODO(wychen): if we allow images in WebText later, add stripImageElements().
 
         // Since there are tag elements that are being wrapped
         // by a pair of {@link WebTag}s, we only need to

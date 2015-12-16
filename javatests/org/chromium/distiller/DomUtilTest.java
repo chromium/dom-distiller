@@ -248,6 +248,7 @@ public class DomUtilTest extends DomDistillerJsTestCase {
             "<html><head><base href=\"http://example.com/\"></head><body>" +
             "<a href=\"link\"></a>" +
             "<img src=\"image\" srcset=\"image200 200w, image400 400w\">" +
+            "<img src=\"image2\">" +
             "<video src=\"video\" poster=\"poster\">" +
             "<source src=\"source\">" +
             "<track src=\"track\"></track>" +
@@ -258,6 +259,7 @@ public class DomUtilTest extends DomDistillerJsTestCase {
             "<a href=\"http://example.com/link\"></a>" +
             "<img src=\"http://example.com/image\" " +
               "srcset=\"http://example.com/image200 200w, http://example.com/image400 400w\">" +
+            "<img src=\"http://example.com/image2\">" +
             "<video src=\"http://example.com/video\" poster=\"http://example.com/poster\">" +
             "<source src=\"http://example.com/source\">" +
             "<track src=\"http://example.com/track\"></track>" +
@@ -343,6 +345,22 @@ public class DomUtilTest extends DomDistillerJsTestCase {
 
         mBody.setInnerHTML(html);
         DomUtil.stripStyleAttributes(mBody);
+        assertEquals(expected, mBody.getInnerHTML());
+    }
+
+    public void testStripImageElements() {
+        String html =
+            "<img id=\"a\" alt=\"alt\" dir=\"rtl\" title=\"t\" style=\"typo\" align=\"left\"" +
+                    "src=\"image\" class=\"a\" srcset=\"image200 200w\" data-dummy=\"a\">" +
+            "<img mulformed=\"nothing\" data-empty data-dup=\"1\" data-dup=\"2\"" +
+                    "src=\"image\" src=\"second\">";
+
+        final String expected =
+            "<img alt=\"alt\" dir=\"rtl\" title=\"t\" src=\"image\" srcset=\"image200 200w\">" +
+            "<img src=\"image\">";
+
+        mBody.setInnerHTML(html);
+        DomUtil.stripImageElements(Node.as(mBody));
         assertEquals(expected, mBody.getInnerHTML());
     }
 }

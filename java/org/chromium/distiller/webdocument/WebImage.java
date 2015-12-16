@@ -43,9 +43,13 @@ public class WebImage extends WebElement {
     @Override
     public String generateOutput(boolean textOnly) {
         if (textOnly) return "";
-        Element container = Document.get().createDivElement();
+
         ImageElement ie = ImageElement.as(Element.as(imgElement.cloneNode(false)));
+        ie.setSrc(ie.getSrc());
         DomUtil.makeSrcSetAbsolute(ie);
+        DomUtil.stripImageElement(ie);
+
+        Element container = Document.get().createDivElement();
         container.appendChild(ie);
         return container.getInnerHTML();
     }

@@ -216,6 +216,7 @@ public class DomUtil {
         stripFontColorAttributes(clonedSubtree);
         stripTableBackgroundColorAttributes(clonedSubtree);
         stripStyleAttributes(clonedSubtree);
+        stripImageElements(clonedSubtree);
 
         if (textOnly) {
             return DomUtil.getTextFromTree(clonedSubtree);
@@ -260,8 +261,14 @@ public class DomUtil {
     }
 
     public static void makeSrcSetAbsolute(ImageElement ie) {
+        String srcset = ie.getAttribute("srcset");
+        if (srcset == "") {
+            ie.removeAttribute("srcset");
+            return;
+        }
+
         String oldsrc = ie.getSrc();
-        String[] sizes = StringUtil.jsSplit(ie.getAttribute("srcset"), ",");
+        String[] sizes = StringUtil.jsSplit(srcset, ",");
         for(int i = 0; i < sizes.length; i++) {
             String size = StringUtil.jsTrim(sizes[i]);
             if (size.isEmpty()) continue;
@@ -272,6 +279,33 @@ public class DomUtil {
         }
         ie.setAttribute("srcset", StringUtil.join(sizes, ", "));
         ie.setSrc(oldsrc);
+    }
+
+    public static void stripImageElements(Node root) {
+        NodeList<Element> imgs = DomUtil.querySelectorAll(root, "IMG");
+        for (int i = 0; i < imgs.getLength(); i++) {
+            stripImageElement(ImageElement.as(imgs.getItem(i)));
+        }
+    }
+
+    /**
+     * Only keep some attributes for image elements.
+     * @param ie The image element to strip in-place.
+     */
+    public static void stripImageElement(ImageElement imgElement) {
+        JsArray<Node> attrs = getAttributes(imgElement);
+        for (int i = 0; i < attrs.length(); ) {
+            String name = attrs.get(i).getNodeName();
+            if (!"src".equals(name) &&
+                !"alt".equals(name) &&
+                !"srcset".equals(name) &&
+                !"dir".equals(name) &&
+                !"title".equals(name)) {
+                imgElement.removeAttribute(name);
+            } else {
+                i++;
+            }
+        }
     }
 
     /**

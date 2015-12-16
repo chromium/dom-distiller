@@ -86,14 +86,18 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
                 MARKUP_PARSER_TITLE, extractor.extractTitle());
     }
 
-    public void testImageWithSrcset() {
+    public void testImage() {
         // Test the absolute and different kinds of relative URLs for image sources,
         // and also add an extra comma (,) as malformed srcset syntax for robustness.
+        // Also test images in WebImage and WebTable.
+        // TODO(wychen): add images in WebText when it is supported.
         final String html =
             "<h1>" + CONTENT_TEXT + "</h1>" +
-            "<img src=\"image\" srcset=\"image200 200w, //example.org/image400 400w\">" +
+            "<img id=\"a\" style=\"typo\" align=\"left\" src=\"image\" srcset=\"image200 200w, //example.org/image400 400w\">" +
+            "<img id=\"b\" style=\"align: left\" alt=\"b\" data-dummy=\"c\" src=\"image2\">" +
             "<table role=\"grid\"><tbody><tr><td>" +
-                "<img src=\"/image\" srcset=\"https://example.com/image2x 2x, /image4x 4x,\">" +
+                "<img id=\"c\" style=\"a\" alt=\"b\" src=\"/image\" srcset=\"https://example.com/image2x 2x, /image4x 4x,\">" +
+                "<img id=\"d\" style=\"a\" align=\"left\" src=\"/image2\">" +
                 "</td></tr></tbody></table>" +
             "<p>" + CONTENT_TEXT + "</p>";
 
@@ -101,9 +105,11 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
             "<h1>" + CONTENT_TEXT + "</h1>" +
             "<img src=\"http://example.com/path/image\" " +
                  "srcset=\"http://example.com/path/image200 200w, http://example.org/image400 400w\">" +
+            "<img alt=\"b\" src=\"http://example.com/path/image2\">" +
             "<table role=\"grid\"><tbody><tr><td>" +
-                "<img src=\"http://example.com/image\" " +
+                "<img alt=\"b\" src=\"http://example.com/image\" " +
                      "srcset=\"https://example.com/image2x 2x, http://example.com/image4x 4x, \">" +
+                "<img src=\"http://example.com/image2\">" +
             "</td></tr></tbody></table>" +
             "<p>" + CONTENT_TEXT + "</p>";
 
@@ -151,10 +157,13 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
             "<p style=\"\">" +
                 CONTENT_TEXT +
             "</p>" +
+            "<img style=\"align: left\" src=\"/test.png\">" +
             "<table style=\"position: absolute\">" +
                 "<tbody style=\"font-size: 2\">" +
                     "<tr style=\"z-index: 0\">" +
-                        "<th style=\"top: 0px\">" + CONTENT_TEXT + "</th>" +
+                        "<th style=\"top: 0px\">" + CONTENT_TEXT +
+                            "<img style=\"align: left\" src=\"/test.png\">" +
+                        "</th>" +
                         "<th style=\"width: 20px\">" + CONTENT_TEXT + "</th>" +
                     "</tr><tr style=\"left: 0\">" +
                         "<td style=\"display: block\">" + CONTENT_TEXT + "</td>" +
@@ -170,10 +179,13 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
             "<p>" +
                 CONTENT_TEXT +
             "</p>" +
+            "<img src=\"http://example.com/test.png\">" +
             "<table>" +
                 "<tbody>" +
                     "<tr>" +
-                        "<th>" + CONTENT_TEXT + "</th>" +
+                        "<th>" + CONTENT_TEXT +
+                            "<img src=\"http://example.com/test.png\">" +
+                        "</th>" +
                         "<th>" + CONTENT_TEXT + "</th>" +
                     "</tr><tr>" +
                         "<td>" + CONTENT_TEXT + "</td>" +
@@ -182,6 +194,7 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
                 "</tbody>" +
             "</table>";
 
+        mHead.setInnerHTML("<base href=\"http://example.com/\">");
         mBody.setInnerHTML(html);
 
         ContentExtractor extractor = new ContentExtractor(mRoot);
