@@ -85,7 +85,7 @@ class CppConverterWriter(writer.CodeWriter):
           '  return false;\n'
           '}}\n'
           '\n'
-          'static scoped_ptr<base::Value> WriteToValue(const {generated_class_name}& message) {{\n'
+          'static scoped_ptr<base::DictionaryValue> WriteToValue(const {generated_class_name}& message) {{\n'
           '  scoped_ptr<base::DictionaryValue> dict(new base::DictionaryValue());\n'
           '',
           generated_class_name=generated_class_name)
@@ -95,7 +95,7 @@ class CppConverterWriter(writer.CodeWriter):
           self.FieldWriteToValue(field_proto)
 
       self.Output(
-          '  return dict.Pass();\n'
+          '  return dict;\n'
           '',
           generated_class_name=generated_class_name)
       self.Output('}}')
