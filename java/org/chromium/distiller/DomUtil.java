@@ -234,11 +234,23 @@ public class DomUtil {
         // AnchorElement.getHref() and ImageElement.getSrc() both return the
         // absolute URI, so simply set them as the respective attributes.
 
+        if ("A".equals(root.getTagName())) {
+            AnchorElement link = AnchorElement.as(root);
+            if (!link.getHref().isEmpty()) {
+                link.setHref(link.getHref());
+            }
+        }
         NodeList<Element> allLinks = root.getElementsByTagName("A");
         for (int i = 0; i < allLinks.getLength(); i++) {
             AnchorElement link = AnchorElement.as(allLinks.getItem(i));
             if (!link.getHref().isEmpty()) {
                 link.setHref(link.getHref());
+            }
+        }
+        if (root.getTagName().equals("VIDEO")) {
+            VideoElement video = (VideoElement) root;
+            if (!video.getPoster().isEmpty()) {
+                video.setPoster(video.getPoster());
             }
         }
         NodeList<Element> videoTags = root.getElementsByTagName("VIDEO");
@@ -254,6 +266,9 @@ public class DomUtil {
     }
 
     private static void makeSrcSetAbsolute(Element root) {
+        if (root.getTagName().equals("IMG")) {
+            makeSrcSetAbsolute(ImageElement.as(root));
+        }
         NodeList<Element> imgs = DomUtil.querySelectorAll(root, "IMG[SRCSET]");
         for (int i = 0; i < imgs.getLength(); i++) {
             makeSrcSetAbsolute(ImageElement.as(imgs.getItem(i)));
@@ -282,6 +297,12 @@ public class DomUtil {
     }
 
     public static void stripImageElements(Node root) {
+        if (root.getNodeType() == Node.ELEMENT_NODE) {
+            Element element = Element.as(root);
+            if (element.getTagName().equals("IMG")) {
+                stripImageElement(ImageElement.as(element));
+            }
+        }
         NodeList<Element> imgs = DomUtil.querySelectorAll(root, "IMG");
         for (int i = 0; i < imgs.getLength(); i++) {
             stripImageElement(ImageElement.as(imgs.getItem(i)));
@@ -313,6 +334,12 @@ public class DomUtil {
      * @param root The root element to look through.
      */
     public static native void makeAllSrcAttributesAbsolute(Element root) /*-{
+        if (root.tagName == "IMG" || root.tagName == "SOURCE" || root.tagName == "TRACK" ||
+            root.tagName == "VIDEO") {
+            if (root.src) {
+                root.src = root.src;
+            }
+        }
         var elementsWithSrc = root.querySelectorAll('img,source,track,video');
         for (var key in elementsWithSrc) {
             if (elementsWithSrc[key].src) {
@@ -322,14 +349,7 @@ public class DomUtil {
     }-*/;
 
     /**
-     * Strips all "id" attributes from nodes in the tree rooted at |node|
-     */
-    public static void stripIds(Node node) {
-        stripAttributeFromTags(node, "ID", new String[]{"*"});
-    }
-
-    /**
-     * Strips some attribute from certain tags in the tree rooted at |rootNode|
+     * Strips some attribute from certain tags in the tree rooted at |rootNode|, including root.
      * @param tagNames The tag names to be processed. ["*"] means all.
      */
     public static void stripAttributeFromTags(Node rootNode, String attribute, String[] tagNames) {
@@ -348,6 +368,13 @@ public class DomUtil {
         for (int i = 0; i < tags.getLength(); i++) {
             tags.getItem(i).removeAttribute(attribute);
         }
+    }
+
+    /**
+     * Strips all "id" attributes from all nodes in the tree rooted at |node|
+     */
+    public static void stripIds(Node node) {
+        stripAttributeFromTags(node, "ID", new String[]{"*"});
     }
 
     /**

@@ -244,16 +244,13 @@ public class DomUtilTest extends DomDistillerJsTestCase {
 
     public void testMakeAllLinksAbsolute() {
         final String html =
-            "<!DOCTYPE html>" +
-            "<html><head><base href=\"http://example.com/\"></head><body>" +
             "<a href=\"link\"></a>" +
             "<img src=\"image\" srcset=\"image200 200w, image400 400w\">" +
             "<img src=\"image2\">" +
             "<video src=\"video\" poster=\"poster\">" +
-            "<source src=\"source\">" +
-            "<track src=\"track\"></track>" +
-            "</video>" +
-            "</body></html>";
+                "<source src=\"source\">" +
+                "<track src=\"track\"></track>" +
+            "</video>";
 
         final String expected =
             "<a href=\"http://example.com/link\"></a>" +
@@ -261,15 +258,18 @@ public class DomUtilTest extends DomDistillerJsTestCase {
               "srcset=\"http://example.com/image200 200w, http://example.com/image400 400w\">" +
             "<img src=\"http://example.com/image2\">" +
             "<video src=\"http://example.com/video\" poster=\"http://example.com/poster\">" +
-            "<source src=\"http://example.com/source\">" +
-            "<track src=\"http://example.com/track\"></track>" +
+                "<source src=\"http://example.com/source\">" +
+                "<track src=\"http://example.com/track\"></track>" +
             "</video>";
 
-        Document doc = DomUtil.createHTMLDocument(Document.get());
-        Element root = doc.getDocumentElement();
-        root.setInnerHTML(html);
-        DomUtil.makeAllLinksAbsolute(root);
-        assertEquals(expected, doc.getBody().getInnerHTML());
+        mHead.setInnerHTML("<base href=\"http://example.com/\">");
+        mBody.setInnerHTML(html);
+
+        mBody.setInnerHTML(html);
+        for (int i = 0; i < mBody.getChildCount(); i++) {
+            DomUtil.makeAllLinksAbsolute(mBody.getChild(i));
+        }
+        assertEquals(expected, mBody.getInnerHTML());
     }
 
     public void testStripTableBackgroundColorAttributes() {
@@ -343,6 +343,13 @@ public class DomUtilTest extends DomDistillerJsTestCase {
                 "</tbody>" +
             "</table>";
 
+        // Test if the root element is handled properly.
+        mBody.setInnerHTML(html);
+        for (int i = 0; i < mBody.getChildCount(); i++) {
+            DomUtil.stripStyleAttributes(mBody.getChild(i));
+        }
+        assertEquals(expected, mBody.getInnerHTML());
+
         mBody.setInnerHTML(html);
         DomUtil.stripStyleAttributes(mBody);
         assertEquals(expected, mBody.getInnerHTML());
@@ -359,8 +366,15 @@ public class DomUtilTest extends DomDistillerJsTestCase {
             "<img alt=\"alt\" dir=\"rtl\" title=\"t\" src=\"image\" srcset=\"image200 200w\">" +
             "<img src=\"image\">";
 
+        // Test if the root element is handled properly.
         mBody.setInnerHTML(html);
-        DomUtil.stripImageElements(Node.as(mBody));
+        for (int i = 0; i < mBody.getChildCount(); i++) {
+            DomUtil.stripImageElements(mBody.getChild(i));
+        }
+        assertEquals(expected, mBody.getInnerHTML());
+
+        mBody.setInnerHTML(html);
+        DomUtil.stripImageElements(mBody);
         assertEquals(expected, mBody.getInnerHTML());
     }
 }
