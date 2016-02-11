@@ -1,0 +1,192 @@
+<html>
+<head>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+  <style>
+
+table {
+  border-collapse: collapse;
+}
+
+table, tr, td {
+  border: 1px solid black;
+}
+
+.error {
+  background-color: #aaaaaa;
+}
+
+.good {
+  background-color: #aaffaa;
+}
+
+.poor {
+  background-color: #aaaaff;
+}
+
+.bad {
+  background-color: #ffaaaa;
+}
+
+tr.active {
+  border: 3px solid blue;
+}
+
+#image-holder {
+  width: 90%;
+  margin: 0 auto;
+}
+
+#image-holder img {
+  vertical-align: text-top;
+}
+
+#base-img {
+  width: 66%;
+}
+
+#distilled-img {
+  width: 33%;
+}
+
+.hidden {
+  display: none;
+}
+
+#image-holder.error {
+  border: 5px solid #aaaaaa;
+}
+
+#image-holder.good {
+  border: 5px solid green;
+}
+
+#image-holder.poor {
+  border: 5px solid blue;
+}
+
+#image-holder.bad {
+  border: 5px solid red;
+}
+
+
+.content {
+  background-color: #e0e0e0;
+}
+
+#data-viewer {
+  background-color: white;
+}
+
+.content-holder {
+  height: 100%;
+  background-color: #e0e0e0;
+  float: left;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.content-holder.active {
+  display: block
+}
+
+button {
+  height: 50px
+}
+
+.left-caret {
+  float: left;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  position: relative;
+}
+
+.left-caret:before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 25%;
+  border-right: 12px solid #555;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+}
+
+.left-caret:hover:before {
+  border-right: 12px solid #777;
+}
+
+.right-caret {
+  float: right;
+  position: relative;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+}
+
+.right-caret:before {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 25%;
+  border-left: 12px solid #555;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+}
+
+.right-caret:hover:before {
+  border-left: 12px solid #777;
+}
+
+.button-row {
+  padding: 20px
+}
+
+  </style>
+</head>
+<div class="content">
+  <div class="content-holder" id="data-viewer" style="width:25%">
+    <table id="data-table">
+    </table>
+  </div>
+  <div class="content-holder" id="image-viewer" style="width:75%">
+    <div class="button-row">
+      <button id="bad" class="bad" style="width:200px">Bad <br/>hotkey: -</button>
+      <button id="good" class="good" style="width:200px">Good <br/>hotkey: + or =</button>
+      <button id="poor" class="poor" style="width:200px">Good w/ mistakes <br/>hotkey: / or ]</button>
+      <button id="error" class="error" style="width:200px">Error <br/>hotkey: * or 0</button>
+      <button id="reset" style="width:200px">Reset</button>
+      <div style="float: right">
+        <input type="checkbox" id="auto-advance" checked="true"/>Jump to next unrated item<br>
+        Label stats:
+        <span class="bad"><span id="bad-count"></span> bad</span>,
+        <span class="good"><span id="good-count"></span> good</span>,
+        <span class="poor"><span id="poor-count"></span> poor</span>,
+        <span class="error"><span id="error-count""></span> error</span>
+      </div>
+      <div style="float: right">
+        <span class="left-caret"><b></b></span>
+        <span id="position" style="float:left; position:relative; top:12px;">
+          <span class="current-position"></span>
+          /
+          <span class="total-entries"></span>
+        </span>
+        <span class="right-caret"><b></b></span>
+      </div>
+    </div>
+
+    <h1><a id="url-holder" target="_blank"></a></h1>
+    <div id="image-holder">
+      <div>
+        <img id="base-img"></img>
+        <img id="distilled-img"></img>
+        <img id="base-img-next" class="hidden"></img>
+        <img id="distilled-img-next" class="hidden"></img>
+        <img id="base-img-next2" class="hidden"></img>
+        <img id="distilled-img-next2" class="hidden"></img>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="index.js"></script>
+</html>
