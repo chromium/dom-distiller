@@ -4,21 +4,35 @@ DOM Distiller aims to provide a better reading experience by distilling the
 content of the page. This distilled content can then be used in a variety of
 ways.
 
-The current efforts that will be powered by DOM Distiller:
+The current efforts that are or will be powered by DOM Distiller:
 
 -   Reader mode: a mobile-friendly viewing mode for Chrome mobile
+-   [Simplify page for print]
+    (https://plus.google.com/+FrancoisBeaufort/posts/dDPD2gVThuv)
 
-## How to use Reader mode on mobile Chrome
+## Report a bug
 
--   Open Chrome on your mobile device
+We use the same bug tracking system Chromium uses (http://crbug.com), and the
+DOM distiller related bugs are filed under [`component:UI>Browser>ReaderMode`]
+(https://bugs.chromium.org/p/chromium/issues/list?q=component%3AUI%3EBrowser%3EReaderMode)
+component.
+
+If the extracted contents have missing or extra text or images, it's considered
+a bug. If a long non-mobile-friendly article doesn't trigger the infobar on
+Chrome on Android, you can also file a bug.
+
+## How to use Reader mode on Chrome on Android
+
+-   Open Chrome on your Android phone
 -   Navigate to [chrome://flags](chrome://flags) and search for "Reader mode"
-    (Menu -> Find in page -> Enable Reader Mode Toolbar Icon), or directly go to
-    [chrome://flags#enable-reader-mode-toolbar-icon]
-    (chrome://flags#enable-reader-mode-toolbar-icon)
--   Click Enable to turn on Reader mode
+    (Menu -> Find in page -> Reader Mode triggering), or directly go to
+    [chrome://flags#reader-mode-heuristics]
+    (chrome://flags#reader-mode-heuristics)
+-   Choose "Appears to be an article" to turn on Reader mode for
+    non-mobile-friendly long articles, or choose "Always" for debugging.
 -   Click "Relaunch Now" at the bottom of the page
--   Next time you're trying to read a page, tap on the "Reader mode" icon in the
-    toolbar to try it out!
+-   Next time you're trying to read a page, tap on the "Make page
+    mobile-friendly" infobar to try it out!
 
 # Continuous integration
 
