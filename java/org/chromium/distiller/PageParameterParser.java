@@ -75,7 +75,7 @@ public class PageParameterParser {
     }
 
     /**
-     * Acutually implements PageParameterParser.parse(), see above description for parse().
+     * Actually implements PageParameterParser.parse(), see above description for parse().
      */
     private PageParamInfo parseDocument(Element root, String originalUrl) {
         double startTime = DomUtil.getTime();
@@ -176,7 +176,7 @@ public class PageParameterParser {
      * adjacency.
      * For forward search, i.e. nodes after start node, search continues (i.e. recursion continues)
      * until a text node or anchor with non-numeric text is encountered.  In the process, text nodes
-     * and anchors with numeric text are added to the current adjaency group.  When a non-numeric
+     * and anchors with numeric text are added to the current adjacency group.  When a non-numeric
      * text node or anchor is encountered, a new group is started to break the adjacency, and search
      * ends.
      *
@@ -343,7 +343,7 @@ public class PageParameterParser {
 
     private static int linkTextToNumber(String linkText) {
         linkText = linkText.replaceAll("[()\\[\\]{}]", "");
-        linkText = linkText.trim();  // Remove leading and trailing whitespaces.
+        linkText = linkText.trim();  // Remove leading and trailing white spaces.
         return StringUtil.toNumber(linkText);
     }
 

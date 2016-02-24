@@ -471,7 +471,7 @@ public class PagingLinksFinder {
             // Use javascript innerText (instead of javascript textContent) to get only visible
             // text.
             String text = DomUtil.getInnerText(link);
-            // Trim unnecessary whitespaces from text.
+            // Trim unnecessary white spaces from text.
             String[] words = StringUtil.split(text, "\\s+");
             text = "";
             for (int w = 0; w < words.length; w++) {

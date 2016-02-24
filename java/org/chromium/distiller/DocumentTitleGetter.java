@@ -6,7 +6,7 @@
  * Parts of this file are adapted from Readability.
  *
  * Readability is Copyright (c) 2010 Src90 Inc
- * and licenced under the Apache License, Version 2.0.
+ * and licensed under the Apache License, Version 2.0.
  */
 
 package org.chromium.distiller;
@@ -41,7 +41,7 @@ public class DocumentTitleGetter {
         } else if (root != null) {  // Otherwise, use text of first TITLE element.
             NodeList<Element> titles = root.getElementsByTagName("TITLE");
             if (titles.getLength() > 0) {
-              // Use javacript textContent instead of javascript innerText; the latter only returns
+              // Use javascript textContent instead of javascript innerText; the latter only returns
               // visible text, but <title> tags are invisible.
               currTitle = origTitle = DomUtil.javascriptTextContent(titles.getItem(0));
             }
@@ -81,7 +81,7 @@ public class DocumentTitleGetter {
 
     private static String findFirstH1(Element root) {
         NodeList<Element> hOnes = root.getElementsByTagName("H1");
-        // Use javacript innerText instead of javascript textContent; the former only returns
+        // Use javascript innerText instead of javascript textContent; the former only returns
         // visible text, and we assume visible H1's are more inclined to being potential titles.
         String h1 = "";
         for (int i = 0; i < hOnes.getLength() && h1.isEmpty(); i++) {

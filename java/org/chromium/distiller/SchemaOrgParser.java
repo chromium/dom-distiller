@@ -374,7 +374,7 @@ public class SchemaOrgParser {
         }
 
         final ImageItem getRepresentativeImageItem() {
-            // Returns the corrresponding ImageItem for "associatedMedia" or "encoding" property.
+            // Returns the corresponding ImageItem for "associatedMedia" or "encoding" property.
             ThingItem imageItem = getItemProperty(ASSOCIATED_MEDIA_PROP);
             if (imageItem == null) imageItem = getItemProperty(ENCODING_PROP);
             return imageItem != null && imageItem.getType() == Type.IMAGE ?

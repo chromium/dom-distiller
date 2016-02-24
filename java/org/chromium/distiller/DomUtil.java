@@ -135,7 +135,7 @@ public class DomUtil {
     /**
      * Get a list of all the parents of this node starting with the node itself.
      * @param n The node to get the parents of.
-     * @return A list of the provided node's partnts.
+     * @return A list of the provided node's parents.
      */
     public static List<Node> getParentNodes(Node n) {
         ArrayList<Node> result = new ArrayList<Node>();
@@ -434,7 +434,7 @@ public class DomUtil {
     }
 
     /**
-     * Generate HTML/text output for a given node tree/subree. This will ignore hidden
+     * Generate HTML/text output for a given node tree/subtree. This will ignore hidden
      * elements.
      * @param subtree The root of the subtree.
      * @param textOnly If this function should return text only and not HTML.

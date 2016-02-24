@@ -59,7 +59,7 @@ public class NodeListExpander {
             subtreePath.add(null);
 
             if (subtreePath.size() == 1) {
-                // This is the root node so update the toplevel subtree.
+                // This is the root node so update the top-level subtree.
                 subtree = new NodeTree(n);
                 subtreePath.set(0, subtree);
             }

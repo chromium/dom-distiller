@@ -70,7 +70,7 @@ public class QueryParamPagePattern implements PageParameterDetector.PagePattern 
      * - query params, except that for page number, must be same in order and value, and
      * - query value must be a plain number.
      *
-     * @param url the URL to evalutate
+     * @param url the URL to evaluate
      */
     @Override
     public boolean isPagingUrl(String url) {

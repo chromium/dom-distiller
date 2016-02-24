@@ -23,7 +23,7 @@ public class IEReadingViewParser implements MarkupParser.Accessor {
     private Element mRoot = null;
     private NodeList<Element> mAllMeta = null;
     // The following data members are initialized to null to indicate that they haven't been
-    // determined.  Once determined, they'll either have legitmate or empty values.
+    // determined.  Once determined, they'll either have legitimate or empty values.
     private String mTitle = null;
     private String mDate = null;
     private String mAuthor = null;

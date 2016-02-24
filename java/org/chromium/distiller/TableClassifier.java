@@ -89,7 +89,7 @@ public class TableClassifier {
         sARIATableDescendantRoles.add("rowgroup");
         sARIATableDescendantRoles.add("rowheader");
 
-        // ARIA landmark roles, applicable to both table and its descendents
+        // ARIA landmark roles, applicable to both table and its descendants
         // - http://www.w3.org/TR/wai-aria/roles#landmark_roles_header.
         sARIARoles = new HashSet<String>();
         sARIARoles.add("application");
@@ -278,8 +278,8 @@ public class TableClassifier {
             }
         } else {
             for (int i = 0; i < allDescendants.getLength(); i++) {
-                // Check if the current element is a direct descendent of the |t| table element in
-                // question, as opposed to being a descendent of a nested table in |t|.
+                // Check if the current element is a direct descendant of the |t| table element in
+                // question, as opposed to being a descendant of a nested table in |t|.
                 Element e = allDescendants.getItem(i);
                 Element parent = e.getParentElement();
                 while (parent != null) {

@@ -117,7 +117,7 @@ public class TableClassifierTest extends DomDistillerJsTestCase {
         assertEquals(TableClassifier.Type.DATA, TableClassifier.table(table));
         assertEquals(TableClassifier.Reason.ROLE_TABLE, TableClassifier.sReason);
 
-        // Test landmark role in table's descendent.
+        // Test landmark role in table's descendant.
         table.removeAttribute("role");
         assertEquals(TableClassifier.Type.LAYOUT, TableClassifier.table(table));
         assertEquals(TableClassifier.Reason.LESS_EQ_10_CELLS, TableClassifier.sReason);

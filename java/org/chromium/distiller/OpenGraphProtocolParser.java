@@ -24,7 +24,7 @@ import java.util.Map;
  * This class recognizes and parses the Open Graph Protocol markup tags and returns the properties
  * that matter to distilled content.
  * First, it extracts the prefix and/or xmlns attributes from the HTML or HEAD tags to determine the
- * prefixes that will be used for the procotol.  If no prefix is specified, we fall back to the
+ * prefixes that will be used for the protocol.  If no prefix is specified, we fall back to the
  * commonly used ones, e.g. "og".  Then, it scans the OpenGraph Protocol <meta> elements that we
  * care about, extracts their content, and stores them semantically, i.e. taking into consideration
  * arrays, structures, and object types.  Callers call get* to access these properties.
@@ -228,7 +228,7 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
     /**
      * The object that has successfully extracted OpenGraphProtocol markup information from |root|.
      *
-     * @throws Exception if the properties do not conform to the procotol i.e. not all required
+     * @throws Exception if the properties do not conform to the protocol i.e. not all required
      * properties exist.
      */
     private OpenGraphProtocolParser(Element root, TimingInfo timingInfo) throws Exception {
@@ -446,7 +446,7 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
                         imageIn[1] : imageIn[0];
                 if (imageIn[2] != null) imageOut.secureUrl = imageIn[2];
                 if (imageIn[3] != null) imageOut.type = imageIn[3];
-                // Caption is not supoprted, so ignore it.
+                // Caption is not supported, so ignore it.
                 if (imageIn[4] != null) imageOut.width = JavaScript.parseInt(imageIn[4], 10);
                 if (imageIn[5] != null) imageOut.height = JavaScript.parseInt(imageIn[5], 10);
             }

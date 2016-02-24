@@ -89,7 +89,7 @@ public class PathComponentPagePattern implements PageParameterDetector.PagePatte
      * - suffix (part of pattern after page param placeholder) must be same, and
      * - different set of rules depending on if page param is at start of path component or not.
      *
-     * @param url the URL to evalutate
+     * @param url the URL to evaluate
      */
     @Override
     public boolean isPagingUrl(String url) {

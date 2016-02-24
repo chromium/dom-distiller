@@ -56,7 +56,7 @@ public class MarkupParser {
 
         /**
          * Returns the properties of all markup images in the document, empty array if none.
-         * The first image is the domainant (i.e. top or salient) one.
+         * The first image is the dominant (i.e. top or salient) one.
          */
         public Image[] getImages();
 

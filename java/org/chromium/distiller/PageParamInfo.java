@@ -313,7 +313,7 @@ class PageParamInfo {
         PageNumbersState state = new PageNumbersState();
 
         // Check if elements in allLinkInfo are adjacent or there's only 1 gap i.e. the gap is
-        // current page number respresented in plain text.
+        // current page number represented in plain text.
         int firstPos = -1;
         int lastPos = -1;
         int gapPos = -1;
@@ -396,11 +396,11 @@ class PageParamInfo {
      * The order of page numbers doesn't matter.
      *
      * Returns LinearFormula, containing the coefficient and delta, if the page
-     * parameter forumla could be determined.  Otherwise, returns null.
+     * parameter formula could be determined.  Otherwise, returns null.
      *
      * @param allLinkInfo the list of PageLinkInfo's to evaluate
      */
-    // TODO(kuan): As this gets rolled out, reassesss the necessity of non-1 coefficient support.
+    // TODO(kuan): As this gets rolled out, reassess the necessity of non-1 coefficient support.
     private static LinearFormula getLinearFormula(List<PageLinkInfo> allLinkInfo) {
         if (allLinkInfo.size() < MIN_LINKS_TO_JUSTIFY_LINEAR_MAP) return null;
 

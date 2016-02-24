@@ -85,7 +85,7 @@ public class PageParameterDetector {
         /**
          * Returns true if a URL matches this page pattern based on a pipeline of rules.
          *
-         * @param url the URL to evalutate
+         * @param url the URL to evaluate
          */
         boolean isPagingUrl(String url);
     }
@@ -406,7 +406,7 @@ public class PageParameterDetector {
         if (path.isEmpty() || !StringUtil.containsDigit(path)) return;
 
         // Extract digits (either one or consecutive) from path, replace the digit(s) with
-        // PAGE_PARAM_PLACEHOLDER to fomulate the page pattern, add it as page candidate.
+        // PAGE_PARAM_PLACEHOLDER to formulate the page pattern, add it as page candidate.
         final String urlStr = url.toString();
         final int pathStart = url.getOrigin().length();
         if (sDigitsRegExp == null) sDigitsRegExp = RegExp.compile("(\\d+)", "gi");
@@ -427,7 +427,7 @@ public class PageParameterDetector {
     }
 
     /**
-     * Returns true if given name is backlisted as a known bad page param name.
+     * Returns true if given name is blacklisted as a known bad page param name.
      */
     static boolean isPageParamNameBad(String name) {
         initBadPageParamNames();
