@@ -21,12 +21,11 @@ short list for dry run.
 
 ## Data preparation for labeling
 
-Use ```get_screenshots.py``` to generate the screenshots of the original and
-distilled web page, and extract the features by running
-```extract_features.js```. You can see how it works by running the following
-command.
+Use `get_screenshots.py` to generate the screenshots of the original and
+distilled web page, and extract the features by running `extract_features.js`.
+You can see how it works by running the following command.
 
-```
+```bash
 ./get_screenshots.py --out out_dir --urls-file urls.txt
 ```
 
@@ -34,22 +33,22 @@ If everything goes fine, run it inside xvfb. Specifying the screen resolution
 makes the size of the screenshots consistent. It also prevent the Chrome window
 from interrupting your work on the main monitor.
 
-```
+```bash
 xvfb-run -a -s "-screen 0 1600x5000x24" ./get_screenshots.py --out out_dir --urls-file urls.txt
 ```
 
 One entry takes about 30 seconds. Depending on the number of entries, it could
-be a lengthy process. If it is interrupted, you could use option ```--resume```
-to continue.
+be a lengthy process. If it is interrupted, you could use option `--resume` to
+continue.
 
-```
+```bash
 xvfb-run -a -s "-screen 0 1600x5000x24" ./get_screenshots.py --out out_dir --urls-file urls.txt --resume
 ```
 
 Running multiple instances concurrently is recommended if the list is long
 enough. You can create a Makefile like this:
 
-```
+```make
 ALL=$(addsuffix .target,$(shell seq 1000))
 
 all: $(ALL)
@@ -58,23 +57,23 @@ all: $(ALL)
         xvfb-run -a -s "-screen 0 1600x5000x24" ./get_screenshots.py --out out_dir --urls-file urls.txt --resume
 ```
 
-And then run ```make -j20```. Adjust the parallelism according to how beefy your
+And then run `make -j20`. Adjust the parallelism according to how beefy your
 machine is.
 
 A small proportion of URLs would time out, or fail for some other reasons. When
-you've collected enough data, run the command again with option
-```--write-index``` to export data for the next stage.
+you've collected enough data, run the command again with option `--write-index`
+to export data for the next stage.
 
-```
+```bash
 ./get_screenshots.py --out out_dir --urls-file urls.txt --resume --write-index
 ```
 
 ## Labeling
 
-Use ```server.py``` to serve the web site for data labeling. Human effort is
-around 10~20 seconds per entry.
+Use `server.py` to serve the web site for data labeling. Human effort is around
+10~20 seconds per entry.
 
-```
+```bash
 ./server.py --data-dir out_dir
 ```
 
@@ -86,20 +85,20 @@ It should print something like:
 
 Then visit that address in your browser.
 
-The labels would be written to ```out_dir/archive/``` periodically.
+The labels would be written to `out_dir/archive/` periodically.
 
 ## Data preparation for training
 
-In the step with ```--write-index```, ```get_screenshots.py``` writes the
-extracted raw features to ```out_dir/feature```. We can use
-```calculate_derived_features.py``` to convert it to the final derived features.
+In the step with `--write-index`, `get_screenshots.py` writes the extracted raw
+features to `out_dir/feature`. We can use `calculate_derived_features.py` to
+convert it to the final derived features.
 
-```
+```bash
 ./calculate_derived_features.py --core out_dir/feature --out derived.txt
 ```
 
-Then use ```write_features_csv.py``` to combine with the label.
+Then use `write_features_csv.py` to combine with the label.
 
-```
+```bash
 ./write_features_csv.py --marked $(ls -rt out_dir/archive/*|tail -n1) --features derived.txt --out labeled
 ```
