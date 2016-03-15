@@ -434,20 +434,6 @@ public class OpenGraphProtocolParserTest extends DomDistillerJsTestCase {
         assertEquals("", parser.getDescription());
     }
 
-    @Override
-    protected void gwtSetUp() throws Exception {
-        super.gwtSetUp();
-
-        // Remove all attributes that specify prefix or namespace, so that each
-        // testcase starts with clean HTML and HEAD tags.  Otherwise. a testcase
-        // may run with the attributes set in a previous testcase, resulting in
-        // unexpected results.
-        mRoot.removeAttribute("prefix");
-        mRoot.removeAttribute("xmlns:tstog");
-        mRoot.removeAttribute("xmlns:tstpf");
-        mRoot.removeAttribute("xmlns:tsta");
-    }
-
     private void createDefaultTitle() {
         createMeta("og:title", "dummy title");
     }

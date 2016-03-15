@@ -27,13 +27,19 @@ public class DomDistillerJsTestCase extends JsTestCase {
     protected void gwtSetUp() throws Exception {
         mRoot = Document.get().getDocumentElement();
         JsArray<Node> attrs = DomUtil.getAttributes(mRoot);
+        String[] attrNames = new String[attrs.length()];
         for (int i = 0; i < attrs.length(); i++) {
-            mRoot.removeAttribute(attrs.get(i).getNodeName());
+            attrNames[i] = attrs.get(i).getNodeName();
         }
+        for (int i = 0; i < attrNames.length; i++) {
+            mRoot.removeAttribute(attrNames[i]);
+        }
+        assertEquals(0, DomUtil.getAttributes(mRoot).length());
         NodeList<Node> children = mRoot.getChildNodes();
         for (int i = children.getLength() - 1; i >= 0; i--) {
             children.getItem(i).removeFromParent();
         }
+        assertEquals(0, mRoot.getChildNodes().getLength());
         mHead = Document.get().createElement("head");
         mRoot.appendChild(mHead);
         mBody = Document.get().createElement("body");
