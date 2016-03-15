@@ -25,6 +25,7 @@ public class ElementAction {
     public static ElementAction getForElement(Element element) {
         Style style = DomUtil.getComputedStyle(element);
         ElementAction action = new ElementAction();
+        String tagName = element.getTagName();
         switch (style.getDisplay()) {
             case "inline":
                 break;
@@ -32,10 +33,18 @@ public class ElementAction {
             case "inline-flex":
                 action.changesTagLevel = true;
                 break;
+            case "block":
+                // Special casing for drop cap letter with "float".
+                // Having style "float" would imply "display: block".
+                // Ref: http://crbug.com/593128
+                if (!"none".equals(style.getProperty("float")) &&
+                    "SPAN".equals(tagName)) {
+                    break;
+                }
+                // Intentional fall through.
             // See http://www.w3.org/TR/CSS2/tables.html#table-display
             // and http://www.w3.org/TR/css-flexbox-1/#flex-containers
             // The default case includes the following display types:
-            // block
             // list-item
             // inline-table
             // table-row
@@ -53,7 +62,6 @@ public class ElementAction {
                 break;
         }
 
-        String tagName = element.getTagName();
         if (!"HTML".equals(tagName) && !"BODY".equals(tagName)) {
             String className = element.getAttribute("class");
             int classCount = DomUtil.getClassList(element).length();

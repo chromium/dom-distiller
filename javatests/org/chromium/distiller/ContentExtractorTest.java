@@ -604,4 +604,31 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
         // Non-article schema.org types should not use the fast path.
         assertExtractor(expected, htmlArticle);
     }
+
+    public void testDropCap() {
+        String html =
+            "<h1>" +
+                CONTENT_TEXT +
+            "</h1>" +
+            "<p>" +
+                "<strong><span style=\"float: left\">T</span>est</strong>" +
+                CONTENT_TEXT +
+            "</p>";
+
+        final String expected =
+            "<h1>" +
+                CONTENT_TEXT +
+            "</h1>" +
+            "<p>" +
+                "<strong><span>T</span>est</strong>" +
+                CONTENT_TEXT +
+            "</p>";
+
+        mBody.setInnerHTML(html);
+
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals(expected,
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
 }
