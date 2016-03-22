@@ -139,7 +139,7 @@ public class Assert {
     }
 
     private static String format(String message, Object expected, Object actual) {
-        return "Expected=" + expected + " Actual=" + actual +
+        return "Expected=" + expected + "\n\nActual  =" + actual + "\n" +
             (message == null ? "" : ": " + message);
     }
 
