@@ -46,6 +46,12 @@ public class WebImage extends WebElement {
 
         ImageElement ie = ImageElement.as(Element.as(imgElement.cloneNode(false)));
         ie.setSrc(ie.getSrc());
+        // If computed width or height is zero, do not override them
+        // to keep them visible.
+        if (width > 0 && height > 0) {
+            ie.setWidth(width);
+            ie.setHeight(height);
+        }
         DomUtil.makeSrcSetAbsolute(ie);
         DomUtil.stripImageElement(ie);
 

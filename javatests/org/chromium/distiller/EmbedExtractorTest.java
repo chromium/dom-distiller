@@ -4,19 +4,30 @@
 
 package org.chromium.distiller;
 
+import com.google.gwt.dom.client.Style;
 import org.chromium.distiller.webdocument.WebEmbed;
+import org.chromium.distiller.webdocument.WebImage;
 import org.chromium.distiller.extractors.embeds.EmbedExtractor;
 import org.chromium.distiller.extractors.embeds.TwitterExtractor;
 import org.chromium.distiller.extractors.embeds.VimeoExtractor;
 import org.chromium.distiller.extractors.embeds.YouTubeExtractor;
+import org.chromium.distiller.extractors.embeds.ImageExtractor;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.IFrameElement;
+import com.google.gwt.dom.client.ImageElement;
 
 import java.util.List;
 
 public class EmbedExtractorTest extends DomDistillerJsTestCase {
+
+    /**
+     * 5x5 red dot image
+     */
+    final String IMAGE_BASE64 = "data:image/png;base64,iVBORw0KGgo" +
+            "AAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/" +
+            "w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
 
     public void testYouTubeExtractor() {
         Element youtube = TestUtil.createIframe();
@@ -199,5 +210,128 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
 
         result = (WebEmbed) extractor.extract(notTwitter);
         assertNull(result);
+    }
+
+    public void testImageExtractorWithWidthHeightAttributes() {
+        ImageElement image = TestUtil.createImage();
+        image.setSrc(IMAGE_BASE64);
+        image.setAttribute("width", "32");
+        image.setAttribute("height", "32");
+        EmbedExtractor extractor = new ImageExtractor();
+        WebImage result = (WebImage) extractor.extract(image);
+        assertNotNull(result);
+        assertEquals(32, result.getWidth());
+        assertEquals(32, result.getHeight());
+    }
+
+    public void testImageExtractorWithNoAttributes() {
+        ImageElement image = TestUtil.createImage();
+        mBody.appendChild(image);
+        EmbedExtractor extractor = new ImageExtractor();
+        WebImage result = (WebImage) extractor.extract(image);
+        assertNotNull(result);
+        assertEquals(0, result.getWidth());
+        assertEquals(0, result.getHeight());
+    }
+
+    public void testImageExtractorWithSettingDimension() {
+        ImageElement image = TestUtil.createImage();
+        image.setSrc(IMAGE_BASE64);
+        mBody.appendChild(image);
+        EmbedExtractor extractor = new ImageExtractor();
+        WebImage result = (WebImage) extractor.extract(image);
+        assertNotNull(result);
+        assertEquals(5, result.getWidth());
+        assertEquals(5, result.getHeight());
+    }
+
+    public void testImageExtractorWithOneAttribute() {
+        ImageElement image = TestUtil.createImage();
+        image.setSrc(IMAGE_BASE64);
+        image.setWidth(32);
+        mBody.appendChild(image);
+        EmbedExtractor extractor = new ImageExtractor();
+        WebImage result = (WebImage) extractor.extract(image);
+        assertNotNull(result);
+        assertEquals(32, result.getWidth());
+        assertEquals(32, result.getHeight());
+    }
+
+    public void testImageExtractorWithHeightCSS() {
+        ImageElement image = TestUtil.createImage();
+        image.setSrc(IMAGE_BASE64);
+        image.getStyle().setHeight(100, Style.Unit.PX);
+        mBody.appendChild(image);
+        EmbedExtractor extractor = new ImageExtractor();
+        WebImage result = (WebImage) extractor.extract(image);
+        assertNotNull(result);
+        assertEquals(100, result.getWidth());
+        assertEquals(100, result.getHeight());
+    }
+
+    public void testImageExtractorWithWidthHeightCSSPX() {
+        ImageElement image = TestUtil.createImage();
+        image.setSrc(IMAGE_BASE64);
+        image.getStyle().setHeight(100, Style.Unit.PX);
+        image.getStyle().setWidth(48, Style.Unit.PX);
+        mBody.appendChild(image);
+        EmbedExtractor extractor = new ImageExtractor();
+        WebImage result = (WebImage) extractor.extract(image);
+        assertNotNull(result);
+        assertEquals(48, result.getWidth());
+        assertEquals(100, result.getHeight());
+    }
+
+    public void testImageExtractorWithWidthAttributeHeightCSS() {
+        ImageElement image = TestUtil.createImage();
+        image.setSrc(IMAGE_BASE64);
+        image.getStyle().setHeight(100, Style.Unit.PX);
+        image.setAttribute("width", "144");
+        mBody.appendChild(image);
+        EmbedExtractor extractor = new ImageExtractor();
+        WebImage result = (WebImage) extractor.extract(image);
+        assertNotNull(result);
+        assertEquals(144, result.getWidth());
+        assertEquals(100, result.getHeight());
+    }
+
+    public void testImageExtractorWithAttributesCSS() {
+        ImageElement image = TestUtil.createImage();
+        image.setSrc(IMAGE_BASE64);
+        image.setAttribute("width", "32");
+        image.setAttribute("height", "32");
+        image.getStyle().setHeight(48, Style.Unit.PX);
+        image.getStyle().setWidth(48, Style.Unit.PX);
+        mBody.appendChild(image);
+        EmbedExtractor extractor = new ImageExtractor();
+        WebImage result = (WebImage) extractor.extract(image);
+        assertNotNull(result);
+        assertEquals(48, result.getWidth());
+        assertEquals(48, result.getHeight());
+    }
+
+    public void testImageExtractorWithAttributesCSSHeightCMAndWidthAttrb() {
+        ImageElement image = TestUtil.createImage();
+        image.setSrc(IMAGE_BASE64);
+        image.getStyle().setHeight(1, Style.Unit.CM);
+        image.setWidth(50);
+        mBody.appendChild(image);
+        EmbedExtractor extractor = new ImageExtractor();
+        WebImage result = (WebImage) extractor.extract(image);
+        assertNotNull(result);
+        assertEquals(38, result.getHeight());
+        assertEquals(50, result.getWidth());
+    }
+
+    public void testImageExtractorWithAttributesCSSHeightCM() {
+        ImageElement image = TestUtil.createImage();
+        image.setSrc(IMAGE_BASE64);
+        image.getStyle().setHeight(1, Style.Unit.CM);
+        mBody.appendChild(image);
+        EmbedExtractor extractor = new ImageExtractor();
+        WebImage result = (WebImage) extractor.extract(image);
+        assertNotNull(result);
+        assertEquals(38, result.getHeight());
+        assertEquals(38, result.getWidth());
     }
 }

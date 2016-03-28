@@ -321,6 +321,8 @@ public class DomUtil {
                 !"alt".equals(name) &&
                 !"srcset".equals(name) &&
                 !"dir".equals(name) &&
+                !"width".equals(name) &&
+                !"height".equals(name) &&
                 !"title".equals(name)) {
                 imgElement.removeAttribute(name);
             } else {

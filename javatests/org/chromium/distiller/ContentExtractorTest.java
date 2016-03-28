@@ -203,6 +203,42 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
                 TestUtil.removeAllDirAttributes(extractedContent));
     }
 
+    public void testKeepingWidthAndHeightAttributes() {
+        String html =
+            "<h1>" +
+                CONTENT_TEXT +
+            "</h1>" +
+            "<p>" +
+                CONTENT_TEXT +
+            "</p>" +
+            "<img style=\"align: left\" src=\"/test.png\" " +
+                    "width=\"200\" height=\"300\">" +
+            "<img style=\"align: left\" src=\"/test.png\" " +
+                    "width=\"200\">" +
+            "<img style=\"align: left\" src=\"/test.png\">";
+
+        final String expected =
+            "<h1>" +
+                CONTENT_TEXT +
+            "</h1>" +
+            "<p>" +
+                CONTENT_TEXT +
+            "</p>" +
+            "<img src=\"http://example.com/test.png\" " +
+                    "width=\"200\" height=\"300\">" +
+            "<img src=\"http://example.com/test.png\" " +
+                    "width=\"200\">" +
+            "<img src=\"http://example.com/test.png\">";
+
+        mHead.setInnerHTML("<base href=\"http://example.com/\">");
+        mBody.setInnerHTML(html);
+
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals(expected,
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
     public void testPreserveOrderedList() {
         Element outerListTag = Document.get().createElement("OL");
         mBody.appendChild(outerListTag);

@@ -33,11 +33,21 @@ public class ImageExtractor implements EmbedExtractor {
             return null;
         }
         String imgSrc = "";
+        // Getting OffSetWidth/Height as default values, even they are
+        // affected by padding, border, etc.
+        int width = e.getOffsetWidth();
+        int height = e.getOffsetHeight();
         if ("IMG".equals(e.getTagName())) {
-            // This will get the absolute URL of the image.
-            imgSrc = ImageElement.as(e).getSrc();
+            // This will get the absolute URL of the image and
+            // the displayed image dimension.
+            ImageElement imageElement = ImageElement.as(e);
+            imgSrc = imageElement.getSrc();
+            // As an ImageElement is manipulated here, it is possible
+            // to get the real dimensions.
+            width = imageElement.getWidth();
+            height = imageElement.getHeight();
         }
 
-        return new WebImage(e, e.getOffsetWidth(), e.getOffsetHeight(), imgSrc);
+        return new WebImage(e, width, height, imgSrc);
     }
 }
