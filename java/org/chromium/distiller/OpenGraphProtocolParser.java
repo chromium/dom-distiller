@@ -36,31 +36,31 @@ import java.util.Map;
  * - article object properties: section, published_time, modified_time, expiration_time, author;
  *                              each author is a URL to the author's profile.
  */
-public class OpenGraphProtocolParser implements MarkupParser.Accessor {
-    private static final String TITLE_PROP = "title";
-    private static final String TYPE_PROP = "type";
-    private static final String IMAGE_PROP = "image";
-    private static final String URL_PROP = "url";
-    private static final String DESCRIPTION_PROP = "description";
-    private static final String SITE_NAME_PROP = "site_name";
-    private static final String IMAGE_STRUCT_PROP_PFX = "image:";
-    private static final String IMAGE_URL_PROP = "image:url";
-    private static final String IMAGE_SECURE_URL_PROP = "image:secure_url";
-    private static final String IMAGE_TYPE_PROP = "image:type";
-    private static final String IMAGE_WIDTH_PROP = "image:width";
-    private static final String IMAGE_HEIGHT_PROP = "image:height";
-    private static final String PROFILE_FIRSTNAME_PROP = "first_name";
-    private static final String PROFILE_LASTNAME_PROP = "last_name";
-    private static final String ARTICLE_SECTION_PROP = "section";
-    private static final String ARTICLE_PUBLISHED_TIME_PROP = "published_time";
-    private static final String ARTICLE_MODIFIED_TIME_PROP = "modified_time";
-    private static final String ARTICLE_EXPIRATION_TIME_PROP = "expiration_time";
-    private static final String ARTICLE_AUTHOR_PROP = "author";
+public class OpenGraphProtocolParser {
+    static final String TITLE_PROP = "title";
+    static final String TYPE_PROP = "type";
+    static final String IMAGE_PROP = "image";
+    static final String URL_PROP = "url";
+    static final String DESCRIPTION_PROP = "description";
+    static final String SITE_NAME_PROP = "site_name";
+    static final String IMAGE_STRUCT_PROP_PFX = "image:";
+    static final String IMAGE_URL_PROP = "image:url";
+    static final String IMAGE_SECURE_URL_PROP = "image:secure_url";
+    static final String IMAGE_TYPE_PROP = "image:type";
+    static final String IMAGE_WIDTH_PROP = "image:width";
+    static final String IMAGE_HEIGHT_PROP = "image:height";
+    static final String PROFILE_FIRSTNAME_PROP = "first_name";
+    static final String PROFILE_LASTNAME_PROP = "last_name";
+    static final String ARTICLE_SECTION_PROP = "section";
+    static final String ARTICLE_PUBLISHED_TIME_PROP = "published_time";
+    static final String ARTICLE_MODIFIED_TIME_PROP = "modified_time";
+    static final String ARTICLE_EXPIRATION_TIME_PROP = "expiration_time";
+    static final String ARTICLE_AUTHOR_PROP = "author";
 
-    private static final String PROFILE_OBJTYPE = "profile";
-    private static final String ARTICLE_OBJTYPE = "article";
+    static final String PROFILE_OBJTYPE = "profile";
+    static final String ARTICLE_OBJTYPE = "article";
 
-    private enum Prefix {
+    enum Prefix {
         OG,
         PROFILE,
         ARTICLE,
@@ -132,100 +132,6 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
     }
 
     /**
-     * Returns the required "title" of the document.
-     */
-    @Override
-    public String getTitle() {
-        return getPropertyContent(TITLE_PROP);
-    }
-
-    /**
-     * Returns the required "type" of the document if it's an article, empty string otherwise.
-     */
-    @Override
-    public String getType() {
-        String type = getPropertyContent(TYPE_PROP);
-        return type.equalsIgnoreCase(ARTICLE_OBJTYPE) ? MarkupParser.ARTICLE_TYPE : "";
-    }
-
-    /**
-     * Returns the required "url" of the document.
-     */
-    @Override
-    public String getUrl() {
-        return getPropertyContent(URL_PROP);
-    }
-
-    /**
-     * Returns the structured properties of all "image" structures.  Each "image" structure consists
-     * of image, image:url, image:secure_url, image:type, image:width, and image:height.
-     */
-    @Override
-    public MarkupParser.Image[] getImages() {
-        return mImageParser.getImages();
-    }
-
-    /**
-     * Returns the optional "description" of the document.
-     */
-    @Override
-    public String getDescription() {
-        return getPropertyContent(DESCRIPTION_PROP);
-    }
-
-    /**
-     * Returns the optional "site_name" of the document.
-     */
-    @Override
-    public String getPublisher() {
-        return getPropertyContent(SITE_NAME_PROP);
-    }
-
-    @Override
-    public String getCopyright() {
-        return "";  // Not supported.
-    }
-
-    /**
-     * Returns the concatenated first_name and last_name (delimited by a whitespace) of the
-     * "profile" object when value of "og:type" is "profile".
-     */
-    @Override
-    public String getAuthor() {
-        return mProfileParser.getFullName(mPropertyTable);
-    }
-
-    /**
-     * Returns the properties of the "article" object when value of "og:type" is "article".  The
-     * properties are published_time, modified_time and expiration_time, section, and a list of URLs
-     * to each author's profile.
-     */
-    @Override
-    public MarkupParser.Article getArticle() {
-        MarkupParser.Article article = new MarkupParser.Article();
-        article.publishedTime = getPropertyContent(ARTICLE_PUBLISHED_TIME_PROP);
-        article.modifiedTime = getPropertyContent(ARTICLE_MODIFIED_TIME_PROP);
-        article.expirationTime = getPropertyContent(ARTICLE_EXPIRATION_TIME_PROP);
-        article.section = getPropertyContent(ARTICLE_SECTION_PROP);
-        article.authors = mArticleParser.getAuthors();
-
-        if (article.section.isEmpty() && article.publishedTime.isEmpty() &&
-                article.modifiedTime.isEmpty() && article.expirationTime.isEmpty() &&
-                article.authors.length == 0) {
-            return null;
-        }
-
-        return article;
-    }
-
-    @Override
-    public boolean optOut() {
-        // While this is not directly supported, the page owner can simply omit the required tags
-        // and parse() will return a null OpenGraphProtocolParser.
-        return false;
-    }
-
-    /**
      * The object that has successfully extracted OpenGraphProtocol markup information from |root|.
      *
      * @throws Exception if the properties do not conform to the protocol i.e. not all required
@@ -250,13 +156,13 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
 
         startTime = DomUtil.getTime();
         String prefix = mPrefixes.get(Prefix.OG) + ":";
-        if (getTitle().isEmpty())
+        if (getPropertyContent(TITLE_PROP).isEmpty())
             throw new Exception("Required \"" + prefix + "title\" property is missing.");
         if (getPropertyContent(TYPE_PROP).isEmpty())
             throw new Exception("Required \"" + prefix + "type\" property is missing.");
-        if (getUrl().isEmpty())
+        if (getPropertyContent(URL_PROP).isEmpty())
             throw new Exception("Required \"" + prefix + "url\" property is missing.");
-        if (getImages().length == 0)
+        if (mImageParser.getImages().length == 0)
             throw new Exception("Required \"" + prefix + "image\" property is missing.");
         LogUtil.addTimingInfo(startTime, mTimingInfo, "OpenGraphProtocolParser.checkRequired");
     }
@@ -389,8 +295,20 @@ public class OpenGraphProtocolParser implements MarkupParser.Accessor {
         }
     }
 
-    private String getPropertyContent(String property) {
+    public String getPropertyContent(String property) {
         return !mPropertyTable.containsKey(property) ? "" : mPropertyTable.get(property);
+    }
+
+    public MarkupParser.Image[] getImages() {
+        return mImageParser.getImages();
+    }
+
+    public String getFullName() {
+        return mProfileParser.getFullName(mPropertyTable);
+    }
+
+    public String[] getAuthors() {
+        return mArticleParser.getAuthors();
     }
 
     private class ImageParser implements Parser {

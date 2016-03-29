@@ -38,7 +38,12 @@ public class IEReadingViewParser implements MarkupParser.Accessor {
      */
     public IEReadingViewParser(Element root) {
         mRoot = root;
-        mAllMeta = root.getElementsByTagName("META");
+    }
+
+    private void init() {
+        if (mAllMeta == null) {
+            mAllMeta = mRoot.getElementsByTagName("META");
+        }
     }
 
     @Override
@@ -105,6 +110,7 @@ public class IEReadingViewParser implements MarkupParser.Accessor {
     }
 
     private void findTitle() {
+        init();
         mTitle = "";
 
         if (mAllMeta.getLength() == 0) return;
@@ -124,6 +130,7 @@ public class IEReadingViewParser implements MarkupParser.Accessor {
     }
 
     private void findDate() {
+        init();
         mDate = "";
 
         // Get date from any element that includes the "dateline" class.
@@ -166,6 +173,7 @@ public class IEReadingViewParser implements MarkupParser.Accessor {
     }
 
     private void findCopyright() {
+        init();
         mCopyright = "";
 
         // Get copyright from meta tag with "copyright" as name.
@@ -201,6 +209,7 @@ public class IEReadingViewParser implements MarkupParser.Accessor {
     }
 
     private void findOptOut() {
+        init();
         mDoneOptOut = true;
 
         // Get optout from meta tag with "IE_RM_OFF" as name.

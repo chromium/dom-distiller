@@ -130,10 +130,8 @@ public class MarkupParser {
     public MarkupParser(Element root, TimingInfo timingInfo) {
         mTimingInfo = timingInfo;
         mAccessors = new ArrayList<Accessor>();
-
         double startTime = DomUtil.getTime();
-        Accessor ogp = OpenGraphProtocolParser.parse(root, mTimingInfo);
-        if (ogp != null) mAccessors.add(ogp);
+        mAccessors.add(new OpenGraphProtocolParserAccessor(root, mTimingInfo));
         LogUtil.addTimingInfo(startTime, mTimingInfo, "OpenGraphProtocolParser");
 
         startTime = DomUtil.getTime();

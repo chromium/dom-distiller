@@ -75,7 +75,7 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
         createMeta("og:image", "http://test/image.jpeg");
         createMeta("og:url", "http://test/test.html");
 
-        OpenGraphProtocolParser parser = OpenGraphProtocolParser.parse(mRoot);
+        OpenGraphProtocolParserAccessor parser = new OpenGraphProtocolParserAccessor(mRoot);
         assertTrue(parser != null);
         assertEquals(MARKUP_PARSER_TITLE, parser.getTitle());
 

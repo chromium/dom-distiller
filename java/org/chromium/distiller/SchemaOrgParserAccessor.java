@@ -16,7 +16,10 @@ import java.util.List;
  * access to properties that SchemaOrgParser has parsed.
  */
 public class SchemaOrgParserAccessor implements MarkupParser.Accessor {
-    private final SchemaOrgParser parser;
+
+    private SchemaOrgParser mParser;
+    private final Element mRoot;
+    private final TimingInfo mTimingInfo;
 
     /**
      * The object that instantiates SchemaOrgParser and implements its MarkupParser.Accessor
@@ -27,13 +30,21 @@ public class SchemaOrgParserAccessor implements MarkupParser.Accessor {
     }
 
     public SchemaOrgParserAccessor(Element root, TimingInfo timingInfo) {
-        parser = new SchemaOrgParser(root, timingInfo);
+        mRoot = root;
+        mTimingInfo = timingInfo;
+    }
+
+    private void init() {
+        if (mParser == null) {
+            mParser = new SchemaOrgParser(mRoot, mTimingInfo);
+        }
     }
 
     @Override
     public String getTitle() {
+        init();
         String title = "";
-        List<SchemaOrgParser.ArticleItem> articles = parser.getArticleItems();
+        List<SchemaOrgParser.ArticleItem> articles = mParser.getArticleItems();
 
         // Get the "headline" property of the first article that has it.
         for (int i = 0; i < articles.size() && title.isEmpty(); i++) {
@@ -50,19 +61,22 @@ public class SchemaOrgParserAccessor implements MarkupParser.Accessor {
 
     @Override
     public String getType() {
+        init();
         // Returns Article if there's an article.
-        return parser.getArticleItems().isEmpty() ? "" : MarkupParser.ARTICLE_TYPE;
+        return mParser.getArticleItems().isEmpty() ? "" : MarkupParser.ARTICLE_TYPE;
     }
 
     @Override
     public String getUrl() {
-        List<SchemaOrgParser.ArticleItem> articles = parser.getArticleItems();
+        init();
+        List<SchemaOrgParser.ArticleItem> articles = mParser.getArticleItems();
         return articles.isEmpty() ? "" :
                 articles.get(0).getStringProperty(SchemaOrgParser.URL_PROP);
     }
 
     @Override
     public MarkupParser.Image[] getImages() {
+        init();
         List<MarkupParser.Image> images = new ArrayList<MarkupParser.Image>();
         // Images are ordered as follows:
         // 1) the "associatedMedia" or "encoding" image of the article that first declares it,
@@ -71,7 +85,7 @@ public class SchemaOrgParserAccessor implements MarkupParser.Accessor {
         // 4) lastly, the list of ImageObject's.
 
         // First, get images from ArticleItem's.
-        List<SchemaOrgParser.ArticleItem> articleItems = parser.getArticleItems();
+        List<SchemaOrgParser.ArticleItem> articleItems = mParser.getArticleItems();
         SchemaOrgParser.ImageItem associatedImageOfArticle = null;
 
         for (int i = 0; i < articleItems.size(); i++) {
@@ -87,7 +101,7 @@ public class SchemaOrgParserAccessor implements MarkupParser.Accessor {
         }
 
         // Then, get images from ImageItem's.
-        List<SchemaOrgParser.ImageItem> imageItems = parser.getImageItems();
+        List<SchemaOrgParser.ImageItem> imageItems = mParser.getImageItems();
         boolean hasRepresentativeImage = false;
 
         for (int i = 0; i < imageItems.size(); i++) {
@@ -109,16 +123,18 @@ public class SchemaOrgParserAccessor implements MarkupParser.Accessor {
 
     @Override
     public String getDescription() {
-        List<SchemaOrgParser.ArticleItem> articles = parser.getArticleItems();
+        init();
+        List<SchemaOrgParser.ArticleItem> articles = mParser.getArticleItems();
         return articles.isEmpty() ?  "" :
                 articles.get(0).getStringProperty(SchemaOrgParser.DESCRIPTION_PROP);
     }
 
     @Override
     public String getPublisher() {
+        init();
         // Returns either the "publisher" or "copyrightHolder" property of the first article.
         String publisher = "";
-        List<SchemaOrgParser.ArticleItem> articles = parser.getArticleItems();
+        List<SchemaOrgParser.ArticleItem> articles = mParser.getArticleItems();
         if (!articles.isEmpty()) {
             SchemaOrgParser.ArticleItem article = articles.get(0);
             publisher = article.getPersonOrOrganizationName(SchemaOrgParser.PUBLISHER_PROP);
@@ -132,14 +148,16 @@ public class SchemaOrgParserAccessor implements MarkupParser.Accessor {
 
     @Override
     public String getCopyright() {
-        List<SchemaOrgParser.ArticleItem> articles = parser.getArticleItems();
+        init();
+        List<SchemaOrgParser.ArticleItem> articles = mParser.getArticleItems();
         return articles.isEmpty() ? "" : articles.get(0).getCopyright();
     }
 
     @Override
     public String getAuthor() {
+        init();
         String author = "";
-        List<SchemaOrgParser.ArticleItem> articles = parser.getArticleItems();
+        List<SchemaOrgParser.ArticleItem> articles = mParser.getArticleItems();
         if (!articles.isEmpty()) {
              SchemaOrgParser.ArticleItem article = articles.get(0);
              author = article.getPersonOrOrganizationName(SchemaOrgParser.AUTHOR_PROP);
@@ -149,12 +167,13 @@ public class SchemaOrgParserAccessor implements MarkupParser.Accessor {
              }
         }
         // Otherwise, use "rel=author" tag.
-        return author.isEmpty() ? parser.getAuthorFromRel() : author;
+        return author.isEmpty() ? mParser.getAuthorFromRel() : author;
     }
 
     @Override
     public MarkupParser.Article getArticle() {
-        List<SchemaOrgParser.ArticleItem> articles = parser.getArticleItems();
+        init();
+        List<SchemaOrgParser.ArticleItem> articles = mParser.getArticleItems();
         return articles.isEmpty() ? null : articles.get(0).getArticle();
     }
 
