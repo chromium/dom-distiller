@@ -68,11 +68,13 @@ public class SchemaOrgParser {
     }
 
     static class ThingItem {
+        private final Element mElement;
         private final Type mType;
         private final Map<String, String> mStringProperties;
         private final Map<String, ThingItem> mItemProperties;
 
-        ThingItem(Type type) {
+        ThingItem(Type type, Element element) {
+            mElement = element;
             mType = type;
             mStringProperties = new HashMap<String, String>();
             mItemProperties = new HashMap<String, ThingItem>();
@@ -115,6 +117,10 @@ public class SchemaOrgParser {
         // in which case, |value| will be ignored.  This means we only keep the first value.
         final void putItemValue(String name, ThingItem value) {
             if (mItemProperties.containsKey(name)) mItemProperties.put(name, value);
+        }
+
+        final Element getElement() {
+            return mElement;
         }
     }
 
@@ -262,19 +268,19 @@ public class SchemaOrgParser {
         Type type = getItemType(e);
         switch (type) {
             case IMAGE:
-                newItem = new ImageItem();
+                newItem = new ImageItem(e);
                 break;
             case ARTICLE:
-                newItem = new ArticleItem();
+                newItem = new ArticleItem(e);
                 break;
             case PERSON:
-                newItem = new PersonItem();
+                newItem = new PersonItem(e);
                 break;
             case ORGANIZATION:
-                newItem = new OrganizationItem();
+                newItem = new OrganizationItem(e);
                 break;
             case UNSUPPORTED:
-                newItem = new UnsupportedItem();
+                newItem = new UnsupportedItem(e);
                 break;
             default:
                 return null;
@@ -283,8 +289,8 @@ public class SchemaOrgParser {
     }
 
     static class ImageItem extends ThingItem {
-        ImageItem() {
-            super(Type.IMAGE);
+        ImageItem(Element element) {
+            super(Type.IMAGE, element);
 
             addStringPropertyName(CONTENT_URL_PROP);
             addStringPropertyName(ENCODING_FORMAT_PROP);
@@ -311,8 +317,8 @@ public class SchemaOrgParser {
     }
 
     static class ArticleItem extends ThingItem {
-        ArticleItem() {
-            super(Type.ARTICLE);
+        ArticleItem(Element element) {
+            super(Type.ARTICLE, element);
 
             addStringPropertyName(HEADLINE_PROP);
             addStringPropertyName(PUBLISHER_PROP);
@@ -387,8 +393,8 @@ public class SchemaOrgParser {
     }
 
     private static class PersonItem extends ThingItem {
-        PersonItem() {
-            super(Type.PERSON);
+        PersonItem(Element element) {
+            super(Type.PERSON, element);
 
             addStringPropertyName(FAMILY_NAME_PROP);
             addStringPropertyName(GIVEN_NAME_PROP);
@@ -404,8 +410,8 @@ public class SchemaOrgParser {
     }
 
     private static class OrganizationItem extends ThingItem {
-        OrganizationItem() {
-            super(Type.ORGANIZATION);
+        OrganizationItem(Element element) {
+            super(Type.ORGANIZATION, element);
 
             addStringPropertyName(LEGAL_NAME_PROP);
         }
@@ -418,8 +424,8 @@ public class SchemaOrgParser {
     }
 
     private static class UnsupportedItem extends ThingItem {
-        UnsupportedItem() {
-            super(Type.UNSUPPORTED);
+        UnsupportedItem(Element element) {
+            super(Type.UNSUPPORTED, element);
         }
     }
 

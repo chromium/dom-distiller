@@ -9,6 +9,8 @@ import org.chromium.distiller.proto.DomDistillerProtos.TimingInfo;
 import com.google.gwt.dom.client.Element;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -44,16 +46,15 @@ public class SchemaOrgParserAccessor implements MarkupParser.Accessor {
     public String getTitle() {
         init();
         String title = "";
-        List<SchemaOrgParser.ArticleItem> articles = mParser.getArticleItems();
+        List<SchemaOrgParser.ArticleItem> sortedArticles = sortArticlesByArea(mParser.getArticleItems());
 
-        // Get the "headline" property of the first article that has it.
-        for (int i = 0; i < articles.size() && title.isEmpty(); i++) {
-            title = articles.get(i).getStringProperty(SchemaOrgParser.HEADLINE_PROP);
-        }
-
-        // If there's no "headline" property, use "name" property.
-        for (int i = 0; i < articles.size() && title.isEmpty(); i++) {
-            title = articles.get(i).getStringProperty(SchemaOrgParser.NAME_PROP);
+        // Get the "headline" or "name" property of the first article that has it.
+        for (int i = 0; i < sortedArticles.size() && title.isEmpty(); i++) {
+            SchemaOrgParser.ArticleItem item = sortedArticles.get(i);
+            title = item.getStringProperty(SchemaOrgParser.HEADLINE_PROP);
+            if (title.isEmpty()) {
+                title = item.getStringProperty(SchemaOrgParser.NAME_PROP);
+            }
         }
 
         return title;
@@ -180,5 +181,34 @@ public class SchemaOrgParserAccessor implements MarkupParser.Accessor {
     @Override
     public boolean optOut() {
         return false;
+    }
+
+    /**
+     * Sort a list of {@link SchemaOrgParser.ArticleItem}s by their area
+     * in descending order.
+     * @param articles List of {@link SchemaOrgParser.ArticleItem}s to
+     * be sorted.
+     * @return The sorted list.
+     */
+    private List<SchemaOrgParser.ArticleItem> sortArticlesByArea(
+            List<SchemaOrgParser.ArticleItem> articles) {
+        List<SchemaOrgParser.ArticleItem> sortedArticles =
+                new ArrayList<>(articles);
+        Collections.sort(sortedArticles,
+                new Comparator<SchemaOrgParser.ArticleItem>() {
+                    @Override
+                    public int compare(SchemaOrgParser.ArticleItem i1,
+                                       SchemaOrgParser.ArticleItem i2) {
+                        int area1 = DomUtil.getArea(i1.getElement());
+                        int area2 = DomUtil.getArea(i2.getElement());
+                        if (area1 > area2) {
+                            return -1;
+                        } else if (area1 < area2) {
+                            return 1;
+                        }
+                        return 0;
+                    }
+                });
+        return sortedArticles;
     }
 }

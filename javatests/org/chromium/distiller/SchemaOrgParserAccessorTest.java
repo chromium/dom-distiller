@@ -541,6 +541,66 @@ public class SchemaOrgParserAccessorTest extends DomDistillerJsTestCase {
         link.removeFromParent();
     }
 
+    public void testGetTitleWhenTheMainArticleDoesntHaveHeadline() {
+        String expectedTitle = "This is a headline";
+        String elements =
+            "<div itemscope itemtype=\"http://schema.org/Article\" " +
+                "style=\"width: 200; height: 300\">" +
+                "<span itemprop=\"name\">A headline</span>" +
+            "</div>" +
+            "<div itemscope itemtype=\"http://schema.org/Article\" " +
+                "style=\"width: 200; height: 400\">" +
+                "<span itemprop=\"name\">" + expectedTitle + "</span>" +
+            "</div>" +
+            "<div itemscope itemtype=\"http://schema.org/Article\" " +
+                "style=\"width: 200; height: 300\">" +
+                "<span itemprop=\"name headline\">Another headline</span>" +
+            "</div>";
+        mBody.setInnerHTML(elements);
+        SchemaOrgParserAccessor parser = new SchemaOrgParserAccessor(mRoot);
+        assertEquals(expectedTitle, parser.getTitle());
+    }
+
+    public void testGetTitleWhenTheMainArticleHasHeadline() {
+        String expectedTitle = "This is a headline";
+        String elements =
+            "<div itemscope itemtype=\"http://schema.org/Article\" " +
+                "style=\"width: 200; height: 290\">" +
+                "<span itemprop=\"name headline\">A headline</span>" +
+            "</div>" +
+            "<div itemscope itemtype=\"http://schema.org/Article\" " +
+                "style=\"width: 100; height: 300\">" +
+                "<span itemprop=\"name headline\">Another headline</span>" +
+            "</div>" +
+            "<div itemscope itemtype=\"http://schema.org/Article\" " +
+                "style=\"width: 200; height: 300\">" +
+                "<span itemprop=\"name headline\">" + expectedTitle + "</span>" +
+            "</div>";
+        mBody.setInnerHTML(elements);
+        SchemaOrgParserAccessor parser = new SchemaOrgParserAccessor(mRoot);
+        assertEquals(expectedTitle, parser.getTitle());
+    }
+
+    public void testGetTitleWithNestedArticles() {
+        String expectedTitle = "This is a headline";
+        String elements =
+            "<div itemscope itemtype=\"http://schema.org/Article\" " +
+                "style=\"width: 200; height: 100\">" +
+                "<span itemprop=\"name headline\">A headline</span>" +
+                "<div itemscope itemtype=\"http://schema.org/Article\" " +
+                "style=\"width: 400; height: 300\">" +
+                    "<span itemprop=\"name headline\">" + expectedTitle + "</span>" +
+                "</div>" +
+            "</div>" +
+            "<div itemscope itemtype=\"http://schema.org/Article\" " +
+                "style=\"width: 200; height: 200\">" +
+                "<span itemprop=\"name headline\">A headline</span>" +
+            "</div>";
+        mBody.setInnerHTML(elements);
+        SchemaOrgParserAccessor parser = new SchemaOrgParserAccessor(mRoot);
+        assertEquals(expectedTitle, parser.getTitle());
+    }
+
     private void setItemScopeAndType(Element e, String type) {
         e.setAttribute("ITEMSCOPE", "");
         e.setAttribute("ITEMTYPE", "http://schema.org/" + type);

@@ -377,4 +377,28 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         DomUtil.stripImageElements(mBody);
         assertEquals(expected, mBody.getInnerHTML());
     }
+
+    public void testGetArea() {
+        String elements =
+            "<div style=\"width: 200px; height: 100px\">w</div>" +
+            "<div style=\"width: 300px;\">" +
+                "<div style=\"width: 300px; height: 200px\"></div>" +
+            "</div>" +
+            "<div style=\"width: 400px; height: 100px\">" +
+                "<div style=\"height: 100%\"></div>" +
+            "</div>";
+        mBody.setInnerHTML(elements);
+
+        Element element = mBody.getFirstChildElement();
+        assertEquals(200*100, DomUtil.getArea(element));
+
+        element = element.getNextSiblingElement();
+        assertEquals(300*200, DomUtil.getArea(element));
+
+        element = element.getNextSiblingElement();
+        assertEquals(400*100, DomUtil.getArea(element));
+
+        element = element.getFirstChildElement();
+        assertEquals(400*100, DomUtil.getArea(element));
+    }
 }
