@@ -5,7 +5,7 @@
 
 # Installs required build dependencies (to buildtools/ and the local system).
 
-CHROME_MIN_VERSION=32
+CHROME_MIN_VERSION=49
 
 (
   set -e
@@ -15,7 +15,7 @@ CHROME_MIN_VERSION=32
   fi
 
   apt-get update
-  apt-get install \
+  apt-get install -y \
     ant \
     openjdk-7-jdk \
     protobuf-compiler \
@@ -28,7 +28,7 @@ CHROME_MIN_VERSION=32
 
   if ! command -v google-chrome >/dev/null 2>&1; then
     wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-    echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
     apt-get update
     apt-get install google-chrome-stable
   fi

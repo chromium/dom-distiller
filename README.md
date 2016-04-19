@@ -37,9 +37,9 @@ Chrome on Android, you can also file a bug.
 # Continuous integration
 
 -   [![Build Status]
-    (https://drone.io/github.com/chromium/dom-distiller/status.png)]
-    (https://drone.io/github.com/chromium/dom-distiller/latest)
--   [drone.io waterfall](https://drone.io/github.com/chromium/dom-distiller)
+    (https://travis-ci.org/chromium/dom-distiller.svg?branch=master)]
+    (https://travis-ci.org/chromium/dom-distiller)
+-   [Travis-CI waterfall](https://travis-ci.org/chromium/dom-distiller/builds)
 
 # Get the code
 
