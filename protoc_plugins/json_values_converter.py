@@ -36,9 +36,10 @@ class CppConverterWriter(writer.CodeWriter):
     self.Output('')
     self.Output('// base dependencies')
     self.Output('#include "base/values.h"')
-    self.Output('#include "base/memory/scoped_ptr.h"')
     self.Output('')
+    self.Output('#include <memory>')
     self.Output('#include <string>')
+    self.Output('#include <utility>')
     self.Output('')
 
     namespaces = proto_file.ProtoNamespaces() + ['json']
@@ -85,8 +86,8 @@ class CppConverterWriter(writer.CodeWriter):
           '  return false;\n'
           '}}\n'
           '\n'
-          'static scoped_ptr<base::DictionaryValue> WriteToValue(const {generated_class_name}& message) {{\n'
-          '  scoped_ptr<base::DictionaryValue> dict(new base::DictionaryValue());\n'
+          'static std::unique_ptr<base::DictionaryValue> WriteToValue(const {generated_class_name}& message) {{\n'
+          '  std::unique_ptr<base::DictionaryValue> dict(new base::DictionaryValue());\n'
           '',
           generated_class_name=generated_class_name)
 
@@ -126,9 +127,9 @@ class CppConverterWriter(writer.CodeWriter):
 
     if field.IsClassType():
       middle = (
-          'scoped_ptr<base::Value> inner_message_value = \n'
+          'std::unique_ptr<base::Value> inner_message_value = \n'
           '    {inner_class_converter}::WriteToValue(message.{field_name}(i));\n'
-          'field_list->Append(inner_message_value.release());\n'
+          'field_list->Append(std::move(inner_message_value));\n'
           )
     else:
       middle = (
@@ -145,9 +146,9 @@ class CppConverterWriter(writer.CodeWriter):
   def OptionalMemberFieldWriteToValue(self, field):
     if field.IsClassType():
       body = (
-          'scoped_ptr<base::Value> inner_message_value = \n'
+          'std::unique_ptr<base::Value> inner_message_value = \n'
           '    {inner_class_converter}::WriteToValue(message.{field_name}());\n'
-          'dict->Set("{field_number}", inner_message_value.release());\n'
+          'dict->Set("{field_number}", std::move(inner_message_value));\n'
           )
     else:
       body = (
