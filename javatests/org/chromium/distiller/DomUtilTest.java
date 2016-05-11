@@ -249,7 +249,7 @@ public class DomUtilTest extends DomDistillerJsTestCase {
             "<img src=\"image2\">" +
             "<video src=\"video\" poster=\"poster\">" +
                 "<source src=\"source\">" +
-                "<track src=\"track\"></track>" +
+                "<track src=\"track\">" +
             "</video>";
 
         final String expected =
@@ -259,7 +259,7 @@ public class DomUtilTest extends DomDistillerJsTestCase {
             "<img src=\"http://example.com/image2\">" +
             "<video src=\"http://example.com/video\" poster=\"http://example.com/poster\">" +
                 "<source src=\"http://example.com/source\">" +
-                "<track src=\"http://example.com/track\"></track>" +
+                "<track src=\"http://example.com/track\">" +
             "</video>";
 
         mHead.setInnerHTML("<base href=\"http://example.com/\">");

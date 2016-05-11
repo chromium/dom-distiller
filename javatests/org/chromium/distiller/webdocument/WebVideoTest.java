@@ -27,7 +27,7 @@ public class WebVideoTest extends DomDistillerJsTestCase {
 
         String want = "<video>" +
                           "<source src=\"http://example.com/foo.ogg\">" +
-                          "<track src=\"http://example.com/foo.vtt\"></track>" +
+                          "<track src=\"http://example.com/foo.vtt\">" +
                       "</video>";
         WebVideo webVideo = new WebVideo(video, 400, 300);
 
@@ -53,7 +53,7 @@ public class WebVideoTest extends DomDistillerJsTestCase {
 
         String want = "<video>" +
                           "<source src=\"http://example.com/foo.ogg\">" +
-                          "<track src=\"http://example.com/foo.vtt\"></track>" +
+                          "<track src=\"http://example.com/foo.vtt\">" +
                       "</video>";
         WebVideo webVideo = new WebVideo(video, 400, 300);
 
