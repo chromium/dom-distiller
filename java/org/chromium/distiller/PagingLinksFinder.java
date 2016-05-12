@@ -19,14 +19,9 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.regexp.shared.RegExp;
-import com.google.gwt.user.client.Window;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -61,11 +56,6 @@ public class PagingLinksFinder {
     private static final RegExp REG_LINK_PAGINATION =
             RegExp.compile("p(a|g|ag)?(e|ing|ination)?(=|\\/)[0-9]{1,2}$", "i");
     private static final RegExp REG_FIRST_LAST = RegExp.compile("(first|last)", "i");
-    // Examples that match PAGE_NUMBER_REGEX are: "_p3", "-pg3", "p3", "_1", "-12-2".
-    // Examples that don't match PAGE_NUMBER_REGEX are: "_p3 ", "p", "p123".
-    private static final RegExp REG_PAGE_NUMBER =
-            RegExp.compile("((_|-)?p[a-z]*|(_|-))[0-9]{1,2}$", "gi");
-
     private static final RegExp REG_HREF_CLEANER = RegExp.compile("/?(#.*)?$");
     private static final RegExp REG_NUMBER = RegExp.compile("\\d");
 
@@ -381,12 +371,6 @@ public class PagingLinksFinder {
         return a;
     }
 
-    private static String fixMissingScheme(String url) {
-        if (url.isEmpty()) return "";
-        if (!url.contains("://")) return "http://" + url;
-        return url;
-    }
-
     // The link is resolved using an anchor within a new HTML document with a base tag.
     public static String resolveLinkHref(AnchorElement link, AnchorElement baseAnchor) {
         String linkHref = link.getAttribute("href");
@@ -407,12 +391,6 @@ public class PagingLinksFinder {
         url = StringUtil.split(url, ":\\/\\/")[1];
         if (!url.contains("/")) return url;
         return StringUtil.split(url, "\\/")[0];
-    }
-
-    private static String getPath(String url) {
-        url = StringUtil.split(url, ":\\/\\/")[1];
-        if (!url.contains("/")) return "";
-        return StringUtil.findAndReplace(url, "^([^/]*)/", "");
     }
 
     public static Integer pageDiff(String url, String linkHref, AnchorElement link, int skip) {

@@ -53,8 +53,9 @@ public final class BoilerplateBlockFilter implements BoilerpipeFilter {
 		this.labelToKeep = labelToKeep;
 	}
 
-        public boolean process(TextDocument doc) {
-                List<TextBlock> textBlocks = doc.getTextBlocks();
+	@Override
+	public boolean process(TextDocument doc) {
+		List<TextBlock> textBlocks = doc.getTextBlocks();
 		boolean hasChanges = false;
 
 		for (Iterator<TextBlock> it = textBlocks.iterator(); it.hasNext();) {

@@ -4,11 +4,6 @@
 
 package org.chromium.distiller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class PageParameterDetectorTest extends DomDistillerJsTestCase {
 
     public void testDynamicPara() {

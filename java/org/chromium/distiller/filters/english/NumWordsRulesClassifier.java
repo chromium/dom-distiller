@@ -45,6 +45,7 @@ public class NumWordsRulesClassifier implements BoilerpipeFilter {
         return INSTANCE;
     }
 
+    @Override
     public boolean process(TextDocument doc) {
         List<TextBlock> textBlocks = doc.getTextBlocks();
 

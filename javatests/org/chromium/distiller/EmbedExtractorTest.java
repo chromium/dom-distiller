@@ -18,8 +18,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.IFrameElement;
 import com.google.gwt.dom.client.ImageElement;
 
-import java.util.List;
-
 public class EmbedExtractorTest extends DomDistillerJsTestCase {
 
     /**

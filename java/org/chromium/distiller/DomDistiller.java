@@ -12,7 +12,6 @@ import org.chromium.distiller.StringUtil;
 
 import com.google.gwt.core.client.js.JsExport;
 import com.google.gwt.dom.client.Document;
-import com.google.gwt.user.client.Window;
 
 @JsExport("DomDistiller")
 public class DomDistiller {

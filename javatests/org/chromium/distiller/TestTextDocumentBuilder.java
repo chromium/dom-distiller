@@ -22,13 +22,10 @@ public class TestTextDocumentBuilder {
     private ArrayList<TextBlock> textBlocks;
     private ArrayList<WebElement> elements;
     private TestWebTextBuilder webTextBuilder;
-    private int textBlockIndex;
-
     public TestTextDocumentBuilder() {
         textBlocks = new ArrayList<>();
         elements = new ArrayList<>();
         webTextBuilder = new TestWebTextBuilder();
-        textBlockIndex = 0;
     }
 
     private TextBlock addBlock(String text, String... labels) {

@@ -13,6 +13,7 @@ public class DomDistillerEntry implements EntryPoint {
   /**
    * This is the entry point method.
    */
+  @Override
   public void onModuleLoad() {
   }
 }

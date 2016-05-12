@@ -4,7 +4,6 @@
 
 package org.chromium.distiller;
 
-import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.regexp.shared.RegExp;
 
 public class StringUtil {
@@ -63,6 +62,7 @@ public class StringUtil {
     }
 
     public static class FullWordCounter implements WordCounter {
+        @Override
         public native int count(String s) /*-{
             // The following range includes broader alphabetical letters and Hangul Syllables.
             var m = s.match(/(\S*[\w\u00C0-\u1FFF\uAC00-\uD7AF]\S*)/g);
@@ -76,6 +76,7 @@ public class StringUtil {
     }
 
     public static class LetterWordCounter implements WordCounter {
+        @Override
         public native int count(String s) /*-{
             // The following range includes broader alphabetical letters and Hangul Syllables.
             var m = s.match(/(\S*[\w\u00C0-\u1FFF\uAC00-\uD7AF]\S*)/g);
@@ -84,6 +85,7 @@ public class StringUtil {
     }
 
     public static class FastWordCounter implements WordCounter {
+        @Override
         public native int count(String s) /*-{
             // The following range includes broader alphabetical letters.
             var m = s.match(/(\S*[\w\u00C0-\u1FFF]\S*)/g);
@@ -113,7 +115,7 @@ public class StringUtil {
 
     public static int countWords(String s) {
         return sWordCounter.count(s);
-    };
+    }
 
     public static native String regexEscape(String s) /*-{
         return s.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");

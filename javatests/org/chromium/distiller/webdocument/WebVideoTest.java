@@ -5,13 +5,9 @@
 package org.chromium.distiller.webdocument;
 
 import org.chromium.distiller.DomDistillerJsTestCase;
-import org.chromium.distiller.TestUtil;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Node;
-
-import java.util.List;
 
 public class WebVideoTest extends DomDistillerJsTestCase {
     public void testGenerateOutput() {
@@ -69,7 +65,7 @@ public class WebVideoTest extends DomDistillerJsTestCase {
         String want = "<video></video>";
         WebVideo webVideo = new WebVideo(video, 400, 300);
 
-        
+
         String got = webVideo.generateOutput(false);
 
         assertEquals(want, got);

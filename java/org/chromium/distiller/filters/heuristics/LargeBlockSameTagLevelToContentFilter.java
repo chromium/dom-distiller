@@ -40,6 +40,7 @@ public final class LargeBlockSameTagLevelToContentFilter implements BoilerpipeFi
     private LargeBlockSameTagLevelToContentFilter() {
     }
 
+    @Override
     public boolean process(final TextDocument doc) {
         boolean changes = false;
 
@@ -57,7 +58,7 @@ public final class LargeBlockSameTagLevelToContentFilter implements BoilerpipeFi
 
         for (TextBlock tb : doc.getTextBlocks()) {
             if (!tb.isContent()) {
-            	
+
             	if(tb.getNumWords() >= 100 && tb.getTagLevel() == tagLevel) {
 	                tb.setIsContent(true);
 	                changes = true;

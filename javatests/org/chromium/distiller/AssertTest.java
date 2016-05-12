@@ -41,10 +41,12 @@ public class AssertTest extends JsTestCase {
 
     public void testCheck() {
         Checker passer = new Checker() {
+            @Override
             void run(boolean withMessage) {
             }
         };
         Checker failer = new Checker() {
+            @Override
             void run(boolean withMessage) {
                 fail();
             }
@@ -70,11 +72,13 @@ public class AssertTest extends JsTestCase {
         // A Checker's success/failure is expected to be consistent across null/non-null messages.
         // If not, check should fail regardless of the expectedSuccess value.
         Checker nullFailer = new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (!withMessage) fail();
             }
         };
         Checker stringFailer = new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (withMessage) fail();
             }
@@ -109,6 +113,7 @@ public class AssertTest extends JsTestCase {
             final char[] expecteds,
             final char[] actuals) {
         check(expectSuccess, new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (withMessage) {
                     assertArrayEquals("", expecteds, actuals);
@@ -123,6 +128,7 @@ public class AssertTest extends JsTestCase {
             final byte[] expecteds,
             final byte[] actuals) {
         check(expectSuccess, new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (withMessage) {
                     assertArrayEquals("", expecteds, actuals);
@@ -137,6 +143,7 @@ public class AssertTest extends JsTestCase {
             final short[] expecteds,
             final short[] actuals) {
         check(expectSuccess, new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (withMessage) {
                     assertArrayEquals("", expecteds, actuals);
@@ -151,6 +158,7 @@ public class AssertTest extends JsTestCase {
             final int[] expecteds,
             final int[] actuals) {
         check(expectSuccess, new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (withMessage) {
                     assertArrayEquals("", expecteds, actuals);
@@ -165,6 +173,7 @@ public class AssertTest extends JsTestCase {
             final long[] expecteds,
             final long[] actuals) {
         check(expectSuccess, new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (withMessage) {
                     assertArrayEquals("", expecteds, actuals);
@@ -179,6 +188,7 @@ public class AssertTest extends JsTestCase {
             final Object[] expecteds,
             final Object[] actuals) {
         check(expectSuccess, new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (withMessage) {
                     assertArrayEquals("", expecteds, actuals);
@@ -194,6 +204,7 @@ public class AssertTest extends JsTestCase {
             final double actual,
             final double delta) {
         check(expectSuccess, new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (withMessage) {
                     assertEquals("", expected, actual, delta);
@@ -208,6 +219,7 @@ public class AssertTest extends JsTestCase {
             final long expected,
             final long actual) {
         check(expectSuccess, new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (withMessage) {
                     assertEquals("", expected, actual);
@@ -222,6 +234,7 @@ public class AssertTest extends JsTestCase {
             final Object expected,
             final Object actual) {
         check(expectSuccess, new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (withMessage) {
                     assertEquals("", expected, actual);
@@ -235,6 +248,7 @@ public class AssertTest extends JsTestCase {
     private static void checkAssertFalse(boolean expectSuccess,
             final boolean value) {
         check(expectSuccess, new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (withMessage) {
                     assertFalse("", value);
@@ -248,6 +262,7 @@ public class AssertTest extends JsTestCase {
     private static void checkAssertTrue(boolean expectSuccess,
             final boolean value) {
         check(expectSuccess, new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (withMessage) {
                     assertTrue("", value);
@@ -262,6 +277,7 @@ public class AssertTest extends JsTestCase {
     private static void checkAssertNull(boolean expectSuccess,
             final Object value) {
         check(expectSuccess, new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (withMessage) {
                     assertNull("", value);
@@ -275,6 +291,7 @@ public class AssertTest extends JsTestCase {
     private static void checkAssertNotNull(boolean expectSuccess,
             final Object value) {
         check(expectSuccess, new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (withMessage) {
                     assertNotNull("", value);
@@ -289,6 +306,7 @@ public class AssertTest extends JsTestCase {
             final Object expected,
             final Object actual) {
         check(expectSuccess, new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (withMessage) {
                     assertSame("", expected, actual);
@@ -303,6 +321,7 @@ public class AssertTest extends JsTestCase {
             final Object expected,
             final Object actual) {
         check(expectSuccess, new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (withMessage) {
                     assertNotSame("", expected, actual);
@@ -468,6 +487,7 @@ public class AssertTest extends JsTestCase {
 
     public void testFail() {
         check(false, new Checker() {
+            @Override
             void run(boolean withMessage) {
                 if (withMessage) {
                     fail("");

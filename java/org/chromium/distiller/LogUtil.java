@@ -4,7 +4,6 @@
 
 package org.chromium.distiller;
 
-import org.chromium.distiller.proto.DomDistillerProtos;
 import org.chromium.distiller.proto.DomDistillerProtos.TimingEntry;
 import org.chromium.distiller.proto.DomDistillerProtos.TimingInfo;
 
@@ -52,14 +51,14 @@ public class LogUtil {
 
     /**
      * Whether the log should be included in
-     * {@link DomDistillerProtos.DomDistillerResult}.
+     * {@link org.chromium.distiller.proto.DomDistillerProtos.DomDistillerResult}.
      */
     private static boolean sIncludeLog = false;
 
     /**
      * Whether the log should be suppressed. If this flag is true, there will be no output to
      * the JS console. This is used when running the JS Tests in Chromium, where the log is
-     * retreived using {@link #getAndClearLog} instead.
+     * retrieved using {@link #getAndClearLog} instead.
      */
     private static boolean sSuppressConsoleOutput;
 
@@ -68,8 +67,8 @@ public class LogUtil {
     }
 
     /**
-     * Log a string to console unless {@link #sSuppressLogOutput} is true. The log string is always
-     * added to the log builder.
+     * Log a string to console unless {@link #sSuppressConsoleOutput} is true. The log string is
+     * always added to the log builder.
      */
     public static void logToConsole(String str) {
         if (str == null) {

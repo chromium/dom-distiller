@@ -33,13 +33,14 @@ import org.chromium.distiller.labels.DefaultLabels;
  */
 public final class LabelToBoilerplateFilter implements BoilerpipeFilter {
 	public static final LabelToBoilerplateFilter INSTANCE_STRICTLY_NOT_CONTENT = new LabelToBoilerplateFilter(DefaultLabels.STRICTLY_NOT_CONTENT);
-	
+
     private String[] labels;
 
     public LabelToBoilerplateFilter(final String... label) {
         this.labels = label;
     }
 
+    @Override
     public boolean process(final TextDocument doc) {
         boolean changes = false;
 

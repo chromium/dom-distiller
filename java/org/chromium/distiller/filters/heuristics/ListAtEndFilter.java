@@ -37,8 +37,9 @@ public final class ListAtEndFilter implements BoilerpipeFilter {
 	private ListAtEndFilter() {
 	}
 
-        public boolean process(final TextDocument doc) {
-                boolean changes = false;
+	@Override
+	public boolean process(final TextDocument doc) {
+		boolean changes = false;
 
 		int tagLevel = Integer.MAX_VALUE;
 		for (TextBlock tb : doc.getTextBlocks()) {

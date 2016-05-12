@@ -93,7 +93,7 @@ class PageParamInfo {
     }
 
     /**
-     * @return new PageParamInfo initialized according to given parameters.
+     * PageParamInfo initialized according to given parameters.
      *
      * @param type must not be Type.UNSET.
      * @param allPageInfo can be null.

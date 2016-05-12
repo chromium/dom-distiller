@@ -8,7 +8,6 @@ import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.BaseElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.user.client.Window;
 
 public class PagingLinksFinderTest extends DomDistillerJsTestCase {
     private static String EXAMPLE_URL = "http://example.com/path/toward/news.php";

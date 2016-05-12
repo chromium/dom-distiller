@@ -52,6 +52,7 @@ public class IEReadingViewParser implements MarkupParser.Accessor {
         return mTitle;
     }
 
+    @Override
     public String getType() {
         return "";  // Not supported.
     }
@@ -245,19 +246,5 @@ public class IEReadingViewParser implements MarkupParser.Accessor {
             }
         }
         return caption;
-    }
-
-    private static boolean isTextInBody(Element root, String text) {
-        String lowerText = text.toLowerCase();
-        NodeList<Element> bodies = root.getElementsByTagName("BODY");
-        for (int i = 0; i < bodies.getLength(); i++) {
-            // Use javascript textContent (instead of javascript innerText) to include invisible
-            // text.
-            if (DomUtil.javascriptTextContent(
-                    bodies.getItem(i)).toLowerCase().contains(lowerText)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

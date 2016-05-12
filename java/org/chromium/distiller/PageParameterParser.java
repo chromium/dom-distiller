@@ -4,7 +4,6 @@
 
 package org.chromium.distiller;
 
-import org.chromium.distiller.proto.DomDistillerProtos;
 import org.chromium.distiller.proto.DomDistillerProtos.TimingInfo;
 
 import com.google.gwt.dom.client.AnchorElement;

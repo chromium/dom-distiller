@@ -5,12 +5,15 @@
 package org.chromium.distiller;
 
 import com.google.gwt.regexp.shared.RegExp;
+
+import org.chromium.distiller.StringUtil.WordCounter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class StringUtilTest extends JsTestCase {
     public void testFastWordCounter() {
-        List<StringUtil.WordCounter> counters = new ArrayList();
+        List<StringUtil.WordCounter> counters = new ArrayList<WordCounter>();
         counters.add(new StringUtil.FastWordCounter());
         counters.add(new StringUtil.LetterWordCounter());
         counters.add(new StringUtil.FullWordCounter());
@@ -39,7 +42,7 @@ public class StringUtilTest extends JsTestCase {
     }
 
     public void testLetterWordCounter() {
-        List<StringUtil.WordCounter> counters = new ArrayList();
+        List<StringUtil.WordCounter> counters = new ArrayList<WordCounter>();
         counters.add(new StringUtil.LetterWordCounter());
         counters.add(new StringUtil.FullWordCounter());
 

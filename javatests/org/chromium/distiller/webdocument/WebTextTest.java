@@ -11,8 +11,6 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Text;
 
-import java.util.List;
-
 public class WebTextTest extends DomDistillerJsTestCase {
     public void testGenerateOutputMultipleContentNodes() {
         Element container = Document.get().createDivElement();

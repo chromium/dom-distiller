@@ -37,6 +37,7 @@ public final class MinWordsFilter implements BoilerpipeFilter {
         this.minWords = minWords;
     }
 
+    @Override
     public boolean process(final TextDocument doc) {
         boolean changes = false;
 

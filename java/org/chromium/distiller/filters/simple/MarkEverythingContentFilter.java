@@ -35,6 +35,7 @@ public final class MarkEverythingContentFilter implements BoilerpipeFilter {
     private MarkEverythingContentFilter() {
     }
 
+    @Override
     public boolean process(final TextDocument doc) {
         boolean changes = false;
 

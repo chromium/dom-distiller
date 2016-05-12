@@ -44,6 +44,7 @@ public final class ExpandTitleToContentFilter implements BoilerpipeFilter {
         return INSTANCE;
     }
 
+    @Override
     public boolean process(TextDocument doc) {
         int i = 0;
         int title = -1;

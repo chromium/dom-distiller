@@ -9,9 +9,6 @@ import org.chromium.distiller.TestUtil;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Node;
-
-import java.util.List;
 
 public class WebTableTest extends DomDistillerJsTestCase {
     public void testGenerateOutput() {

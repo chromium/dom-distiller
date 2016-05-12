@@ -50,6 +50,7 @@ public class LabelAction {
         return labels;
     }
 
+    @Override
     public String toString() {
     	return super.toString()+"{"+Arrays.asList(labels)+"}";
     }

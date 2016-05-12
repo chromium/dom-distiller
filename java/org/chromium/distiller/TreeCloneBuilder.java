@@ -7,7 +7,6 @@ package org.chromium.distiller;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

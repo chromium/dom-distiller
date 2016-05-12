@@ -311,7 +311,7 @@ public class DomUtil {
 
     /**
      * Only keep some attributes for image elements.
-     * @param ie The image element to strip in-place.
+     * @param imgElement The image element to strip in-place.
      */
     public static void stripImageElement(ImageElement imgElement) {
         JsArray<Node> attrs = getAttributes(imgElement);
@@ -354,6 +354,7 @@ public class DomUtil {
      * Strips some attribute from certain tags in the tree rooted at |rootNode|, including root.
      * @param tagNames The tag names to be processed. ["*"] means all.
      */
+    @SuppressWarnings("unused")
     public static void stripAttributeFromTags(Node rootNode, String attribute, String[] tagNames) {
         Element root = Element.as(rootNode);
         for (String tag: tagNames) {

@@ -34,7 +34,6 @@ public class IEReadingViewParserTest extends DomDistillerJsTestCase {
 
     public void testDateInSubstringClassName() {
         Element div = TestUtil.createDiv(0);
-        String expectedDate = "Monday January 1st 2011 01:01";
         div.addClassName("b4datelineaft");
         div.setInnerHTML("Monday January 1st 2011 01:01");
         mRoot.appendChild(div);

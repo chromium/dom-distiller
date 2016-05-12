@@ -197,7 +197,7 @@ public class TableClassifier {
         // many (old) pages have layout tables with the "summary" attribute (#10).
         Element docElement = t.getOwnerDocument().getDocumentElement();
         int docWidth = docElement.getOffsetWidth();
-        if (docWidth > 0 && (double) t.getOffsetWidth() > 0.95 * (double) docWidth) {
+        if (docWidth > 0 && t.getOffsetWidth() > 0.95 * docWidth) {
             boolean viewportFound = false;
             NodeList<Element> allMeta = docElement.getElementsByTagName("META");
             for (int i = 0; i < allMeta.getLength() && !viewportFound; i++) {
@@ -257,7 +257,7 @@ public class TableClassifier {
         // into any of the above heuristics but are for layout, and hence shouldn't default to data
         // by #18.
         int docHeight = docElement.getOffsetHeight();
-        if (docHeight > 0 && (double) t.getOffsetHeight() > 0.9 * (double) docHeight) {
+        if (docHeight > 0 && t.getOffsetHeight() > 0.9 * docHeight) {
             return logAndReturn(Reason.MORE_90_PERCENT_DOC_HEIGHT, "", Type.LAYOUT);
         }
 
