@@ -12,6 +12,8 @@ import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.IFrameElement;
+import com.google.gwt.dom.client.NodeList;
+import com.google.gwt.dom.client.ObjectElement;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -25,6 +27,7 @@ public class YouTubeExtractor implements EmbedExtractor {
     private static final Set<String> relevantTags = new HashSet<>();
     static {
         relevantTags.add("IFRAME");
+        relevantTags.add("OBJECT");
     }
 
     @Override
@@ -37,18 +40,44 @@ public class YouTubeExtractor implements EmbedExtractor {
         if (e == null || !relevantTags.contains(e.getTagName())) {
             return null;
         }
-        String src = IFrameElement.as(e).getSrc();
+        String src = null;
+        if ("IFRAME".equals(e.getTagName())) {
+            src = IFrameElement.as(e).getSrc();
+        } else if ("OBJECT".equals(e.getTagName())) {
+            // Deprecated way to embed youtube.
+            // Ref: https://www.w3.org/blog/2008/09/howto-insert-youtube-video/
+            //      http://xahlee.info/js/html_embed_video.html
+            ObjectElement o = ObjectElement.as(e);
+            if (o.getAttribute("type").equals("application/x-shockwave-flash")) {
+                src = o.getAttribute("data");
+            } else {
+                NodeList<Element> params = DomUtil.querySelectorAll(e, "param[name=\"movie\"]");
+                if (params.getLength() == 1) {
+                    src = params.getItem(0).getAttribute("value");
+                }
+            }
+        }
+        if (src == null) {
+            return null;
+        }
         if (!DomUtil.hasRootDomain(src, "youtube.com")) {
             return null;
         }
 
         // Get specific attributes about the YouTube embed.
-        AnchorElement anchor = Document.get().createAnchorElement();
-        anchor.setHref(src);
-        String path = anchor.getPropertyString("pathname");
+        int paramLoc = src.indexOf("?");
+        if (paramLoc < 0) {
+            // Wrong syntax like "http://www.youtube.com/v/<video-id>&param=value" has been
+            // observed in the wild. Youtube seems to be resilient.
+            paramLoc = src.indexOf("&");
+        }
+        if (paramLoc < 0) {
+            paramLoc = src.length();
+        }
+        String path = src.substring(0, paramLoc);
 
         Map<String, String> paramMap =
-                DomUtil.splitUrlParams(anchor.getPropertyString("search").substring(1));
+                DomUtil.splitUrlParams(src.substring(paramLoc + 1));
 
         String id = getYouTubeIdFromPath(path);
         if (id == null) {

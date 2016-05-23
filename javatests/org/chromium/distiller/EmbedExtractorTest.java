@@ -29,7 +29,7 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
 
     public void testYouTubeExtractor() {
         Element youtube = TestUtil.createIframe();
-        youtube.setAttribute("src", "http://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1");
+        youtube.setAttribute("src", "http://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1&hl=zh_TW");
 
         EmbedExtractor extractor = new YouTubeExtractor();
         WebEmbed result = (WebEmbed) extractor.extract(youtube);
@@ -39,6 +39,7 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         assertEquals("youtube", result.getType());
         assertEquals("M7lc1UVf-VE", result.getId());
         assertEquals("1", result.getParams().get("autoplay"));
+        assertEquals("zh_TW", result.getParams().get("hl"));
 
         // Begin negative test:
         Element notYoutube = TestUtil.createIframe();
@@ -67,6 +68,53 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         result = (WebEmbed) extractor.extract(badYoutube);
 
         assertNull(result);
+    }
+
+    public void testYouTubeExtractorObject() {
+        String html =
+            "<object>" +
+                "<param name=\"movie\" " +
+                    "value=\"http://www.youtube.com/v/DML2WUhn2M0&hl=en_US&fs=1&hd=1\">" +
+                "</param>" +
+                "<param name=\"allowFullScreen\" value=\"true\">" +
+                "</param>" +
+            "</object>";
+        Element youtube = TestUtil.createDiv(0);
+        youtube.setInnerHTML(html);
+
+        EmbedExtractor extractor = new YouTubeExtractor();
+        WebEmbed result = (WebEmbed) extractor.extract(youtube.getFirstChildElement());
+
+        // Check YouTube specific attributes
+        assertNotNull(result);
+        assertEquals("youtube", result.getType());
+        assertEquals("DML2WUhn2M0", result.getId());
+        assertEquals("en_US", result.getParams().get("hl"));
+        assertEquals("1", result.getParams().get("fs"));
+        assertEquals("1", result.getParams().get("hd"));
+    }
+
+    public void testYouTubeExtractorObject2() {
+        String html =
+            "<object type=\"application/x-shockwave-flash\" " +
+                "data=\"http://www.youtube.com/v/ZuNNhOEzJGA&hl=fr&fs=1&rel=0&color1=0x006699&color2=0x54abd6&border=1\">" +
+            "</object>";
+        Element youtube = TestUtil.createDiv(0);
+        youtube.setInnerHTML(html);
+
+        EmbedExtractor extractor = new YouTubeExtractor();
+        WebEmbed result = (WebEmbed) extractor.extract(youtube.getFirstChildElement());
+
+        // Check YouTube specific attributes
+        assertNotNull(result);
+        assertEquals("youtube", result.getType());
+        assertEquals("ZuNNhOEzJGA", result.getId());
+        assertEquals("fr", result.getParams().get("hl"));
+        assertEquals("1", result.getParams().get("fs"));
+        assertEquals("0", result.getParams().get("rel"));
+        assertEquals("0x006699", result.getParams().get("color1"));
+        assertEquals("0x54abd6", result.getParams().get("color2"));
+        assertEquals("1", result.getParams().get("border"));
     }
 
     public void testVimeoExtractor() {
