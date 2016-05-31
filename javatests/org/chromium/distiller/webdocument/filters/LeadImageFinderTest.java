@@ -38,6 +38,40 @@ public class LeadImageFinderTest extends DomDistillerJsTestCase {
 
     public void testIrrelevantLeadImage() {
         TestWebDocumentBuilder builder = new TestWebDocumentBuilder();
+        builder.addText("text 1").setIsContent(true);
+        builder.addText("text 2").setIsContent(true);
+        WebImage priority = builder.addLeadImage();
+        WebDocument document = builder.build();
+        assertFalse(LeadImageFinder.process(document));
+        assertFalse(priority.getIsContent());
+    }
+
+    public void testMultipleLeadImageCandidatesWithinTexts() {
+        TestWebDocumentBuilder builder = new TestWebDocumentBuilder();
+        builder.addText("text 1").setIsContent(true);
+        WebImage priority = builder.addLeadImage();
+        builder.addText("text 2").setIsContent(true);
+        WebImage ignored = builder.addLeadImage();
+        WebDocument document = builder.build();
+        assertTrue(LeadImageFinder.process(document));
+        assertTrue(priority.getIsContent());
+        assertFalse(ignored.getIsContent());
+    }
+
+    public void testIrrelevantLeadImageWithContentImage() {
+        TestWebDocumentBuilder builder = new TestWebDocumentBuilder();
+        WebImage smallImage = builder.addImage();
+        smallImage.setIsContent(true);
+        WebImage largeImage = builder.addLeadImage();
+        builder.addNestedText("text 1").setIsContent(true);
+        WebDocument document = builder.build();
+        assertFalse(LeadImageFinder.process(document));
+        assertTrue(smallImage.getIsContent());
+        assertFalse(largeImage.getIsContent());
+    }
+
+    public void testIrrelevantLeadImageAfterSingleText() {
+        TestWebDocumentBuilder builder = new TestWebDocumentBuilder();
         WebImage wi = builder.addImage();
         builder.addNestedText("text 1").setIsContent(true);
         WebDocument document = builder.build();

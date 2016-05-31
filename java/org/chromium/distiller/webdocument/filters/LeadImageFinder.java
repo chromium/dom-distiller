@@ -34,24 +34,33 @@ public class LeadImageFinder {
     public static boolean process(WebDocument w) {
         List<WebImage> candidates = new ArrayList<>();
         WebText firstContent = null;
+        WebText lastContent = null;
 
         // TODO(mdjones): WebDocument should have a separate list that point to all images in the
         // document.
         for (WebElement e : w.getElements()) {
-            // If the element is an image and not already considered content:
-            if (e instanceof WebImage) {
-                if (!e.getIsContent()) {
-                    candidates.add((WebImage) e);
-                } else {
-                    // If we hit an image that is content, we are no longer searching for a "lead"
-                    // image.
-                    break;
-                }
-            } else if (firstContent == null && e instanceof WebText && e.getIsContent()) {
+            if (!(e instanceof WebText) || !e.getIsContent()) {
+                continue;
+            }
+            if (firstContent == null) {
                 firstContent = (WebText) e;
             }
+            lastContent = (WebText) e;
         }
-
+        boolean isWebImage;
+        for (WebElement e : w.getElements()) {
+            // If the element is an image and not already
+            // considered content.
+            isWebImage = e instanceof WebImage;
+            if ((isWebImage && e.getIsContent()) || e == lastContent) {
+                // If we hit the last content or a image that is
+                // content, then we are no longer searching for a
+                // "lead" image.
+                break;
+            } else if (isWebImage) {
+                candidates.add((WebImage) e);
+            }
+        }
         return findLeadImage(candidates, firstContent);
     }
 
