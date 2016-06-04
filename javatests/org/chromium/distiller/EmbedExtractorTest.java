@@ -380,4 +380,24 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         assertEquals(38, result.getHeight());
         assertEquals(38, result.getWidth());
     }
+
+    private void extractLazilyLoadedImage(String attr) {
+        ImageElement image = TestUtil.createImage();
+        image.setAttribute(attr, "image.png");
+        mBody.appendChild(image);
+
+        mHead.setInnerHTML("<base href=\"http://example.com/\">");
+
+        EmbedExtractor extractor = new ImageExtractor();
+        WebImage result = (WebImage) extractor.extract(image);
+        assertNotNull(result);
+        assertEquals("<img src=\"http://example.com/image.png\">", result.generateOutput(false));
+    }
+
+    public void testImageExtractorLazy() {
+        extractLazilyLoadedImage("data-src");
+        extractLazilyLoadedImage("datasrc");
+        extractLazilyLoadedImage("data-original");
+        extractLazilyLoadedImage("data-url");
+    }
 }

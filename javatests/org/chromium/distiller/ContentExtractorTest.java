@@ -94,7 +94,7 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
         final String html =
             "<h1>" + CONTENT_TEXT + "</h1>" +
             "<img id=\"a\" style=\"typo\" align=\"left\" src=\"image\" srcset=\"image200 200w, //example.org/image400 400w\">" +
-            "<img id=\"b\" style=\"align: left\" alt=\"b\" data-dummy=\"c\" src=\"image2\">" +
+            "<img id=\"b\" style=\"align: left\" alt=\"b\" data-dummy=\"c\" data-src=\"image2\">" +
             "<table role=\"grid\"><tbody><tr><td>" +
                 "<img id=\"c\" style=\"a\" alt=\"b\" src=\"/image\" srcset=\"https://example.com/image2x 2x, /image4x 4x,\">" +
                 "<img id=\"d\" style=\"a\" align=\"left\" src=\"/image2\">" +
@@ -157,7 +157,7 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
             "<p style=\"\">" +
                 CONTENT_TEXT +
             "</p>" +
-            "<img style=\"align: left\" src=\"/test.png\">" +
+            "<img style=\"align: left\" data-src=\"/test.png\">" +
             "<table style=\"position: absolute\">" +
                 "<tbody style=\"font-size: 2\">" +
                     "<tr style=\"z-index: 0\">" +

@@ -45,6 +45,7 @@ public class WebImage extends WebElement {
         if (textOnly) return "";
 
         ImageElement ie = ImageElement.as(Element.as(imgElement.cloneNode(false)));
+        ie.setSrc(srcUrl);
         ie.setSrc(ie.getSrc());
         // If computed width or height is zero, do not override them
         // to keep them visible.
