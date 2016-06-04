@@ -66,6 +66,7 @@ public class WebText extends WebElement {
 
         // Make sure links are absolute and IDs are gone.
         DomUtil.makeAllLinksAbsolute(clonedRoot);
+        DomUtil.stripTargetAttributes(clonedRoot);
         DomUtil.stripIds(clonedRoot);
         DomUtil.stripFontColorAttributes(clonedRoot);
         DomUtil.stripStyleAttributes(clonedRoot);

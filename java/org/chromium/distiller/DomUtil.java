@@ -213,6 +213,7 @@ public class DomUtil {
 
         stripIds(clonedSubtree);
         makeAllLinksAbsolute(clonedSubtree);
+        stripTargetAttributes(clonedSubtree);
         stripFontColorAttributes(clonedSubtree);
         stripTableBackgroundColorAttributes(clonedSubtree);
         stripStyleAttributes(clonedSubtree);
@@ -399,6 +400,13 @@ public class DomUtil {
      */
     public static void stripStyleAttributes(Node rootNode) {
         stripAttributeFromTags(rootNode, "STYLE", new String[]{"*"});
+    }
+
+    /**
+     * Strips all "target" attributes from anchor nodes in the tree rooted at |rootNode|
+     */
+    public static void stripTargetAttributes(Node rootNode) {
+        stripAttributeFromTags(rootNode, "TARGET", new String[]{"A"});
     }
 
     /**
