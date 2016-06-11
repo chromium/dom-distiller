@@ -102,6 +102,57 @@ public class DomUtil {
                 opacity == 0.0F);
     }
 
+    /**
+     * Verifies if a given element is visible by checking its offset.
+     */
+    public static boolean isVisibleByOffset(Element e) {
+        // Detect whether any of the ancestors has "display: none".
+        // Using offsetParent alone wouldn't work because it's also null when position is fixed.
+        // Using offsetHeight/Width alone makes sense in production, but we have too many
+        // zero-sized elements in our tests.
+        return e.getOffsetParent() != null || e.getOffsetHeight() != 0 || e.getOffsetWidth() != 0;
+    }
+
+    /**
+     * Get the element of the main article, if any.
+     * @return An element of article (not necessarily the html5 article element).
+     */
+    public static Element getArticleElement(Element root) {
+        NodeList<Element> allArticles = root.getElementsByTagName("ARTICLE");
+        List<Element> visibleElements = getVisibleElements(allArticles);
+        // Having multiple article elements usually indicates a bad case for this shortcut.
+        // TODO(wychen): some sites exclude things like title and author in article element.
+        if (visibleElements.size() == 1) {
+            return visibleElements.get(0);
+        }
+        // Note that the CSS property matching is case sensitive, and "Article" is the correct
+        // capitalization.
+        String query = "[itemscope][itemtype*=\"Article\"],[itemscope][itemtype*=\"Post\"]";
+        allArticles = DomUtil.querySelectorAll(root, query);
+        visibleElements = getVisibleElements(allArticles);
+        // It is commonly seen that the article is wrapped separately or in multiple layers.
+        if (visibleElements.size() > 0) {
+            return Element.as(DomUtil.getNearestCommonAncestor(visibleElements));
+        }
+        return null;
+    }
+
+    /**
+     * Get a list of visible elements.
+     * @return A list of visible elements.
+     */
+    public static List<Element> getVisibleElements(NodeList<Element> nodeList) {
+        List<Element> visibleElements = new ArrayList<>();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Element element = nodeList.getItem(i);
+            if (DomUtil.isVisible(element) &&
+                    DomUtil.isVisibleByOffset(element)) {
+                visibleElements.add(element);
+            }
+        }
+        return visibleElements;
+    }
+
     /*
      * We want to use jsni for direct access to javascript's innerText.  This avoids GWT's
      * implementation of Element::getInnerText(), which is intentionally different to mimic an old
@@ -171,11 +222,11 @@ public class DomUtil {
     /**
      * Get the nearest common ancestor of nodes.
      */
-    public static Node getNearestCommonAncestor(final NodeList ns) {
-        if (ns.getLength() == 0) return null;
-        Node parent = ns.getItem(0);
-        for (int i = 1; i < ns.getLength(); i++) {
-            parent = getNearestCommonAncestor(parent, ns.getItem(i));
+    public static Node getNearestCommonAncestor(final List<Element> ns) {
+        if (ns.size() == 0) return null;
+        Node parent = ns.get(0);
+        for (int i = 1; i < ns.size(); i++) {
+            parent = getNearestCommonAncestor(parent, ns.get(i));
         }
         return parent;
     }

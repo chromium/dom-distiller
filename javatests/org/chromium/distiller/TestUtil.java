@@ -13,6 +13,7 @@ import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.MetaElement;
 import com.google.gwt.dom.client.Text;
 import com.google.gwt.dom.client.TitleElement;
+import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Window;
 
@@ -159,6 +160,14 @@ public class TestUtil {
 
     public static String removeAllDirAttributes(String originalHtml) {
         return originalHtml.replaceAll(" dir=\\\"(ltr|rtl|inherit|auto)\\\"","");
+    }
+
+    public static List<Element> nodeListToList(NodeList<Element> nodeList) {
+        List<Element> elements = new ArrayList<>();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            elements.add(nodeList.getItem(i));
+        }
+        return elements;
     }
 
     /**

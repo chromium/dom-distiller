@@ -10,6 +10,7 @@ import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.NodeList;
 
 import java.util.Map;
 import java.util.List;
@@ -110,8 +111,8 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         currDiv.appendChild(TestUtil.createDiv(5));
 
         assertEquals(div2, DomUtil.getNearestCommonAncestor(finalDiv1, currDiv.getChild(0)));
-        assertEquals(div2, DomUtil.getNearestCommonAncestor(
-                DomUtil.querySelectorAll(mRoot, "[id=\"3\"],[id=\"5\"]")));
+        NodeList<Element> nodeList = DomUtil.querySelectorAll(mRoot, "[id=\"3\"],[id=\"5\"]");
+        assertEquals(div2, DomUtil.getNearestCommonAncestor(TestUtil.nodeListToList(nodeList)));
     }
 
     /**
@@ -129,8 +130,8 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         div2.appendChild(div3);
 
         assertEquals(div, DomUtil.getNearestCommonAncestor(div, div3));
-        assertEquals(div, DomUtil.getNearestCommonAncestor(
-                DomUtil.querySelectorAll(mRoot, "[id=\"1\"],[id=\"3\"]")));
+        NodeList<Element> nodeList = DomUtil.querySelectorAll(mRoot, "[id=\"1\"],[id=\"3\"]");
+        assertEquals(div, DomUtil.getNearestCommonAncestor(TestUtil.nodeListToList(nodeList)));
     }
 
     public void testNodeDepth() {
@@ -376,6 +377,212 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         mBody.setInnerHTML(html);
         DomUtil.stripImageElements(mBody);
         assertEquals(expected, mBody.getInnerHTML());
+    }
+
+    public void testIsVisibleByOffsetParentDisplayNone() {
+        String html =
+            "<div style=\"display: none;\">" +
+                "<div></div>" +
+            "</div>";
+        mBody.setInnerHTML(html);
+        Element child = mBody.getFirstChildElement().getFirstChildElement();
+        assertFalse(DomUtil.isVisibleByOffset(child));
+    }
+
+    public void testIsVisibleByOffsetChildDisplayNone() {
+        String html =
+            "<div>" +
+                "<div style=\"display: none;\"></div>" +
+            "</div>";
+        mBody.setInnerHTML(html);
+        Element child = mBody.getFirstChildElement().getFirstChildElement();
+        assertFalse(DomUtil.isVisibleByOffset(child));
+    }
+
+    public void testIsVisibleByOffsetDisplayBlock() {
+        String html =
+            "<div>" +
+                "<div></div>" +
+            "</div>";
+        mBody.setInnerHTML(html);
+        Element child = mBody.getFirstChildElement().getFirstChildElement();
+        assertTrue(DomUtil.isVisibleByOffset(child));
+    }
+
+    public void testOnlyProcessArticleElement() {
+        final String htmlArticle =
+            "<h1></h1>" +
+            "<article></article>";
+
+        String expected = "<article></article>";
+
+        Element result = getArticleElement(htmlArticle);
+        assertEquals(expected, result.getString());
+    }
+
+    public void testOnlyProcessArticleElementWithHiddenArticleElement() {
+        final String htmlArticle =
+            "<h1></h1>" +
+            "<article></article>" +
+            "<article style=\"display:none\"></article>";
+
+        String expected = "<article></article>";
+
+        Element result = getArticleElement(htmlArticle);
+        assertEquals(expected, result.getString());
+    }
+
+    public void testOnlyProcessArticleElementMultiple() {
+        final String htmlArticle =
+            "<h1></h1>" +
+            "<article></article>" +
+            "<article></article>";
+
+        // The existence of multiple articles disables the fast path.
+        assertNull(getArticleElement(htmlArticle));
+    }
+
+    public void testOnlyProcessSchemaOrgArticle() {
+        final String htmlArticle =
+            "<h1></h1>" +
+            "<div itemscope itemtype=\"http://schema.org/Article\">" +
+            "</div>";
+
+        final String expected =
+            "<div itemscope=\"\" " +
+                "itemtype=\"http://schema.org/Article\">" +
+            "</div>";
+
+        Element result = getArticleElement(htmlArticle);
+        assertEquals(expected, result.getString());
+    }
+
+    public void testOnlyProcessSchemaOrgArticleWithHiddenArticleElement() {
+        final String htmlArticle =
+            "<h1></h1>" +
+            "<div itemscope itemtype=\"http://schema.org/Article\">" +
+            "</div>" +
+            "<div itemscope itemtype=\"http://schema.org/Article\" " +
+                "style=\"display:none\">" +
+            "</div>";
+
+        String expected =
+            "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">" +
+            "</div>";
+
+        Element result = getArticleElement(htmlArticle);
+        assertEquals(expected, result.getString());
+    }
+
+    public void testOnlyProcessSchemaOrgArticleNews() {
+        final String htmlArticle =
+            "<h1></h1>" +
+            "<div itemscope itemtype=\"http://schema.org/NewsArticle\">" +
+            "</div>";
+
+        final String expected =
+            "<div itemscope=\"\" " +
+                "itemtype=\"http://schema.org/NewsArticle\">" +
+            "</div>";
+
+        Element result = getArticleElement(htmlArticle);
+        assertEquals(expected, result.getString());
+    }
+
+    public void testOnlyProcessSchemaOrgArticleBlog() {
+        final String htmlArticle =
+            "<h1></h1>" +
+            "<div itemscope itemtype=\"http://schema.org/BlogPosting\">" +
+            "</div>";
+
+        final String expected =
+            "<div itemscope=\"\" " +
+                "itemtype=\"http://schema.org/BlogPosting\">" +
+            "</div>";
+
+        Element result = getArticleElement(htmlArticle);
+        assertEquals(expected, result.getString());
+    }
+
+    public void testOnlyProcessSchemaOrgArticleNested() {
+        final String htmlArticle =
+            "<h1></h1>" +
+            "<div itemscope itemtype=\"http://schema.org/Article\">" +
+                "<div itemscope itemtype=\"http://schema.org/Article\">" +
+                "</div>" +
+            "</div>";
+
+        final String expected =
+            "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">" +
+                "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">" +
+               "</div>" +
+            "</div>";
+
+        Element result = getArticleElement(htmlArticle);
+        assertEquals(expected, result.getString());
+    }
+
+    public void testOnlyProcessSchemaOrgArticleNestedWithNestedHiddenArticleElement() {
+        final String htmlArticle =
+            "<h1></h1>" +
+            "<div itemscope itemtype=\"http://schema.org/Article\">" +
+                "<div itemscope itemtype=\"http://schema.org/Article\">" +
+                "</div>" +
+                "<div itemscope itemtype=\"http://schema.org/Article\" " +
+                    "style=\"display:none\">" +
+                "</div>" +
+            "</div>";
+
+        final String expected =
+            "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">" +
+                "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">" +
+                "</div>" +
+                "<div itemscope=\"\" itemtype=\"http://schema.org/Article\" " +
+                    "style=\"display:none\">" +
+                "</div>" +
+            "</div>";
+
+        Element result = getArticleElement(htmlArticle);
+        assertEquals(expected, result.getString());
+    }
+
+    public void testOnlyProcessSchemaOrgArticleNestedWithHiddenArticleElement() {
+        final String paragraph = "<p></p>";
+
+        final String htmlArticle =
+            "<h1></h1>" +
+            "<div itemscope itemtype=\"http://schema.org/Article\">" +
+                "<div itemscope itemtype=\"http://schema.org/Article\">" +
+                "</div>" +
+            "</div>" +
+            "<div itemscope itemtype=\"http://schema.org/Article\" " +
+                "style=\"display:none\">" +
+            "</div>";
+
+        final String expected =
+            "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">" +
+                "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">" +
+                "</div>" +
+            "</div>";
+
+        Element result = getArticleElement(htmlArticle);
+        assertEquals(expected, result.getString());
+    }
+
+    public void testOnlyProcessSchemaOrgNonArticleMovie() {
+        final String htmlArticle =
+            "<h1></h1>" +
+            "<div itemscope itemtype=\"http://schema.org/Movie\">" +
+            "</div>";
+
+        // Non-article schema.org types should not use the fast path.
+        Element result = getArticleElement(htmlArticle);
+        assertNull(result);
+    }
+
+    private Element getArticleElement(String html) {
+        mBody.setInnerHTML(html);
+        return DomUtil.getArticleElement(mRoot);
     }
 
     public void testGetArea() {
