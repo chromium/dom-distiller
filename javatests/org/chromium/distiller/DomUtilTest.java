@@ -504,6 +504,16 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         assertEquals(expected, result.getString());
     }
 
+    public void testOnlyProcessSchemaOrgPostal() {
+        final String htmlArticle =
+            "<h1></h1>" +
+            "<div itemscope itemtype=\"http://schema.org/PostalAddress\">" +
+            "</div>";
+
+        Element result = getArticleElement(htmlArticle);
+        assertNull(result);
+    }
+
     public void testOnlyProcessSchemaOrgArticleNested() {
         final String htmlArticle =
             "<h1></h1>" +

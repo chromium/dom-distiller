@@ -127,7 +127,7 @@ public class DomUtil {
         }
         // Note that the CSS property matching is case sensitive, and "Article" is the correct
         // capitalization.
-        String query = "[itemscope][itemtype*=\"Article\"],[itemscope][itemtype*=\"Post\"]";
+        String query = "[itemscope][itemtype*=\"Article\"],[itemscope][itemtype*=\"Posting\"]";
         allArticles = DomUtil.querySelectorAll(root, query);
         visibleElements = getVisibleElements(allArticles);
         // It is commonly seen that the article is wrapped separately or in multiple layers.
