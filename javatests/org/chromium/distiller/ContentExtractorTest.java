@@ -259,6 +259,22 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
                 TestUtil.removeAllDirAttributes(extractedContent));
     }
 
+    public void testPreserveOrderedListWithSpan() {
+        String html =
+            "<OL>" +
+                "<LI><span>" + CONTENT_TEXT + "</span></LI>" +
+                "<LI>" + CONTENT_TEXT + "</LI>" +
+                "<LI>" + CONTENT_TEXT + "</LI>" +
+                "<LI>" + CONTENT_TEXT + "</LI>" +
+            "</OL>";
+        mBody.setInnerHTML(html);
+
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals(html,
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
     public void testPreserveNestedOrderedList() {
         Element outerListTag = Document.get().createElement("OL");
         Element outerListItem = Document.get().createElement("LI");
@@ -546,11 +562,8 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
     }
 
     private void assertExtractor(String expected, String html) {
-        mBody.setInnerHTML("");
-        Element div = TestUtil.createDiv(0);
-        mBody.appendChild(div);
+        mBody.setInnerHTML(html);
 
-        div.setInnerHTML(html);
         ContentExtractor extractor = new ContentExtractor(mRoot);
         String extractedContent = extractor.extractContent();
         assertEquals(expected, TestUtil.removeAllDirAttributes(extractedContent));
@@ -581,5 +594,42 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
         String extractedContent = extractor.extractContent();
         assertEquals(expected,
                 TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
+    public void testBlockyArticle() {
+        final String htmlArticle =
+            "<h1>" + CONTENT_TEXT + "</h1>" +
+            "<span>" + CONTENT_TEXT + "</span>" +
+            "<div><span>" + CONTENT_TEXT + "</span></div>" +
+            "<p><em>" + CONTENT_TEXT + "</em></p>" +
+            "<div><cite><span><span>" + CONTENT_TEXT + "</span></span></cite></div>" +
+            "<div><span>" + CONTENT_TEXT + "</span><span>" + CONTENT_TEXT + "</span></div>" +
+            "<main><span><blockquote><cite>" +
+                "<span><span>" + CONTENT_TEXT + "</span></span><span>" + CONTENT_TEXT + "</span>" +
+            "</cite></blockquote></span></main>";
+
+        final String expected =
+            "<h1>" + CONTENT_TEXT + "</h1>" +
+            "<span>" + CONTENT_TEXT + "</span>" +
+            "<div><span>" + CONTENT_TEXT + "</span></div>" +
+            "<p><em>" + CONTENT_TEXT + "</em></p>" +
+            "<div><cite><span><span>" + CONTENT_TEXT + "</span></span></cite></div>" +
+            "<div><span>" + CONTENT_TEXT + "</span><span>" + CONTENT_TEXT + "</span></div>" +
+            "<BLOCKQUOTE><cite>" +
+                "<span><span>" + CONTENT_TEXT + "</span></span><span>" + CONTENT_TEXT + "</span>" +
+            "</cite></BLOCKQUOTE>";
+
+        assertExtractor(expected, htmlArticle);
+    }
+
+    public void testSpanArticle() {
+        final String htmlArticle =
+            "<span>" + CONTENT_TEXT + "</span>" +
+            "<span>" + CONTENT_TEXT + "</span>" +
+            "<span>" + CONTENT_TEXT + "</span>";
+
+        final String expected = "<div>" + htmlArticle + "</div>";
+
+        assertExtractor(expected, htmlArticle);
     }
 }

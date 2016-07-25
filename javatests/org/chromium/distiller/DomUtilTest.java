@@ -111,7 +111,7 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         currDiv.appendChild(TestUtil.createDiv(5));
 
         assertEquals(div2, DomUtil.getNearestCommonAncestor(finalDiv1, currDiv.getChild(0)));
-        NodeList<Element> nodeList = DomUtil.querySelectorAll(mRoot, "[id=\"3\"],[id=\"5\"]");
+        NodeList nodeList = DomUtil.querySelectorAll(mRoot, "[id=\"3\"],[id=\"5\"]");
         assertEquals(div2, DomUtil.getNearestCommonAncestor(TestUtil.nodeListToList(nodeList)));
     }
 
@@ -130,7 +130,7 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         div2.appendChild(div3);
 
         assertEquals(div, DomUtil.getNearestCommonAncestor(div, div3));
-        NodeList<Element> nodeList = DomUtil.querySelectorAll(mRoot, "[id=\"1\"],[id=\"3\"]");
+        NodeList nodeList = DomUtil.querySelectorAll(mRoot, "[id=\"1\"],[id=\"3\"]");
         assertEquals(div, DomUtil.getNearestCommonAncestor(TestUtil.nodeListToList(nodeList)));
     }
 

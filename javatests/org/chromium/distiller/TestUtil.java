@@ -11,6 +11,7 @@ import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.dom.client.IFrameElement;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.MetaElement;
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.Text;
 import com.google.gwt.dom.client.TitleElement;
 import com.google.gwt.dom.client.NodeList;
@@ -162,12 +163,12 @@ public class TestUtil {
         return originalHtml.replaceAll(" dir=\\\"(ltr|rtl|inherit|auto)\\\"","");
     }
 
-    public static List<Element> nodeListToList(NodeList<Element> nodeList) {
-        List<Element> elements = new ArrayList<>();
+    public static List<Node> nodeListToList(NodeList nodeList) {
+        List<Node> nodes = new ArrayList<>();
         for (int i = 0; i < nodeList.getLength(); i++) {
-            elements.add(nodeList.getItem(i));
+            nodes.add(nodeList.getItem(i));
         }
-        return elements;
+        return nodes;
     }
 
     /**

@@ -222,7 +222,7 @@ public class DomUtil {
     /**
      * Get the nearest common ancestor of nodes.
      */
-    public static Node getNearestCommonAncestor(final List<Element> ns) {
+    public static Node getNearestCommonAncestor(final List<? extends Node> ns) {
         if (ns.size() == 0) return null;
         Node parent = ns.get(0);
         for (int i = 1; i < ns.size(); i++) {

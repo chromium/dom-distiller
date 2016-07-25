@@ -4,6 +4,7 @@
 
 package org.chromium.distiller.webdocument;
 
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import org.chromium.distiller.DomUtil;
 import org.chromium.distiller.TreeCloneBuilder;
@@ -26,6 +27,7 @@ public class WebText extends WebElement {
     // If this text needs to be split to place an image properly its group will signify how they
     // should be joined again (same group numbers get merged).
     private int groupNumber;
+    private static Set<String> sInlineTags = null;
 
     public WebText(String text, List<Node> allTextNodes, int start, int end, int firstWordNode,
             int lastWordNode, int numWords, int numLinkedWords, int tagLevel, int offsetBlock) {
@@ -48,6 +50,45 @@ public class WebText extends WebElement {
         this.offsetBlock = offsetBlock;
     }
 
+    private Set<String> getInlineTags() {
+        if (sInlineTags == null) {
+            sInlineTags = new HashSet<String>();
+            // All inline elements except for impossible tags: BR, OBJECT, and SCRIPT.
+            // Please refer to DomConverter.visitElement() for skipped tags.
+            // Reference: https://developer.mozilla.org/en-US/docs/HTML/Inline_elements
+            sInlineTags.add("B");
+            sInlineTags.add("BIG");
+            sInlineTags.add("I");
+            sInlineTags.add("SMALL");
+            sInlineTags.add("TT");
+            sInlineTags.add("ABBR");
+            sInlineTags.add("ACRONYM");
+            sInlineTags.add("CITE");
+            sInlineTags.add("CODE");
+            sInlineTags.add("DFN");
+            sInlineTags.add("EM");
+            sInlineTags.add("KBD");
+            sInlineTags.add("STRONG");
+            sInlineTags.add("SAMP");
+            sInlineTags.add("TIME");
+            sInlineTags.add("VAR");
+            sInlineTags.add("A");
+            sInlineTags.add("BDO");
+            sInlineTags.add("IMG");
+            sInlineTags.add("MAP");
+            sInlineTags.add("Q");
+            sInlineTags.add("SPAN");
+            sInlineTags.add("SUB");
+            sInlineTags.add("SUP");
+            sInlineTags.add("BUTTON");
+            sInlineTags.add("INPUT");
+            sInlineTags.add("LABEL");
+            sInlineTags.add("SELECT");
+            sInlineTags.add("TEXTAREA");
+        }
+        return sInlineTags;
+    }
+
     @Override
     public String generateOutput(boolean textOnly) {
         if (hasLabel(DefaultLabels.TITLE)) return "";
@@ -57,9 +98,33 @@ public class WebText extends WebElement {
         Node clonedRoot = TreeCloneBuilder.buildTreeClone(getTextNodes());
 
         // To keep formatting/structure, at least one parent element should be in the output. This
-        // is necessary because many times a WebText is only a single node.
+        // is necessary because many times a WebText is only a single text node.
         if (clonedRoot.getNodeType() != Node.ELEMENT_NODE) {
             Node parentClone = getTextNodes().get(0).getParentElement().cloneNode(false);
+            parentClone.appendChild(clonedRoot);
+            clonedRoot = parentClone;
+        }
+
+        // The BODY element should not be used in the output.
+        if ("BODY".equals(Element.as(clonedRoot).getTagName())) {
+            Element div = Document.get().createDivElement();
+            div.setInnerHTML(Element.as(clonedRoot).getInnerHTML());
+            clonedRoot = div;
+        }
+
+        // Retain parent tags until the root is not an inline element, to make sure the style is
+        // display:block.
+        Node srcRoot = null;
+        while (getInlineTags().contains(Element.as(clonedRoot).getTagName())) {
+            if (srcRoot == null) {
+                srcRoot = DomUtil.getNearestCommonAncestor(getTextNodes());
+                if (srcRoot.getNodeType() != Node.ELEMENT_NODE) {
+                    srcRoot = srcRoot.getParentElement();
+                }
+            }
+            srcRoot = srcRoot.getParentElement();
+            if ("BODY".equals(Element.as(srcRoot).getTagName())) break;
+            Node parentClone = srcRoot.cloneNode(false);
             parentClone.appendChild(clonedRoot);
             clonedRoot = parentClone;
         }
