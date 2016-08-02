@@ -47,7 +47,10 @@ public class WebDocument {
             if (!e.getIsContent()) continue;
             if (e instanceof WebImage) {
                 images.addAll(((WebImage) e).getUrlList());
+            } else if (e instanceof WebTable) {
+                images.addAll(((WebTable) e).getImageUrlList());
             }
+            // TODO(wychen): if we allow images in WebText later, handle it here.
         }
         return images;
     }

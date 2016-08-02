@@ -7,6 +7,8 @@ package org.chromium.distiller.webdocument;
 import org.chromium.distiller.DomDistillerJsTestCase;
 import org.chromium.distiller.TestUtil;
 
+import java.util.List;
+
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 
@@ -27,5 +29,8 @@ public class WebTableTest extends DomDistillerJsTestCase {
 
         // Output should be the same as the input in this case.
         assertEquals("<table>" + html + "</table>", TestUtil.removeAllDirAttributes(got));
+        List<String> imgUrls = webTable.getImageUrlList();
+        assertEquals(1, imgUrls.size());
+        assertEquals("http://example.com/table.png", imgUrls.get(0));
     }
 }

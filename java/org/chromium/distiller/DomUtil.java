@@ -247,20 +247,19 @@ public class DomUtil {
     }
 
     /**
-     * Generate the HTML output for a list of relevant nodes.
+     * Clone and process a list of relevant nodes for output.
      * @param outputNodes The list of nodes in a subtree that are considered relevant.
-     * @param textOnly If this function should return text only instead of HTML.
-     * @return Displayable HTML content representing this WebElement.
+     * @return Element for displayable HTML content.
      */
-    public static String generateOutputFromList(List<Node> outputNodes, boolean textOnly) {
+    public static Element cloneAndProcessList(List<Node> outputNodes) {
         if (outputNodes.size() == 0) {
-            return "";
+            return null;
         }
 
         NodeTree expanded = NodeListExpander.expand(outputNodes);
         Node clonedSubtree = expanded.cloneSubtreeRetainDirection();
 
-        if (clonedSubtree.getNodeType() != Node.ELEMENT_NODE) return "";
+        if (clonedSubtree.getNodeType() != Node.ELEMENT_NODE) return null;
 
         stripIds(clonedSubtree);
         makeAllLinksAbsolute(clonedSubtree);
@@ -270,10 +269,7 @@ public class DomUtil {
         stripStyleAttributes(clonedSubtree);
         stripImageElements(clonedSubtree);
 
-        if (textOnly) {
-            return DomUtil.getTextFromTree(clonedSubtree);
-        }
-        return Element.as(clonedSubtree).getString();
+        return (Element) clonedSubtree;
     }
 
     /**
@@ -520,14 +516,13 @@ public class DomUtil {
     }
 
     /**
-     * Generate HTML/text output for a given node tree/subtree. This will ignore hidden
+     * Clone and process a given node tree/subtree. This will ignore hidden
      * elements.
      * @param subtree The root of the subtree.
-     * @param textOnly If this function should return text only and not HTML.
      * @return The output for the provided subtree.
      */
-    public static String generateOutputFromTree(Node subtree, boolean textOnly) {
-        return generateOutputFromList(getOutputNodes(subtree), textOnly);
+    public static Element cloneAndProcessTree(Node subtree) {
+        return cloneAndProcessList(getOutputNodes(subtree));
     }
 
     // Returns whether querySelectorAll is available
