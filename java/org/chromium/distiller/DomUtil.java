@@ -189,7 +189,7 @@ public class DomUtil {
      * @return A list of the provided node's parents.
      */
     public static List<Node> getParentNodes(Node n) {
-        ArrayList<Node> result = new ArrayList<Node>();
+        ArrayList<Node> result = new ArrayList<>();
         Node curr = n;
         while (curr != null) {
             result.add(curr);
@@ -329,7 +329,7 @@ public class DomUtil {
 
     public static void makeSrcSetAbsolute(ImageElement ie) {
         String srcset = ie.getAttribute("srcset");
-        if (srcset == "") {
+        if (srcset.isEmpty()) {
             ie.removeAttribute("srcset");
             return;
         }
@@ -346,6 +346,23 @@ public class DomUtil {
         }
         ie.setAttribute("srcset", StringUtil.join(sizes, ", "));
         ie.setSrc(oldsrc);
+    }
+
+    public static List<String> getSrcSetUrls(ImageElement ie) {
+        List<String> list = new ArrayList<>();
+        String srcset = ie.getAttribute("srcset");
+        if (srcset.isEmpty()) {
+            return list;
+        }
+
+        String[] sizes = StringUtil.jsSplit(srcset, ",");
+        for(int i = 0; i < sizes.length; i++) {
+            String size = StringUtil.jsTrim(sizes[i]);
+            if (size.isEmpty()) continue;
+            String[] comp = size.split(" ");
+            list.add(comp[0]);
+        }
+        return list;
     }
 
     public static void stripImageElements(Node root) {

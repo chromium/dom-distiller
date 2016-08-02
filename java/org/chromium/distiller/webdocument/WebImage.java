@@ -10,6 +10,9 @@ import com.google.gwt.dom.client.ImageElement;
 
 import org.chromium.distiller.DomUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * WebImage represents an image in the WebDocument potentially needing extraction.
  */
@@ -22,6 +25,8 @@ public class WebImage extends WebElement {
     private int width;
     // The original height of the image in pixels.
     private int height;
+    // Cloned and processed element.
+    private ImageElement clonedImg;
 
     /**
      * Build an image element.
@@ -40,10 +45,7 @@ public class WebImage extends WebElement {
         }
     }
 
-    @Override
-    public String generateOutput(boolean textOnly) {
-        if (textOnly) return "";
-
+    private void cloneAndProcessNode() {
         ImageElement ie = ImageElement.as(Element.as(imgElement.cloneNode(false)));
         ie.setSrc(srcUrl);
         ie.setSrc(ie.getSrc());
@@ -56,8 +58,17 @@ public class WebImage extends WebElement {
         DomUtil.makeSrcSetAbsolute(ie);
         DomUtil.stripImageElement(ie);
 
+        clonedImg = ie;
+    }
+
+    @Override
+    public String generateOutput(boolean textOnly) {
+        if (textOnly) return "";
+        if (clonedImg == null) {
+            cloneAndProcessNode();
+        }
         Element container = Document.get().createDivElement();
-        container.appendChild(ie);
+        container.appendChild(clonedImg);
         return container.getInnerHTML();
     }
 
@@ -86,10 +97,17 @@ public class WebImage extends WebElement {
     }
 
     /**
-     * Get the source URL of this image.
-     * @return Source URL or an empty string.
+     * Get the list of source URLs of this image.
+     * It's more efficient to call after generateOutput().
+     * @return Source URLs or an empty List.
      */
-    public String getSrc() {
-        return srcUrl;
+    public List<String> getUrlList() {
+        if (clonedImg == null) {
+            cloneAndProcessNode();
+        }
+        List<String> list = new ArrayList<>();
+        list.add(srcUrl);
+        list.addAll(DomUtil.getSrcSetUrls(clonedImg));
+        return list;
     }
 }

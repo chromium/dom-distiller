@@ -9,6 +9,7 @@ import org.chromium.distiller.webdocument.WebTable;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 
@@ -271,6 +272,18 @@ public class DomUtilTest extends DomDistillerJsTestCase {
             DomUtil.makeAllLinksAbsolute(mBody.getChild(i));
         }
         assertEquals(expected, mBody.getInnerHTML());
+    }
+
+    public void testGetSrcSetUrls() {
+        String html =
+            "<img src=\"http://example.com/image\" " +
+              "srcset=\"http://example.com/image200 200w, http://example.com/image400 400w\">";
+
+        mBody.setInnerHTML(html);
+        List<String> list = DomUtil.getSrcSetUrls((ImageElement) mBody.getChild(0));
+        assertEquals(2, list.size());
+        assertEquals("http://example.com/image200", list.get(0));
+        assertEquals("http://example.com/image400", list.get(1));
     }
 
     public void testStripTableBackgroundColorAttributes() {

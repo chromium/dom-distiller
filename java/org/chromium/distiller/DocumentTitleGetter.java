@@ -46,7 +46,7 @@ public class DocumentTitleGetter {
               currTitle = origTitle = DomUtil.javascriptTextContent(titles.getItem(0));
             }
         }
-        if (currTitle == "") return "";
+        if (currTitle.isEmpty()) return "";
 
         if (StringUtil.match(currTitle, " [\\|\\-] ")) {  // Title has '|' and/or '-'.
             // Get part before last '|' or '-'.

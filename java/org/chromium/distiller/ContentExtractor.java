@@ -34,7 +34,7 @@ public class ContentExtractor {
     private final TimingInfo mTimingInfo;
     private final StatisticsInfo mStatisticsInfo;
     private final MarkupParser parser;
-    private final List<String> imageUrls;
+    private List<String> imageUrls;
     private String textDirection;
 
     private class WebDocumentInfo {
@@ -47,7 +47,6 @@ public class ContentExtractor {
         candidateTitles = new LinkedList<String>();
         mTimingInfo = TimingInfo.create();
         mStatisticsInfo = StatisticsInfo.create();
-        imageUrls = new ArrayList<String>();
 
         double startTime = DomUtil.getTime();
         parser = new MarkupParser(root, mTimingInfo);
@@ -96,15 +95,13 @@ public class ContentExtractor {
         LeadImageFinder.process(documentInfo.document);
         NestedElementRetainer.process(documentInfo.document);
 
-        List<WebImage> images = documentInfo.document.getContentImages();
-        for (WebImage wi : images) {
-            imageUrls.add(wi.getSrc());
-        }
         mTimingInfo.setArticleProcessingTime(DomUtil.getTime() - now);
 
         now = DomUtil.getTime();
         String html = documentInfo.document.generateOutput(textOnly);
         mTimingInfo.setFormattingTime(DomUtil.getTime() - now);
+
+        imageUrls = documentInfo.document.getImageUrls();
 
         if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_TIMING_INFO)) {
             for (int i = 0; i < mTimingInfo.getOtherTimesCount(); i++) {

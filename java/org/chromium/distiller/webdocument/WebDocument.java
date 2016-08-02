@@ -41,11 +41,12 @@ public class WebDocument {
         return elements;
     }
 
-    public List<WebImage> getContentImages() {
-        List<WebImage> images = new ArrayList<>();
+    public List<String> getImageUrls() {
+        List<String> images = new ArrayList<>();
         for (WebElement e : elements) {
-            if (e instanceof WebImage && e.getIsContent()) {
-                images.add((WebImage) e);
+            if (!e.getIsContent()) continue;
+            if (e instanceof WebImage) {
+                images.addAll(((WebImage) e).getUrlList());
             }
         }
         return images;
