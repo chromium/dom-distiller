@@ -14,7 +14,7 @@ return (function() {
     var bounds = e.getBoundingClientRect()
     var style = window.getComputedStyle(e);
     return !(
-      bounds.height == 0 || bounds.width == 0 ||
+      (bounds.height == 0 && bounds.width == 0) ||
       style.display == "none" ||
       style.visibility == "hidden" ||
       style.opacity == 0
