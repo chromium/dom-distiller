@@ -4,8 +4,11 @@
 
 package org.chromium.distiller;
 
+import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Style;
+import org.chromium.distiller.webdocument.WebElement;
 import org.chromium.distiller.webdocument.WebEmbed;
+import org.chromium.distiller.webdocument.WebFigure;
 import org.chromium.distiller.webdocument.WebImage;
 import org.chromium.distiller.extractors.embeds.EmbedExtractor;
 import org.chromium.distiller.extractors.embeds.TwitterExtractor;
@@ -210,7 +213,7 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         mBody.appendChild(twitter);
 
         // This string represents a very simplified version of the twitter iframe embed structure.
-        String iframeStructure = 
+        String iframeStructure =
                 "<div class=\"media-forward root standalone-tweet ltr\"" +
                     "data-iframe-title=\"Embedded Tweet\"" +
                     "data-scribe=\"page:tweet\">" +
@@ -394,10 +397,168 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         assertEquals("<img src=\"http://example.com/image.png\">", result.generateOutput(false));
     }
 
+    private void extractLazilyLoadedFigure(String attr) {
+        ImageElement image = TestUtil.createImage();
+        image.setAttribute(attr, "image.png");
+        Element figure = Document.get().createElement("FIGURE");
+        figure.appendChild(image);
+
+        mBody.appendChild(figure);
+
+        mHead.setInnerHTML("<base href=\"http://example.com/\">");
+
+        EmbedExtractor extractor = new ImageExtractor();
+        WebFigure result = (WebFigure) extractor.extract(figure);
+        assertNotNull(result);
+        assertEquals("<figure><img src=\"http://example.com/image.png\"></figure>",
+                result.generateOutput(false));
+    }
+
     public void testImageExtractorLazy() {
         extractLazilyLoadedImage("data-src");
         extractLazilyLoadedImage("datasrc");
         extractLazilyLoadedImage("data-original");
         extractLazilyLoadedImage("data-url");
+
+        extractLazilyLoadedFigure("data-src");
+        extractLazilyLoadedFigure("datasrc");
+        extractLazilyLoadedFigure("data-original");
+        extractLazilyLoadedFigure("data-url");
+    }
+
+    public void testFigureWithoutCaption() {
+        ImageElement image = TestUtil.createImage();
+        image.setSrc("http://wwww.example.com/image.jpeg");
+        image.setAttribute("width", "100");
+        image.setAttribute("height", "100");
+        Element figure = Document.get().createElement("FIGURE");
+        figure.appendChild(image);
+        mBody.appendChild(figure);
+
+        EmbedExtractor extractor = new ImageExtractor();
+        WebImage result = (WebImage) extractor.extract(figure);
+        String got = result.generateOutput(false);
+        String expected =
+            "<figure>" +
+                "<img src=\"http://wwww.example.com/image.jpeg\"" +
+                    " width=\"100\" height=\"100\">" +
+            "</figure>";
+        assertNotNull(result);
+        assertEquals(100, result.getHeight());
+        assertEquals(100, result.getWidth());
+        assertEquals(expected, got);
+    }
+
+    public void testFigureWithoutImageAndCaption() {
+        Element figure = Document.get().createElement("FIGURE");
+        mBody.appendChild(figure);
+
+        EmbedExtractor extractor = new ImageExtractor();
+        WebImage result = (WebImage) extractor.extract(figure);
+        assertNull(result);
+    }
+
+    public void testFigureCaptionTextOnly() {
+        ImageElement image = TestUtil.createImage();
+        image.setSrc("http://wwww.example.com/image.jpeg");
+        image.setAttribute("width", "100");
+        image.setAttribute("height", "100");
+
+        Element figure = Document.get().createElement("FIGURE");
+        figure.appendChild(image);
+        Element figcaption = Document.get().createElement("FIGCAPTION");
+        figcaption.setInnerHTML("This is a caption");
+        figure.appendChild(figcaption);
+        mBody.appendChild(figure);
+
+        EmbedExtractor extractor = new ImageExtractor();
+        WebElement result = extractor.extract(figure);
+        assertEquals("This is a caption", result.generateOutput(true));
+    }
+
+    public void testFigureCaptionWithAnchor() {
+        mHead.setInnerHTML("<base href=\"http://example.com/\">");
+
+        ImageElement image = TestUtil.createImage();
+        image.setSrc("http://wwww.example.com/image.jpeg");
+        image.setAttribute("width", "100");
+        image.setAttribute("height", "100");
+
+        Element figure = Document.get().createElement("FIGURE");
+        figure.appendChild(image);
+        figure.setAttribute("class", "test");
+        figure.setAttribute("attribute", "value");
+
+        Element figcaption = Document.get().createElement("FIGCAPTION");
+        AnchorElement anchor = Document.get().createAnchorElement();
+        anchor.setHref("link_page.html");
+        anchor.setInnerHTML("caption link");
+        figcaption.appendChild(TestUtil.createText("This is a "));
+        figcaption.appendChild(anchor);
+        figure.appendChild(figcaption);
+        mBody.appendChild(figure);
+        String expected =
+            "<figure>" +
+                "<img src=\"http://wwww.example.com/image.jpeg\"" +
+                    " width=\"100\" height=\"100\">" +
+                "<figcaption>This is a " +
+                    "<a href=\"http://example.com/link_page.html\">caption link</a>" +
+                "</figcaption>" +
+            "</figure>";
+        EmbedExtractor extractor = new ImageExtractor();
+        WebElement result = extractor.extract(figure);
+        assertEquals(expected, TestUtil.removeAllDirAttributes(
+                result.generateOutput(false)));
+    }
+
+    public void testFigureWithCaptionWithoutAnchor() {
+        ImageElement image = TestUtil.createImage();
+        image.setSrc("http://wwww.example.com/image.jpeg");
+        image.setAttribute("width", "100");
+        image.setAttribute("height", "100");
+        Element figure = Document.get().createElement("FIGURE");
+        figure.appendChild(image);
+        Element figcaption = Document.get().createElement("FIGCAPTION");
+        figcaption.setInnerHTML("<div><span>This is a caption</span></div>");
+        figure.appendChild(figcaption);
+        mBody.appendChild(figure);
+
+        EmbedExtractor extractor = new ImageExtractor();
+        WebImage result = (WebImage) extractor.extract(figure);
+        String expected =
+            "<figure>" +
+                "<img src=\"http://wwww.example.com/image.jpeg\"" +
+                    " width=\"100\" height=\"100\">" +
+                "<figcaption>This is a caption</figcaption>" +
+            "</figure>";
+        assertNotNull(result);
+        assertEquals(100, result.getHeight());
+        assertEquals(100, result.getWidth());
+        assertEquals(expected, TestUtil.removeAllDirAttributes(
+                result.generateOutput(false)));
+    }
+
+    public void testDivCaption() {
+        ImageElement image = TestUtil.createImage();
+        image.setSrc("http://wwww.example.com/image.jpeg");
+        image.setAttribute("width", "100");
+        image.setAttribute("height", "100");
+
+        Element figure = Document.get().createElement("FIGURE");
+        figure.appendChild(image);
+        Element div = Document.get().createElement("DIV");
+        div.setInnerHTML("This is a caption");
+        figure.appendChild(div);
+        mBody.appendChild(figure);
+        String expected =
+            "<figure>" +
+                "<img src=\"http://wwww.example.com/image.jpeg\"" +
+                    " width=\"100\" height=\"100\">" +
+                "<figcaption>This is a caption</figcaption>" +
+            "</figure>";
+        EmbedExtractor extractor = new ImageExtractor();
+        WebElement result = extractor.extract(figure);
+        assertEquals(expected, TestUtil.removeAllDirAttributes(
+                result.generateOutput(false)));
     }
 }

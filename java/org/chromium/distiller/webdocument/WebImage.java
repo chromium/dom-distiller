@@ -110,4 +110,11 @@ public class WebImage extends WebElement {
         list.addAll(DomUtil.getSrcSetUrls(clonedImg));
         return list;
     }
+
+    protected ImageElement getProcessedNode() {
+        if (clonedImg == null) {
+            cloneAndProcessNode();
+        }
+        return clonedImg;
+    }
 }
