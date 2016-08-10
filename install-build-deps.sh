@@ -24,6 +24,7 @@ CHROME_MIN_VERSION=49
     python-protobuf \
     unzip \
     wget \
+    xdotool \
     xvfb
 
   if ! command -v google-chrome >/dev/null 2>&1; then

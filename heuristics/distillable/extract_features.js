@@ -73,7 +73,7 @@ return (function() {
   }
 
   var body = document.body;
-  return {
+  var features = {
      'opengraph': hasOGArticle(),
      'url': document.location.href,
      'title': document.title,
@@ -86,13 +86,11 @@ return (function() {
      'innerText': body.innerText,
      'textContent': body.textContent,
      'innerHTML': body.innerHTML,
-     'mozScore': _mozScore(true, 0.5, 140, true, 1e100),
-     'mozScoreAllSqrt': _mozScore(true, 0.5, 0, true, 1e100),
-     'mozScoreAllLinear': _mozScore(true, 1, 0, true, 1e100),
-     'mozScoreFast': _mozScore(false, 0.5, 140, true, 1000),
-     'mozScoreFastAllSqrt': _mozScore(false, 0.5, 0, true, 1000),
-     'mozScoreFastAllLinear': _mozScore(false, 1, 0, true, 1000),
+     'mozScore': Math.min(6 * Math.sqrt(1000 - 140), _mozScore(false, 0.5, 140, true, 1000)),
+     'mozScoreAllSqrt': Math.min(6 * Math.sqrt(1000), _mozScore(false, 0.5, 0, true, 1000)),
+     'mozScoreAllLinear': Math.min(6 * 1000, _mozScore(false, 1, 0, true, 1000)),
      'visibleElements': countVisible(body.querySelectorAll('*')),
      'visiblePPRE': countVisible(body.querySelectorAll('p,pre')),
   }
+  return features;
 })()

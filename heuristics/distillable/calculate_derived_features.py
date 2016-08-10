@@ -23,8 +23,28 @@ def WordCount(s):
 def GetLastSegment(path):
   return re.search('[^/]*\/?$', path).group(0)
 
-def CalcDerivedFeatures(index, opengraph, url, title, numElements, numAnchors, numForms, numPPRE, visibleElements, visiblePPRE,
-   innerText, textContent, innerHTML, numText, numPassword, mozScores):
+def CalcDerivedFeatures(index, raw):
+  return _CalcDerivedFeatures(
+    index,
+    raw,
+    raw['opengraph'],
+    raw['url'],
+    raw['title'],
+    raw['numElements'],
+    raw['numAnchors'],
+    raw['numForms'],
+    raw['numPPRE'],
+    raw['visibleElements'],
+    raw['visiblePPRE'],
+    raw['innerText'],
+    raw['textContent'],
+    raw['innerHTML'],
+    raw['numTextInput'],
+    raw['numPasswordInput']
+    )
+
+def _CalcDerivedFeatures(index, raw, opengraph, url, title, numElements, numAnchors, numForms, numPPRE, visibleElements, visiblePPRE,
+   innerText, textContent, innerHTML, numText, numPassword):
   path = urlparse.urlparse(url).path
 
   path = path.encode('utf-8')
@@ -35,7 +55,9 @@ def CalcDerivedFeatures(index, opengraph, url, title, numElements, numAnchors, n
   innerTextWords = WordCount(innerText)
   textContentWords = WordCount(textContent)
   innerHTMLWords = WordCount(innerHTML)
-  return [
+  features = [
+    'id', index,
+    'sin', math.sin(index),
     'openGraph', opengraph,
 
     'forum', 'forum' in path,
@@ -53,15 +75,38 @@ def CalcDerivedFeatures(index, opengraph, url, title, numElements, numAnchors, n
     'pathNumbers', CountMatches(path, r'\d+'),
     'lastSegmentLength', len(GetLastSegment(path)),
 
+    'visibleRatio', float(visibleElements) / max(1, numElements),
+    'visiblePPRERatio', float(visiblePPRE) / max(1, numPPRE),
+    'PPRERatio', float(numPPRE) / max(1, numElements),
+    'anchorPPRERatio', float(numAnchors) / max(1, numPPRE),
+
+    'innerTextLength', len(innerText),
+    'textContentLength', len(textContent),
+    'innerHtmlLength', len(innerHTML),
+    'innerTextLengthRatio', float(len(innerText)) / max(1, len(innerHTML)),
+    'textContentLengthRatio', float(len(textContent)) / max(1, len(innerHTML)),
+    'innerTexttextContentLengthRatio',float(len(innerText)) / max(1, len(textContent)),
+
+    'innerTextWordCount', innerTextWords,
+    'textContentWordCount', textContentWords,
+    'innerhtmlWordCount', innerHTMLWords,
+    'innerTextWordCountRatio', float(innerTextWords) / max(1, innerHTMLWords),
+    'textContentWordCountRatio', float(textContentWords) / max(1, innerHTMLWords),
+    'innerTexttextContentWordCountRatio', float(innerTextWords) / max(1, textContentWords),
+
+    'textCount', numText,
+    'passwordCount', numPassword,
     'formCount', numForms,
     'anchorCount', numAnchors,
     'elementCount', numElements,
     'anchorRatio', float(numAnchors) / max(1, numElements),
-
-    'mozScore', min(mozScores[3], 6 * math.sqrt(1000-140)),
-    'mozScoreAllSqrt', min(mozScores[4], 6 * math.sqrt(1000)),
-    'mozScoreAllLinear', min(mozScores[5], 6000),
   ]
+
+  for k in sorted(raw):
+    if 'mozScore' in k or 'num' in k:
+      features += [k, raw[k]]
+
+  return features
 
 def main(argv):
   parser = argparse.ArgumentParser()
@@ -79,25 +124,8 @@ def main(argv):
   for entry in core:
     features = entry['features']
     print 'processing %d' % (entry['index'])
-    entry['features'] = CalcDerivedFeatures(
-      entry['index'],
-      features['opengraph'],
-      features['url'],
-      features['title'],
-      features['numElements'],
-      features['numAnchors'],
-      features['numForms'],
-      features['numPPRE'],
-      features['visibleElements'],
-      features['visiblePPRE'],
-      features['innerText'],
-      features['textContent'],
-      features['innerHTML'],
-      features['numTextInput'],
-      features['numPasswordInput'],
-      [features['mozScore'], features['mozScoreAllSqrt'], features['mozScoreAllLinear'],
-       features['mozScoreFast'], features['mozScoreFastAllSqrt'], features['mozScoreFastAllLinear']]
-      )
+
+    entry['features'] = CalcDerivedFeatures(entry['index'], features)
 
   with open(options.out, 'w') as outfile:
     json.dump(core, outfile, indent=1)

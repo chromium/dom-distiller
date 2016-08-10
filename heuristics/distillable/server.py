@@ -182,7 +182,7 @@ class Service(object):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
-  parser.add_argument('--data-dir')
+  parser.add_argument('--data-dir', required=True)
   options = parser.parse_args()
   service = Service(options.data_dir)
   conf = {
