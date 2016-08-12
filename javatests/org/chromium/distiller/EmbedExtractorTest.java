@@ -449,6 +449,32 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         assertEquals(expected, got);
     }
 
+    public void testFigureWithoutCaptionWithNoscript() {
+        ImageElement image = TestUtil.createImage();
+        image.setSrc("http://wwww.example.com/image.jpeg");
+        image.setAttribute("width", "100");
+        image.setAttribute("height", "100");
+        Element figure = Document.get().createElement("FIGURE");
+        figure.appendChild(image);
+        Element noscript = Document.get().createElement("NOSCRIPT");
+        noscript.setInnerHTML("<span>text</span>");
+        figure.appendChild(noscript);
+        mBody.appendChild(figure);
+
+        EmbedExtractor extractor = new ImageExtractor();
+        WebImage result = (WebImage) extractor.extract(figure);
+        String got = result.generateOutput(false);
+        String expected =
+            "<figure>" +
+                "<img src=\"http://wwww.example.com/image.jpeg\"" +
+                    " width=\"100\" height=\"100\">" +
+            "</figure>";
+        assertNotNull(result);
+        assertEquals(100, result.getHeight());
+        assertEquals(100, result.getWidth());
+        assertEquals(expected, got);
+    }
+
     public void testFigureWithoutImageAndCaption() {
         Element figure = Document.get().createElement("FIGURE");
         mBody.appendChild(figure);
@@ -554,7 +580,7 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
             "<figure>" +
                 "<img src=\"http://wwww.example.com/image.jpeg\"" +
                     " width=\"100\" height=\"100\">" +
-                "<figcaption>This is a caption</figcaption>" +
+                "<figcaption>\nThis is a caption</figcaption>" +
             "</figure>";
         EmbedExtractor extractor = new ImageExtractor();
         WebElement result = extractor.extract(figure);

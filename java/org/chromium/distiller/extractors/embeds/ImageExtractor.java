@@ -108,7 +108,7 @@ public class ImageExtractor implements EmbedExtractor {
 
     private Element createFigcaptionElement(Element element) {
         Element figcaption = Document.get().createElement("FIGCAPTION");
-        figcaption.setInnerText(element.getInnerText());
+        figcaption.setInnerText(DomUtil.getInnerText(element));
         return figcaption;
     }
 }
