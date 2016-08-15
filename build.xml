@@ -102,17 +102,6 @@
     </apply>
   </target>
 
-  <target name="protoc.json" depends="protoc.plugin.base"
-      description="Generate base::Value-based json proto reader/writers">
-    <mkdir dir="out/proto/json" />
-    <apply executable="protoc" failonerror="true" relative="true">
-      <arg value="--plugin=protoc-gen-json_converter=protoc_plugins/json_values_converter.py"/>
-      <arg value="--json_converter_out=output_dir=third_party/dom_distiller_js:out/proto/json"/>
-      <arg value="--proto_path=proto"/>
-      <fileset dir="." includes="proto/**/*.proto"/>
-    </apply>
-  </target>
-
   <target name="javac" depends="setup, protoc" description="Compile java source to bytecode">
     <mkdir dir="war/WEB-INF/classes"/>
     <javac includes="**" encoding="utf-8"
@@ -154,24 +143,23 @@
     </exec>
   </target>
 
-  <target name="package" depends="gwtc, extractwrappedjs, gwtc.jstests, protoc.json"
+  <target name="package" depends="gwtc, extractwrappedjs, gwtc.jstests"
       description="Copy the main build artifacts into the out/package directory" >
     <mkdir dir="out/extension"/>
     <mkdir dir="out/package"/>
     <mkdir dir="out/package/js"/>
     <mkdir dir="out/package/proto"/>
+    <mkdir dir="out/package/python"/>
     <mkdir dir="out/package/test"/>
     <mkdir dir="out/package/test/data"/>
     <mkdir dir="out/package/test/data/war"/>
 
     <copy file="war/domdistiller/domdistiller.nocache.js" tofile="out/package/js/domdistiller.js" />
     <copy file="out/domdistiller_wrapped.js" todir="out/package/js" />
-    <copy todir="out/package/proto_gen">
-      <fileset dir="out/proto/json"/>
-    </copy>
     <copy todir="out/package/proto">
       <fileset dir="proto"/>
     </copy>
+    <copy file="out/proto/python/google/protobuf/compiler/plugin_pb2.py" todir="out/package/python" />
 
     <copy file="war/domdistiller/domdistiller.nocache.js" tofile="out/extension/domdistiller.js" />
     <copy todir="out/extension">
