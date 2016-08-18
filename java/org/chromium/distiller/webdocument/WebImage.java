@@ -67,9 +67,7 @@ public class WebImage extends WebElement {
         if (clonedImg == null) {
             cloneAndProcessNode();
         }
-        Element container = Document.get().createDivElement();
-        container.appendChild(clonedImg);
-        return container.getInnerHTML();
+        return clonedImg.getString();
     }
 
     /**

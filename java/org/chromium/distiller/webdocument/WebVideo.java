@@ -37,7 +37,6 @@ public class WebVideo extends WebElement {
     @Override
     public String generateOutput(boolean textOnly) {
         if (textOnly) return "";
-        Element container = Document.get().createDivElement();
         VideoElement ve = (VideoElement) videoElement.cloneNode(false);
         for (int i = 0; i < videoElement.getChildCount(); i++) {
             Node curNode = videoElement.getChild(i);
@@ -55,8 +54,7 @@ public class WebVideo extends WebElement {
         }
         DomUtil.makeAllSrcAttributesAbsolute(ve);
         DomUtil.stripIds(ve);
-        container.appendChild(ve);
-        return container.getInnerHTML();
+        return ve.getString();
     }
 
     /**

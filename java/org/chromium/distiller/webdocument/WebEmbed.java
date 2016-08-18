@@ -50,13 +50,11 @@ public class WebEmbed extends WebElement {
     public String generateOutput(boolean textOnly) {
         if (textOnly) return "";
         // Generate a placeholder for javascript to replace with the real embed.
-        Element container = Document.get().createDivElement();
         Element embed = Document.get().createDivElement();
         embed.setClassName("embed-placeholder");
         embed.setAttribute("data-type", type);
         embed.setAttribute("data-id", id);
-        container.appendChild(embed);
-        return container.getInnerHTML();
+        return embed.getString();
     }
 
     /**
