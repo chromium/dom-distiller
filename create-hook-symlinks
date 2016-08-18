@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Install hook scripts by making symlinks to $GIT_ROOT/hooks.
+
+HOOK_DIR=.git/hooks
+
+for hook in $(ls hooks); do
+    ln -s -f ../../hooks/$hook $HOOK_DIR/$hook
+done

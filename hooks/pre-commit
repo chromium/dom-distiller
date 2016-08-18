@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+
+# Redirect output to stderr.
+exec 1>&2
+
+VIOLATIONS="$(git grep --cached getInnerText -- '*.java' | grep -v DomUtil)"
+
+if [ -n "$VIOLATIONS" ]; then
+	echo "Avoid using Element.getInnerText() in GWT"
+	echo "Ref: http://crbug.com/637170"
+	echo
+	echo "Violations:"
+	echo "$VIOLATIONS"
+	exit 1
+fi

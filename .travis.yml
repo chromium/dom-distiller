@@ -9,5 +9,6 @@ install:
 script:
   # Use system python for protobuf package.
   - export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  - hooks/pre-commit
   - ant test -Dtest.shuffle=1 -Dtest.repeat=10
   - ant package

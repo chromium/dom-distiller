@@ -62,6 +62,12 @@ ChromeDriver requires Google Chrome to be installed at a specific location (the
 default location for the platform). See [ChromeDriver documentation]
 (https://code.google.com/p/selenium/wiki/ChromeDriver) for details.
 
+Also install the git hooks:
+
+```bash
+./create-hook-symlinks
+```
+
 ## Developing on Ubuntu/Debian
 
 Install the dependencies by entering the `dom-distiller` folder and running:
