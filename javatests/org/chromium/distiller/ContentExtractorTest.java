@@ -632,4 +632,17 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
 
         assertExtractor(expected, htmlArticle);
     }
+
+    public void testUnwantedIFrame() {
+        final String html =
+            "<p>" + CONTENT_TEXT + "</p>" +
+            "<iframe>dummy</iframe>" +
+            "<p>" + CONTENT_TEXT + "</p>";
+
+        final String expected =
+            "<p>" + CONTENT_TEXT + "</p>" +
+            "<p>" + CONTENT_TEXT + "</p>";
+
+        assertExtractor(expected, html);
+    }
 }

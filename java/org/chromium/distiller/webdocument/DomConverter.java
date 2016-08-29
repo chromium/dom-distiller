@@ -139,6 +139,7 @@ public class DomConverter implements DomWalker.Visitor {
             case "SCRIPT":
             case "LINK":
             case "NOSCRIPT":
+            case "IFRAME":
                 return false;
         }
         builder.startElement(e);
