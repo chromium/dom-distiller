@@ -622,6 +622,12 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
         assertExtractor(expected, htmlArticle);
     }
 
+    public void testSandboxedIFrame() {
+        final String html ="<iframe sandbox></iframe>";
+
+        assertExtractor("", html);
+    }
+
     public void testSpanArticle() {
         final String htmlArticle =
             "<span>" + CONTENT_TEXT + "</span>" +

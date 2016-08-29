@@ -87,16 +87,26 @@ public class DomConverter implements DomWalker.Visitor {
         // Node-type specific extractors check for elements they are interested in here. Everything
         // else will be filtered through the switch below.
 
-        // Check for embedded elements that might be extracted.
-        if (embedTagNames.contains(e.getTagName())) {
-            // If the tag is marked as interesting, check the extractors.
-            for (EmbedExtractor extractor : extractors) {
-                WebElement embed = extractor.extract(e);
-                if (embed != null) {
-                    builder.embed(embed);
-                    return false;
+        try {
+            // Check for embedded elements that might be extracted.
+            if (embedTagNames.contains(e.getTagName())) {
+                // If the tag is marked as interesting, check the extractors.
+                for (EmbedExtractor extractor : extractors) {
+                    WebElement embed = extractor.extract(e);
+                    if (embed != null) {
+                        builder.embed(embed);
+                        return false;
+                    }
                 }
             }
+        } catch (Exception exception) {
+            LogUtil.logToConsole(
+                "Exception happened in EmbedExtractors: " + exception.getMessage());
+        }
+
+        // Skip IFRAMEs not recognized by EmbedExtractors.
+        if (e.getTagName().equals("IFRAME")) {
+            return false;
         }
 
         // Create a placeholder for the elements we want to preserve.
