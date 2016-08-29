@@ -142,9 +142,7 @@ public class WebText extends WebElement {
         // get the innerHTML, otherwise these tags would be duplicated.
         Element elementClonedRoot = Element.as(clonedRoot);
         if (textOnly) {
-            // TODO(wychen): .textContent should be identical to .innerText
-            // in our use cases, but needs verification.
-            return DomUtil.javascriptTextContent(elementClonedRoot);
+            return DomUtil.getInnerText(elementClonedRoot);
         } else if (WebTag.canBeNested(elementClonedRoot.getTagName())) {
             return elementClonedRoot.getInnerHTML();
         }

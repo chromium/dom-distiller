@@ -88,6 +88,10 @@ public class WebTextTest extends DomDistillerJsTestCase {
         String got = text.generateOutput(false);
         String want = "<p>Words<br>split<br>with<br>lines</p>";
         assertEquals(want, TestUtil.removeAllDirAttributes(got));
+
+        got = text.generateOutput(true);
+        want = "Words\nsplit\nwith\nlines";
+        assertEquals(want, got);
     }
 
     public void testGenerateOutputLIElements() {

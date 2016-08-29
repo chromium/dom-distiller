@@ -518,7 +518,7 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         Element figcaption = Document.get().createElement("FIGCAPTION");
         AnchorElement anchor = Document.get().createAnchorElement();
         anchor.setHref("link_page.html");
-        anchor.setInnerHTML("caption link");
+        anchor.setInnerHTML("caption<br>link");
         figcaption.appendChild(TestUtil.createText("This is a "));
         figcaption.appendChild(anchor);
         figure.appendChild(figcaption);
@@ -528,13 +528,14 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
                 "<img src=\"http://wwww.example.com/image.jpeg\"" +
                     " width=\"100\" height=\"100\">" +
                 "<figcaption>This is a " +
-                    "<a href=\"http://example.com/link_page.html\">caption link</a>" +
+                    "<a href=\"http://example.com/link_page.html\">caption<br>link</a>" +
                 "</figcaption>" +
             "</figure>";
         EmbedExtractor extractor = new ImageExtractor();
         WebElement result = extractor.extract(figure);
         assertEquals(expected, TestUtil.removeAllDirAttributes(
                 result.generateOutput(false)));
+        assertEquals("This is a caption\nlink", result.generateOutput(true));
     }
 
     public void testFigureWithCaptionWithoutAnchor() {
