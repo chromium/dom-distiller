@@ -6,6 +6,7 @@ package org.chromium.distiller.webdocument;
 
 import org.chromium.distiller.DomUtil;
 import org.chromium.distiller.DomWalker;
+import org.chromium.distiller.JavaScript;
 import org.chromium.distiller.LogUtil;
 import org.chromium.distiller.TableClassifier;
 
@@ -37,11 +38,14 @@ public class DomConverter implements DomWalker.Visitor {
     // For quick lookup of tags that could possibly be embeds.
     private final HashSet<String> embedTagNames;
 
+    private boolean isMobileFriendly;
+    private boolean hasArticleElement;
+
     public DomConverter(WebDocumentBuilderInterface builder) {
-        hiddenElements = new HashSet<Node>();
+        hiddenElements = new HashSet<>();
         this.builder = builder;
 
-        extractors = new ArrayList<EmbedExtractor>();
+        extractors = new ArrayList<>();
         extractors.add(new ImageExtractor());
         extractors.add(new TwitterExtractor());
         extractors.add(new VimeoExtractor());
@@ -51,6 +55,14 @@ public class DomConverter implements DomWalker.Visitor {
         for (EmbedExtractor extractor : extractors) {
             embedTagNames.addAll(extractor.getRelevantTagNames());
         }
+    }
+
+    public void setIsMobileFriendly(boolean mobileFriendly) {
+        isMobileFriendly = mobileFriendly;
+    }
+
+    public void setHasArticleElement(boolean hasArticle) {
+        hasArticleElement = hasArticle;
     }
 
     public final Set<Node> getHiddenElements() {
@@ -78,8 +90,17 @@ public class DomConverter implements DomWalker.Visitor {
     private boolean visitElement(Element e) {
         // Skip invisible or uninteresting elements.
         boolean visible = DomUtil.isVisible(e);
-        logVisibilityInfo(e, visible);
+        boolean keepAnyway = false;
         if (!visible) {
+            if (isMobileFriendly && hasArticleElement && DomUtil.hasClassName(e, "hidden")) {
+                // Process more hidden elements in a marked article in mobile-friendly pages
+                // because some sites hide the lower part of the article.
+                // See crbug.com/599121
+                keepAnyway = true;
+            }
+        }
+        logVisibilityInfo(e, visible || keepAnyway);
+        if (!visible && !keepAnyway) {
             hiddenElements.add(e);
             return false;
         }

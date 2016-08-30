@@ -44,7 +44,7 @@ public class ContentExtractor {
 
     public ContentExtractor(Element root) {
         documentElement = root;
-        candidateTitles = new LinkedList<String>();
+        candidateTitles = new LinkedList<>();
         mTimingInfo = TimingInfo.create();
         mStatisticsInfo = StatisticsInfo.create();
 
@@ -164,9 +164,20 @@ public class ContentExtractor {
     private WebDocumentInfo createWebDocumentInfoFromPage() {
         WebDocumentInfo info = new WebDocumentInfo();
         WebDocumentBuilder documentBuilder = new WebDocumentBuilder();
+
+        NodeList<Element> mobileViewport = DomUtil.querySelectorAll(documentElement,
+                "meta[name=\"viewport\"][content*=\"width=device-width\"]");
         DomConverter converter = new DomConverter(documentBuilder);
+        converter.setIsMobileFriendly(mobileViewport.getLength() > 0);
+
         Element walkerRoot = DomUtil.getArticleElement(documentElement);
-        if (walkerRoot == null) {
+        converter.setHasArticleElement(walkerRoot != null);
+
+        if (walkerRoot != null) {
+            if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_BOILER_PIPE_PHASES)) {
+                LogUtil.logToConsole("Extracted article element: " + walkerRoot);
+            }
+        } else {
             walkerRoot = documentElement;
         }
         new DomWalker(converter).walk(walkerRoot);
