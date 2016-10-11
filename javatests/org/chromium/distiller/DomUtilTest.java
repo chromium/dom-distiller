@@ -392,6 +392,36 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         assertEquals(expected, mBody.getInnerHTML());
     }
 
+    public void testStripUnwantedClassNames() {
+        String html =
+            "<br class=\"iscaptiontxt\">" +
+            "<br id=\"a\">" +
+            "<br class=\"\">" +
+            "<div class=\"tion cap\">" +
+                "<br class=\"hascaption\">" +
+                "<br class=\"not_me\">" +
+            "</div>";
+
+        final String expected =
+            "<br class=\"caption\">" +
+            "<br id=\"a\">" +
+            "<br>" +
+            "<div>" +
+                "<br class=\"caption\">" +
+                "<br>" +
+            "</div>";
+
+        mBody.setInnerHTML(html);
+        for (int i = 0; i < mBody.getChildCount(); i++) {
+            DomUtil.stripUnwantedClassNames(Element.as(mBody.getChild(i)));
+        }
+        assertEquals(expected, mBody.getInnerHTML());
+
+        mBody.setInnerHTML(html);
+        DomUtil.stripUnwantedClassNames(mBody);
+        assertEquals(expected, mBody.getInnerHTML());
+    }
+
     public void testIsVisibleByOffsetParentDisplayNone() {
         String html =
             "<div style=\"display: none;\">" +

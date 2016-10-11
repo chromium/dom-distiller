@@ -651,4 +651,16 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
 
         assertExtractor(expected, html);
     }
+
+    public void testStripUnwantedClassNames() {
+        final String html =
+            "<p class=\"test\">" + CONTENT_TEXT + "</p>" +
+            "<p class=\"iscaption\">" + CONTENT_TEXT + "</p>";
+
+        final String expected =
+            "<p>" + CONTENT_TEXT + "</p>" +
+            "<p class=\"caption\">" + CONTENT_TEXT + "</p>";
+
+        assertExtractor(expected, html);
+    }
 }

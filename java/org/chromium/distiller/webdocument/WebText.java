@@ -133,6 +133,7 @@ public class WebText extends WebElement {
         DomUtil.makeAllLinksAbsolute(clonedRoot);
         DomUtil.stripTargetAttributes(clonedRoot);
         DomUtil.stripIds(clonedRoot);
+        DomUtil.stripUnwantedClassNames(clonedRoot);
         DomUtil.stripFontColorAttributes(clonedRoot);
         DomUtil.stripStyleAttributes(clonedRoot);
         // TODO(wychen): if we allow images in WebText later, add stripImageElements().

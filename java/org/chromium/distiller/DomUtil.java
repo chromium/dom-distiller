@@ -418,6 +418,7 @@ public class DomUtil {
     /**
      * Strips some attribute from certain tags in the tree rooted at |rootNode|, including root.
      * @param tagNames The tag names to be processed. ["*"] means all.
+     * TODO(crbug.com/654108): We should convert to whitelisting for all the tags.
      */
     @SuppressWarnings("unused")
     public static void stripAttributeFromTags(Node rootNode, String attribute, String[] tagNames) {
@@ -471,6 +472,32 @@ public class DomUtil {
      */
     public static void stripTargetAttributes(Node rootNode) {
         stripAttributeFromTags(rootNode, "TARGET", new String[]{"A"});
+    }
+
+    /**
+     * Strips unwanted classNames from all nodes in the tree rooted at |root|.
+     * TODO(crbug.com/654109): "caption" is essential for styling, but all classNames should
+     *                         be removed eventually.
+     */
+    public static void stripUnwantedClassNames(Node root) {
+        if (root.getNodeType() == Node.ELEMENT_NODE) {
+            Element element = Element.as(root);
+            if (element.hasAttribute("class")) {
+                stripUnwantedClassName(element);
+            }
+        }
+        NodeList<Element> elems = DomUtil.querySelectorAll(root, "[class]");
+        for (int i = 0; i < elems.getLength(); i++) {
+            stripUnwantedClassName(elems.getItem(i));
+        }
+    }
+
+    private static void stripUnwantedClassName(Element elem) {
+        if (elem.getClassName().contains("caption")) {
+            elem.setClassName("caption");
+        } else {
+            elem.removeAttribute("class");
+        }
     }
 
     /**
