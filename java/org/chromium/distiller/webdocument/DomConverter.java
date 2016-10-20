@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 /**
  * This DomWalker.Visitor creates a WebDocument from the walked DOM. It skips hidden and other
@@ -40,6 +41,8 @@ public class DomConverter implements DomWalker.Visitor {
 
     private boolean isMobileFriendly;
     private boolean hasArticleElement;
+    private boolean isHiddenClass = false;
+    private Stack<Boolean> isHiddenStack = new Stack<>();
 
     public DomConverter(WebDocumentBuilderInterface builder) {
         hiddenElements = new HashSet<>();
@@ -91,12 +94,18 @@ public class DomConverter implements DomWalker.Visitor {
         // Skip invisible or uninteresting elements.
         boolean visible = DomUtil.isVisible(e);
         boolean keepAnyway = false;
+        boolean hasHiddenClassName = false;
         if (!visible) {
-            if (isMobileFriendly && hasArticleElement && DomUtil.hasClassName(e, "hidden")) {
-                // Process more hidden elements in a marked article in mobile-friendly pages
-                // because some sites hide the lower part of the article.
-                // See crbug.com/599121
-                keepAnyway = true;
+            if (isMobileFriendly && hasArticleElement) {
+                if (!isHiddenClass) {
+                    hasHiddenClassName = DomUtil.hasClassName(e, "hidden");
+                }
+                if (isHiddenClass || hasHiddenClassName) {
+                    // Process more hidden elements in a marked article in mobile-friendly pages
+                    // because some sites hide the lower part of the article.
+                    // See crbug.com/599121
+                    keepAnyway = true;
+                }
             }
         }
         logVisibilityInfo(e, visible || keepAnyway);
@@ -174,6 +183,8 @@ public class DomConverter implements DomWalker.Visitor {
                 return false;
         }
         builder.startElement(e);
+        isHiddenStack.push(isHiddenClass);
+        isHiddenClass |= hasHiddenClassName;
         return true;
     }
 
@@ -186,6 +197,7 @@ public class DomConverter implements DomWalker.Visitor {
             }
         }
         builder.endElement();
+        isHiddenClass = isHiddenStack.pop();
     }
 
     private static void logVisibilityInfo(Element e, boolean visible) {

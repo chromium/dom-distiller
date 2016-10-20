@@ -663,4 +663,28 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
 
         assertExtractor(expected, html);
     }
+
+    public void testHiddenArticle() {
+        final String html =
+            "<article>" +
+                "<p class=\"visible\">" + CONTENT_TEXT + "</p>" +
+                "<p class=\"hidden another\">" + CONTENT_TEXT + "</p>" +
+                "<div class=\"nested hidden\"><p>" + CONTENT_TEXT + "</p></div>" +
+                "<div class=\"invisible\"><p>" + CONTENT_TEXT + "</p></div>" +
+                "<p class=\"last hidden\">" + CONTENT_TEXT + "</p>" +
+            "</article>";
+
+        mHead.setInnerHTML(
+            "<meta name=\"viewport\" content=\"width=device-width\">" +
+            "<style>.hidden {display: none} .invisible {display: none}</style>"
+        );
+
+        final String expected =
+            "<p>" + CONTENT_TEXT + "</p>" +
+            "<p>" + CONTENT_TEXT + "</p>" +
+            "<p>" + CONTENT_TEXT + "</p>" +
+            "<p>" + CONTENT_TEXT + "</p>";
+
+        assertExtractor(expected, html);
+    }
 }
