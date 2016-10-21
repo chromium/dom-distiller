@@ -5,7 +5,8 @@
 
 # Installs required build dependencies (to buildtools/ and the local system).
 
-CHROME_MIN_VERSION=49
+# If Chrome is older than CHROME_MIN_VERSION, force update.
+[ -z "$CHROME_MIN_VERSION" ] && CHROME_MIN_VERSION=49
 
 (
   set -e
@@ -35,7 +36,9 @@ CHROME_MIN_VERSION=49
   fi
 
   # Update chrome if it is too old, and keep the default channel.
-  if ! google-chrome --version | tr " " "\n" | awk '/[0-9.]/{exit ($1<'${CHROME_MIN_VERSION}')}'; then
+  CHROME_VERSION=$(google-chrome --version | tr " " "\n" | awk '/[0-9.]/{print ($1+0)}')
+  if (( $CHROME_VERSION < $CHROME_MIN_VERSION )); then
+    echo "Current Chrome version is $CHROME_VERSION. Updating to latest."
     case "$(google-chrome --version)" in
       *dev*)
         apt-get install google-chrome-unstable
@@ -62,7 +65,7 @@ CHROME_MIN_VERSION=49
   mkdir $tmp
   cd $tmp
 
-  wget https://chromedriver.storage.googleapis.com/2.15/$zip
+  wget https://chromedriver.storage.googleapis.com/2.24/$zip
   chmod a+r $zip
   sudo -u $user mkdir -p $tools
   sudo -u $user unzip -o -d $tools $zip

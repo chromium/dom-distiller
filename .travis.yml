@@ -12,3 +12,6 @@ script:
   - hooks/pre-commit
   - ant test -Dtest.shuffle=1 -Dtest.repeat=10
   - ant package
+env:
+  - CHROME_MIN_VERSION=49
+  - CHROME_MIN_VERSION=99
