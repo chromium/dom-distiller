@@ -198,3 +198,9 @@ Or for long-article model, run:
 ```
 
 Then lots of files named `labelled-*.csv` would be created.
+
+## Misc
+
+After scrawling the MHTML files using `get_screenshots.py` with `--save-mhtml`
+option, you can convert it to a corpus file by `gen_mhtml_corpus.py`. The
+detailed usage is in the header of `gen_mhtml_corpus.py`.
