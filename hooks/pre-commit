@@ -7,8 +7,21 @@ exec 1>&2
 VIOLATIONS="$(git grep --cached getInnerText -- '*.java' | grep -v DomUtil)"
 
 if [ -n "$VIOLATIONS" ]; then
-	echo "Avoid using Element.getInnerText() in GWT"
+	echo "Avoid using Element.getInnerText() in GWT."
+	echo "Use DomUtil.getInnerText() instead."
 	echo "Ref: http://crbug.com/637170"
+	echo
+	echo "Violations:"
+	echo "$VIOLATIONS"
+	exit 1
+fi
+
+VIOLATIONS="$(git grep --cached getClassName -- '*.java' | grep -v '*')"
+
+if [ -n "$VIOLATIONS" ]; then
+	echo "Avoid using Element.getClassName() in GWT."
+	echo "Use Element.getAttribute(\"class\") instead."
+	echo "Ref: http://crbug.com/658038"
 	echo
 	echo "Violations:"
 	echo "$VIOLATIONS"

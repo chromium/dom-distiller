@@ -215,10 +215,10 @@ public class DomConverter implements DomWalker.Visitor {
         Element parent = e.getParentElement();
         LogUtil.logToConsole("TABLE: " + type +
                 ", id=" + e.getId() +
-                ", class=" + e.getClassName() +
+                ", class=" + e.getAttribute("class") +
                 ", parent=[" + parent.getTagName() +
                 ", id=" + parent.getId() +
-                ", class=" + parent.getClassName() +
+                ", class=" + parent.getAttribute("class") +
                 "]");
     }
 }

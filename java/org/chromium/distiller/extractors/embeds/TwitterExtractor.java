@@ -63,7 +63,7 @@ public class TwitterExtractor implements EmbedExtractor {
      */
     private WebEmbed handleNotRendered(Element e) {
         // Make sure the characteristic class name for Twitter exists.
-        if (!e.getClassName().contains("twitter-tweet")) {
+        if (!e.getAttribute("class").contains("twitter-tweet")) {
             return null;
         }
 

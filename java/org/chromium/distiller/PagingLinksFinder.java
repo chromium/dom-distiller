@@ -208,7 +208,7 @@ public class PagingLinksFinder {
 
             // Concatenate the link text with class name and id, and determine the score based on
             // existence of various paging-related words.
-            String linkData = linkText + " " + link.getClassName() + " " + link.getId();
+            String linkData = linkText + " " + link.getAttribute("class") + " " + link.getId();
             appendDbgStrForLink(link, "txt+class+id=" + linkData);
             if (pageLink == PageLink.NEXT ? REG_NEXT_LINK.test(linkData)
                                           : REG_PREV_LINK.test(linkData)) {
@@ -248,7 +248,7 @@ public class PagingLinksFinder {
             boolean positiveMatch = false, negativeMatch = false;
             Element parent = link.getParentElement();
             while (parent != null && (positiveMatch == false || negativeMatch == false)) {
-                String parentClassAndId = parent.getClassName() + " " + parent.getId();
+                String parentClassAndId = parent.getAttribute("class") + " " + parent.getId();
                 if (!positiveMatch && REG_PAGINATION.test(parentClassAndId)) {
                     linkObj.mScore += 25;
                     positiveMatch = true;

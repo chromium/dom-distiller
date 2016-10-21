@@ -493,7 +493,7 @@ public class DomUtil {
     }
 
     private static void stripUnwantedClassName(Element elem) {
-        if (elem.getClassName().contains("caption")) {
+        if (elem.getAttribute("class").contains("caption")) {
             elem.setClassName("caption");
         } else {
             elem.removeAttribute("class");
