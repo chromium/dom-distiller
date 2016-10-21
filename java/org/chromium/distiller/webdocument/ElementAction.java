@@ -91,6 +91,11 @@ public class ElementAction {
                     action.labels.push(DefaultLabels.H3);
                     action.labels.push(DefaultLabels.HEADING);
                     break;
+                case "H4":
+                case "H5":
+                case "H6":
+                    action.labels.push(DefaultLabels.HEADING);
+                    break;
                 case "A":
                     // TODO(cjhopman): Anchors probably shouldn't unconditionally change the tag
                     // level.

@@ -71,6 +71,10 @@ public class ElementActionTest extends DomDistillerJsTestCase {
                     DefaultLabels.H1));
         assertTrue(hasLabel(getForHtml("<h1></h1>"),
                     DefaultLabels.HEADING));
+        assertTrue(hasLabel(getForHtml("<h4></h4>"),
+                    DefaultLabels.HEADING));
+        assertTrue(hasLabel(getForHtml("<h6></h6>"),
+                    DefaultLabels.HEADING));
 
         assertEquals(1, getForHtml("<li></li>").labels.length());
 
