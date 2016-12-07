@@ -92,10 +92,6 @@ public class DomConverterTest extends DomDistillerJsTestCase {
         runTest(html, "");
     }
 
-    // Note: getComputedStyle() doesn't work correctly when running ant test.dev or test.prod,
-    // but it works in production mode in the browser, so the test is in chrome's components/
-    // dom_distiller/content/distiller_page_web_contents_browsertest.cc::VisibilityDetection().
-
     public void testDataTable() throws Throwable {
         String html = "<table align=\"left\" role=\"grid\">" + // role=grid make this a data table.
                           "<tbody align=\"left\">" +
@@ -120,15 +116,25 @@ public class DomConverterTest extends DomDistillerJsTestCase {
         runTest(html, html);
     }
 
-    public void testIgnorableElementsNonDataTable() throws Throwable {
+    public void testIgnorableElements() throws Throwable {
+        runTest("<head></head>", "");
         runTest("<style></style>", "");
-        runTest("<link></link>", "");
         runTest("<script></script>", "");
+        runTest("<link></link>", "");
         runTest("<noscript></noscript>", "");
-        runTest("<applet></applet>", "");
-        runTest("<object></object>", "");
+        runTest("<iframe></iframe>", "");
+        runTest("<svg></svg>", "");
+
         runTest("<option></option>", "");
+        runTest("<object></object>", "");
         runTest("<embed></embed>", "");
+        runTest("<applet></applet>", "");
+    }
+
+    public void testSvgTagNameCase() {
+        Element container = Document.get().createDivElement();
+        container.setInnerHTML("<SVG></SVG>");
+        assertEquals("svg", container.getFirstChildElement().getTagName());
     }
 
     public void testElementOrder() {

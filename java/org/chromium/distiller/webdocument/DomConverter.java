@@ -134,11 +134,6 @@ public class DomConverter implements DomWalker.Visitor {
                 "Exception happened in EmbedExtractors: " + exception.getMessage());
         }
 
-        // Skip IFRAMEs not recognized by EmbedExtractors.
-        if (e.getTagName().equals("IFRAME")) {
-            return false;
-        }
-
         // Create a placeholder for the elements we want to preserve.
         if (WebTag.canBeNested(e.getTagName())) {
             builder.tag(new WebTag(e.getTagName(), WebTag.TagType.START));
@@ -180,6 +175,7 @@ public class DomConverter implements DomWalker.Visitor {
             case "LINK":
             case "NOSCRIPT":
             case "IFRAME":
+            case "svg": // The svg tag is actually in small case.
                 return false;
         }
         builder.startElement(e);
