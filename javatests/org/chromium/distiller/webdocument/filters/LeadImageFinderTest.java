@@ -25,6 +25,15 @@ public class LeadImageFinderTest extends DomDistillerJsTestCase {
         assertTrue(wi.getIsContent());
     }
 
+    public void testNoContent() {
+        TestWebDocumentBuilder builder = new TestWebDocumentBuilder();
+        WebImage wi = builder.addLeadImage();
+        builder.addText("text 1").setIsContent(false);
+        WebDocument document = builder.build();
+        assertFalse(LeadImageFinder.process(document));
+        assertFalse(wi.getIsContent());
+    }
+
     public void testMultipleLeadImageCandidates() {
         TestWebDocumentBuilder builder = new TestWebDocumentBuilder();
         WebImage priority = builder.addLeadImage();

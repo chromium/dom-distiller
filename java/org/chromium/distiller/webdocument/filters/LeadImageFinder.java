@@ -47,6 +47,8 @@ public class LeadImageFinder {
             }
             lastContent = (WebText) e;
         }
+        if (lastContent == null) return false;
+
         boolean isWebImage;
         for (WebElement e : w.getElements()) {
             // If the element is an image and not already
