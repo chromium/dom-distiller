@@ -189,9 +189,12 @@ is:
     (https://code.google.com/p/googletest/wiki/AdvancedGuide#Running_a_Subset_of_the_Tests).
     For example `*.FilterTest.*:*Foo*-*Bar*` would run all tests containing
     `.FilterTest.` and `Foo`, but not those with `Bar`.
--   `ant gwtc` compiles .class+.java files to JavaScript. Standalone JavaScript
+-   `ant gwtc` compiles .class + .java files to JavaScript. Standalone JavaScript
     is available at `war/domdistiller/domdistiller.nocache.js`.
 -   `ant gwtc.jstests` creates a standalone JavaScript for the tests.
+-   `ant extractjs` creates standalone JavaScript from output of ant gwtc. The
+    compiled JavaScript file is available at `out/domdistiller.js`.
+-   `ant extractjs.jstests` creates a standalone JavaScript for the tests.
 -   `ant package` Copies the main build artifacts into the `out/package` folder,
     typically the extracted JS and protocol buffer files.
 
@@ -382,7 +385,7 @@ distill http://example.com/article.html
 
 You can use the Chrome Developer Tools to debug DOM Distiller:
 
--   Update the test JavaScript by running `ant gwtc.jstests` or `ant test`.
+-   Update the test JavaScript by running `ant extractjs.jstests` or `ant test`.
 -   Open `war/test.html` in Chrome desktop
 -   Open the `Console` panel in Developer Tools (**Ctrl-Shift-J**). On Mac OS X
     you can use **&#x2325;-&#x2318;-I** (uppercase `I`) as the shortcut.

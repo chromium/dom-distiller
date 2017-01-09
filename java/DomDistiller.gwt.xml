@@ -20,10 +20,8 @@
   <entry-point class='org.chromium.distiller.DomDistillerEntry'/>
 
   <!-- Specify the paths for translatable code                    -->
-  <source path='org/chromium/distiller'>
-    <exclude name="dev/*" />
-  </source>
+  <source path='org/chromium/distiller'/>
 
-  <define-linker name="distillerlinker" class="org.chromium.distiller.dev.DistillerScriptLinker" />
-  <add-linker name='distillerlinker'/>
+  <!-- Use the SingleScriptLinker. -->
+  <add-linker name='sso'/>
 </module>

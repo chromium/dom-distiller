@@ -133,17 +133,25 @@
     </java>
   </target>
 
-  <target name="extractwrappedjs" depends="gwtc"
+  <target name="extractjs" depends="gwtc" description="Extract standalone JavaScript from compiled JavaScript">
+    <exec executable="python" failonerror="true">
+      <arg value="create_standalone_js.py"/>
+      <arg line="--module domdistiller"/>
+      <arg value="--auto"/>
+    </exec>
+  </target>
+
+  <target name="extractwrappedjs" depends="extractjs"
       description="Create wrapped standalone JavaScript from compiled JavaScript for direct inclusion in Chrome">
     <exec executable="python" failonerror="true">
       <arg value="create_wrapped_standalone_js.py"/>
       <arg value="--templatefile=war/wrapped_domdistiller_template.js"/>
-      <arg value="--infile=war/domdistiller/domdistiller.nocache.js"/>
+      <arg value="--infile=out/domdistiller.js"/>
       <arg value="--outfile=out/domdistiller_wrapped.js"/>
     </exec>
   </target>
 
-  <target name="package" depends="gwtc, extractwrappedjs, gwtc.jstests"
+  <target name="package" depends="extractjs, extractwrappedjs, extractjs.jstests"
       description="Copy the main build artifacts into the out/package directory" >
     <mkdir dir="out/extension"/>
     <mkdir dir="out/package"/>
@@ -152,21 +160,22 @@
     <mkdir dir="out/package/python"/>
     <mkdir dir="out/package/test"/>
     <mkdir dir="out/package/test/data"/>
+    <mkdir dir="out/package/test/data/out"/>
     <mkdir dir="out/package/test/data/war"/>
 
-    <copy file="war/domdistiller/domdistiller.nocache.js" tofile="out/package/js/domdistiller.js" />
+    <copy file="out/domdistiller.js" todir="out/package/js" />
     <copy file="out/domdistiller_wrapped.js" todir="out/package/js" />
     <copy todir="out/package/proto">
       <fileset dir="proto"/>
     </copy>
     <copy file="out/proto/python/google/protobuf/compiler/plugin_pb2.py" todir="out/package/python" />
 
-    <copy file="war/domdistiller/domdistiller.nocache.js" tofile="out/extension/domdistiller.js" />
+    <copy file="out/domdistiller.js" todir="out/extension" />
     <copy todir="out/extension">
       <fileset dir="extension"/>
     </copy>
 
-    <copy file="war/domdistillerjstest/domdistillerjstest.nocache.js" todir="out/package/test/data/war/domdistillerjstest" />
+    <copy file="out/domdistillerjstest.js" todir="out/package/test/data/out" />
     <copy file="war/test.html" todir="out/package/test/data/war" />
   </target>
 
@@ -214,6 +223,14 @@
     </java>
   </target>
 
+  <target name="extractjs.jstests" depends="gwtc.jstests" description="Extract standalone JavaScript from compiled JavaScript">
+    <exec executable="python" failonerror="true">
+      <arg value="create_standalone_js.py"/>
+      <arg line="--module domdistillerjstest"/>
+      <arg value="--auto"/>
+      <arg value="--sourcemaps"/>
+    </exec>
+  </target>
 
   <!-- Run jstests for the Linux platform -->
   <target name="-jstests.linux" if="isLinux">
@@ -247,7 +264,7 @@
   <target name="-jstests" depends="-jstests.linux, -jstests.mac" />
 
   <target name="test"
-    depends="gwtc.jstests, -jstests"
+    depends="extractjs.jstests, -jstests"
     description="Run tests">
   </target>
 
