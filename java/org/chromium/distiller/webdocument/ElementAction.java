@@ -20,7 +20,7 @@ public class ElementAction {
     public JsArrayString labels = JavaScriptObject.createArray().<JsArrayString>cast();
 
     private static final RegExp REG_COMMENT = RegExp.compile("\\bcomments?\\b");
-    private static final int MAX_CLASS_COUNT = 5;
+    private static final int MAX_CLASS_COUNT = 2;
 
     public static ElementAction getForElement(Element element) {
         Style style = DomUtil.getComputedStyle(element);
@@ -62,7 +62,7 @@ public class ElementAction {
                 break;
         }
 
-        if (!"HTML".equals(tagName) && !"BODY".equals(tagName)) {
+        if (!"HTML".equals(tagName) && !"BODY".equals(tagName) && !"ARTICLE".equals(tagName)) {
             String className = element.getAttribute("class");
             int classCount = DomUtil.getClassList(element).length();
             String id = element.getAttribute("id");

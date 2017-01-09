@@ -108,8 +108,10 @@ public class ElementActionTest extends DomDistillerJsTestCase {
                     DefaultLabels.STRICTLY_NOT_CONTENT));
         assertTrue(hasLabel(getForHtml("<div id=\"comments\"></div>"),
                     DefaultLabels.STRICTLY_NOT_CONTENT));
-
         assertTrue(hasLabel(getForHtml("<div class=\"user-comments\"></div>"),
+                    DefaultLabels.STRICTLY_NOT_CONTENT));
+
+        assertFalse(hasLabel(getForHtml("<article class=\"user-comments\"></div>"),
                     DefaultLabels.STRICTLY_NOT_CONTENT));
 
         /**
@@ -123,7 +125,7 @@ public class ElementActionTest extends DomDistillerJsTestCase {
                              "class1 class2 class3 class4 class5 class6 class7 class8\"></div>"),
                 DefaultLabels.STRICTLY_NOT_CONTENT));
         assertTrue(hasLabel(getForHtml(
-                "<div class=\"     user-comments                         a       b   \"></div>"),
+                "<div class=\"     user-comments                         a          \"></div>"),
                 DefaultLabels.STRICTLY_NOT_CONTENT));
     }
 }
