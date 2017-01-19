@@ -39,6 +39,25 @@ public class DomUtil {
         return root.querySelector("." + className);
     }-*/;
 
+    // Returns the first element with |tagName| in the tree rooted at |root|, including root.
+    // null if none is found.
+    public static Element getFirstElementByTagNameInc(Element e, String tagName) {
+        if (e.getTagName() == tagName) {
+            return e;
+        }
+        return getFirstElementByTagName(e, tagName);
+    }
+
+    // Returns the first element with |tagName| in the tree rooted at |root|.
+    // null if none is found.
+    public static Element getFirstElementByTagName(Element e, String tagName) {
+        NodeList<Element> elements = e.getElementsByTagName(tagName);
+        if (elements.getLength() > 0) {
+            return elements.getItem(0);
+        }
+        return null;
+    }
+
     public static native boolean hasClassName(Element elem, String className) /*-{
         return elem.classList.contains(className);
     }-*/;
@@ -273,7 +292,8 @@ public class DomUtil {
     }
 
     /**
-     * Makes all anchors and video posters absolute. This calls "makeAllSrcAttributesAbsolute".
+     * Makes all anchors and video posters absolute. This calls "makeAllSrcAttributesAbsolute"
+     * and "makeAllSrcSetAbsolute".
      * @param rootNode The root Node to look through.
      */
     public static void makeAllLinksAbsolute(Node rootNode) {
@@ -310,43 +330,54 @@ public class DomUtil {
         }
         makeAllSrcAttributesAbsolute(root);
 
-        makeSrcSetAbsolute(root);
+        makeAllSrcSetAbsolute(root);
     }
 
-    private static void makeSrcSetAbsolute(Element root) {
-        if (root.getTagName().equals("IMG")) {
-            makeSrcSetAbsolute(ImageElement.as(root));
+    public static void makeAllSrcSetAbsolute(Element root) {
+        if (root.hasAttribute("srcset")) {
+            makeSrcSetAbsolute(root);
         }
-        NodeList<Element> imgs = DomUtil.querySelectorAll(root, "IMG[SRCSET]");
-        for (int i = 0; i < imgs.getLength(); i++) {
-            makeSrcSetAbsolute(ImageElement.as(imgs.getItem(i)));
+        NodeList<Element> es = DomUtil.querySelectorAll(root, "[SRCSET]");
+        for (int i = 0; i < es.getLength(); i++) {
+            makeSrcSetAbsolute(es.getItem(i));
         }
     }
 
-    public static void makeSrcSetAbsolute(ImageElement ie) {
+    private static void makeSrcSetAbsolute(Element ie) {
         String srcset = ie.getAttribute("srcset");
         if (srcset.isEmpty()) {
             ie.removeAttribute("srcset");
             return;
         }
 
-        String oldsrc = ie.getSrc();
+        ImageElement holder = Document.get().createImageElement();
         String[] sizes = StringUtil.jsSplit(srcset, ",");
         for(int i = 0; i < sizes.length; i++) {
             String size = StringUtil.jsTrim(sizes[i]);
             if (size.isEmpty()) continue;
             String[] comp = size.split(" ");
-            ie.setSrc(comp[0]);
-            comp[0] = ie.getSrc();
+            holder.setSrc(comp[0]);
+            comp[0] = holder.getSrc();
             sizes[i] = StringUtil.join(comp, " ");
         }
         ie.setAttribute("srcset", StringUtil.join(sizes, ", "));
-        ie.setSrc(oldsrc);
     }
 
-    public static List<String> getSrcSetUrls(ImageElement ie) {
+    public static List<String> getAllSrcSetUrls(Element root) {
         List<String> list = new ArrayList<>();
-        String srcset = ie.getAttribute("srcset");
+        if (root.hasAttribute("srcset")) {
+            list.addAll(getSrcSetUrls(root));
+        }
+        NodeList<Element> es = DomUtil.querySelectorAll(root, "[SRCSET]");
+        for (int i = 0; i < es.getLength(); i++) {
+            list.addAll(getSrcSetUrls(es.getItem(i)));
+        }
+        return list;
+    }
+
+    public static List<String> getSrcSetUrls(Element e) {
+        List<String> list = new ArrayList<>();
+        String srcset = e.getAttribute("srcset");
         if (srcset.isEmpty()) {
             return list;
         }

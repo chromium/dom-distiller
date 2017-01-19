@@ -250,7 +250,7 @@ public class DomUtilTest extends DomDistillerJsTestCase {
             "<img src=\"image\" srcset=\"image200 200w, image400 400w\">" +
             "<img src=\"image2\">" +
             "<video src=\"video\" poster=\"poster\">" +
-                "<source src=\"source\">" +
+                "<source src=\"source\" srcset=\"s2, s3\">" +
                 "<track src=\"track\">" +
             "</video>";
 
@@ -260,7 +260,8 @@ public class DomUtilTest extends DomDistillerJsTestCase {
               "srcset=\"http://example.com/image200 200w, http://example.com/image400 400w\">" +
             "<img src=\"http://example.com/image2\">" +
             "<video src=\"http://example.com/video\" poster=\"http://example.com/poster\">" +
-                "<source src=\"http://example.com/source\">" +
+                "<source src=\"http://example.com/source\" " +
+                    "srcset=\"http://example.com/s2, http://example.com/s3\">" +
                 "<track src=\"http://example.com/track\">" +
             "</video>";
 
@@ -284,6 +285,23 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         assertEquals(2, list.size());
         assertEquals("http://example.com/image200", list.get(0));
         assertEquals("http://example.com/image400", list.get(1));
+    }
+
+    public void testGetAllSrcSetUrls() {
+        String html =
+            "<picture>" +
+                "<source srcset=\"image200 200w, //example.org/image400 400w\">" +
+                "<source srcset=\"image100 100w, //example.org/image300 300w\">" +
+                "<img>" +
+            "</picture>";
+        Element container = Document.get().createDivElement();
+        container.setInnerHTML(html);
+        List<String> urls = DomUtil.getAllSrcSetUrls(container);
+        assertEquals(4, urls.size());
+        assertEquals("image200", urls.get(0));
+        assertEquals("//example.org/image400", urls.get(1));
+        assertEquals("image100", urls.get(2));
+        assertEquals("//example.org/image300", urls.get(3));
     }
 
     public void testStripTableBackgroundColorAttributes() {

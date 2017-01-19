@@ -4,9 +4,9 @@
 
 package org.chromium.distiller.webdocument;
 
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.dom.client.NodeList;
 
 import org.chromium.distiller.DomUtil;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * WebImage represents an image in the WebDocument potentially needing extraction.
  */
 public class WebImage extends WebElement {
-    // The main image element.
+    // The main image element. Could be <img>, or <picture> containing <img>.
     Element imgElement;
     // The absolute source of the image.
     private String srcUrl;
@@ -26,7 +26,10 @@ public class WebImage extends WebElement {
     // The original height of the image in pixels.
     private int height;
     // Cloned and processed element.
-    private ImageElement clonedImg;
+    private Element clonedImg;
+
+    private static final String[] LAZY_SRCSET_ATTRIBUTES =
+            {"data-srcset"};
 
     /**
      * Build an image element.
@@ -46,19 +49,36 @@ public class WebImage extends WebElement {
     }
 
     private void cloneAndProcessNode() {
-        ImageElement ie = ImageElement.as(Element.as(imgElement.cloneNode(false)));
-        ie.setSrc(srcUrl);
-        ie.setSrc(ie.getSrc());
+        Element cloned = Element.as(imgElement.cloneNode(true));
+        ImageElement ie = ImageElement.as(
+                DomUtil.getFirstElementByTagNameInc(cloned, "IMG"));
+        if (!srcUrl.isEmpty()) {
+            ie.setSrc(srcUrl);
+        }
         // If computed width or height is zero, do not override them
         // to keep them visible.
         if (width > 0 && height > 0) {
             ie.setWidth(width);
             ie.setHeight(height);
         }
-        DomUtil.makeSrcSetAbsolute(ie);
         DomUtil.stripImageElement(ie);
 
-        clonedImg = ie;
+        NodeList<Element> srcs = cloned.getElementsByTagName("SOURCE");
+        for (int i = 0; i < srcs.getLength(); i++) {
+            Element src = srcs.getItem(i);
+            for (String attr : LAZY_SRCSET_ATTRIBUTES) {
+                String srcset = src.getAttribute(attr);
+                if (!srcset.isEmpty()) {
+                    src.setAttribute("srcset", srcset);
+                    break;
+                }
+            }
+        }
+
+        DomUtil.makeAllSrcAttributesAbsolute(cloned);
+        DomUtil.makeAllSrcSetAbsolute(cloned);
+
+        clonedImg = cloned;
     }
 
     @Override
@@ -104,12 +124,14 @@ public class WebImage extends WebElement {
             cloneAndProcessNode();
         }
         List<String> list = new ArrayList<>();
-        list.add(srcUrl);
-        list.addAll(DomUtil.getSrcSetUrls(clonedImg));
+        if (!srcUrl.isEmpty()) {
+            list.add(srcUrl);
+        }
+        list.addAll(DomUtil.getAllSrcSetUrls(clonedImg));
         return list;
     }
 
-    protected ImageElement getProcessedNode() {
+    protected Element getProcessedNode() {
         if (clonedImg == null) {
             cloneAndProcessNode();
         }

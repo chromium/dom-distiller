@@ -29,6 +29,7 @@ public class ImageExtractor implements EmbedExtractor {
     static {
         // TODO(mdjones): Add "DIV" to this list for css images and possibly captions.
         relevantTags.add("IMG");
+        relevantTags.add("PICTURE");
         relevantTags.add("FIGURE");
     }
 
@@ -47,29 +48,34 @@ public class ImageExtractor implements EmbedExtractor {
         }
         imgSrc = "";
 
-        if ("IMG".equals(e.getTagName())) {
-            extractImageAttributes(ImageElement.as(e));
-            return new WebImage(e, width, height, imgSrc);
-        } else if ("FIGURE".equals(e.getTagName())) {
-            Element img = getFirstElementByTagName(e, "IMG");
-            if (img != null) {
-                extractImageAttributes(ImageElement.as(img));
-                Element figcaption;
-                Element cap = getFirstElementByTagName(e, "FIGCAPTION");
-                if (cap != null) {
-                    // We look for links because some sites put non-caption
-                    // elements into <figcaption>. For example: image credit
-                    // could contain a link. So we get the whole DOM structure within
-                    // <figcaption> only when it contains links, otherwise we get the innerText.
-                    figcaption = getFirstElementByTagName(cap, "A") != null ?
-                            cap : createFigcaptionElement(cap);
-                } else {
-                    figcaption = createFigcaptionElement(e);
-                }
-                return new WebFigure(img, width, height, imgSrc, figcaption);
+        ImageElement ie = ImageElement.as(DomUtil.getFirstElementByTagNameInc(e, "IMG"));
+
+        if ("FIGURE".equals(e.getTagName())) {
+            Element img = DomUtil.getFirstElementByTagName(e, "PICTURE");
+            if (img == null) {
+                img = DomUtil.getFirstElementByTagName(e, "IMG");
             }
+            if (img == null) {
+                return null;
+            }
+            extractImageAttributes(ie);
+            Element figcaption;
+            Element cap = DomUtil.getFirstElementByTagName(e, "FIGCAPTION");
+            if (cap != null) {
+                // We look for links because some sites put non-caption
+                // elements into <figcaption>. For example: image credit
+                // could contain a link. So we get the whole DOM structure within
+                // <figcaption> only when it contains links, otherwise we get the innerText.
+                figcaption = DomUtil.getFirstElementByTagName(cap, "A") != null ?
+                        cap : createFigcaptionElement(cap);
+            } else {
+                figcaption = createFigcaptionElement(e);
+            }
+            return new WebFigure(img, width, height, imgSrc, figcaption);
         }
-        return null;
+
+        extractImageAttributes(ie);
+        return new WebImage(e, width, height, imgSrc);
     }
 
     private void extractImageAttributes(ImageElement imageElement) {
@@ -96,14 +102,6 @@ public class ImageExtractor implements EmbedExtractor {
         if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_VISIBILITY_INFO)) {
             LogUtil.logToConsole("Extracted WebImage: " + imgSrc);
         }
-    }
-
-    private Element getFirstElementByTagName(Element e, String tagName) {
-        NodeList<Element> elements = e.getElementsByTagName(tagName);
-        if (elements.getLength() > 0) {
-            return elements.getItem(0);
-        }
-        return null;
     }
 
     private Element createFigcaptionElement(Element element) {

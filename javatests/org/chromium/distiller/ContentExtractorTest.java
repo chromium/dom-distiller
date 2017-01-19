@@ -94,6 +94,11 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
         final String html =
             "<h1>" + CONTENT_TEXT + "</h1>" +
             "<img id=\"a\" style=\"typo\" align=\"left\" src=\"image\" srcset=\"image200 200w, //example.org/image400 400w\">" +
+            "<figure><picture>" +
+                "<source srcset=\"image200 200w, //example.org/image400 400w\">" +
+                "<source srcset=\"image100 100w, //example.org/image300 300w\">" +
+                "<img>" +
+            "</picture></figure>" +
             "<img id=\"b\" style=\"align: left\" alt=\"b\" data-dummy=\"c\" data-src=\"image2\">" +
             "<table role=\"grid\"><tbody><tr><td>" +
                 "<img id=\"c\" style=\"a\" alt=\"b\" src=\"/image\" srcset=\"https://example.com/image2x 2x, /image4x 4x,\">" +
@@ -105,6 +110,11 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
             "<h1>" + CONTENT_TEXT + "</h1>" +
             "<img src=\"http://example.com/path/image\" " +
                  "srcset=\"http://example.com/path/image200 200w, http://example.org/image400 400w\">" +
+            "<figure><picture>" +
+                "<source srcset=\"http://example.com/path/image200 200w, http://example.org/image400 400w\">" +
+                "<source srcset=\"http://example.com/path/image100 100w, http://example.org/image300 300w\">" +
+                "<img>" +
+            "</picture></figure>" +
             "<img alt=\"b\" src=\"http://example.com/path/image2\">" +
             "<table role=\"grid\"><tbody><tr><td>" +
                 "<img alt=\"b\" src=\"http://example.com/image\" " +

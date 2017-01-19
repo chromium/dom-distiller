@@ -51,11 +51,13 @@ public class WebTable extends WebElement {
             cloneAndProcessNode();
         }
         List<String> imgUrls = new ArrayList<>();
-        NodeList<Element> imgs = DomUtil.querySelectorAll(cloned, "IMG");
+        NodeList<Element> imgs = DomUtil.querySelectorAll(cloned, "IMG, SOURCE");
         for (int i = 0; i < imgs.getLength(); i++) {
             ImageElement ie = (ImageElement) imgs.getItem(i);
-            imgUrls.add(ie.getSrc());
-            imgUrls.addAll(DomUtil.getSrcSetUrls(ie));
+            if (!ie.getSrc().isEmpty()) {
+                imgUrls.add(ie.getSrc());
+            }
+            imgUrls.addAll(DomUtil.getAllSrcSetUrls(ie));
         }
         return imgUrls;
     }
