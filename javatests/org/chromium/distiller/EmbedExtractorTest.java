@@ -546,7 +546,7 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         Element figure = Document.get().createElement("FIGURE");
         figure.appendChild(image);
         Element figcaption = Document.get().createElement("FIGCAPTION");
-        figcaption.setInnerHTML("<div><span>This is a caption</span></div>");
+        figcaption.setInnerHTML("<div><span>This is a caption</span><a></a></div>");
         figure.appendChild(figcaption);
         mBody.appendChild(figure);
 

@@ -66,7 +66,8 @@ public class ImageExtractor implements EmbedExtractor {
                 // elements into <figcaption>. For example: image credit
                 // could contain a link. So we get the whole DOM structure within
                 // <figcaption> only when it contains links, otherwise we get the innerText.
-                figcaption = DomUtil.getFirstElementByTagName(cap, "A") != null ?
+                NodeList<Element> links = DomUtil.querySelectorAll(cap, "A[HREF]");
+                figcaption = links.getLength() > 0 ?
                         cap : createFigcaptionElement(cap);
             } else {
                 figcaption = createFigcaptionElement(e);
