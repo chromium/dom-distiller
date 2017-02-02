@@ -14,11 +14,18 @@ import java.util.List;
 
 public class DomConverterTest extends DomDistillerJsTestCase {
     private void runTest(String innerHtml, String expectedHtml) throws Throwable {
+        runTest(innerHtml, expectedHtml, false);
+    }
+
+    private void runTest(String innerHtml, String expectedHtml, boolean mobileArticle)
+            throws Throwable {
         Element container = Document.get().createDivElement();
         mBody.appendChild(container);
         container.setInnerHTML(innerHtml);
         FakeWebDocumentBuilder builder = new FakeWebDocumentBuilder();
         DomConverter filteringDomVisitor = new DomConverter(builder);
+        filteringDomVisitor.setHasArticleElement(mobileArticle);
+        filteringDomVisitor.setIsMobileFriendly(mobileArticle);
         new DomWalker(filteringDomVisitor).walk(container);
         String expectedDocument = "<div>" + expectedHtml + "</div>";
         assertEquals(expectedDocument, builder.getDocumentString().toLowerCase());
@@ -51,8 +58,15 @@ public class DomConverterTest extends DomDistillerJsTestCase {
 
     public void testVisibleInInvisible() throws Throwable {
         String html = "<div style=\"visibility:hidden\">invisible parent" +
-                          "<div>visible child</div>" +
-                      "</div>";
+                "<div>visible child</div>" +
+                "</div>";
+        runTest(html, "");
+    }
+
+    public void testVisibleInInvisible2() throws Throwable {
+        String html = "<div style=\"display:none\">invisible parent" +
+                "<div>visible child</div>" +
+                "</div>";
         runTest(html, "");
     }
 
@@ -90,6 +104,30 @@ public class DomConverterTest extends DomDistillerJsTestCase {
                           "<div style=\"visibility:hidden\">invisible child2</div>" +
                       "</div>";
         runTest(html, "");
+    }
+
+    public void testKeepHidden() throws Throwable {
+        String html = "<div class=\"hidden\" style=\"display: none\">visible element</div>";
+        runTest(html, html, true);
+    }
+
+    public void testKeepHiddenNested() throws Throwable {
+        // "visibility: hidden" is used. See crbug.com/599121
+        String html = "<div class=\"hidden\" style=\"visibility: hidden\">" +
+                "<div>visible element</div></div>";
+        runTest(html, html, true);
+    }
+
+    public void testKeepContinue() throws Throwable {
+        String html = "<div class=\"continue\" style=\"display: none\">visible element</div>";
+        runTest(html, html, true);
+    }
+
+    public void testKeepContinueNested() throws Throwable {
+        // "display: none" is used. See crbug.com/687071
+        String html = "<div class=\"continue\" style=\"display: none\">" +
+                "<div>visible element</div></div>";
+        runTest(html, html, true);
     }
 
     public void testDataTable() throws Throwable {

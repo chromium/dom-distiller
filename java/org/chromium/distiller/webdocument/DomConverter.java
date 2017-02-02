@@ -96,14 +96,20 @@ public class DomConverter implements DomWalker.Visitor {
         boolean keepAnyway = false;
         boolean hasHiddenClassName = false;
         if (!visible) {
+            // Process more hidden elements in a marked article in mobile-friendly pages
+            // because some sites hide the lower part of the article.
             if (isMobileFriendly && hasArticleElement) {
                 if (!isHiddenClass) {
                     hasHiddenClassName = DomUtil.hasClassName(e, "hidden");
                 }
                 if (isHiddenClass || hasHiddenClassName) {
-                    // Process more hidden elements in a marked article in mobile-friendly pages
-                    // because some sites hide the lower part of the article.
                     // See crbug.com/599121
+                    keepAnyway = true;
+                }
+            }
+            if (isMobileFriendly) {
+                if (e.getAttribute("class").contains("continue")) {
+                    // See crbug.com/687071
                     keepAnyway = true;
                 }
             }
