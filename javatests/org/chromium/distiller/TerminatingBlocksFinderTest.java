@@ -71,4 +71,8 @@ public class TerminatingBlocksFinderTest extends DomDistillerJsTestCase {
         assertFalse(TerminatingBlocksFinder.isTerminating(builder.createForAnchorText("comment")));
         assertFalse(TerminatingBlocksFinder.isTerminating(builder.createForAnchorText("foobar")));
     }
+
+    public void testShareLink() {
+        assertTrue(TerminatingBlocksFinder.isTerminating(builder.createForText("Shares")));
+    }
 }

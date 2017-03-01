@@ -68,10 +68,15 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
     public static boolean isTerminating(TextBlock tb) {
         if (tb.getNumWords() > 14) return false;
         String text = StringUtil.jsTrim(tb.getText());
+
         if (text.length() >= 8) {
             return isTerminatingText(text);
         } else if (tb.getLinkDensity() == 1.0) {
             return text.equals("Comment");
+        } else if (text.equals("Shares")) {
+            // Skip social and sharing elements.
+            // See crbug.com/692553
+            return true;
         }
         return false;
     }

@@ -231,4 +231,12 @@ public class DomConverterTest extends DomDistillerJsTestCase {
         assertTrue(elements.get(7) instanceof WebTag);
         assertFalse(((WebTag) elements.get(7)).isStartTag());
     }
+
+    public void testSocialElements() throws Throwable {
+        runTest("<div></div>", "<div></div>");
+        runTest("<div data-component=\"share\"></div>", "");
+        runTest("<div class=\"socialArea\"></div>", "");
+        runTest("<li></li>", "<li></li>");
+        runTest("<li class=\"sharing\"></li>", "");
+    }
 }

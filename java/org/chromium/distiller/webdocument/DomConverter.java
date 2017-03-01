@@ -140,6 +140,15 @@ public class DomConverter implements DomWalker.Visitor {
                 "Exception happened in EmbedExtractors: " + exception.getMessage());
         }
 
+        String className = e.getAttribute("class");
+        String component = e.getAttribute("data-component");
+        if (className.equals("sharing") || className.equals("socialArea") ||
+            component.equals("share")) {
+            // Skip social and sharing elements.
+            // See crbug.com/692553, crbug.com/696556, and crbug.com/674557
+            return false;
+        }
+
         // Create a placeholder for the elements we want to preserve.
         if (WebTag.canBeNested(e.getTagName())) {
             builder.tag(new WebTag(e.getTagName(), WebTag.TagType.START));
@@ -184,6 +193,7 @@ public class DomConverter implements DomWalker.Visitor {
             case "svg": // The svg tag is actually in small case.
                 return false;
         }
+
         builder.startElement(e);
         isHiddenStack.push(isHiddenClass);
         isHiddenClass |= hasHiddenClassName;
