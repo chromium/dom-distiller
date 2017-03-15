@@ -19,7 +19,7 @@ import java.util.List;
 public class WebImage extends WebElement {
     // The main image element. Could be <img>, or <picture> containing <img>.
     Element imgElement;
-    // The absolute source of the image.
+    // The source of the image. Could be relative before cloneAndProcessNode().
     private String srcUrl;
     // The original width of the image in pixels.
     private int width;
@@ -54,6 +54,7 @@ public class WebImage extends WebElement {
                 DomUtil.getFirstElementByTagNameInc(cloned, "IMG"));
         if (!srcUrl.isEmpty()) {
             ie.setSrc(srcUrl);
+            srcUrl = ie.getSrc();
         }
         // If computed width or height is zero, do not override them
         // to keep them visible.

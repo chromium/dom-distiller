@@ -6,6 +6,8 @@ package org.chromium.distiller;
 
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Style;
+import java.util.ArrayList;
+import java.util.List;
 import org.chromium.distiller.webdocument.WebElement;
 import org.chromium.distiller.webdocument.WebEmbed;
 import org.chromium.distiller.webdocument.WebFigure;
@@ -395,6 +397,10 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         WebImage result = (WebImage) extractor.extract(image);
         assertNotNull(result);
         assertEquals("<img src=\"http://example.com/image.png\">", result.generateOutput(false));
+
+        List<String> expected = new ArrayList<String>();
+        expected.add("http://example.com/image.png");
+        assertEquals(expected, result.getUrlList());
     }
 
     private void extractLazilyLoadedFigure(String attr) {
@@ -412,6 +418,10 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         assertNotNull(result);
         assertEquals("<figure><img src=\"http://example.com/image.png\"></figure>",
                 result.generateOutput(false));
+
+        List<String> expected = new ArrayList<String>();
+        expected.add("http://example.com/image.png");
+        assertEquals(expected, result.getUrlList());
     }
 
     public void testImageExtractorLazy() {
