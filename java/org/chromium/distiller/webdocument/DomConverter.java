@@ -6,10 +6,10 @@ package org.chromium.distiller.webdocument;
 
 import org.chromium.distiller.DomUtil;
 import org.chromium.distiller.DomWalker;
-import org.chromium.distiller.JavaScript;
 import org.chromium.distiller.LogUtil;
 import org.chromium.distiller.TableClassifier;
 
+import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.Style;
@@ -160,6 +160,24 @@ public class DomConverter implements DomWalker.Visitor {
         }
 
         switch (e.getTagName()) {
+            case "A":
+                // The "section" parameter is to differentiate with "redlinks".
+                // Ref: https://en.wikipedia.org/wiki/Wikipedia:Red_link
+                String editPattern = "action=edit&section=";
+                boolean isEdit = AnchorElement.as(e).getHref().indexOf(editPattern) != -1;
+                if (isEdit) {
+                    // Skip "edit section" on mediawiki.
+                    // See crbug.com/647667.
+                    return false;
+                }
+                break;
+            case "SPAN":
+                if (className.equals("mw-editsection")) {
+                    // Skip "[edit]" on mediawiki desktop version.
+                    // See crbug.com/647667.
+                    return false;
+                }
+                break;
             case "BR":
                 builder.lineBreak(e);
                 return false;

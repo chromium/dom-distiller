@@ -244,4 +244,16 @@ public class DomConverterTest extends DomDistillerJsTestCase {
         runTest("<li></li>", "<li></li>");
         runTest("<li class=\"sharing\"></li>", "");
     }
+
+    public void testWikiEditLinks() throws Throwable {
+        String notEdit = "<a href=\"index.php?action=edit&redlink=1\"></a>";
+        runTest(notEdit, notEdit);
+        runTest("<a href=\"index.php?action=edit&section=3\" class=\"mw-ui-icon\"></a>", "");
+    }
+
+    public void testWikiEditSection() throws Throwable {
+        String notEdit = "<span class=\"mw-headline\"></span>";
+        runTest(notEdit, notEdit);
+        runTest("<span class=\"mw-editsection\"></span>", "");
+    }
 }
