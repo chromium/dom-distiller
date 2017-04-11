@@ -130,6 +130,11 @@ public class DomConverterTest extends DomDistillerJsTestCase {
         runTest(html, html, true);
     }
 
+    public void testWikipediaFoldedSections() throws Throwable {
+        String html = "<div aria-expanded=\"false\" style=\"display: none\">folded section</div>";
+        runTest(html, html, true);
+    }
+
     public void testDataTable() throws Throwable {
         String html = "<table align=\"left\" role=\"grid\">" + // role=grid make this a data table.
                           "<tbody align=\"left\">" +

@@ -112,6 +112,11 @@ public class DomConverter implements DomWalker.Visitor {
                     // See crbug.com/687071
                     keepAnyway = true;
                 }
+                if (e.getAttribute("aria-expanded").equals("false")) {
+                    // Unhide folded elements, like folded sections on mobile Wikipedia.
+                    // See crbug.com/647667
+                    keepAnyway = true;
+                }
             }
         }
         logVisibilityInfo(e, visible || keepAnyway);
