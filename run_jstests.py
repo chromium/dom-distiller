@@ -49,7 +49,8 @@ def main(argv):
   if options.shuffle:
     params['shuffle'] = options.shuffle
 
-  test_runner = "return org.chromium.distiller.JsTestEntry.run()";
+  image_loaded = "return window.image_loaded"
+  test_runner = "return org.chromium.distiller.JsTestEntry.run()"
   test_html = os.path.abspath(os.path.join(os.path.dirname(__file__), "war", "test.html"))
   test_html += "?" + urllib.urlencode(params)
 
@@ -64,12 +65,16 @@ def main(argv):
     chrome_options.add_argument("--no-sandbox")
 
   driver = webdriver.Chrome(chrome_options=chrome_options)
-  driver.get("file://" + test_html)
   for i in range(options.repeat):
+    driver.get("file://" + test_html)
+    while not driver.execute_script(image_loaded):
+      print "Wait for image loading..."
+      time.sleep(0.1)
+
     start = time.time()
     result = driver.execute_script(test_runner)
-
     end = time.time()
+
     if not result['success'] or options.repeat == i+1:
       print result['log'].encode('utf-8')
     print 'Tests run: %d, Failures: %d, Skipped: %d, Time elapsed: %0.3f sec' % (result['numTests'],
