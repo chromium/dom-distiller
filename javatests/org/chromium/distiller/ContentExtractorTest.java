@@ -99,6 +99,8 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
                 "<source srcset=\"image100 100w, //example.org/image300 300w\">" +
                 "<img>" +
             "</picture></figure>" +
+            "<span class=\"lazy-image-placeholder\" data-src=\"/image\" " +
+                "data-srcset=\"/image2x 2x\" data-width=\"20\" data-height=\"10\"></span>" +
             "<img id=\"b\" style=\"align: left\" alt=\"b\" data-dummy=\"c\" data-src=\"image2\">" +
             "<table role=\"grid\"><tbody><tr><td>" +
                 "<img id=\"c\" style=\"a\" alt=\"b\" src=\"/image\" srcset=\"https://example.com/image2x 2x, /image4x 4x,\">" +
@@ -115,6 +117,8 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
                 "<source srcset=\"http://example.com/path/image100 100w, http://example.org/image300 300w\">" +
                 "<img>" +
             "</picture></figure>" +
+            "<img srcset=\"http://example.com/image2x 2x\" src=\"http://example.com/image\" " +
+                "width=\"20\" height=\"10\">" +
             "<img alt=\"b\" src=\"http://example.com/path/image2\">" +
             "<table role=\"grid\"><tbody><tr><td>" +
                 "<img alt=\"b\" src=\"http://example.com/image\" " +

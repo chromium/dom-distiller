@@ -9,6 +9,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.NodeList;
 import org.chromium.distiller.DomUtil;
+import org.chromium.distiller.JavaScript;
 import org.chromium.distiller.LogUtil;
 import org.chromium.distiller.webdocument.WebFigure;
 import org.chromium.distiller.webdocument.WebImage;
@@ -31,6 +32,7 @@ public class ImageExtractor implements EmbedExtractor {
         relevantTags.add("IMG");
         relevantTags.add("PICTURE");
         relevantTags.add("FIGURE");
+        relevantTags.add("SPAN");
     }
 
     private static final String[] LAZY_IMAGE_ATTRIBUTES =
@@ -73,6 +75,19 @@ public class ImageExtractor implements EmbedExtractor {
                 figcaption = createFigcaptionElement(e);
             }
             return new WebFigure(img, width, height, imgSrc, figcaption);
+        }
+
+        if ("SPAN".equals(e.getTagName())) {
+            if (!e.getAttribute("class").contains("lazy-image-placeholder")) {
+                return null;
+            }
+            // Image lazy loading on Wikipedia.
+            ie = Document.get().createImageElement();
+            imgSrc = e.getAttribute("data-src");
+            width = JavaScript.parseInt(e.getAttribute("data-width"));
+            height = JavaScript.parseInt(e.getAttribute("data-height"));
+            ie.setAttribute("srcset", e.getAttribute("data-srcset"));
+            return new WebImage(ie, width, height, imgSrc);
         }
 
         extractImageAttributes(ie);
