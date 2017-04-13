@@ -36,9 +36,7 @@ Chrome on Android, you can also file a bug.
 
 # Continuous integration
 
--   [![Build Status]
-    (https://travis-ci.org/chromium/dom-distiller.svg?branch=master)]
-    (https://travis-ci.org/chromium/dom-distiller)
+-   [![Build Status](https://travis-ci.org/chromium/dom-distiller.svg?branch=master)](https://travis-ci.org/chromium/dom-distiller)
 -   [Travis-CI waterfall](https://travis-ci.org/chromium/dom-distiller/builds)
 
 # Get the code
