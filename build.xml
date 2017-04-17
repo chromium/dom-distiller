@@ -106,6 +106,7 @@
     <mkdir dir="war/WEB-INF/classes"/>
     <javac includes="**" encoding="utf-8"
         destdir="war/WEB-INF/classes"
+	includeantruntime="false"
         source="1.7" target="1.7" nowarn="true"
         debug="true" debuglevel="lines,vars,source">
       <src refid="project.java.path"/>
