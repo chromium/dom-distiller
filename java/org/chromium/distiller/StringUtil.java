@@ -38,6 +38,10 @@ public class StringUtil {
         return strings.join(sep);
     }-*/;
 
+    public static native String decodeURIComponent(String input) /*-{
+        return decodeURIComponent(input);
+    }-*/;
+
     public static int splitLength(String input, String regex) {
         return StringUtil.split(input, regex).length;
     }

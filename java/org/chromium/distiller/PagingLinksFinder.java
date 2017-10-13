@@ -396,6 +396,8 @@ public class PagingLinksFinder {
     public static Integer pageDiff(String url, String linkHref, AnchorElement link, int skip) {
         int commonLen = skip;
         int i;
+        url = StringUtil.decodeURIComponent(url);
+        linkHref = StringUtil.decodeURIComponent(linkHref);
         for (i=skip; i<Math.min(url.length(), linkHref.length()); i++) {
             if (url.charAt(i) != linkHref.charAt(i)) {
                 break;
