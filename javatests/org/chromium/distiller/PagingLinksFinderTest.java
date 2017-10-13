@@ -383,5 +383,6 @@ public class PagingLinksFinderTest extends DomDistillerJsTestCase {
         assertNull(PagingLinksFinder.pageDiff("common10", "commonB02", null, 0));
         assertNull(PagingLinksFinder.pageDiff("commonA10", "common02", null, 0));
         assertEquals((Integer) (-7), PagingLinksFinder.pageDiff("common11", "common4", null, 0));
+        assertNull(PagingLinksFinder.pageDiff("%40%44", "%41%44", null, 0));
     }
 }
