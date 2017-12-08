@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb2494fd_3a1d0877",
+        "filename": "javatests/org/chromium/distiller/DomUtilTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1135279
+      },
+      "writtenOn": "2017-12-08T17:25:36Z",
+      "side": 1,
+      "message": "qq: Are these additions to add \"content\" to the tags?",
+      "range": {
+        "startLine": 521,
+        "startChar": 67,
+        "endLine": 521,
+        "endChar": 68
+      },
+      "revId": "43c6d353780f99fccd88724cc1a1849665633666",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
