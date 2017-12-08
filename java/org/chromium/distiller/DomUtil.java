@@ -165,7 +165,7 @@ public class DomUtil {
         for (int i = 0; i < nodeList.getLength(); i++) {
             Element element = nodeList.getItem(i);
             if (DomUtil.isVisible(element) &&
-                    DomUtil.isVisibleByOffset(element)) {
+                    DomUtil.isVisibleByOffset(element) && DomUtil.getArea(element) > 0) {
                 visibleElements.add(element);
             }
         }

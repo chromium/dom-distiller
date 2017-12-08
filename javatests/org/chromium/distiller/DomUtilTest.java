@@ -473,9 +473,9 @@ public class DomUtilTest extends DomDistillerJsTestCase {
     public void testOnlyProcessArticleElement() {
         final String htmlArticle =
             "<h1></h1>" +
-            "<article></article>";
+            "<article>a</article>";
 
-        String expected = "<article></article>";
+        String expected = "<article>a</article>";
 
         Element result = getArticleElement(htmlArticle);
         assertEquals(expected, result.getString());
@@ -484,10 +484,22 @@ public class DomUtilTest extends DomDistillerJsTestCase {
     public void testOnlyProcessArticleElementWithHiddenArticleElement() {
         final String htmlArticle =
             "<h1></h1>" +
-            "<article></article>" +
-            "<article style=\"display:none\"></article>";
+            "<article>a</article>" +
+            "<article style=\"display:none\">b</article>";
 
-        String expected = "<article></article>";
+        String expected = "<article>a</article>";
+
+        Element result = getArticleElement(htmlArticle);
+        assertEquals(expected, result.getString());
+    }
+
+    public void testOnlyProcessArticleElementWithZeroAreaElement() {
+        final String htmlArticle =
+                "<h1></h1>" +
+                        "<article>a</article>" +
+                        "<article style=\"width: 0px\">b</article>";
+
+        String expected = "<article>a</article>";
 
         Element result = getArticleElement(htmlArticle);
         assertEquals(expected, result.getString());
@@ -496,8 +508,8 @@ public class DomUtilTest extends DomDistillerJsTestCase {
     public void testOnlyProcessArticleElementMultiple() {
         final String htmlArticle =
             "<h1></h1>" +
-            "<article></article>" +
-            "<article></article>";
+            "<article>a</article>" +
+            "<article>b</article>";
 
         // The existence of multiple articles disables the fast path.
         assertNull(getArticleElement(htmlArticle));
@@ -506,12 +518,12 @@ public class DomUtilTest extends DomDistillerJsTestCase {
     public void testOnlyProcessSchemaOrgArticle() {
         final String htmlArticle =
             "<h1></h1>" +
-            "<div itemscope itemtype=\"http://schema.org/Article\">" +
+            "<div itemscope itemtype=\"http://schema.org/Article\">a" +
             "</div>";
 
         final String expected =
             "<div itemscope=\"\" " +
-                "itemtype=\"http://schema.org/Article\">" +
+                "itemtype=\"http://schema.org/Article\">a" +
             "</div>";
 
         Element result = getArticleElement(htmlArticle);
@@ -521,14 +533,14 @@ public class DomUtilTest extends DomDistillerJsTestCase {
     public void testOnlyProcessSchemaOrgArticleWithHiddenArticleElement() {
         final String htmlArticle =
             "<h1></h1>" +
-            "<div itemscope itemtype=\"http://schema.org/Article\">" +
+            "<div itemscope itemtype=\"http://schema.org/Article\">a" +
             "</div>" +
             "<div itemscope itemtype=\"http://schema.org/Article\" " +
-                "style=\"display:none\">" +
+                "style=\"display:none\">b" +
             "</div>";
 
         String expected =
-            "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">" +
+            "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">a" +
             "</div>";
 
         Element result = getArticleElement(htmlArticle);
@@ -538,12 +550,12 @@ public class DomUtilTest extends DomDistillerJsTestCase {
     public void testOnlyProcessSchemaOrgArticleNews() {
         final String htmlArticle =
             "<h1></h1>" +
-            "<div itemscope itemtype=\"http://schema.org/NewsArticle\">" +
+            "<div itemscope itemtype=\"http://schema.org/NewsArticle\">a" +
             "</div>";
 
         final String expected =
             "<div itemscope=\"\" " +
-                "itemtype=\"http://schema.org/NewsArticle\">" +
+                "itemtype=\"http://schema.org/NewsArticle\">a" +
             "</div>";
 
         Element result = getArticleElement(htmlArticle);
@@ -553,12 +565,12 @@ public class DomUtilTest extends DomDistillerJsTestCase {
     public void testOnlyProcessSchemaOrgArticleBlog() {
         final String htmlArticle =
             "<h1></h1>" +
-            "<div itemscope itemtype=\"http://schema.org/BlogPosting\">" +
+            "<div itemscope itemtype=\"http://schema.org/BlogPosting\">a" +
             "</div>";
 
         final String expected =
             "<div itemscope=\"\" " +
-                "itemtype=\"http://schema.org/BlogPosting\">" +
+                "itemtype=\"http://schema.org/BlogPosting\">a" +
             "</div>";
 
         Element result = getArticleElement(htmlArticle);
@@ -568,7 +580,7 @@ public class DomUtilTest extends DomDistillerJsTestCase {
     public void testOnlyProcessSchemaOrgPostal() {
         final String htmlArticle =
             "<h1></h1>" +
-            "<div itemscope itemtype=\"http://schema.org/PostalAddress\">" +
+            "<div itemscope itemtype=\"http://schema.org/PostalAddress\">a" +
             "</div>";
 
         Element result = getArticleElement(htmlArticle);
@@ -578,14 +590,14 @@ public class DomUtilTest extends DomDistillerJsTestCase {
     public void testOnlyProcessSchemaOrgArticleNested() {
         final String htmlArticle =
             "<h1></h1>" +
-            "<div itemscope itemtype=\"http://schema.org/Article\">" +
-                "<div itemscope itemtype=\"http://schema.org/Article\">" +
+            "<div itemscope itemtype=\"http://schema.org/Article\">a" +
+                "<div itemscope itemtype=\"http://schema.org/Article\">b" +
                 "</div>" +
             "</div>";
 
         final String expected =
-            "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">" +
-                "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">" +
+            "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">a" +
+                "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">b" +
                "</div>" +
             "</div>";
 
@@ -596,20 +608,20 @@ public class DomUtilTest extends DomDistillerJsTestCase {
     public void testOnlyProcessSchemaOrgArticleNestedWithNestedHiddenArticleElement() {
         final String htmlArticle =
             "<h1></h1>" +
-            "<div itemscope itemtype=\"http://schema.org/Article\">" +
-                "<div itemscope itemtype=\"http://schema.org/Article\">" +
+            "<div itemscope itemtype=\"http://schema.org/Article\">a" +
+                "<div itemscope itemtype=\"http://schema.org/Article\">b" +
                 "</div>" +
                 "<div itemscope itemtype=\"http://schema.org/Article\" " +
-                    "style=\"display:none\">" +
+                    "style=\"display:none\">c" +
                 "</div>" +
             "</div>";
 
         final String expected =
-            "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">" +
-                "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">" +
+            "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">a" +
+                "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">b" +
                 "</div>" +
                 "<div itemscope=\"\" itemtype=\"http://schema.org/Article\" " +
-                    "style=\"display:none\">" +
+                    "style=\"display:none\">c" +
                 "</div>" +
             "</div>";
 
@@ -622,17 +634,17 @@ public class DomUtilTest extends DomDistillerJsTestCase {
 
         final String htmlArticle =
             "<h1></h1>" +
-            "<div itemscope itemtype=\"http://schema.org/Article\">" +
-                "<div itemscope itemtype=\"http://schema.org/Article\">" +
+            "<div itemscope itemtype=\"http://schema.org/Article\">a" +
+                "<div itemscope itemtype=\"http://schema.org/Article\">b" +
                 "</div>" +
             "</div>" +
             "<div itemscope itemtype=\"http://schema.org/Article\" " +
-                "style=\"display:none\">" +
+                "style=\"display:none\">c" +
             "</div>";
 
         final String expected =
-            "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">" +
-                "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">" +
+            "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">a" +
+                "<div itemscope=\"\" itemtype=\"http://schema.org/Article\">b" +
                 "</div>" +
             "</div>";
 
@@ -643,7 +655,7 @@ public class DomUtilTest extends DomDistillerJsTestCase {
     public void testOnlyProcessSchemaOrgNonArticleMovie() {
         final String htmlArticle =
             "<h1></h1>" +
-            "<div itemscope itemtype=\"http://schema.org/Movie\">" +
+            "<div itemscope itemtype=\"http://schema.org/Movie\">a" +
             "</div>";
 
         // Non-article schema.org types should not use the fast path.
