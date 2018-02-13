@@ -25,6 +25,12 @@ public class WebImage extends WebElement {
     private int width;
     // The original height of the image in pixels.
     private int height;
+    // The inner width of the image in pixels, including padding but not the horizontal scrollbar
+    // height, border, or margin.
+    private int clientWidth;
+    // The inner height of the image in pixels, including padding but not the vertical scrollbar
+    // width, border, or margin.
+    private int clientHeight;
     // Cloned and processed element.
     private Element clonedImg;
 
@@ -46,6 +52,21 @@ public class WebImage extends WebElement {
         if (srcUrl == null) {
             srcUrl = "";
         }
+    }
+
+    /**
+     * Build an image element.
+     * @param e The element detected as an image.
+     * @param w The original width of the image.
+     * @param h The original height of the image.
+     * @param cw The inner width of the image.
+     * @param ch The inner height of the image.
+     * @param src The source URL of the image being extracted.
+     */
+    public WebImage(Element e, int w, int h, int cw, int ch, String src) {
+        this(e, w, h, src);
+        clientWidth = cw;
+        clientHeight = ch;
     }
 
     private void cloneAndProcessNode() {
@@ -113,6 +134,22 @@ public class WebImage extends WebElement {
      */
     public int getHeight() {
         return height;
+    }
+
+    /**
+     * Get the inner width of this image in pixels.
+     * @return The inner width of this image in pixels.
+     */
+    public int getClientWidth() {
+        return clientWidth;
+    }
+
+    /**
+     * Get the inner height of this image in pixels.
+     * @return The inner height of this image in pixels.
+     */
+    public int getClientHeight() {
+        return clientHeight;
     }
 
     /**
