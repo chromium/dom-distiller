@@ -370,8 +370,8 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         EmbedExtractor extractor = new ImageExtractor();
         WebImage result = (WebImage) extractor.extract(image);
         assertNotNull(result);
-        assertEquals(38, result.getHeight());
-        assertEquals(50, result.getWidth());
+        assertEquals(38, result.getClientHeight());
+        assertEquals(50, result.getClientWidth());
     }
 
     public void testImageExtractorWithAttributesCSSHeightCM() {
@@ -382,8 +382,8 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
         EmbedExtractor extractor = new ImageExtractor();
         WebImage result = (WebImage) extractor.extract(image);
         assertNotNull(result);
-        assertEquals(38, result.getHeight());
-        assertEquals(38, result.getWidth());
+        assertEquals(38, result.getClientHeight());
+        assertEquals(38, result.getClientWidth());
     }
 
     private void extractLazilyLoadedImage(String attr) {

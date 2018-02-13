@@ -26,6 +26,8 @@ public class ImageExtractor implements EmbedExtractor {
     private String imgSrc;
     private int width;
     private int height;
+    private int clientWidth;
+    private int clientHeight;
 
     static {
         // TODO(mdjones): Add "DIV" to this list for css images and possibly captions.
@@ -91,7 +93,7 @@ public class ImageExtractor implements EmbedExtractor {
         }
 
         extractImageAttributes(ie);
-        return new WebImage(e, width, height, imgSrc);
+        return new WebImage(e, width, height, clientWidth, clientHeight, imgSrc);
     }
 
     private void extractImageAttributes(ImageElement imageElement) {
@@ -114,6 +116,8 @@ public class ImageExtractor implements EmbedExtractor {
             // to get the real dimensions.
             width = imageElement.getWidth();
             height = imageElement.getHeight();
+            clientWidth = imageElement.getClientWidth();
+            clientHeight = imageElement.getClientHeight();
         }
         if (LogUtil.isLoggable(LogUtil.DEBUG_LEVEL_VISIBILITY_INFO)) {
             LogUtil.logToConsole("Extracted WebImage: " + imgSrc);
