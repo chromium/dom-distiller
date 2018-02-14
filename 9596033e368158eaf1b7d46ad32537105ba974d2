@@ -22,6 +22,30 @@
       "revId": "9596033e368158eaf1b7d46ad32537105ba974d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b252ea6d_8b83427a",
+        "filename": "javatests/org/chromium/distiller/EmbedExtractorTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1135279
+      },
+      "writtenOn": "2018-02-14T16:33:59Z",
+      "side": 0,
+      "message": "As a side note, assertEquals should take an epsilon (which in this case we could make 1) if we wanted to test with a margin for error.",
+      "parentUuid": "4be29b3c_35e3119a",
+      "range": {
+        "startLine": 374,
+        "startChar": 8,
+        "endLine": 374,
+        "endChar": 23
+      },
+      "revId": "9596033e368158eaf1b7d46ad32537105ba974d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
