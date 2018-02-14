@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4be29b3c_35e3119a",
+        "filename": "javatests/org/chromium/distiller/EmbedExtractorTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2018-02-14T08:47:28Z",
+      "side": 0,
+      "message": "I think we should still assert equality here, since there\u0027s no unit conversion.",
+      "range": {
+        "startLine": 374,
+        "startChar": 8,
+        "endLine": 374,
+        "endChar": 23
+      },
+      "revId": "9596033e368158eaf1b7d46ad32537105ba974d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
