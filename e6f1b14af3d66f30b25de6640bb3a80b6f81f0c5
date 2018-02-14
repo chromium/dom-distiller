@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "73e7275c_f8d74695",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1237911
+      },
+      "writtenOn": "2018-02-14T07:13:25Z",
+      "side": 1,
+      "message": "Hmm .. you are right. We must preserve the old behavior as much as possible. Precision issues are one thing that makes me hardly follow the principle, because I met many precision issues for this project and they were very complicated (we need a big change to solve them ..). I think we need another project to handle those problems. Let me discuss them with people who get involved in this project (bokan@ and boliu@).",
+      "parentUuid": "e434151b_44b2d6b1",
+      "range": {
+        "startLine": 10,
+        "startChar": 52,
+        "endLine": 10,
+        "endChar": 67
+      },
+      "revId": "e6f1b14af3d66f30b25de6640bb3a80b6f81f0c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4eabe667_26631d41",
         "filename": "java/org/chromium/distiller/extractors/embeds/ImageExtractor.java",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "075b8e09_f0899dfb",
+        "filename": "java/org/chromium/distiller/extractors/embeds/ImageExtractor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1237911
+      },
+      "writtenOn": "2018-02-14T07:13:25Z",
+      "side": 1,
+      "message": "The problem is that some elements has totally different clientWidth from width (e.g., clientWidth \u003d\u003d 0 while width \u003d\u003d 32).",
+      "parentUuid": "4eabe667_26631d41",
+      "range": {
+        "startLine": 119,
+        "startChar": 39,
+        "endLine": 119,
+        "endChar": 53
+      },
+      "revId": "e6f1b14af3d66f30b25de6640bb3a80b6f81f0c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b651e52c_bba07dc5",
         "filename": "javatests/org/chromium/distiller/EmbedExtractorTest.java",
         "patchSetId": 3
@@ -59,6 +107,30 @@
       "writtenOn": "2018-02-14T03:11:00Z",
       "side": 1,
       "message": "Rather than changing the prod logic, we could change the tests instead. We don\u0027t NEED to assert equality. What we want to test is that non-px units in CSS can be consistently obtained. We could say assert 38 \u003c\u003d height \u003c\u003d 39 for example.",
+      "range": {
+        "startLine": 373,
+        "startChar": 21,
+        "endLine": 373,
+        "endChar": 23
+      },
+      "revId": "e6f1b14af3d66f30b25de6640bb3a80b6f81f0c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95814d37_6b7a5c02",
+        "filename": "javatests/org/chromium/distiller/EmbedExtractorTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1237911
+      },
+      "writtenOn": "2018-02-14T07:13:25Z",
+      "side": 1,
+      "message": "Yes, I agree with this idea. I will revert this CL and just change only these expected values.\n\n\nJust to be clear, I think the number range must be 37 ~ 38.\nLet\u0027s assume that the correct value in CSS is 38 + a, where 0 \u003c\u003d a \u003c 1.\n\nfloor((38 + a) * scale) / scale \u003c\u003d (38 + a) * scale / scale\n-\u003e floor( floor((38 + a) * scale) / scale ) \u003c\u003d floor( (38 + a) * scale / scale ) \u003d\u003d 38\n\nfloor((38 + a) * scale) / scale \u003e (38 + a) * scale / scale - 1\n-\u003e floor( floor((38 + a) * scale) / scale ) \u003e\u003d floor( (38 + a) * scale / scale - 1 ) \u003d\u003d 37",
+      "parentUuid": "b651e52c_bba07dc5",
       "range": {
         "startLine": 373,
         "startChar": 21,
