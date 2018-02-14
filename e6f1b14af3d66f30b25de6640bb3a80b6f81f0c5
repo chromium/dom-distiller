@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e434151b_44b2d6b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2018-02-14T03:11:00Z",
+      "side": 1,
+      "message": "Is it inevitable that --use-zoom-for-dsf causes a user-visible (via web-platform, CSS/JS in this case) change like this? If somehow we could preserve the old behavior, we can avoid a whole family of bugs like this.",
+      "range": {
+        "startLine": 10,
+        "startChar": 52,
+        "endLine": 10,
+        "endChar": 67
+      },
+      "revId": "e6f1b14af3d66f30b25de6640bb3a80b6f81f0c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4eabe667_26631d41",
+        "filename": "java/org/chromium/distiller/extractors/embeds/ImageExtractor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2018-02-14T03:11:00Z",
+      "side": 1,
+      "message": "Images rarely have paddings, and we don\u0027t care about the rounding mode in WebImage. I think we could probably use clientWidth as width here, without introducing another width/height pair.",
+      "range": {
+        "startLine": 119,
+        "startChar": 39,
+        "endLine": 119,
+        "endChar": 53
+      },
+      "revId": "e6f1b14af3d66f30b25de6640bb3a80b6f81f0c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b651e52c_bba07dc5",
+        "filename": "javatests/org/chromium/distiller/EmbedExtractorTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2018-02-14T03:11:00Z",
+      "side": 1,
+      "message": "Rather than changing the prod logic, we could change the tests instead. We don\u0027t NEED to assert equality. What we want to test is that non-px units in CSS can be consistently obtained. We could say assert 38 \u003c\u003d height \u003c\u003d 39 for example.",
+      "range": {
+        "startLine": 373,
+        "startChar": 21,
+        "endLine": 373,
+        "endChar": 23
+      },
+      "revId": "e6f1b14af3d66f30b25de6640bb3a80b6f81f0c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
