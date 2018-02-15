@@ -46,6 +46,30 @@
       "revId": "9596033e368158eaf1b7d46ad32537105ba974d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcc1040f_cd9cd6b9",
+        "filename": "javatests/org/chromium/distiller/EmbedExtractorTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1237911
+      },
+      "writtenOn": "2018-02-15T00:59:57Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "b252ea6d_8b83427a",
+      "range": {
+        "startLine": 374,
+        "startChar": 8,
+        "endLine": 374,
+        "endChar": 23
+      },
+      "revId": "9596033e368158eaf1b7d46ad32537105ba974d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
