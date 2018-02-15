@@ -46,6 +46,30 @@
       "revId": "3d9c82535259c72b54b8d3e0077ea032a6b0f6a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "368108a9_7faa11bb",
+        "filename": "javatests/org/chromium/distiller/EmbedExtractorTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2018-02-15T09:27:33Z",
+      "side": 1,
+      "message": "Hmm. I guess you are saying with --use-zoom-for-dsf, it is possible that setting 50px doesn\u0027t necessarily get you exactly 50px back through web-platform APIs, since px is no longer a special unit that preserves exact precision. This might be quite unexpected for web developers. Could the rounding difference be amended somehow? Like using the same rounding mode in .width as in .clientWidth.\n\nPreserving the exact width/height value if an integer px number is specified has been taken for granted, even if this is not part of the web spec. The impact of --use-zoom-for-dsf as is might be quite large. For example, all testImageExtractor* tests would need to be changed because none of the dimensions are exact anymore.",
+      "parentUuid": "21551486_6bd1f8d7",
+      "range": {
+        "startLine": 374,
+        "startChar": 8,
+        "endLine": 374,
+        "endChar": 47
+      },
+      "revId": "3d9c82535259c72b54b8d3e0077ea032a6b0f6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
