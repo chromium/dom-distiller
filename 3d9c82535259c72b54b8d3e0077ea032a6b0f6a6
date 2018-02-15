@@ -22,6 +22,30 @@
       "revId": "3d9c82535259c72b54b8d3e0077ea032a6b0f6a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21551486_6bd1f8d7",
+        "filename": "javatests/org/chromium/distiller/EmbedExtractorTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1237911
+      },
+      "writtenOn": "2018-02-15T07:25:03Z",
+      "side": 1,
+      "message": "Right, but I also allow this error because for some devices (in the future), the width can be 49. For example, if the device scale factor is 3.875, then floor((floor(50 * 3.875) + 0.501)/3.875) \u003d\u003d 49.\n\nIf we test this on only existing devices, then I guess the exact 50 is fine. How do you think of it?",
+      "parentUuid": "9274cbb5_9d3ae49f",
+      "range": {
+        "startLine": 374,
+        "startChar": 8,
+        "endLine": 374,
+        "endChar": 47
+      },
+      "revId": "3d9c82535259c72b54b8d3e0077ea032a6b0f6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
