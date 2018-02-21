@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "38ab2a50_de247894",
+        "filename": "javatests/org/chromium/distiller/EmbedExtractorTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1237911
+      },
+      "writtenOn": "2018-02-21T02:31:41Z",
+      "side": 1,
+      "message": "Right, it is possible ..",
+      "parentUuid": "81e69f4e_983157b4",
+      "range": {
+        "startLine": 360,
+        "startChar": 32,
+        "endLine": 360,
+        "endChar": 40
+      },
+      "revId": "3d9c82535259c72b54b8d3e0077ea032a6b0f6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9274cbb5_9d3ae49f",
         "filename": "javatests/org/chromium/distiller/EmbedExtractorTest.java",
         "patchSetId": 7
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "I\u0027m fine with adding an error margin here. However, to be future proof (compatible with arbitrary device scale factor), not only these 4 lines need to be updated, but also most of the getWidth/Height() calls in the assertEquals(), right?\n\nHow did you solve the failed unit tests with special device scale factors? If it is too much trouble updating all these assertions, I guess conditionally disabling DomDistillerJsTest.RunJsTests when --use-zoom-for-dsf is used might be easiest.",
       "parentUuid": "2550ba95_8ab194e8",
+      "range": {
+        "startLine": 374,
+        "startChar": 8,
+        "endLine": 374,
+        "endChar": 47
+      },
+      "revId": "3d9c82535259c72b54b8d3e0077ea032a6b0f6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca3b3034_7c1016ab",
+        "filename": "javatests/org/chromium/distiller/EmbedExtractorTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1237911
+      },
+      "writtenOn": "2018-02-21T02:31:41Z",
+      "side": 1,
+      "message": "Ok, let me disable --use-zoom-for-dsf for DomDistillerJsTest.RunJsTests. I just created another CL crrev.com/c/927614 for it.",
+      "parentUuid": "1764c6ab_6bbf6b09",
       "range": {
         "startLine": 374,
         "startChar": 8,
