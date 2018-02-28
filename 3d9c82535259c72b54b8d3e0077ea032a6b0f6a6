@@ -189,6 +189,30 @@
       "revId": "3d9c82535259c72b54b8d3e0077ea032a6b0f6a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91889e76_190a16fb",
+        "filename": "javatests/org/chromium/distiller/EmbedExtractorTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1002681
+      },
+      "writtenOn": "2018-02-28T00:43:19Z",
+      "side": 1,
+      "message": "As Jaebaek mentioned, it can already happen that the value set by the author for width/height may not be returned by image.width/height exactly if the user\u0027s browser has Ctrl+/- zooming applied. FWIW, `px` was never a unit that is exactly preserved in these cases (if the author sets the CSS width to a fractional value like 10.5px, image.width will return a different value). \n\nThis feature is already shipped on Windows and ChromeOS so it should already affect more than ctrl+/- zooming but screens with exotic scale factors are likely more prevalent on Android devices than on desktops. This is a potential compatibility risk, though I don\u0027t expect we\u0027ll hit major issues.\n\nWith regard to these tests, what does the image extractor do? If it\u0027s ok that the values might be slightly off on strange screen densities/zoom factors, then I think the correct thing to do here is have a 1px of allowed error (along with a comment somewhere explaining why that\u0027s the case).",
+      "parentUuid": "ca3b3034_7c1016ab",
+      "range": {
+        "startLine": 374,
+        "startChar": 8,
+        "endLine": 374,
+        "endChar": 47
+      },
+      "revId": "3d9c82535259c72b54b8d3e0077ea032a6b0f6a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
