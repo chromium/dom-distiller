@@ -58,6 +58,17 @@ public class DomUtil {
         return null;
     }
 
+    public static Element getFirstVisibleElementByTagName(Element e, String tagName) {
+        NodeList<Element> elements = e.getElementsByTagName(tagName);
+        Element elem = null;
+        for (int i = 0; i < elements.getLength(); i++) {
+            elem = Element.as(elements.getItem(i));
+            if (isVisible(elem))
+                return elem;
+        }
+        return null;
+    }
+
     public static native boolean hasClassName(Element elem, String className) /*-{
         return elem.classList.contains(className);
     }-*/;
