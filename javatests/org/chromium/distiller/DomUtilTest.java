@@ -12,6 +12,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
+import com.google.gwt.dom.client.Style;
 
 import java.util.Map;
 import java.util.List;
@@ -54,6 +55,38 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         assertEquals(null, DomUtil.getFirstElementWithClassName(rootDiv, "t xy"));
         assertEquals(null, DomUtil.getFirstElementWithClassName(rootDiv, "tes"));
         assertEquals(div3, DomUtil.getFirstElementWithClassName(rootDiv, "foo"));
+    }
+
+    public void testGetFirstVisibleElementByTagName() {
+        Element rootDiv = TestUtil.createDiv(0);
+        String html =
+            "<div id=\"1\" style=\"visibility:hidden\"> </div>" +
+            "<div id=\"2\" style=\"display:none\"> </div>" +
+            "<div id=\"3\" style=\"opacity:0.0\"> </div>" +
+            "<div id=\"4\" style=\"visibility:visible\"> </div>" +
+            "<div id=\"5\" style=\"opacity:1.0\"> </div>";
+
+        rootDiv.setInnerHTML(html);
+        mBody.appendChild(rootDiv);
+        assertEquals("4", DomUtil.getFirstVisibleElementByTagName(rootDiv,"DIV").getId());
+    }
+
+    public void testIsLazilyLoaded() {
+        ImageElement img1 = TestUtil.createImage();
+        img1.setAttribute("data-src","image.png");
+
+        ImageElement img2 = TestUtil.createImage();
+        img2.setAttribute("data-url","image.png");
+
+        ImageElement img3 = TestUtil.createImage();
+        img3.setAttribute("data-original","image.png");
+
+        ImageElement img4 = TestUtil.createImage();
+
+        assertTrue(DomUtil.isLazilyLoaded(img1));
+        assertTrue(DomUtil.isLazilyLoaded(img2));
+        assertTrue(DomUtil.isLazilyLoaded(img3));
+        assertFalse(DomUtil.isLazilyLoaded(img4));
     }
 
     public void testHasRootDomain() {
