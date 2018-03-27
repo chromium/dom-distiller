@@ -53,14 +53,23 @@ public class ImageExtractor implements EmbedExtractor {
         ImageElement ie = ImageElement.as(DomUtil.getFirstElementByTagNameInc(e, "IMG"));
 
         if ("FIGURE".equals(e.getTagName())) {
-            Element img = DomUtil.getFirstElementByTagName(e, "PICTURE");
+            Element img = DomUtil.getFirstVisibleElementByTagName(e,"PICTURE");
+            Element elem;
             if (img == null) {
-                img = DomUtil.getFirstElementByTagName(e, "IMG");
+                NodeList<Element> elements = e.getElementsByTagName("IMG");
+                for (int i = 0; i < elements.getLength(); i++) {
+                    elem = elements.getItem(i);
+                    if (DomUtil.isVisible(elem) || DomUtil.isLazilyLoaded(elem)) {
+                        img = elem;
+                        break;
+                    }
+                }
             }
             if (img == null) {
                 return null;
             }
-            extractImageAttributes(ie);
+            extractImageAttributes(ImageElement.as(img));
+
             Element figcaption;
             Element cap = DomUtil.getFirstElementByTagName(e, "FIGCAPTION");
             if (cap != null) {
