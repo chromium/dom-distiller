@@ -223,6 +223,7 @@ public class IEReadingViewParserTest extends DomDistillerJsTestCase {
 
         root.appendChild(figure);
         figure.appendChild(img);
+        mBody.appendChild(root);
 
         IEReadingViewParser parser = new IEReadingViewParser(root);
         MarkupParser.Image[] images = parser.getImages();
@@ -248,6 +249,7 @@ public class IEReadingViewParserTest extends DomDistillerJsTestCase {
 
         root.appendChild(figure);
         figure.appendChild(img);
+        mBody.appendChild(root);
 
         IEReadingViewParser parser = new IEReadingViewParser(root);
         MarkupParser.Image[] images = parser.getImages();
@@ -273,6 +275,7 @@ public class IEReadingViewParserTest extends DomDistillerJsTestCase {
 
         root.appendChild(figure);
         figure.appendChild(img);
+        mBody.appendChild(root);
 
         IEReadingViewParser parser = new IEReadingViewParser(root);
         MarkupParser.Image[] images = parser.getImages();
@@ -297,6 +300,7 @@ public class IEReadingViewParserTest extends DomDistillerJsTestCase {
 
         root.appendChild(figure);
         root.appendChild(img);
+        mBody.appendChild(root);
 
         IEReadingViewParser parser = new IEReadingViewParser(root);
         MarkupParser.Image[] images = parser.getImages();
@@ -321,6 +325,7 @@ public class IEReadingViewParserTest extends DomDistillerJsTestCase {
 
         root.appendChild(figure);
         root.appendChild(img);
+        mBody.appendChild(root);
 
         IEReadingViewParser parser = new IEReadingViewParser(root);
         MarkupParser.Image[] images = parser.getImages();
@@ -348,6 +353,7 @@ public class IEReadingViewParserTest extends DomDistillerJsTestCase {
         root.appendChild(dominant);
         root.appendChild(figure);
         figure.appendChild(img);
+        mBody.appendChild(root);
 
         IEReadingViewParser parser = new IEReadingViewParser(root);
         MarkupParser.Image[] images = parser.getImages();
