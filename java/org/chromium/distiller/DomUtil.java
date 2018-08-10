@@ -251,11 +251,15 @@ public class DomUtil {
     }
 
     /**
-     * Get all text from a tree/sub-tree.
+     * Get all text from a tree/sub-tree. The node is added to the DOM for rendering, so that the
+     * innerText has all the line breaks even if the node is not originally rendered.
+     * See https://crbug.com/859410.
+     * Note that this should only be used in tests since it modifies the DOM.
+     * TODO(wychen): assert this is not used in prod if we have a way to do so.
      * @param node The root of the tree.
      * @return The text contained in this tree.
      */
-    public static String getTextFromTree(Node node) {
+    public static String getTextFromTreeForTest(Node node) {
         // Temporarily add the node to the DOM so that style is calculated.
         Document.get().getBody().appendChild(node);
         String output = DomUtil.getInnerText(node);

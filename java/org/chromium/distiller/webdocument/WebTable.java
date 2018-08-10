@@ -32,7 +32,7 @@ public class WebTable extends WebElement {
             cloneAndProcessNode();
         }
         if (textOnly) {
-            return DomUtil.getTextFromTree(cloned);
+            return DomUtil.getTextFromTreeForTest(cloned);
         }
         return Element.as(cloned).getString();
     }
