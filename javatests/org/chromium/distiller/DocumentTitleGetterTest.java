@@ -142,6 +142,7 @@ public class DocumentTitleGetterTest extends DomDistillerJsTestCase {
         Element root = TestUtil.createDiv(0);
         Element h1 = TestUtil.createHeading(1, "short heading");
         root.appendChild(h1);
+        mBody.appendChild(root);
 
         String title = DocumentTitleGetter.getDocumentTitle("short title", root);
         assertEquals("short title", title);
@@ -151,6 +152,7 @@ public class DocumentTitleGetterTest extends DomDistillerJsTestCase {
         Element root = TestUtil.createDiv(0);
         Element h1 = TestUtil.createHeading(1, "long heading with 5 words");
         root.appendChild(h1);
+        mBody.appendChild(root);
 
         String title = DocumentTitleGetter.getDocumentTitle("short title", root);
         assertEquals("long heading with 5 words", title);
@@ -162,6 +164,7 @@ public class DocumentTitleGetterTest extends DomDistillerJsTestCase {
         Element h2 = TestUtil.createHeading(2, "long heading2 with 5 words");
         root.appendChild(h1);
         root.appendChild(h2);
+        mBody.appendChild(root);
 
         String title = DocumentTitleGetter.getDocumentTitle("short title", root);
         assertEquals("long heading1 with 5 words", title);
@@ -172,9 +175,14 @@ public class DocumentTitleGetterTest extends DomDistillerJsTestCase {
         Element h1 = TestUtil.createHeading(1,
                 "<a href=\"http://longheading.com\"><b>long heading</b></a> with <br>5 words");
         root.appendChild(h1);
+        mBody.appendChild(root);
 
         String title = DocumentTitleGetter.getDocumentTitle("short title", root);
-        assertEquals("long heading with \n5 words", title);
+        // The title is "long heading with \n5 words" in older version of Chrome, when not rendered.
+        // It becomes "long heading with\n5 words" after http://crrev.com/c/1114673, when rendered.
+        // Note the trailing space is gone. Both results are acceptable.
+        assertEquals("long heading with 5 words",
+            title.replaceAll("\n", " ").replaceAll("  ", " "));
     }
 
     public void testH1WithLongHTMLWithNbsp() {
@@ -182,6 +190,7 @@ public class DocumentTitleGetterTest extends DomDistillerJsTestCase {
         Element h1 = TestUtil.createHeading(1,
                 "<a href=\"http://longheading.com\"><b> &nbsp;long heading</b></a> with 5 words &nbsp; ");
         root.appendChild(h1);
+        mBody.appendChild(root);
 
         String title = DocumentTitleGetter.getDocumentTitle("short title", root);
         assertEquals("long heading with 5 words", title);
