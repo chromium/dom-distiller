@@ -591,7 +591,7 @@ public class EmbedExtractorTest extends DomDistillerJsTestCase {
             "<figure>" +
                 "<img src=\"http://wwww.example.com/image.jpeg\"" +
                     " width=\"100\" height=\"100\">" +
-                "<figcaption>\nThis is a caption</figcaption>" +
+                "<figcaption>This is a caption</figcaption>" +
             "</figure>";
         EmbedExtractor extractor = new ImageExtractor();
         WebElement result = extractor.extract(figure);

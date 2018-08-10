@@ -11,6 +11,7 @@ import com.google.gwt.dom.client.NodeList;
 import org.chromium.distiller.DomUtil;
 import org.chromium.distiller.JavaScript;
 import org.chromium.distiller.LogUtil;
+import org.chromium.distiller.StringUtil;
 import org.chromium.distiller.webdocument.WebFigure;
 import org.chromium.distiller.webdocument.WebImage;
 
@@ -122,7 +123,11 @@ public class ImageExtractor implements EmbedExtractor {
 
     private Element createFigcaptionElement(Element element) {
         Element figcaption = Document.get().createElement("FIGCAPTION");
-        figcaption.setInnerText(DomUtil.getInnerText(element));
+        // element.innerText might contain leading/trailing new lines or whitespaces when running
+        // in older version of Chrome (before http://crrev.com/c/1114673). Both behaviors are
+        // acceptable.
+        // See https://crbug.com/651764.
+        figcaption.setInnerText(StringUtil.jsTrim(DomUtil.getInnerText(element)));
         return figcaption;
     }
 }
