@@ -32,7 +32,9 @@ public class WebFigure extends WebImage {
     @Override
     public String generateOutput(boolean textOnly) {
         Element figcaption = DomUtil.cloneAndProcessTree(figCaption);
-        if (textOnly) return DomUtil.getInnerText(figcaption);
+        if (textOnly) {
+            return DomUtil.getTextFromTreeForTest(figcaption);
+        }
 
         Element figure = Document.get().createElement("FIGURE");
         figure.appendChild(getProcessedNode());
