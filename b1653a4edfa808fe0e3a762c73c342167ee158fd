@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "efaf819c_d1a43ac8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2018-12-19T10:10:05Z",
+      "side": 1,
+      "message": "The first line of the CL description is the title, and we usually want that to be \u003c50 chars.\n\nWe can have a shorter title, and move what you wrote to the body of the CL description.",
+      "revId": "b1653a4edfa808fe0e3a762c73c342167ee158fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7d830b3_3b3912ac",
+        "filename": "java/org/chromium/distiller/DomUtil.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2018-12-19T10:10:05Z",
+      "side": 1,
+      "message": "Could we reuse LAZY_IMAGE_ATTRIBUTES? We could move this function into ImageExtractor.java.",
+      "range": {
+        "startLine": 72,
+        "startChar": 26,
+        "endLine": 72,
+        "endChar": 40
+      },
+      "revId": "b1653a4edfa808fe0e3a762c73c342167ee158fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad969e35_82a54854",
+        "filename": "java/org/chromium/distiller/extractors/embeds/ImageExtractor.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2018-12-19T10:10:05Z",
+      "side": 1,
+      "message": "The declaration can be moved below when it is first used.",
+      "range": {
+        "startLine": 57,
+        "startChar": 12,
+        "endLine": 57,
+        "endChar": 25
+      },
+      "revId": "b1653a4edfa808fe0e3a762c73c342167ee158fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a10544bc_97c4e11e",
+        "filename": "javatests/org/chromium/distiller/DomUtilTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2018-12-19T10:10:05Z",
+      "side": 1,
+      "message": "Can we add a test in EmbedExtractorTest.java for ImageExtractor.java?",
+      "revId": "b1653a4edfa808fe0e3a762c73c342167ee158fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
