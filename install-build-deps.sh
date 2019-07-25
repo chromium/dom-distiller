@@ -18,7 +18,7 @@
   apt-get update
   apt-get install -y \
     ant \
-    openjdk-7-jdk \
+    openjdk-8-jdk \
     protobuf-compiler \
     python \
     python-setuptools \
