@@ -1,17 +1,32 @@
 sudo: required
-# Chrome is no longer supported on Ubuntu Precise (12.04), so use Trusty (14.04).
-dist: trusty
+
+# Ubuntu 18.04 (Bionic)
+dist: bionic
 
 language: java
+
 before_install: git log --oneline -n 5
+
 install:
+  - google-chrome --version
   - sudo ./install-build-deps.sh
+  # Fix the Java environment in Travis CI. Ubuntu 18.04 uses JDK 11 and cannot downgrade to 8.
+  - unset JAVA_HOME
+
 script:
   # Use system python for protobuf package.
   - export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   - hooks/pre-commit
+  - which java
+  - java -Xmx32m -version
+  - javac -J-Xmx32m -version
+  - google-chrome --version
   - ant test -Dtest.shuffle=1 -Dtest.repeat=10
   - ant package
+
+# Each item under env is a testing environment.
 env:
+  # Use stock version of Chrome
   - CHROME_MIN_VERSION=49
+  # Update to latest Chrome
   - CHROME_MIN_VERSION=99
