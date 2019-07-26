@@ -34,6 +34,24 @@
       "revId": "614ee25c860b98926a0acceb28f7913cfdd74bfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "655a1d2f_e4c12c49",
+        "filename": ".travis.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002237
+      },
+      "writtenOn": "2019-07-26T23:18:48Z",
+      "side": 1,
+      "message": "Got it. Thanks for the clarification!",
+      "parentUuid": "9e4c8d2e_d371c0ad",
+      "revId": "614ee25c860b98926a0acceb28f7913cfdd74bfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
