@@ -39,6 +39,8 @@ def newDriver(mobile=False):
   chromeOptions = webdriver.ChromeOptions()
   # If you want to use a different version of chrome, specify the full path here.
   #chromeOptions.binary_location = "/usr/bin/google-chrome-unstable";
+  # For native distillability features.
+  chromeOptions.add_argument('--enable-distillability-service')
   chromeOptions.add_argument('--enable-dom-distiller')
   chromeOptions.add_argument('--save-page-as-mhtml')
   chromeOptions.add_argument('--reader-mode-heuristics=adaboost')
