@@ -16,6 +16,24 @@
       "revId": "614ee25c860b98926a0acceb28f7913cfdd74bfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e4c8d2e_d371c0ad",
+        "filename": ".travis.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2019-07-26T23:14:37Z",
+      "side": 1,
+      "message": "For sections like install and script, each item is run sequentially, but for env, each item is one testing environment. One uses the stock version of Chrome, and the other force updates it to the latest one.",
+      "parentUuid": "413d2a3f_97b41b66",
+      "revId": "614ee25c860b98926a0acceb28f7913cfdd74bfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
