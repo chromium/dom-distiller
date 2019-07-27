@@ -58,7 +58,7 @@
   user=$SUDO_USER
   bit=$(getconf LONG_BIT)
   domdistiller=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-  pkg=selenium-2.45.0
+  pkg=selenium-3.141.0
   tar=${pkg}.tar.gz
   zip=chromedriver_linux${bit}.zip
   tmp=/tmp/domdistiller-$$
