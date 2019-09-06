@@ -51,7 +51,7 @@ def newDriver(mobile=False):
 
   d = DesiredCapabilities.CHROME
   # This is to enable accessing devtools console log from here, for nativeFeatures().
-  d['loggingPrefs'] = {'browser': 'ALL'}
+  d['goog:loggingPrefs'] = {'browser': 'ALL'}
   driver = webdriver.Chrome(chrome_options=chromeOptions, desired_capabilities=d)
   driver.set_page_load_timeout(60)
   driver.set_script_timeout(60)
