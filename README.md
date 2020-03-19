@@ -1,39 +1,40 @@
 # DOM Distiller
 
-[DOM Distiller](https://chromium.googlesource.com/chromium/dom-distiller)
-aims to provide a better reading experience by distilling the content of the
-web pages. This distilled content can then be used in a variety of ways.
+[DOM Distiller](https://chromium.googlesource.com/chromium/dom-distiller) aims
+to provide a better reading experience by distilling the content of the web
+pages. This distilled content can then be used in a variety of ways.
 
-Projects or features powered by DOM Distiller:
+Projects and features powered by DOM Distiller:
 
--   Reader mode: a mobile-friendly viewing mode for Chrome mobile
-    ([news](http://www.thesempost.com/site-not-mobile-friendly-google-offers-searchers-mobile-friendly-version-page/))
+-   Reader mode, a distraction-free viewing mode for Chrome on Android and
+    desktop
 -   Reading list on Chrome iOS
-    ([news](https://9to5mac.com/2017/03/14/chrome-for-ios-update-reading-list/))
 -   [Simplify page for print](https://plus.google.com/+FrancoisBeaufort/posts/dDPD2gVThuv)
 
-DOM Distiller is loosely based off of a research project called "Boilerpipe".
-The [original paper](http://www.l3s.de/~kohlschuetter/publications/wsdm187-kohlschuetter.pdf),
-the [presentation](http://www.l3s.de/~kohlschuetter/boilerplate/WSDM2010-Kohlschuetter-slides.pdf),
-[source](https://github.com/kohlschutter/boilerpipe),
-and more info can be found here:
-http://www.l3s.de/~kohlschuetter/boilerplate/
+DOM Distiller is loosely based on a research project called "Boilerpipe". The
+[original paper](http://www.l3s.de/~kohlschuetter/publications/wsdm187-kohlschuetter.pdf),
+the
+[presentation](http://www.l3s.de/~kohlschuetter/boilerplate/WSDM2010-Kohlschuetter-slides.pdf),
+[source](https://github.com/kohlschutter/boilerpipe), and more info can be found
+at http://www.l3s.de/~kohlschuetter/boilerplate/
 
 ## Report a bug
 
-We use the same bug tracking system Chromium uses, [crbug](http://crbug.com),
-and the DOM distiller related bugs are filed under [`component:UI>Browser>ReaderMode`](https://bugs.chromium.org/p/chromium/issues/list?q=component%3AUI%3EBrowser%3EReaderMode)
-component.
+Bugs are tracked in Chromium's issue tracker, [crbug](http://crbug.com). DOM
+Distiller bugs are filed under
+[`component:UI>Browser>ReaderMode`](https://bugs.chromium.org/p/chromium/issues/list?q=component%3AUI%3EBrowser%3EReaderMode).
 
 If the extracted contents have missing or extra text or images, it's considered
-a bug. If a long non-mobile-friendly article doesn't trigger the infobar on
+a bug. If a long, non-mobile-friendly article doesn't trigger the infobar on
 Chrome on Android, you can also file a bug.
 
-## How to use Reader mode on Chrome on Android
+## How to use Reader mode on Chrome
 
-This feature was already launched, so you should be able to use it on current
-version of Chrome on Android. If you would like to configure the triggering
-logic, follow these steps:
+### Android
+
+This feature has launched, so you should be able to use it on current version of
+Chrome on Android. If you would like to configure the triggering logic, follow
+these steps:
 
 -   Open Chrome on your Android phone.
 -   Navigate to [chrome://flags](chrome://flags) and search for "Reader mode"
@@ -46,6 +47,25 @@ logic, follow these steps:
 -   Click "Relaunch Now" at the bottom of the page.
 -   Next time you're trying to read a page, tap on the "Make page
     mobile-friendly" infobar to try it out!
+
+### Desktop
+
+Reader Mode for Chrome on desktop is still in development. As of M80, an
+experimental preview of the feature can be activated by following these steps:
+
+-   Open Chrome on your desktop computer.
+-   Navigate to [chrome://flags](chrome://flags) and search for
+    "enable-reader-mode" with the in-page search box. Alternatively, you may go
+    directly to the setting by visiting
+    [chrome://flags#enable-reader-mode](chrome://flags#enable-reader-mode).
+-   Click the dropdown box and select "Enabled".
+-   Click "Relaunch Now" at the bottom of the page when prompted.
+-   Visit an article or article-like page, and a Reader Mode icon should appear
+    in the omnibox. Click the icon to enter Reader Mode.
+
+The Reader Mode icon may not appear on all articles or article-like pages due to
+the way DOM Distiller calculates a page's "distillability", i.e. how likely the
+page is to benefit from Reader Mode.
 
 # Continuous integration
 
@@ -66,10 +86,13 @@ A `dom-distiller` folder will be created in the folder you run that command.
 
 Before you build for the first time, you need to install the build dependencies.
 
-For all platforms, it is require to download and install [Google Chrome browser](https://www.google.com/chrome/browser/desktop/).
+For all platforms, it is require to download and install
+[Google Chrome browser](https://www.google.com/chrome/browser/desktop/).
 
 ChromeDriver requires Google Chrome to be installed at a specific location (the
-default location for the platform). See [ChromeDriver documentation](https://code.google.com/p/selenium/wiki/ChromeDriver) for details.
+default location for the platform). See
+[ChromeDriver documentation](https://code.google.com/p/selenium/wiki/ChromeDriver)
+for details.
 
 Also install the git hooks:
 
@@ -85,12 +108,11 @@ Install the dependencies by entering the `dom-distiller` folder and running:
 sudo ./install-build-deps.sh
 ```
 
-Ubuntu 14.04 64-bit is recommended.
-
 ## Developing on Mac OS X
 
 -   Install JDK 7 using either your organizations software management tool, or
-    download it from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html).
+    download it from
+    [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html).
 -   Install [Homebrew](http://brew.sh/).
 -   Install `ant` and `python` using Homebrew:
 
@@ -108,7 +130,8 @@ Ubuntu 14.04 64-bit is recommended.
 
 -   Create a folder named `buildtools` inside your DOM Distiller checkout
 
--   Download ChromeDriver (chromedriver_mac32.zip) from the [Download page](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+-   Download ChromeDriver (chromedriver_mac32.zip) from the
+    [Download page](https://sites.google.com/a/chromium.org/chromedriver/downloads)
 
 -   Unzip the `chromedriver_mac32.zip` and ensure the binary ends up in your
     `buildtools` folder.
@@ -154,12 +177,11 @@ The Vagrant VM is based on Ubuntu 14.04.
 
 ## Tools for contributing
 
-The DOM Distiller project uses the Chromium tools for collaboration. For code
-reviews, [Chromium Gerrit](https://chromium-review.googlesource.com/)
-is used and the set of tools found in `depot_tools` is also required.
-
-To get `depot_tools`, follow the guide at [Chrome infrastructure documentation
-for depot_tools](http://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html#_setting_up).
+The DOM Distiller project uses the Chromium tools for collaboration. Code
+reviews are hosted on
+[Chromium Gerrit](https://chromium-review.googlesource.com/). You must also
+install `depot_tools` by following the guide at
+[Chrome infrastructure documentation for depot_tools](http://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html#_setting_up).
 
 The TL;DR of that is to run this from a folder where you install developer
 tools, for example in your `$HOME` folder:
@@ -169,21 +191,36 @@ git clone https://chromium.googlesource.com/chromium/tools/depot_tools
 export PATH="/path/to/depot_tools:$PATH"
 ```
 
+## Formatting code
+
+You can update your code to follow DOM Distiller's code formatting guidelines by
+running `git cl format`.
+
+To properly configure the command, add the following symbolic links to the
+`buildtools` folder in your checkout:
+
+-   `clang_format` &rarr; `/path/to/chromium/src/buildtools/clang_format/`
+-   `linux64` &rarr; `/path/to/chromium/src/buildtools/linux64/` (only for Linux
+    64-bit platform)
+-   `mac` &rarr; `/path/to/chromium/mac/buildtools/linux64/` (only for Mac
+    platform)
+
 # Building
 
 ## Using ant
 
-`ant` is the tool we use to build, and the available targets can be listed using
-`ant -p`, but the typical targets you might use when you work on this project
-is:
+`ant` is the tool we use to build. All available targets can be listed using
+`ant -p`.
+
+Some important targets that you are likely to use while working on the project:
 
 -   `ant test` Runs all tests.
 -   `ant test -Dtest.filter=$FILTER_PATTERN` where `$FILTER_PATTERN` is a
     [gtest\_filter pattern](https://code.google.com/p/googletest/wiki/AdvancedGuide#Running_a_Subset_of_the_Tests).
     For example `*.FilterTest.*:*Foo*-*Bar*` would run all tests containing
     `.FilterTest.` and `Foo`, but not those with `Bar`.
--   `ant gwtc` compiles .class + .java files to JavaScript. Standalone JavaScript
-    is available at `war/domdistiller/domdistiller.nocache.js`.
+-   `ant gwtc` compiles .class + .java files to JavaScript. Standalone
+    JavaScript is available at `war/domdistiller/domdistiller.nocache.js`.
 -   `ant gwtc.jstests` creates a standalone JavaScript for the tests.
 -   `ant extractjs` creates standalone JavaScript from output of ant gwtc. The
     compiled JavaScript file is available at `out/domdistiller.js`.
@@ -193,52 +230,45 @@ is:
 
 # Contributing
 
-You can use regular `git` command when developing in this project and use `git
-cl` for collaboration.
+You can use most regular `git` commands for development and `git cl` for
+collaboration.
 
-## Uploading a CL for review
+## Preparing changes for review
 
-On your branch, run: `git cl upload`. The first time you do this, you will have
-to provide a username and password.
+Create a new local branch and commit the changes you want to make. When you are
+done, please run `git cl format` to standardize the code format before
+uploading.
 
--   For username, use your @chromium.org. account.
--   For password, get it from [GoogleCode.com settings page](https://code.google.com/hosting/settings) when logged into your
-    @chromium.org account, and add the full `machine code.google.com login` line
-    to your `~/.netrc` file.
+## Uploading changes to Gerrit
 
-## Landing a CL
+Checkout your local branch with the changes you want to have reviewed and run
+`git cl upload` to create a change list (CL) at
+[Chromium Gerrit](https://chromium-review).
 
--   After getting LGTM, you can land the CL in the code review system by
-    clicking the "Submit" button.
+The first time you do this, you will have to provide a username and password.
 
-## Code formatting
+-   For username, use your @chromium.org account.
+-   For password, get it from
+    [GoogleCode.com settings page](https://code.google.com/hosting/settings)
+    when logged into your @chromium.org account, and add the full `machine
+    code.google.com login` line to your `~/.netrc` file.
 
-Before uploading a CL it is recommended to run `git cl format`. However, this
-requires adding symbolic links to your chromium checkout.
+## Landing your changes
 
-Inside the `buildtools` folder of your checkout, add the following symbolic
-links:
-
--   `clang_format` &rarr; `/path/to/chromium/src/buildtools/clang_format/`
--   `linux64` &rarr; `/path/to/chromium/src/buildtools/linux64/` (only for Linux
-    64-bit platform)
--   `mac` &rarr; `/path/to/chromium/mac/buildtools/linux64/` (only for Mac
-    platform)
-
-Doing this enables you to run the command `git cl format` to fix the formatting
-of your code.
+After getting LGTM, you can land the CL in the code review system by clicking
+the "Submit to CQ" button.
 
 # Run in Chrome for desktop
 
-In this section, the following shell variables and are assumed correctly set:
+This section assumes the following shell variables are set:
 
 ```bash
 export CHROME_SRC=/path/to/chromium/src
 export DOM_DISTILLER_DIR=/path/to/dom-distiller
 ```
 
--   Pull generated package (from ant package) into Chrome. You can use this
-    handy bash-function to help with that:
+-   Pull the generated DOM Distiller package (from ant package) into Chrome. You
+    can use this bash function to automate this process:
 
     ```bash
     roll-distiller () {
@@ -262,7 +292,7 @@ export DOM_DISTILLER_DIR=/path/to/dom-distiller
 -   For running Chrome, you need to build the `chrome` target:
 
     ```bash
-    ninja -C out/Debug chrome
+    autoninja -C out/Debug chrome
     ```
 
 -   Run chrome with DOM Distiller enabled:
@@ -271,9 +301,8 @@ export DOM_DISTILLER_DIR=/path/to/dom-distiller
     out/Debug/chrome --enable-dom-distiller
     ```
 
--   This adds a menu item `Distill page` that you can use to distill web pages.
-
--   You can also go to `chrome://dom-distiller` to access the debug page.
+-   This adds a menu item `Toggle distilled page contents` that you can use to
+    distill web pages.
 
 -   To have a unique user profile every time you run Chrome, you can also add
     `--user-data-dir=/tmp/$(mktemp -d)` as a command line parameter. On Mac OS
@@ -286,7 +315,7 @@ export DOM_DISTILLER_DIR=/path/to/dom-distiller
     target:
 
     ```bash
-    ninja -C out/Debug components_browsertests
+    autoninja -C out/Debug components_browsertests
     ```
 
 -   Run the `components_browsertests` binary to execute the tests. You can
@@ -306,13 +335,13 @@ export DOM_DISTILLER_DIR=/path/to/dom-distiller
     `components_browsertests_run` and execute them using the swarming tool:
 
     ```bash
-    ninja -C out/Debug components_browsertests_run
+    autoninja -C out/Debug components_browsertests_run
     python tools/swarming_client/isolate.py run -s out/Debug/components_browsertests.isolated
     ```
 
 ## Running the content extractor
 
-To extract the content from a web page directly, you can run:
+To extract the content from a web page directly, you can run
 
 ```bash
 xvfb-run out/Debug/components_browsertests \
@@ -338,7 +367,7 @@ file you include (for example `~/.bashrc`) and use it for iterative development:
 distill() {
   (
     roll-distiller && \
-    ninja -C out/Debug components_browsertests &&
+    autoninja -C out/Debug components_browsertests &&
     xvfb-run out/Debug/components_browsertests \
       --gtest_filter='*MANUAL_ExtractUrl' \
       --run-manual \
@@ -417,8 +446,8 @@ To add logging, you can use the LogUtil. You can use the Java function
     `$CHROME_LOG_FILE`. A release mode build of Chrome will log all JavaScript
     `INFO` there if you start Chrome with `--enable-logging`. You can add
     `--enable-logging=stderr` to have the log go to stderr instead of a file.
--   Content extractor: See [documentation about `extract.log` above]
-    (#running-the-content-extractor).
+-   Content extractor: See
+    [documentation about `extract.log` above](#running-the-content-extractor).
 
 For an example, see
 `$DOM_DISTILLER_DIR/java/org/chromium/distiller/PagingLinksFinder.java`.
@@ -438,8 +467,8 @@ debugging.
     to verify that you get what you expect. Copy this to the clipboard.
 4.  (Re)start chrome with `--user-agent="$USER_AGENT_FROM_CLIPBOARD"`. Remember
     to also add `--enable-dom-distiller`.
-5.  Distill the same URL in viewer by either using the menu `Distill page` or by
-    going to `chrome://dom-distiller` and using the input field there.
+5.  Distill the same URL in viewer by either using the menu `Toggle distilled
+    page contents`.
 6.  Have fun scrutinizing the Chrome log file.
 
 If you want you can copy some of these User-Agent aliases into normal bash
