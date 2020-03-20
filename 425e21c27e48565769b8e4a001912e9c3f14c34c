@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7429457d_5a941428",
+        "filename": "README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-03-20T22:08:39Z",
+      "side": 1,
+      "message": "nit: the numbered lists here are not consistent. Some use 1, 2, 3, and some use 1, 1, 1.",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 1
+      },
+      "revId": "425e21c27e48565769b8e4a001912e9c3f14c34c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
