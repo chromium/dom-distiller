@@ -70,6 +70,29 @@
       "revId": "425e21c27e48565769b8e4a001912e9c3f14c34c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "001dd0c1_576aa88e",
+        "filename": "README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-03-23T21:15:19Z",
+      "side": 1,
+      "message": "Unrelated to this CL. I heard vagrant no longer works. I guess the config file is outdated.",
+      "range": {
+        "startLine": 149,
+        "startChar": 4,
+        "endLine": 149,
+        "endChar": 14
+      },
+      "revId": "425e21c27e48565769b8e4a001912e9c3f14c34c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
