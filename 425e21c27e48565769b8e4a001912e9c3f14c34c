@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "806c1476_b50c9f3b",
+        "filename": "README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1135279
+      },
+      "writtenOn": "2020-03-23T21:42:31Z",
+      "side": 1,
+      "message": "Maybe the opposite too? Reader mode being offered when it shouldn\u0027t be (ex. login pages).",
+      "range": {
+        "startLine": 26,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 62
+      },
+      "revId": "425e21c27e48565769b8e4a001912e9c3f14c34c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6e77fb8_13e3bc7f",
+        "filename": "README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1135279
+      },
+      "writtenOn": "2020-03-23T21:42:31Z",
+      "side": 1,
+      "message": "I might also mention that, outside of this, it is only triggered if Chrome detects that it is not mobile friendly and an article.",
+      "range": {
+        "startLine": 34,
+        "startChar": 37,
+        "endLine": 35,
+        "endChar": 26
+      },
+      "revId": "425e21c27e48565769b8e4a001912e9c3f14c34c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7429457d_5a941428",
         "filename": "README.md",
         "patchSetId": 8
