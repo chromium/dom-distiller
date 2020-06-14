@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc84f653_faa9ec32",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-14T05:08:03Z",
+      "side": 1,
+      "message": "nit: allowlist\n\nSame for the code and the comments.\n\nRef: https://chromium.googlesource.com/chromium/src/+/master/styleguide/inclusive_code.md#racially-neutral",
+      "range": {
+        "startLine": 7,
+        "startChar": 41,
+        "endLine": 7,
+        "endChar": 50
+      },
+      "revId": "81a641569fd394b151908d096c635ce10a238986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f89e6167_e78dcae3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-14T05:08:03Z",
+      "side": 1,
+      "message": "nit: blocklist",
+      "range": {
+        "startLine": 9,
+        "startChar": 34,
+        "endLine": 9,
+        "endChar": 43
+      },
+      "revId": "81a641569fd394b151908d096c635ce10a238986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1aab87d_5cce0e95",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-14T05:08:03Z",
+      "side": 1,
+      "message": "optional nit: We don\u0027t have a separate bug tracking system, so saying Bug: 1012955 is enough.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 21
+      },
+      "revId": "81a641569fd394b151908d096c635ce10a238986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea5dabf4_190ee586",
+        "filename": "java/org/chromium/distiller/DomUtil.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-14T05:08:03Z",
+      "side": 1,
+      "message": "Besides cloneAndProcessList(), which is called by most but not all the generateOutput() methods, we should also handle those generateOutput() methods that don\u0027t call cloneAndProcessList() to make sure everything is sanitized. More specifically, we should fix WebVideo and WebText as well. WebImage already has stripImageElement(), which is stricter than this, and WebEmbed doesn\u0027t clone the DOM elements from the source web page, so it\u0027s fine to skip this sanitization for them, even if they don\u0027t call cloneAndProcessList().\n\nThen we can also update unit tests WebVideoTest and WebTextTest.",
+      "range": {
+        "startLine": 334,
+        "startChar": 0,
+        "endLine": 334,
+        "endChar": 48
+      },
+      "revId": "81a641569fd394b151908d096c635ce10a238986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20fb3b15_df2fe9c7",
+        "filename": "java/org/chromium/distiller/DomUtil.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-14T05:08:03Z",
+      "side": 1,
+      "message": "optional: I\u0027m slightly worried about the performance implication here. GWT historically didn\u0027t have great HashSet performance. It got better in 2.8 (http://www.gwtproject.org/release-notes.html), but we are still using 2.7.0, which is ancient and long overdue for upgrading.\n\nWe could do a quick profiling and see how large the performance regression is and decide whether it\u0027s fine.\n\nThis sanitizing only operates on extracted content, and the DOM structure is tiny compared to the original document, so it\u0027s likely fine.",
+      "range": {
+        "startLine": 464,
+        "startChar": 16,
+        "endLine": 464,
+        "endChar": 61
+      },
+      "revId": "81a641569fd394b151908d096c635ce10a238986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c293584_11faac1f",
+        "filename": "javatests/org/chromium/distiller/DomUtilTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-14T05:08:03Z",
+      "side": 1,
+      "message": "Besides this unit test, we should also add an integration test that covers some Web* objects that derive WebElement. We can do that in ContentExtractorTest.\n\noptional: Even with that, this doesn\u0027t feel future-proof enough, since we might modify or introduce some Web* objects that accidentally don\u0027t go through sanitation later. I don\u0027t have great ideas, but one possibility is to check the sanitization in WebDocument#generateOutput, by sanitizing again and see if they are identical in debug mode. Unlike Chromium, we don\u0027t have mechanisms like if (DCHECK_IS_ON) here in this project, so not affecting the production code would be tricky. One way to minimize the prod impact is to modify WebDocument#generateOutput(boolean textOnly) to something like WebDocument#generateOutput(boolean textOnly, boolean checkSanitizing) and only pass checkSanitizing \u003d true in tests. This still affect the prod code size though. JS size would affect V8 parsing time, and this part is tricky to properly benchmark, but I guess the performance impact should be fine.",
+      "range": {
+        "startLine": 345,
+        "startChar": 16,
+        "endLine": 345,
+        "endChar": 44
+      },
+      "revId": "81a641569fd394b151908d096c635ce10a238986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
