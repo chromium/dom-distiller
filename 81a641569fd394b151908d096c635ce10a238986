@@ -137,6 +137,30 @@
       "revId": "81a641569fd394b151908d096c635ce10a238986",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d17f47b_5f3daa33",
+        "filename": "javatests/org/chromium/distiller/DomUtilTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-15T19:42:01Z",
+      "side": 1,
+      "message": "I wasn\u0027t clear about the checkSanitizing idea. It\u0027s not for the javatests. It is to be used for the quality evaluation flow (https://g3doc.corp.google.com/googleclient/chrome/domdistiller/README.md#evaluation-of-extracted-content) and go through datasets. This approach only increases the chance of catching future regressions, but not guaranteed.",
+      "parentUuid": "7c293584_11faac1f",
+      "range": {
+        "startLine": 345,
+        "startChar": 16,
+        "endLine": 345,
+        "endChar": 44
+      },
+      "revId": "81a641569fd394b151908d096c635ce10a238986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
