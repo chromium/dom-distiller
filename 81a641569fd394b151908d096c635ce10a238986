@@ -71,6 +71,29 @@
     },
     {
       "key": {
+        "uuid": "559fd9c0_397c729f",
+        "filename": "java/org/chromium/distiller/DomUtil.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1135279
+      },
+      "writtenOn": "2020-06-16T16:37:54Z",
+      "side": 1,
+      "message": "Not necessarily something for this patch, but we could probably use an approach similar to the one here to remove the attributes we don\u0027t want.",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 332,
+        "endChar": 44
+      },
+      "revId": "81a641569fd394b151908d096c635ce10a238986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea5dabf4_190ee586",
         "filename": "java/org/chromium/distiller/DomUtil.java",
         "patchSetId": 1
