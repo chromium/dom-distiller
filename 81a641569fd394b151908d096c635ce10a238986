@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cfbefc41_f229a602",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000678
+      },
+      "writtenOn": "2020-06-17T01:16:48Z",
+      "side": 1,
+      "message": "Thanks for catching this!",
+      "parentUuid": "dc84f653_faa9ec32",
+      "range": {
+        "startLine": 7,
+        "startChar": 41,
+        "endLine": 7,
+        "endChar": 50
+      },
+      "revId": "81a641569fd394b151908d096c635ce10a238986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f89e6167_e78dcae3",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "35edb4f6_df4cc48d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000678
+      },
+      "writtenOn": "2020-06-17T01:16:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f89e6167_e78dcae3",
+      "range": {
+        "startLine": 9,
+        "startChar": 34,
+        "endLine": 9,
+        "endChar": 43
+      },
+      "revId": "81a641569fd394b151908d096c635ce10a238986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a1aab87d_5cce0e95",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "81a641569fd394b151908d096c635ce10a238986",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7464aa8c_5c686f6c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000678
+      },
+      "writtenOn": "2020-06-17T01:16:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1aab87d_5cce0e95",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 21
+      },
+      "revId": "81a641569fd394b151908d096c635ce10a238986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +177,30 @@
       "writtenOn": "2020-06-14T05:08:03Z",
       "side": 1,
       "message": "Besides cloneAndProcessList(), which is called by most but not all the generateOutput() methods, we should also handle those generateOutput() methods that don\u0027t call cloneAndProcessList() to make sure everything is sanitized. More specifically, we should fix WebVideo and WebText as well. WebImage already has stripImageElement(), which is stricter than this, and WebEmbed doesn\u0027t clone the DOM elements from the source web page, so it\u0027s fine to skip this sanitization for them, even if they don\u0027t call cloneAndProcessList().\n\nThen we can also update unit tests WebVideoTest and WebTextTest.",
+      "range": {
+        "startLine": 334,
+        "startChar": 0,
+        "endLine": 334,
+        "endChar": 48
+      },
+      "revId": "81a641569fd394b151908d096c635ce10a238986",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bf888f2_27a9a89f",
+        "filename": "java/org/chromium/distiller/DomUtil.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000678
+      },
+      "writtenOn": "2020-06-17T01:16:48Z",
+      "side": 1,
+      "message": "Thanks. I also went through other files that call generateOutput and I\nagree that none of the others seem to need extra processing through the\nallowlist.\n\nDone.",
+      "parentUuid": "ea5dabf4_190ee586",
       "range": {
         "startLine": 334,
         "startChar": 0,
