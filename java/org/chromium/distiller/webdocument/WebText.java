@@ -6,14 +6,16 @@ package org.chromium.distiller.webdocument;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import org.chromium.distiller.DomUtil;
-import org.chromium.distiller.TreeCloneBuilder;
-import org.chromium.distiller.labels.DefaultLabels;
 import com.google.gwt.dom.client.Node;
 
+import org.chromium.distiller.DomUtil;
+import org.chromium.distiller.LogUtil;
+import org.chromium.distiller.TreeCloneBuilder;
+import org.chromium.distiller.labels.DefaultLabels;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.HashSet;
 
 public class WebText extends WebElement {
     private List<Node> allTextNodes;
@@ -102,6 +104,7 @@ public class WebText extends WebElement {
         if (clonedRoot.getNodeType() != Node.ELEMENT_NODE) {
             Node parentClone = getTextNodes().get(0).getParentElement().cloneNode(false);
             parentClone.appendChild(clonedRoot);
+            DomUtil.stripAllUnsafeAttributesFromElement((Element) parentClone);
             clonedRoot = parentClone;
         }
 
@@ -126,6 +129,7 @@ public class WebText extends WebElement {
             if ("BODY".equals(Element.as(srcRoot).getTagName())) break;
             Node parentClone = srcRoot.cloneNode(false);
             parentClone.appendChild(clonedRoot);
+            DomUtil.stripAllUnsafeAttributesFromElement((Element) parentClone);
             clonedRoot = parentClone;
         }
 
