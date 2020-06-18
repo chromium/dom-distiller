@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "99efa031_698afeeb",
+        "filename": "java/org/chromium/distiller/DomUtil.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1000678
+      },
+      "writtenOn": "2020-06-18T23:20:17Z",
+      "side": 1,
+      "message": "I might need to investigate some more. I thought it was just because it was\na detached node tree that it fails, but that works in vanilla JavaScript\nin Chrome.\n\nHow exactly do the unit tests run? Is it running an embedded browser?\nMaybe the environment it\u0027s using for running the tests isn\u0027t the same.",
+      "parentUuid": "67267097_39ad8e0d",
+      "revId": "99136755943a4480ddb10b51c7d319d9423042e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1aae6b19_49ac92a8",
         "filename": "java/org/chromium/distiller/webdocument/WebText.java",
         "patchSetId": 5
