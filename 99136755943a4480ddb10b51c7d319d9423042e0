@@ -19,6 +19,47 @@
     },
     {
       "key": {
+        "uuid": "67267097_39ad8e0d",
+        "filename": "java/org/chromium/distiller/DomUtil.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-18T07:17:37Z",
+      "side": 1,
+      "message": "Thanks for pointing this out! I don\u0027t remember we\u0027ve been aware of this issue.\n\nHow exactly does querySelectorAll() fail? Always return null if |root| is not in the DOM? What if a subset of its child elements are in the DOM?",
+      "parentUuid": "74f77072_ff957521",
+      "revId": "99136755943a4480ddb10b51c7d319d9423042e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1aae6b19_49ac92a8",
+        "filename": "java/org/chromium/distiller/webdocument/WebText.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-18T07:17:37Z",
+      "side": 1,
+      "message": "This one is probably not covered in the unit tests. If we remove this line, WebTextTest.testStripUnsafeAttributes() would still pass, right?\n\nMaybe we can add something like \u003cp onclick\u003d\"alarm()\"\u003e\u003cspan\u003etext\u003c/span\u003e\u003c/p\u003e.",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 79
+      },
+      "revId": "99136755943a4480ddb10b51c7d319d9423042e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae33c2bd_044e817d",
         "filename": "java/org/chromium/distiller/webdocument/WebText.java",
         "patchSetId": 5
@@ -30,6 +71,70 @@
       "writtenOn": "2020-06-17T01:16:48Z",
       "side": 1,
       "message": "Calling DomUtil.stripAllUnsafeAttributes didn\u0027t work here, because\nclonedRoot isn\u0027t in the DOM yet so querySelectorAll fails.\n\nThat makes me suspect that some of the other methods above\naren\u0027t actually working either.",
+      "revId": "99136755943a4480ddb10b51c7d319d9423042e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "255604ad_d6149a0d",
+        "filename": "java/org/chromium/distiller/webdocument/WebText.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-18T07:17:37Z",
+      "side": 1,
+      "message": "If they don\u0027t actually work, we should probably address them in followup CLs. Thanks for pointing this out! The test coverage of WebTextTest isn\u0027t that good.",
+      "parentUuid": "ae33c2bd_044e817d",
+      "revId": "99136755943a4480ddb10b51c7d319d9423042e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87d03152_50cc9dbb",
+        "filename": "java/org/chromium/distiller/webdocument/WebVideo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-18T07:17:37Z",
+      "side": 1,
+      "message": "|ve| is a cloned element. Does this make stripAllUnsafeAttributes() not always working since ve is not attached?",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 45
+      },
+      "revId": "99136755943a4480ddb10b51c7d319d9423042e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "383a82cd_42559985",
+        "filename": "javatests/org/chromium/distiller/webdocument/WebVideoTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-18T07:17:37Z",
+      "side": 1,
+      "message": "What if we also attach onclick to \u003cvideo\u003e itself? Does it get removed? If stripAllUnsafeAttributes() doesn\u0027t work on elements detached from the DOM, maybe it won\u0027t be removed?",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 50
+      },
       "revId": "99136755943a4480ddb10b51c7d319d9423042e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
