@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "eae7937f_2f585feb",
+        "filename": "java/org/chromium/distiller/DomUtil.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-19T00:16:24Z",
+      "side": 1,
+      "message": "These tests are compiled into JavaScript as well, and injected to Chrome driven by Selenium. To compare that with vanilla JavaScript, interactively debug the tests might be helpful: https://github.com/chromium/dom-distiller#interactive-debugging",
+      "parentUuid": "99efa031_698afeeb",
+      "revId": "99136755943a4480ddb10b51c7d319d9423042e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1aae6b19_49ac92a8",
         "filename": "java/org/chromium/distiller/webdocument/WebText.java",
         "patchSetId": 5
