@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "a248d66e_54703847",
+        "filename": "java/org/chromium/distiller/DomUtil.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1000678
+      },
+      "writtenOn": "2020-06-24T23:33:09Z",
+      "side": 1,
+      "message": "Ah, it was something much simpler. querySelectorAll(\u0027*\u0027) only\nreturns descendants, not the current element. So it was failing\nto process the current element. The similar querySelectorAll pattern\nis used elsewhere but I think that in other cases it\u0027s being called\nwhere the current element itself doesn\u0027t need to be processed.\n\nI modified it to process both the current element and descendants\nand that solves the issue with WebText.",
+      "parentUuid": "eae7937f_2f585feb",
+      "revId": "99136755943a4480ddb10b51c7d319d9423042e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1aae6b19_49ac92a8",
         "filename": "java/org/chromium/distiller/webdocument/WebText.java",
         "patchSetId": 5
@@ -84,6 +102,30 @@
       "writtenOn": "2020-06-18T07:17:37Z",
       "side": 1,
       "message": "This one is probably not covered in the unit tests. If we remove this line, WebTextTest.testStripUnsafeAttributes() would still pass, right?\n\nMaybe we can add something like \u003cp onclick\u003d\"alarm()\"\u003e\u003cspan\u003etext\u003c/span\u003e\u003c/p\u003e.",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 79
+      },
+      "revId": "99136755943a4480ddb10b51c7d319d9423042e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b4a6472_b397b424",
+        "filename": "java/org/chromium/distiller/webdocument/WebText.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000678
+      },
+      "writtenOn": "2020-06-24T23:33:09Z",
+      "side": 1,
+      "message": "Moot now that I moved the call back to the end.",
+      "parentUuid": "1aae6b19_49ac92a8",
       "range": {
         "startLine": 132,
         "startChar": 0,
