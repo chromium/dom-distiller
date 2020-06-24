@@ -18,8 +18,9 @@ public class WebVideoTest extends DomDistillerJsTestCase {
 
         child = Document.get().createElement("track");
         child.setAttribute("src", "http://example.com/foo.vtt");
+        // This should be stripped.
+        child.setAttribute("onclick", "alert(1)");
         video.appendChild(child);
-
 
         String want = "<video>" +
                           "<source src=\"http://example.com/foo.ogg\">" +

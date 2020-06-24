@@ -54,6 +54,8 @@ public class WebVideo extends WebElement {
         }
         DomUtil.makeAllSrcAttributesAbsolute(ve);
         DomUtil.stripIds(ve);
+        DomUtil.stripAllUnsafeAttributes(ve);
+
         return ve.getString();
     }
 
