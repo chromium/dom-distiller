@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "236b9ff9_adecef91",
+        "filename": "java/org/chromium/distiller/DomUtil.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-25T03:35:07Z",
+      "side": 1,
+      "message": "Awesome investigation! It is indeed inconvenient not to have something that returns all the child elements including root. If we add a util function, it might be a bit inefficient because we essentially need to copy all the elements in NodeList\u003cElement\u003e out to another list.",
+      "parentUuid": "a248d66e_54703847",
+      "revId": "99136755943a4480ddb10b51c7d319d9423042e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1aae6b19_49ac92a8",
         "filename": "java/org/chromium/distiller/webdocument/WebText.java",
         "patchSetId": 5
@@ -138,6 +156,30 @@
     },
     {
       "key": {
+        "uuid": "99b6326d_01926a27",
+        "filename": "java/org/chromium/distiller/webdocument/WebText.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-25T03:35:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1b4a6472_b397b424",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 79
+      },
+      "revId": "99136755943a4480ddb10b51c7d319d9423042e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae33c2bd_044e817d",
         "filename": "java/org/chromium/distiller/webdocument/WebText.java",
         "patchSetId": 5
@@ -173,6 +215,24 @@
     },
     {
       "key": {
+        "uuid": "ff9df10a_a1b5c147",
+        "filename": "java/org/chromium/distiller/webdocument/WebText.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-25T03:35:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "255604ad_d6149a0d",
+      "revId": "99136755943a4480ddb10b51c7d319d9423042e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87d03152_50cc9dbb",
         "filename": "java/org/chromium/distiller/webdocument/WebVideo.java",
         "patchSetId": 5
@@ -196,6 +256,30 @@
     },
     {
       "key": {
+        "uuid": "6c48dd4f_2cf99777",
+        "filename": "java/org/chromium/distiller/webdocument/WebVideo.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-25T03:35:07Z",
+      "side": 1,
+      "message": "This should work.",
+      "parentUuid": "87d03152_50cc9dbb",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 45
+      },
+      "revId": "99136755943a4480ddb10b51c7d319d9423042e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "383a82cd_42559985",
         "filename": "javatests/org/chromium/distiller/webdocument/WebVideoTest.java",
         "patchSetId": 5
@@ -207,6 +291,30 @@
       "writtenOn": "2020-06-18T07:17:37Z",
       "side": 1,
       "message": "What if we also attach onclick to \u003cvideo\u003e itself? Does it get removed? If stripAllUnsafeAttributes() doesn\u0027t work on elements detached from the DOM, maybe it won\u0027t be removed?",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 50
+      },
+      "revId": "99136755943a4480ddb10b51c7d319d9423042e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7cbbd26a_1615a1ce",
+        "filename": "javatests/org/chromium/distiller/webdocument/WebVideoTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-25T03:35:07Z",
+      "side": 1,
+      "message": "Probably make sense to enhance the test coverage regarding this.",
+      "parentUuid": "383a82cd_42559985",
       "range": {
         "startLine": 22,
         "startChar": 0,
