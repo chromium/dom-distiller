@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2fd9798a_80526319",
+        "filename": "javatests/org/chromium/distiller/ContentExtractorTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000678
+      },
+      "writtenOn": "2020-06-29T20:23:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "503c3516_56f6667c",
+      "range": {
+        "startLine": 221,
+        "startChar": 60,
+        "endLine": 221,
+        "endChar": 71
+      },
+      "revId": "037cc0d54b7f4ce5cde382e5b908e03b6abdd0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b35e2dd_0e12b7e1",
         "filename": "javatests/org/chromium/distiller/ContentExtractorTest.java",
         "patchSetId": 7
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "bb3782f9_31112ede",
+        "filename": "javatests/org/chromium/distiller/ContentExtractorTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000678
+      },
+      "writtenOn": "2020-06-29T20:23:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf6fdb60_75197c3b",
+      "range": {
+        "startLine": 224,
+        "startChar": 15,
+        "endLine": 224,
+        "endChar": 19
+      },
+      "revId": "037cc0d54b7f4ce5cde382e5b908e03b6abdd0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3476674a_a058f6eb",
         "filename": "javatests/org/chromium/distiller/ContentExtractorTest.java",
         "patchSetId": 7
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "7fd4915f_5a0fca42",
+        "filename": "javatests/org/chromium/distiller/ContentExtractorTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000678
+      },
+      "writtenOn": "2020-06-29T20:23:55Z",
+      "side": 1,
+      "message": "I tried this, but when they get rewritten they become double-quotes, so I\nthink it\u0027s clearer this way.",
+      "parentUuid": "3476674a_a058f6eb",
+      "range": {
+        "startLine": 225,
+        "startChar": 25,
+        "endLine": 225,
+        "endChar": 27
+      },
+      "revId": "037cc0d54b7f4ce5cde382e5b908e03b6abdd0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bce85ec4_68ca132f",
         "filename": "javatests/org/chromium/distiller/DomUtilTest.java",
         "patchSetId": 7
@@ -105,6 +177,30 @@
       "writtenOn": "2020-06-25T03:35:07Z",
       "side": 1,
       "message": "We should probably update this test to reflect the root node changes.",
+      "range": {
+        "startLine": 345,
+        "startChar": 16,
+        "endLine": 345,
+        "endChar": 44
+      },
+      "revId": "037cc0d54b7f4ce5cde382e5b908e03b6abdd0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51816414_06885fc7",
+        "filename": "javatests/org/chromium/distiller/DomUtilTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000678
+      },
+      "writtenOn": "2020-06-29T20:23:55Z",
+      "side": 1,
+      "message": "Can you clarify? What else do you want to add to this test?",
+      "parentUuid": "bce85ec4_68ca132f",
       "range": {
         "startLine": 345,
         "startChar": 16,
