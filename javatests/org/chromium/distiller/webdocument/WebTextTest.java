@@ -94,6 +94,30 @@ public class WebTextTest extends DomDistillerJsTestCase {
         assertEquals(want, got);
     }
 
+    public void testStripUnsafeAttributes() {
+        Element container = Document.get().createDivElement();
+        mBody.appendChild(container);
+
+        Element content1 = Document.get().createPElement();
+
+        // This should be passed through.
+        content1.setAttribute("allowfullscreen", "true");
+
+        // This should be stripped.
+        content1.setAttribute("onclick", "alert(1)");
+
+        content1.appendChild(Document.get().createTextNode("Text"));
+        container.appendChild(content1);
+
+        WebTextBuilder builder = new WebTextBuilder();
+        builder.textNode(Text.as(content1.getChild(0)), 0);
+
+        WebText text = builder.build(0);
+        String got = text.generateOutput(false);
+        String want = "<p allowfullscreen=\"true\">Text</p>";
+        assertEquals(want, TestUtil.removeAllDirAttributes(got));
+    }
+
     public void testGenerateOutputLIElements() {
         Element container = Document.get().createLIElement();
         mBody.appendChild(container);
