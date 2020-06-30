@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a7f46fd_e1f112ac",
+        "filename": "java/org/chromium/distiller/DomUtil.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-30T20:23:20Z",
+      "side": 1,
+      "message": "optional nit: would it make sense to carry version info here, just in case the file is renamed in the future, and also mark which revision it is, since this list is updated from time to time? Something like:\n\nhttps://cs.chromium.org/chromium/src/third_party/blink/renderer/core/html/html_attribute_names.json5?rcl\u003dc40d19b4b0664b8c27e4de5df8e0482c3c4ad887",
+      "range": {
+        "startLine": 30,
+        "startChar": 9,
+        "endLine": 30,
+        "endChar": 72
+      },
+      "revId": "7c45c493ea9cbdc0f62c32859fb30c3ea5f6a3c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
