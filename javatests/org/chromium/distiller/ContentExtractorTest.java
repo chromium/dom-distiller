@@ -217,6 +217,71 @@ public class ContentExtractorTest extends DomDistillerJsTestCase {
                 TestUtil.removeAllDirAttributes(extractedContent));
     }
 
+    public void testRemoveNonAllowlistedAttributes() {
+        // Test onclick (an attribute that's explicitly not allowed)
+        // and made-up attributes larry and sergey - all three should be
+        // stripped.
+        String html =
+            "<h1 onclick=\"alert(0);\">" +
+                CONTENT_TEXT +
+            "</h1>" +
+            "<p larry=\"console.error(0);\">" +
+                CONTENT_TEXT +
+            "</p>" +
+            "<img sergey=\"alert(0);\" data-src=\"/test.png\">" +
+            "<video onkeydown=\"window.location.href = 'foo';\">" +
+                "<source src=\"http://example.com/foo.ogg\">" +
+                "<track src=\"http://example.com/foo.vtt\">" +
+            "</video>" +
+            "<table onscroll=\"new XMLHttpRequest();\">" +
+                "<tbody>" +
+                    "<tr larry=\"1\">" +
+                        "<th>" + CONTENT_TEXT +
+                            "<img src=\"/test.png\">" +
+                        "</th>" +
+                        "<th sergey=\"2\">" + CONTENT_TEXT + "</th>" +
+                    "</tr><tr>" +
+                        "<td>" + CONTENT_TEXT + "</td>" +
+                        "<td>" + CONTENT_TEXT + "</td>" +
+                    "</tr>" +
+                "</tbody>" +
+            "</table>";
+
+        final String expected =
+            "<h1>" +
+                CONTENT_TEXT +
+            "</h1>" +
+            "<p>" +
+                CONTENT_TEXT +
+            "</p>" +
+            "<img src=\"http://example.com/test.png\">" +
+            "<video>" +
+                "<source src=\"http://example.com/foo.ogg\">" +
+                "<track src=\"http://example.com/foo.vtt\">" +
+            "</video>" +
+            "<table>" +
+                "<tbody>" +
+                    "<tr>" +
+                        "<th>" + CONTENT_TEXT +
+                            "<img src=\"http://example.com/test.png\">" +
+                        "</th>" +
+                        "<th>" + CONTENT_TEXT + "</th>" +
+                    "</tr><tr>" +
+                        "<td>" + CONTENT_TEXT + "</td>" +
+                        "<td>" + CONTENT_TEXT + "</td>" +
+                    "</tr>" +
+                "</tbody>" +
+            "</table>";
+
+        mHead.setInnerHTML("<base href=\"http://example.com/\">");
+        mBody.setInnerHTML(html);
+
+        ContentExtractor extractor = new ContentExtractor(mRoot);
+        String extractedContent = extractor.extractContent();
+        assertEquals(expected,
+                TestUtil.removeAllDirAttributes(extractedContent));
+    }
+
     public void testKeepingWidthAndHeightAttributes() {
         String html =
             "<h1>" +
