@@ -354,6 +354,30 @@
       "revId": "037cc0d54b7f4ce5cde382e5b908e03b6abdd0a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "733ce458_c63bdc43",
+        "filename": "javatests/org/chromium/distiller/DomUtilTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000678
+      },
+      "writtenOn": "2020-06-30T19:59:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "696cf3b1_35c9af88",
+      "range": {
+        "startLine": 345,
+        "startChar": 16,
+        "endLine": 345,
+        "endChar": 44
+      },
+      "revId": "037cc0d54b7f4ce5cde382e5b908e03b6abdd0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
