@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "8e0d6539_6416d4e8",
+        "filename": "javatests/org/chromium/distiller/ContentExtractorTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000678
+      },
+      "writtenOn": "2020-06-30T18:54:25Z",
+      "side": 1,
+      "message": "Sorry, what I mean is that when you run extractContent(), it\nreformats the HTML as it turns it into a string. If you have\n\u003ctrack src\u003d\u0027http://example.com/foo.vtt\u0027\u003e, it will output it\nas \u003ctrack src\u003d\"http://example.com/foo.vtt\"\u003e\n\nWhat that means is that the \"expected\" string needs to have\nescaped double-quotes.\n\nYes we could change the double-quotes to single quotes in the\n\"html\" input string, but I think it\u0027d make the test harder to\nread because the input and output strings wouldn\u0027t be consistent.",
+      "parentUuid": "3bba7344_c4dd2c30",
+      "range": {
+        "startLine": 225,
+        "startChar": 25,
+        "endLine": 225,
+        "endChar": 27
+      },
+      "revId": "037cc0d54b7f4ce5cde382e5b908e03b6abdd0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bce85ec4_68ca132f",
         "filename": "javatests/org/chromium/distiller/DomUtilTest.java",
         "patchSetId": 7
@@ -249,6 +273,30 @@
       "side": 1,
       "message": "Before we specifically consider the root node, attributes on mBody won\u0027t be removed.\n\nTo make it more readable, I think we can use a \u003cdiv\u003e to contain the current HTML, and that div should have attributes that should be removed. Then call stripAllUnsafeAttributes() on that div and make sure the attributes on div is also cleaned up.",
       "parentUuid": "51816414_06885fc7",
+      "range": {
+        "startLine": 345,
+        "startChar": 16,
+        "endLine": 345,
+        "endChar": 44
+      },
+      "revId": "037cc0d54b7f4ce5cde382e5b908e03b6abdd0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6dfb8d0_fc88d0b8",
+        "filename": "javatests/org/chromium/distiller/DomUtilTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000678
+      },
+      "writtenOn": "2020-06-30T18:54:25Z",
+      "side": 1,
+      "message": "Got it! How\u0027s this?",
+      "parentUuid": "ce07a0a9_7cc18f75",
       "range": {
         "startLine": 345,
         "startChar": 16,
