@@ -12,14 +12,18 @@ import com.google.gwt.dom.client.Element;
 public class WebVideoTest extends DomDistillerJsTestCase {
     public void testGenerateOutput() {
         Element video = Document.get().createVideoElement();
+        // This should be stripped.
+        video.setAttribute("onfocus", "new XMLHttpRequest();");
+
         Element child = Document.get().createElement("source");
         child.setAttribute("src", "http://example.com/foo.ogg");
         video.appendChild(child);
 
         child = Document.get().createElement("track");
         child.setAttribute("src", "http://example.com/foo.vtt");
+        // This should be stripped.
+        child.setAttribute("onclick", "alert(1)");
         video.appendChild(child);
-
 
         String want = "<video>" +
                           "<source src=\"http://example.com/foo.ogg\">" +
