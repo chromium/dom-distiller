@@ -17,11 +17,52 @@ import com.google.gwt.dom.client.VideoElement;
 import com.google.gwt.http.client.URL;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 public class DomUtil {
+    /**
+     * Allowlist of all safe HTML attributes. Taken from the Chromium
+     * source code in:
+     *   third_party/blink/renderer/core/html/html_attribute_names.json5
+     * and manually filtered to exclude event handlers. Last updated
+     * on June 12, 2020.
+     */
+    private static final HashSet<String> attributeAllowlist = new HashSet<>(Arrays.asList("abbr",
+            "accept-charset", "accept", "accesskey", "action", "align", "alink", "allow",
+            "allowfullscreen", "allowpaymentrequest", "alt", "archive", "as", "async",
+            "autocapitalize", "autocomplete", "autocorrect", "autofocus", "autoplay",
+            "autopictureinpicture", "axis", "background", "behavior", "bgcolor", "border",
+            "bordercolor", "capture", "cellpadding", "cellspacing", "char", "challenge", "charoff",
+            "charset", "checked", "cite", "class", "classid", "clear", "code", "codebase",
+            "codetype", "color", "cols", "colspan", "compact", "content", "contenteditable",
+            "controls", "controlslist", "conversiondestination", "coords", "crossorigin", "csp",
+            "data", "datetime", "declare", "decoding", "default", "defer", "dir", "direction",
+            "dirname", "disabled", "disablepictureinpicture", "disableremoteplayback",
+            "disallowdocumentaccess", "download", "draggable", "elementtiming", "enctype", "end",
+            "enterkeyhint", "event", "exportparts", "face", "for", "form", "formaction",
+            "formenctype", "formmethod", "formnovalidate", "formtarget", "frame", "frameborder",
+            "headers", "height", "hidden", "high", "href", "hreflang", "hreftranslate", "hspace",
+            "http-equiv", "id", "imagesizes", "imagesrcset", "importance", "impressiondata",
+            "impressionexpiry", "incremental", "inert", "inputmode", "integrity", "is", "ismap",
+            "keytype", "kind", "invisible", "label", "lang", "language", "latencyhint",
+            "leftmargin", "link", "list", "loading", "longdesc", "loop", "low", "lowsrc",
+            "manifest", "marginheight", "marginwidth", "max", "maxlength", "mayscript", "media",
+            "method", "min", "minlength", "multiple", "muted", "name", "nohref", "nomodule",
+            "nonce", "noresize", "noshade", "novalidate", "nowrap", "object", "open", "optimum",
+            "part", "pattern", "placeholder", "playsinline", "ping", "policy", "poster", "preload",
+            "pseudo", "readonly", "referrerpolicy", "rel", "reportingorigin", "required",
+            "resources", "rev", "reversed", "role", "rows", "rowspan", "rules", "sandbox", "scheme",
+            "scope", "scrollamount", "scrolldelay", "scrolling", "select", "selected", "shadowroot",
+            "shadowrootdelegatesfocus", "shape", "size", "sizes", "slot", "span", "spellcheck",
+            "src", "srcset", "srcdoc", "srclang", "standby", "start", "step", "style", "summary",
+            "tabindex", "target", "text", "title", "topmargin", "translate", "truespeed",
+            "trusttoken", "type", "usemap", "valign", "value", "valuetype", "version", "vlink",
+            "vspace", "virtualkeyboardpolicy", "webkitdirectory", "width", "wrap"));
+
     /**
      * GWT does not provide a way to get a list of all attributes that have been explicitly set on a
      * DOM element (only a way to query the value of a particular attribute). In javascript, this
@@ -291,6 +332,7 @@ public class DomUtil {
         stripTableBackgroundColorAttributes(clonedSubtree);
         stripStyleAttributes(clonedSubtree);
         stripImageElements(clonedSubtree);
+        stripAllUnsafeAttributes(clonedSubtree);
 
         return (Element) clonedSubtree;
     }
@@ -410,6 +452,36 @@ public class DomUtil {
     }
 
     /**
+     * Strips all attributes from nodes other than ones in the allowlist.
+     */
+    @SuppressWarnings("unused")
+    public static void stripAllUnsafeAttributes(Node root) {
+        if (root.getNodeType() == Node.ELEMENT_NODE) {
+            stripAllUnsafeAttributesFromElement(Element.as(root));
+        }
+        NodeList<Element> elements = DomUtil.querySelectorAll(root, "*");
+        for (int i = 0; i < elements.getLength(); i++) {
+            stripAllUnsafeAttributesFromElement(elements.getItem(i));
+        }
+    }
+
+    /**
+     * Strips all attributes from nodes other than ones in the allowlist.
+     */
+    @SuppressWarnings("unused")
+    public static void stripAllUnsafeAttributesFromElement(Element element) {
+        JsArray<Node> attrs = getAttributes(element);
+        for (int j = 0; j < attrs.length();) {
+            String attrName = attrs.get(j).getNodeName();
+            if (!attributeAllowlist.contains(attrName)) {
+                element.removeAttribute(attrName);
+            } else {
+                j++;
+            }
+        }
+    }
+
+    /**
      * Only keep some attributes for image elements.
      * @param imgElement The image element to strip in-place.
      */
@@ -453,7 +525,7 @@ public class DomUtil {
     /**
      * Strips some attribute from certain tags in the tree rooted at |rootNode|, including root.
      * @param tagNames The tag names to be processed. ["*"] means all.
-     * TODO(crbug.com/654108): We should convert to whitelisting for all the tags.
+     * TODO(crbug.com/654108): We should convert to allowlisting for all the tags.
      */
     @SuppressWarnings("unused")
     public static void stripAttributeFromTags(Node rootNode, String attribute, String[] tagNames) {

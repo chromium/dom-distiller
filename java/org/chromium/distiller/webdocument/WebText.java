@@ -6,14 +6,16 @@ package org.chromium.distiller.webdocument;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import org.chromium.distiller.DomUtil;
-import org.chromium.distiller.TreeCloneBuilder;
-import org.chromium.distiller.labels.DefaultLabels;
 import com.google.gwt.dom.client.Node;
 
+import org.chromium.distiller.DomUtil;
+import org.chromium.distiller.LogUtil;
+import org.chromium.distiller.TreeCloneBuilder;
+import org.chromium.distiller.labels.DefaultLabels;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.HashSet;
 
 public class WebText extends WebElement {
     private List<Node> allTextNodes;
@@ -136,6 +138,7 @@ public class WebText extends WebElement {
         DomUtil.stripUnwantedClassNames(clonedRoot);
         DomUtil.stripFontColorAttributes(clonedRoot);
         DomUtil.stripStyleAttributes(clonedRoot);
+        DomUtil.stripAllUnsafeAttributes(clonedRoot);
         // TODO(wychen): if we allow images in WebText later, add stripImageElements().
 
         // Since there are tag elements that are being wrapped

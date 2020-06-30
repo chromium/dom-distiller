@@ -342,6 +342,24 @@ public class DomUtilTest extends DomDistillerJsTestCase {
         assertEquals(expected, mBody.getInnerHTML());
     }
 
+    public void testStripAllUnsafeAttributes() {
+        String unsafeHTML = "<h1 class='foo' onclick='alert(123);'>Foo</h1>"
+                + "<img alt='bar' invalidattr='alert(\"Stop\");'>"
+                + "<div tabIndex=0 onScroll='alert(\"Unsafe\");'>Baz</div>";
+
+        Element e = Document.get().createDivElement();
+        e.setAttribute("onfocus", "window.location.href = 'bad.com';");
+        e.setInnerHTML(unsafeHTML);
+        mBody.appendChild(e);
+
+        final String expected = "<div><h1 class=\"foo\">Foo</h1>"
+                + "<img alt=\"bar\">"
+                + "<div tabindex=\"0\">Baz</div></div>";
+
+        DomUtil.stripAllUnsafeAttributes(e);
+        assertEquals(expected, mBody.getInnerHTML());
+    }
+
     public void testStripStyleAttributes() {
         String html =
             "<div style=\"font-weight: folder\">" +
