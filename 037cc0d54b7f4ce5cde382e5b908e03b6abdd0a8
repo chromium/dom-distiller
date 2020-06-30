@@ -214,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "2dd31b86_db9ff6e5",
+        "filename": "javatests/org/chromium/distiller/ContentExtractorTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-30T19:15:49Z",
+      "side": 1,
+      "message": "Makes sense. Thanks for the explanation!",
+      "parentUuid": "8e0d6539_6416d4e8",
+      "range": {
+        "startLine": 225,
+        "startChar": 25,
+        "endLine": 225,
+        "endChar": 27
+      },
+      "revId": "037cc0d54b7f4ce5cde382e5b908e03b6abdd0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bce85ec4_68ca132f",
         "filename": "javatests/org/chromium/distiller/DomUtilTest.java",
         "patchSetId": 7
@@ -297,6 +321,30 @@
       "side": 1,
       "message": "Got it! How\u0027s this?",
       "parentUuid": "ce07a0a9_7cc18f75",
+      "range": {
+        "startLine": 345,
+        "startChar": 16,
+        "endLine": 345,
+        "endChar": 44
+      },
+      "revId": "037cc0d54b7f4ce5cde382e5b908e03b6abdd0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "696cf3b1_35c9af88",
+        "filename": "javatests/org/chromium/distiller/DomUtilTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-30T19:15:49Z",
+      "side": 1,
+      "message": "I think we should call stripAllUnsafeAttributes() on \u003cdiv\u003e instead of on \u003cbody\u003e, and keep getting output using mBody.getInnerHTML(). Otherwise, the test still passes if we don\u0027t handle the root element.",
+      "parentUuid": "a6dfb8d0_fc88d0b8",
       "range": {
         "startLine": 345,
         "startChar": 16,
