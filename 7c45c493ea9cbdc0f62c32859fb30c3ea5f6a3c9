@@ -46,6 +46,30 @@
       "revId": "7c45c493ea9cbdc0f62c32859fb30c3ea5f6a3c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a59898ad_9cfe864a",
+        "filename": "java/org/chromium/distiller/DomUtil.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-30T20:57:49Z",
+      "side": 1,
+      "message": "That works, too. Thanks!",
+      "parentUuid": "d4fa73b5_49cb455c",
+      "range": {
+        "startLine": 30,
+        "startChar": 9,
+        "endLine": 30,
+        "endChar": 72
+      },
+      "revId": "7c45c493ea9cbdc0f62c32859fb30c3ea5f6a3c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
