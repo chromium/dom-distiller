@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "3bba7344_c4dd2c30",
+        "filename": "javatests/org/chromium/distiller/ContentExtractorTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-30T00:30:03Z",
+      "side": 1,
+      "message": "Sounds good. BTW, what do you mean by rewritten? Do you mean auto formatting by IDE?",
+      "parentUuid": "7fd4915f_5a0fca42",
+      "range": {
+        "startLine": 225,
+        "startChar": 25,
+        "endLine": 225,
+        "endChar": 27
+      },
+      "revId": "037cc0d54b7f4ce5cde382e5b908e03b6abdd0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bce85ec4_68ca132f",
         "filename": "javatests/org/chromium/distiller/DomUtilTest.java",
         "patchSetId": 7
@@ -201,6 +225,30 @@
       "side": 1,
       "message": "Can you clarify? What else do you want to add to this test?",
       "parentUuid": "bce85ec4_68ca132f",
+      "range": {
+        "startLine": 345,
+        "startChar": 16,
+        "endLine": 345,
+        "endChar": 44
+      },
+      "revId": "037cc0d54b7f4ce5cde382e5b908e03b6abdd0a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce07a0a9_7cc18f75",
+        "filename": "javatests/org/chromium/distiller/DomUtilTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1144344
+      },
+      "writtenOn": "2020-06-30T00:30:03Z",
+      "side": 1,
+      "message": "Before we specifically consider the root node, attributes on mBody won\u0027t be removed.\n\nTo make it more readable, I think we can use a \u003cdiv\u003e to contain the current HTML, and that div should have attributes that should be removed. Then call stripAllUnsafeAttributes() on that div and make sure the attributes on div is also cleaned up.",
+      "parentUuid": "51816414_06885fc7",
       "range": {
         "startLine": 345,
         "startChar": 16,
