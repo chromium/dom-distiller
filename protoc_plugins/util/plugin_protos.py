@@ -1,4 +1,4 @@
-# Copyright 2014 The Chromium Authors. All rights reserved.
+# Copyright 2016 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -12,15 +12,17 @@ and https://developers.google.com/protocol-buffers/docs/reference/cpp/google.pro
 import os
 import sys
 
-from google.protobuf.descriptor_pb2 import FieldDescriptorProto
-
-import plugin
-import types
+SCRIPT_DIR = os.path.dirname(__file__)
+SRC_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..', '..', '..'))
 
 sys.path.insert(
-    1, os.path.join(os.path.dirname(__file__), '..', '..',
-                    'out', 'proto', 'python', 'google', 'protobuf', 'compiler'))
-import plugin_pb2
+    1, os.path.join(SRC_DIR, 'third_party', 'protobuf', 'python'))
+sys.path.insert(
+    1, os.path.join(SRC_DIR, 'third_party', 'protobuf', 'third_party', 'six'))
+from google.protobuf.descriptor_pb2 import FieldDescriptorProto
+from google.protobuf.compiler import plugin_pb2
+
+from . import types
 
 
 class PluginRequest(object):
@@ -31,7 +33,10 @@ class PluginRequest(object):
     return dict((v.split('=') for v in self.proto.parameter.split(',')))
 
   def GetAllFiles(self):
-    return map(ProtoFile, self.proto.proto_file)
+    files = [ProtoFile(x) for x in self.proto.proto_file]
+    for f in files:
+      assert f.Filename() in self.proto.file_to_generate
+    return files
 
 
 def PluginRequestFromString(data):
@@ -53,8 +58,9 @@ class PluginResponse(object):
     self.proto.error += err + '\n'
 
   def WriteToStdout(self):
-    sys.stdout.write(self.proto.SerializeToString())
-    sys.stdout.flush()
+    stream = sys.stdout if sys.version_info[0] < 3 else sys.stdout.buffer
+    stream.write(self.proto.SerializeToString())
+    stream.flush()
 
 
 class ProtoFile(object):
@@ -65,7 +71,7 @@ class ProtoFile(object):
         self.JavaPackage() + '.' + self.JavaOuterClass(),
         self.CppBaseNamespace(),
         self.CppConverterNamespace()
-        )
+    )
 
   def Filename(self):
     return self.proto.name
@@ -112,7 +118,9 @@ class ProtoFile(object):
     return [ProtoEnum(n, self.qualified_types) for n in self.proto.enum_type]
 
   def GetDependencies(self):
-    return map(plugin.GetProtoFileForFilename, self.proto.dependency)
+    # import is not supported
+    assert [] == self.proto.dependency
+    return [types.GetProtoFileForFilename(x) for x in self.proto.dependency]
 
   def JavaFilename(self):
     return '/'.join(self.JavaQualifiedOuterClass().split('.')) + '.java'
@@ -121,7 +129,7 @@ class ProtoFile(object):
     if self.proto.options.HasField('java_outer_classname'):
       return self.proto.options.java_outer_classname
     basename, _ = os.path.splitext(os.path.basename(self.proto.name))
-    return plugin.TitleCase(basename)
+    return types.TitleCase(basename)
 
   def JavaQualifiedOuterClass(self):
     return self.qualified_types.java
@@ -150,13 +158,13 @@ class ProtoMessage(object):
     return self.qualified_types
 
   def JavaClassName(self):
-    return plugin.TitleCase(self.proto.name)
+    return types.TitleCase(self.proto.name)
 
   def CppConverterClassName(self):
-    return plugin.TitleCase(self.proto.name)
+    return types.TitleCase(self.proto.name)
 
   def GetFields(self):
-    return map(ProtoField, self.proto.field)
+    return [ProtoField(x) for x in self.proto.field]
 
   def GetMessages(self):
     return [ProtoMessage(n, self.qualified_types)
@@ -172,7 +180,7 @@ class ProtoField(object):
     self.name = field_proto.name
 
     if self.IsClassType() and not self.proto.HasField('type_name'):
-      raise Error('expected type_name')
+      raise TypeError('expected type_name')
 
   def Extendee(self):
     return self.proto.extendee if self.proto.HasField('extendee') else None
@@ -207,7 +215,7 @@ class ProtoField(object):
     return self.proto.number
 
   def JavaName(self):
-    return plugin.TitleCase(self.name)
+    return types.TitleCase(self.name)
 
   def CppConverterType(self):
     return types.ResolveCppConverterType(self.proto.type_name)
@@ -218,6 +226,9 @@ class ProtoField(object):
 
   def CppValueType(self):
     return types.GetCppValueType(self.CppPrimitiveType())
+
+  def CppValuePredicate(self, variable_name):
+    return types.GetCppValuePredicate(self.CppPrimitiveType(), variable_name)
 
   def CheckSupported(self):
     if self.Extendee():
@@ -259,10 +270,10 @@ class ProtoEnum(object):
     return self.qualified_types
 
   def JavaName(self):
-    return plugin.TitleCase(self.proto.name)
+    return types.TitleCase(self.proto.name)
 
   def Values(self):
-    return map(ProtoEnumValue, self.proto.value)
+    return [ProtoEnumValue(x) for x in self.proto.value]
 
 
 class ProtoEnumValue(object):

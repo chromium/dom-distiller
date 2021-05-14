@@ -1,10 +1,9 @@
-# Copyright 2014 The Chromium Authors. All rights reserved.
+# Copyright 2016 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 from google.protobuf.descriptor_pb2 import FieldDescriptorProto
 
-import plugin
 
 _cpp_base_type_map = {
     FieldDescriptorProto.TYPE_DOUBLE: 'double',
@@ -32,10 +31,24 @@ _cpp_base_type_map = {
 _cpp_type_to_value_type_map = {
     'double': 'Double',
     'float': 'Double',
-    'int': 'Integer',
-    'bool': 'Boolean',
+    'int': 'Int',
+    'bool': 'Bool',
     'std::string': 'String',
 }
+
+
+_proto_path_to_file_map = {}
+
+
+def RegisterProtoFile(proto_file):
+  _proto_path_to_file_map[proto_file.Filename()] = proto_file
+  RegisterTypesForFile(proto_file)
+
+
+def GetProtoFileForFilename(filename):
+  proto_file = _proto_path_to_file_map[filename]
+  assert proto_file
+  return proto_file
 
 
 def GetCppPrimitiveType(type_name):
@@ -44,6 +57,14 @@ def GetCppPrimitiveType(type_name):
 
 def GetCppValueType(primitive_type):
   return _cpp_type_to_value_type_map[primitive_type]
+
+
+def GetCppValuePredicate(primitive_type, variable_name):
+  if primitive_type == 'double' or primitive_type == 'float':
+    return '({var}.is_int() || {var}.is_double())'.format(var=variable_name)
+  else:
+    return '{var}.is_{value_type}()'.format(
+        var=variable_name, value_type=GetCppValueType(primitive_type).lower())
 
 
 # TYPE_ENUM and TYPE_MESSAGE are supported, but their types depend on type_name.
@@ -93,6 +114,7 @@ def GetJavaObjectType(java_base_type):
 _proto_cpp_converter_class_map = {}
 _proto_java_class_map = {}
 
+
 def ResolveCppConverterType(s):
   if s.startswith('.'):
     s = s[1:]
@@ -121,8 +143,12 @@ class QualifiedTypes(object):
     _proto_java_class_map[self.proto] = self.java
 
 
+def TitleCase(s):
+  return ''.join(p[0].upper() + p[1:] for p in s.split('_'))
+
+
 def QualifiedTypesForChild(name, parent_typenames):
-  title_name = plugin.TitleCase(name)
+  title_name = TitleCase(name)
   proto = parent_typenames.proto + '.' + name
   java = parent_typenames.java + '.' + title_name
   cpp_base = parent_typenames.cpp_base + '::' + title_name
@@ -147,4 +173,3 @@ def RegisterTypesForFile(proto_file):
     RegisterTypesForEnum(enum)
   for message in proto_file.GetMessages():
     RegisterTypesForMessage(message)
-
