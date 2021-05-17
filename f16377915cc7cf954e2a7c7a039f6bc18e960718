@@ -16,6 +16,23 @@
       "message": "Guessing we should do this?",
       "revId": "f16377915cc7cf954e2a7c7a039f6bc18e960718",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0df62998_d5f01747",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002237
+      },
+      "writtenOn": "2021-05-17T16:26:40Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "f16377915cc7cf954e2a7c7a039f6bc18e960718",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
