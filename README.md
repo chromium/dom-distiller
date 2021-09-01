@@ -50,6 +50,12 @@ experimental preview of the feature can be activated by following these steps:
 1.  Visit an article or article-like page, and a Reader Mode icon should appear
     in the omnibox. Click the icon to enter Reader Mode.
 
+## Continuous integration
+
+![Build Status](https://github.com/chromium/dom-distiller/actions/workflows/ant.yml/badge.svg)
+
+[CI waterfall](https://github.com/chromium/dom-distiller/actions)
+
 ## Environment setup
 
 You must install the build dependencies before building for the first time. The
